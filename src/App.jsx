@@ -630,12 +630,10 @@ export default function App() {
   const [tab, setTab] = useState("home");
 
   // 반응형 컬럼 계산
-  const getColumns = () => {
-    if (window.innerWidth >= 1600) return "repeat(4, 1fr)";
-    if (window.innerWidth >= 1100) return "repeat(3, 1fr)";
-    if (window.innerWidth >= 700) return "repeat(2, 1fr)";
-    return "1fr";
-  };
+const getColumns = () => {
+  if (window.innerWidth >= 700) return "repeat(2, 1fr)";
+  return "1fr";
+};
 
   return (
     <div
