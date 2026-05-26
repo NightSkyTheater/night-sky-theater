@@ -629,55 +629,349 @@ const TABS = [
 export default function App() {
   const [tab, setTab] = useState("home");
 
+  // 반응형 컬럼 계산
+  const getColumns = () => {
+    if (window.innerWidth >= 1600) return "repeat(4, 1fr)";
+    if (window.innerWidth >= 1100) return "repeat(3, 1fr)";
+    if (window.innerWidth >= 700) return "repeat(2, 1fr)";
+    return "1fr";
+  };
+
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(160deg,#04031a 0%,#080520 40%,#0c0830 70%,#060318 100%)", color: "#e0d8f8", fontFamily: "'Noto Sans KR','Apple SD Gothic Neo',sans-serif", position: "relative" }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        background:
+          "linear-gradient(160deg,#04031a 0%,#080520 40%,#0c0830 70%,#060318 100%)",
+        color: "#e0d8f8",
+        fontFamily: "'Noto Sans KR','Apple SD Gothic Neo',sans-serif",
+        position: "relative",
+      }}
+    >
       <style>{`
-        @keyframes twinkle { from{opacity:.15} to{opacity:.85} }
-        @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-        @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
-        *{box-sizing:border-box}
-        textarea::placeholder,input::placeholder{color:#3a3a58}
-        ::-webkit-scrollbar{width:3px}
-        ::-webkit-scrollbar-thumb{background:rgba(147,114,229,0.25);border-radius:3px}
+        @keyframes twinkle {
+          from { opacity:.15 }
+          to { opacity:.85 }
+        }
+
+        @keyframes ticker {
+          from { transform:translateX(0) }
+          to { transform:translateX(-50%) }
+        }
+
+        @keyframes fadeUp {
+          from {
+            opacity:0;
+            transform:translateY(16px)
+          }
+          to {
+            opacity:1;
+            transform:translateY(0)
+          }
+        }
+
+        @keyframes pulse {
+          0%,100% { opacity:.4 }
+          50% { opacity:1 }
+        }
+
+        * {
+          box-sizing:border-box;
+        }
+
+        textarea::placeholder,
+        input::placeholder {
+          color:#3a3a58;
+        }
+
+        ::-webkit-scrollbar {
+          width:3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background:rgba(147,114,229,0.25);
+          border-radius:3px;
+        }
+
+        @media (max-width: 700px) {
+          .main-grid {
+            display:flex !important;
+            flex-direction:column !important;
+          }
+        }
       `}</style>
 
       <Stars />
       <Ticker />
 
-      <div style={{ position: "relative", zIndex: 1, maxWidth: 620, margin: "0 auto", padding: "56px 18px 90px" }}>
-
+      {/* 메인 컨테이너 */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          maxWidth: 1700,
+          width: "100%",
+          margin: "0 auto",
+          padding: "56px 24px 100px",
+        }}
+      >
         {/* 헤더 */}
-        <header style={{ textAlign: "center", padding: "32px 0 28px", animation: "fadeUp 0.7s ease both" }}>
+        <header
+          style={{
+            textAlign: "center",
+            padding: "32px 0 40px",
+            animation: "fadeUp 0.7s ease both",
+          }}
+        >
           <div style={{ fontSize: 40, marginBottom: 10 }}>🌌</div>
-          <h1 style={{ fontFamily: "'Noto Serif KR',serif", fontSize: 28, fontWeight: 900, background: "linear-gradient(135deg,#c4a8f0 0%,#8ab4f8 50%,#a8d8ea 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", margin: "0 0 6px", letterSpacing: "-1px" }}>밤하늘극장</h1>
-          <p style={{ fontSize: 11, color: "#555580", letterSpacing: "0.15em", margin: 0 }}>유우레이 · 임보성 · 감성 인디</p>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginTop: 14, padding: "5px 14px", background: "rgba(147,114,229,0.12)", border: "1px solid rgba(147,114,229,0.22)", borderRadius: 30 }}>
-            <span style={{ fontSize: 11, color: "#9370cc" }}>구독자</span>
-            <span style={{ fontSize: 14, fontWeight: 900, color: "#c4a8f0" }}>400+</span>
-            <span style={{ fontSize: 10, color: "#63dcb4" }}>▲ 성장중</span>
+
+          <h1
+            style={{
+              fontFamily: "'Noto Serif KR',serif",
+              fontSize: 34,
+              fontWeight: 900,
+              background:
+                "linear-gradient(135deg,#c4a8f0 0%,#8ab4f8 50%,#a8d8ea 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              margin: "0 0 6px",
+              letterSpacing: "-1px",
+            }}
+          >
+            밤하늘극장
+          </h1>
+
+          <p
+            style={{
+              fontSize: 12,
+              color: "#555580",
+              letterSpacing: "0.15em",
+              margin: 0,
+            }}
+          >
+            유우레이 · 임보성 · 감성 인디
+          </p>
+
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              marginTop: 14,
+              padding: "5px 14px",
+              background: "rgba(147,114,229,0.12)",
+              border: "1px solid rgba(147,114,229,0.22)",
+              borderRadius: 30,
+            }}
+          >
+            <span
+              style={{
+                fontSize: 11,
+                color: "#9370cc",
+              }}
+            >
+              구독자
+            </span>
+
+            <span
+              style={{
+                fontSize: 14,
+                fontWeight: 900,
+                color: "#c4a8f0",
+              }}
+            >
+              400+
+            </span>
+
+            <span
+              style={{
+                fontSize: 10,
+                color: "#63dcb4",
+              }}
+            >
+              ▲ 성장중
+            </span>
           </div>
         </header>
 
         {/* 콘텐츠 */}
-        <div style={{ animation: "fadeUp 0.4s ease both" }} key={tab}>
-          {tab === "home" && (<><AboutSection /><TodayTrack /><NewsSection /><OverseasSection /></>)}
-          {tab === "music" && (<><ChartSection /><DiscographySection /><PlatformSection /><YoutubeSection /></>)}
-          {tab === "schedule" && <CalendarSection />}
-          {tab === "guestbook" && <GuestbookSection />}
+        <div
+          key={tab}
+          className="main-grid"
+          style={{
+            animation: "fadeUp 0.4s ease both",
+            display: "grid",
+            gridTemplateColumns: getColumns(),
+            gap: 20,
+            alignItems: "start",
+          }}
+        >
+          {tab === "home" && (
+            <>
+              <div
+                style={{
+                  height: "fit-content",
+                }}
+              >
+                <AboutSection />
+              </div>
+
+              <div
+                style={{
+                  height: "fit-content",
+                }}
+              >
+                <TodayTrack />
+              </div>
+
+              <div
+                style={{
+                  height: "fit-content",
+                }}
+              >
+                <NewsSection />
+              </div>
+
+              <div
+                style={{
+                  height: "fit-content",
+                }}
+              >
+                <OverseasSection />
+              </div>
+            </>
+          )}
+
+          {tab === "music" && (
+            <>
+              <div
+                style={{
+                  height: "fit-content",
+                }}
+              >
+                <ChartSection />
+              </div>
+
+              <div
+                style={{
+                  height: "fit-content",
+                }}
+              >
+                <DiscographySection />
+              </div>
+
+              <div
+                style={{
+                  height: "fit-content",
+                }}
+              >
+                <PlatformSection />
+              </div>
+
+              <div
+                style={{
+                  height: "fit-content",
+                }}
+              >
+                <YoutubeSection />
+              </div>
+            </>
+          )}
+
+          {tab === "schedule" && (
+            <div
+              style={{
+                gridColumn: "1 / -1",
+                maxWidth: 900,
+                width: "100%",
+                margin: "0 auto",
+              }}
+            >
+              <CalendarSection />
+            </div>
+          )}
+
+          {tab === "guestbook" && (
+            <div
+              style={{
+                gridColumn: "1 / -1",
+                maxWidth: 900,
+                width: "100%",
+                margin: "0 auto",
+              }}
+            >
+              <GuestbookSection />
+            </div>
+          )}
         </div>
 
-        <footer style={{ textAlign: "center", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 20, marginTop: 10 }}>
-          <p style={{ fontSize: 10, color: "#2a2a44", margin: 0 }}>© 2026 밤하늘극장 · 유통 (주)와이지플러스</p>
+        {/* 푸터 */}
+        <footer
+          style={{
+            textAlign: "center",
+            borderTop: "1px solid rgba(255,255,255,0.05)",
+            paddingTop: 20,
+            marginTop: 40,
+          }}
+        >
+          <p
+            style={{
+              fontSize: 10,
+              color: "#2a2a44",
+              margin: 0,
+            }}
+          >
+            © 2026 밤하늘극장 · 유통 (주)와이지플러스
+          </p>
         </footer>
       </div>
 
       {/* 하단 탭바 */}
-      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100, background: "rgba(8,5,28,0.95)", backdropFilter: "blur(12px)", borderTop: "1px solid rgba(147,114,229,0.15)", display: "flex" }}>
-        {TABS.map(t => (
-          <button key={t.id} onClick={() => setTab(t.id)} style={{ flex: 1, padding: "14px 0", background: "none", border: "none", fontSize: 20, cursor: "pointer", opacity: tab === t.id ? 1 : 0.35, transition: "opacity 0.2s", position: "relative" }}>
+      <div
+        style={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
+          background: "rgba(8,5,28,0.95)",
+          backdropFilter: "blur(12px)",
+          borderTop: "1px solid rgba(147,114,229,0.15)",
+          display: "flex",
+        }}
+      >
+        {TABS.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            style={{
+              flex: 1,
+              padding: "14px 0",
+              background: "none",
+              border: "none",
+              fontSize: 20,
+              cursor: "pointer",
+              opacity: tab === t.id ? 1 : 0.35,
+              transition: "opacity 0.2s",
+              position: "relative",
+            }}
+          >
             {t.label}
-            {tab === t.id && <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: 24, height: 2, background: "#9370cc", borderRadius: 2 }} />}
+
+            {tab === t.id && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: 24,
+                  height: 2,
+                  background: "#9370cc",
+                  borderRadius: 2,
+                }}
+              />
+            )}
           </button>
         ))}
       </div>
