@@ -112,71 +112,194 @@ function BottomNav({tab,setTab}) {
   );
 }
 
-// ── 홈 ──────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// HOME TAB 수정본
+// ─────────────────────────────────────────────────────────────
+
 function HomeTab({isPC}) {
   const [track,setTrack]=useState(null);
-  const [aiMsg,setAiMsg]=useState("");
-  const [aiLoading,setAiLoading]=useState(true);
+  const [now,setNow]=useState(new Date());
 
   useEffect(()=>{
-    const seed=new Date().toDateString(); let h=0;
-    for(let c of seed) h=(h*31+c.charCodeAt(0))%ALL_TRACKS.length;
-    const picked=ALL_TRACKS[Math.abs(h)]; setTrack(picked);
-    const hr=new Date().getHours();
-    const tc=hr>=22||hr<5?"늦은 새벽":hr<10?"이른 아침":hr<15?"한낮":hr<19?"오후":"저녁";
-    fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,
-        messages:[{role:"user",content:`밤하늘극장의 곡 "${picked.title}" (앨범: ${picked.album})을 오늘 ${tc}에 추천하는 감성적인 한두 문장. 45자 이내, 시적으로. 이모지 없이.`}]})
-    }).then(r=>r.json()).then(d=>{setAiMsg((d.content?.map(c=>c.text||"").join("")||"").trim());setAiLoading(false);})
-      .catch(()=>{setAiMsg(`${tc}의 밤하늘에 어울리는 한 곡`);setAiLoading(false);});
+    const seed=new Date().toDateString();
+
+    let h=0;
+
+    for(let c of seed){
+      h=(h*31+c.charCodeAt(0))%ALL_TRACKS.length;
+    }
+
+    const picked=ALL_TRACKS[Math.abs(h)];
+    setTrack(picked);
+
+    const timer=setInterval(()=>{
+      setNow(new Date());
+    },1000);
+
+    return ()=>clearInterval(timer);
   },[]);
 
-  const rankColor = r => r===1?LIME:r===2?"rgba(184,255,0,0.65)":r===3?"rgba(184,255,0,0.4)":muted;
-  const trendColor = t => t==="up"?"#63b4ff":t==="down"?"#ff7070":t==="new"?LIME:muted;
-  const trendLabel = t => t==="up"?"▲":t==="down"?"▼":t==="new"?"N":"—";
+  const rankColor = r =>
+    r===1
+      ?LIME
+      :r===2
+      ?"rgba(184,255,0,0.65)"
+      :r===3
+      ?"rgba(184,255,0,0.4)"
+      :muted;
 
-  // 오늘의 추천곡
+  const trendColor = t =>
+    t==="up"
+      ?"#63b4ff"
+      :t==="down"
+      ?"#ff7070"
+      :t==="new"
+      ?LIME
+      :muted;
+
+  const trendLabel = t =>
+    t==="up"
+      ?"▲"
+      :t==="down"
+      ?"▼"
+      :t==="new"
+      ?"N"
+      :"—";
+
+  // TODAY PICK
   const TodayPick = (
-    <G acc style={{textAlign:"center",padding:"26px 20px",position:"relative",overflow:"hidden"}}>
-      <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.1) 0%,transparent 70%)",pointerEvents:"none"}}/>
-      <p style={{fontSize:10,fontWeight:700,color:LIME,letterSpacing:"0.15em",margin:"0 0 14px",opacity:0.8}}>TODAY'S PICK</p>
-      {track&&<>
-        <p style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 5px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.3,letterSpacing:"-0.3px"}}>{track.title}</p>
-        <p style={{fontSize:12,color:muted,margin:"0 0 6px"}}>{track.album}</p>
-        {track.mood&&<p style={{fontSize:12,color:`${LIME}88`,margin:"0 0 14px",fontStyle:"italic"}}>"{track.mood}"</p>}
-      </>}
+    <G
+      acc
+      style={{
+        textAlign:"center",
+        padding:"26px 20px",
+        position:"relative",
+        overflow:"hidden"
+      }}
+    >
+      <div
+        style={{
+          position:"absolute",
+          inset:0,
+          background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.1) 0%,transparent 70%)",
+          pointerEvents:"none"
+        }}
+      />
+
+      <p
+        style={{
+          fontSize:10,
+          fontWeight:700,
+          color:LIME,
+          letterSpacing:"0.15em",
+          margin:"0 0 14px",
+          opacity:0.8
+        }}
+      >
+        TODAY'S PICK
+      </p>
+
+      {track&&(
+        <>
+          <p
+            style={{
+              fontSize:22,
+              fontWeight:900,
+              color:white,
+              margin:"0 0 5px",
+              fontFamily:"'Noto Serif KR',serif",
+              lineHeight:1.3,
+              letterSpacing:"-0.3px"
+            }}
+          >
+            {track.title}
+          </p>
+
+          {track.mood&&(
+            <p
+              style={{
+                fontSize:12,
+                color:`${LIME}88`,
+                margin:"0 0 14px",
+                fontStyle:"italic"
+              }}
+            >
+              "{track.mood}"
+            </p>
+          )}
+        </>
+      )}
+
       <Hr my={0}/>
-      <div style={{marginTop:14,minHeight:20}}>
-        {aiLoading
-          ?<div style={{display:"flex",gap:8,alignItems:"center",justifyContent:"center"}}><div style={{width:5,height:5,borderRadius:"50%",background:LIME,animation:"pulse 1s infinite"}}/><span style={{fontSize:12,color:muted}}>AI 멘트 생성 중...</span></div>
-          :<p style={{fontSize:13,color:soft,margin:0,lineHeight:1.85,fontStyle:"italic"}}>"{aiMsg}"</p>
-        }
+
+      <div style={{marginTop:14}}>
+        <p
+          style={{
+            fontSize:13,
+            color:soft,
+            margin:0,
+            lineHeight:1.8,
+            fontFamily:"monospace"
+          }}
+        >
+          {now.toLocaleDateString("ko-KR")}
+          <br/>
+          {now.toLocaleTimeString("ko-KR")}
+        </p>
       </div>
     </G>
   );
 
-  // 공지
+  // 공지사항
   const Notice = (
     <G pad="0">
-      <div style={{padding:"16px 18px 12px"}}><SecHead title="공지사항"/></div>
+      <div style={{padding:"16px 18px 12px"}}>
+        <SecHead title="공지사항"/>
+      </div>
+
       <Hr/>
+
       {[
-        {tag:"발매",   tagC:LIME,      date:"05.28",title:"새 싱글 발매",       desc:"모든 음원 플랫폼에서 지금 감상하세요."},
-        {tag:"예정",   tagC:"#ffcc44", date:"06.09",title:"정규앨범 7곡 발매", desc:"밤하늘극장 최대 규모의 정규앨범."},
-        {tag:"라이브", tagC:"#ff88cc", date:"06.15",title:"유튜브 라이브",     desc:"팬들과 실시간으로 만나는 첫 라이브."},
-        {tag:"채널",   tagC:"#aaaaff", date:"05.26",title:"구독자 401명 돌파", desc:"함께해주신 모든 분들께 감사드립니다."},
+        {tag:"발매",tagC:LIME,date:"05.28",title:"새 싱글 발매"},
+        {tag:"예정",tagC:"#ffcc44",date:"06.09",title:"정규앨범 7곡 발매"},
+        {tag:"라이브",tagC:"#ff88cc",date:"06.15",title:"유튜브 라이브"},
+        {tag:"채널",tagC:"#aaaaff",date:"05.26",title:"구독자 401명 돌파"},
       ].map((n,i,arr)=>(
         <div key={i}>
-          <div style={{display:"flex",gap:12,padding:"13px 18px",alignItems:"flex-start"}}>
-            <div style={{flexShrink:0,paddingTop:2,textAlign:"center",minWidth:42}}>
-              <Tag c={n.tagC}>{n.tag}</Tag>
-              <p style={{fontSize:9,color:muted,margin:"4px 0 0",fontFamily:"monospace"}}>{n.date}</p>
-            </div>
-            <div style={{minWidth:0}}>
-              <p style={{margin:"0 0 2px",fontSize:13,fontWeight:700,color:white}}>{n.title}</p>
-              <p style={{margin:0,fontSize:11,color:muted,lineHeight:1.5}}>{n.desc}</p>
-            </div>
+          <div
+            style={{
+              display:"flex",
+              alignItems:"center",
+              gap:10,
+              padding:"13px 18px"
+            }}
+          >
+            <Tag c={n.tagC}>{n.tag}</Tag>
+
+            <span
+              style={{
+                fontSize:10,
+                color:muted,
+                fontFamily:"monospace"
+              }}
+            >
+              {n.date}
+            </span>
+
+            <span
+              style={{
+                fontSize:12,
+                color:white,
+                fontWeight:600,
+                overflow:"hidden",
+                textOverflow:"ellipsis",
+                whiteSpace:"nowrap"
+              }}
+            >
+              {n.title}
+            </span>
           </div>
+
           {i<arr.length-1&&<Hr/>}
         </div>
       ))}
@@ -186,77 +309,261 @@ function HomeTab({isPC}) {
   // TOP10
   const Top10 = (
     <G pad="0">
-      <div style={{padding:"16px 18px 12px"}}><SecHead title="밤하늘극장 TOP 10" sub="26년 3월 기준"/></div>
+      <div style={{padding:"16px 18px 12px"}}>
+        <SecHead
+          title="밤하늘극장 발매곡 TOP 10"
+          sub="26년 3월 기준"
+        />
+      </div>
+
       <Hr/>
+
       {CHART.map((t,i)=>(
         <div key={i}>
-          <div style={{display:"flex",alignItems:"center",gap:12,padding:"11px 18px"}}>
-            <span style={{width:22,textAlign:"center",fontFamily:"monospace",fontWeight:900,flexShrink:0,fontSize:t.rank<=3?14:12,color:rankColor(t.rank)}}>{t.rank}</span>
+          <div
+            style={{
+              display:"flex",
+              alignItems:"center",
+              gap:12,
+              padding:"11px 18px"
+            }}
+          >
+            <span
+              style={{
+                width:22,
+                textAlign:"center",
+                fontFamily:"monospace",
+                fontWeight:900,
+                flexShrink:0,
+                fontSize:t.rank<=3?14:12,
+                color:rankColor(t.rank)
+              }}
+            >
+              {t.rank}
+            </span>
+
             <div style={{flex:1,minWidth:0}}>
-              <p style={{margin:"0 0 1px",fontSize:13,fontWeight:t.rank<=3?700:400,color:t.rank===1?white:t.rank<=3?"rgba(242,238,249,0.85)":soft,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</p>
-              <p style={{margin:0,fontSize:10,color:muted,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.album}</p>
+              <p
+                style={{
+                  margin:0,
+                  fontSize:13,
+                  fontWeight:t.rank<=3?700:400,
+                  color:
+                    t.rank===1
+                      ?white
+                      :t.rank<=3
+                      ?"rgba(242,238,249,0.85)"
+                      :soft,
+                  overflow:"hidden",
+                  textOverflow:"ellipsis",
+                  whiteSpace:"nowrap"
+                }}
+              >
+                {t.title}
+              </p>
             </div>
-            <span style={{fontSize:11,fontWeight:700,color:trendColor(t.trend),width:14,textAlign:"center",flexShrink:0}}>{trendLabel(t.trend)}</span>
+
+            <span
+              style={{
+                fontSize:11,
+                fontWeight:700,
+                color:trendColor(t.trend),
+                width:14,
+                textAlign:"center",
+                flexShrink:0
+              }}
+            >
+              {trendLabel(t.trend)}
+            </span>
           </div>
+
           {i<CHART.length-1&&<Hr/>}
         </div>
       ))}
     </G>
   );
 
-  // 해외
+  // 구독자 그래프
+  const SubscriberGraph = (
+    <G>
+      <SecHead title="구독자 추이"/>
+
+      <div
+        style={{
+          marginTop:18,
+          display:"flex",
+          alignItems:"flex-end",
+          justifyContent:"space-between",
+          gap:8,
+          height:140
+        }}
+      >
+        {[
+          {m:"1월",v:120},
+          {m:"2월",v:170},
+          {m:"3월",v:230},
+          {m:"4월",v:310},
+          {m:"5월",v:401},
+        ].map((d,i)=>(
+          <div
+            key={i}
+            style={{
+              flex:1,
+              display:"flex",
+              flexDirection:"column",
+              alignItems:"center",
+              gap:8
+            }}
+          >
+            <div
+              style={{
+                width:"100%",
+                maxWidth:38,
+                height:`${d.v/4}px`,
+                background:`linear-gradient(to top, ${LIME}, rgba(184,255,0,0.25))`,
+                borderRadius:"10px 10px 4px 4px",
+                boxShadow:`0 0 12px rgba(184,255,0,0.15)`
+              }}
+            />
+
+            <span
+              style={{
+                fontSize:9,
+                color:muted
+              }}
+            >
+              {d.m}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <p
+        style={{
+          margin:"14px 0 0",
+          fontSize:11,
+          color:LIME,
+          textAlign:"right",
+          fontFamily:"monospace"
+        }}
+      >
+        현재 401명
+      </p>
+    </G>
+  );
+
+  // 해외 청취율
   const Overseas = (
     <G>
       <SecHead title="해외 청취율" sub="5월 유튜브 기준"/>
+
       {OVERSEAS.map((o,i)=>(
-        <div key={i} style={{display:"flex",alignItems:"center",gap:10,marginBottom:i<OVERSEAS.length-1?10:0}}>
-          <span style={{fontSize:14,flexShrink:0}}>{o.flag}</span>
-          <span style={{fontSize:11,color:muted,width:42,flexShrink:0}}>{o.name}</span>
-          <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
-            <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${LIME}cc,#66bbff)`,borderRadius:4}}/>
+        <div
+          key={i}
+          style={{
+            display:"flex",
+            alignItems:"center",
+            gap:10,
+            marginBottom:i<OVERSEAS.length-1?10:0
+          }}
+        >
+          <span
+            style={{
+              fontSize:16,
+              flexShrink:0
+            }}
+          >
+            {o.flag}
+          </span>
+
+          <div
+            style={{
+              flex:1,
+              background:"rgba(255,255,255,0.05)",
+              borderRadius:4,
+              height:5,
+              overflow:"hidden"
+            }}
+          >
+            <div
+              style={{
+                width:`${o.pct}%`,
+                height:"100%",
+                background:`linear-gradient(90deg,${LIME}cc,#66bbff)`,
+                borderRadius:4
+              }}
+            />
           </div>
-          <span style={{fontSize:10,color:LIME,fontFamily:"monospace",width:26,textAlign:"right"}}>{o.pct}%</span>
+
+          <span
+            style={{
+              fontSize:10,
+              color:LIME,
+              fontFamily:"monospace",
+              width:26,
+              textAlign:"right"
+            }}
+          >
+            {o.pct}%
+          </span>
         </div>
       ))}
     </G>
   );
 
-  // PC용 TOP10 — 5개씩 2컬럼으로 높이 압축
-  const Top10PC = (
-    <G pad="0">
-      <div style={{padding:"16px 18px 12px"}}><SecHead title="밤하늘극장 TOP 10" sub="26년 3월 기준"/></div>
-      <Hr/>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr"}}>
-        {[CHART.slice(0,5), CHART.slice(5)].map((half, col) => (
-          <div key={col} style={{borderRight: col===0 ? `1px solid ${gb}` : "none"}}>
-            {half.map((t,i)=>(
-              <div key={i}>
-                <div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px"}}>
-                  <span style={{width:20,textAlign:"center",fontFamily:"monospace",fontWeight:900,flexShrink:0,fontSize:t.rank<=3?13:11,color:rankColor(t.rank)}}>{t.rank}</span>
-                  <div style={{flex:1,minWidth:0}}>
-                    <p style={{margin:"0 0 1px",fontSize:12,fontWeight:t.rank<=3?700:400,color:t.rank===1?white:t.rank<=3?"rgba(242,238,249,0.85)":soft,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</p>
-                    <p style={{margin:0,fontSize:9,color:muted,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.album}</p>
-                  </div>
-                  <span style={{fontSize:10,fontWeight:700,color:trendColor(t.trend),width:12,textAlign:"center",flexShrink:0}}>{trendLabel(t.trend)}</span>
-                </div>
-                {i<half.length-1&&<Hr/>}
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-    </G>
-  );
-
+  // PC
   if (isPC) {
     return (
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"start"}}>
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>{TodayPick}{Top10}</div>
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>{Notice}{Overseas}</div>
+      <div
+        style={{
+          display:"grid",
+          gridTemplateColumns:"1fr 1fr",
+          gap:14,
+          alignItems:"start"
+        }}
+      >
+        <div
+          style={{
+            display:"flex",
+            flexDirection:"column",
+            gap:14
+          }}
+        >
+          {TodayPick}
+          {Top10}
+        </div>
+
+        <div
+          style={{
+            display:"flex",
+            flexDirection:"column",
+            gap:14
+          }}
+        >
+          {Notice}
+          {SubscriberGraph}
+          {Overseas}
+        </div>
       </div>
     );
   }
-  return <div style={{display:"flex",flexDirection:"column",gap:10}}>{TodayPick}{Notice}{Top10}{Overseas}</div>;
+
+  // MOBILE
+  return (
+    <div
+      style={{
+        display:"flex",
+        flexDirection:"column",
+        gap:10
+      }}
+    >
+      {TodayPick}
+      {Notice}
+      {Top10}
+      {SubscriberGraph}
+      {Overseas}
+    </div>
+  );
 }
 
 // ── 소개 (v6 그대로) ────────────────────────────────
