@@ -8,113 +8,79 @@ const soft  = "rgba(220,210,255,0.70)";
 const white = "#F2EEF9";
 const ADMIN_PW = "bam2026!";
 
-// ── DATA ──────────────────────────────────────────────────────
 const ALBUMS = [
-  { id:1,  title:"그대였죠",                           year:"2023", color:"#1a1428",
-    desc:"처음 목소리를 꺼낸 날. 아무도 듣지 않아도 괜찮았던 새벽.",
-    tracks:[{n:1,title:"그대였죠",mood:"그리움이 익숙해진 사람에게"},{n:2,title:"고장난시계",mood:"멈춘 시간 속에서 혼자 걷는 기분"},{n:3,title:"그 계절에",mood:"지나간 계절을 다시 꺼내는 밤"}]},
-  { id:2,  title:"오늘이 가장 어렸던 날이야",            year:"2024", color:"#0d1a2a",
-    desc:"지금 이 순간이 남은 생에서 가장 젊은 날임을 아는 사람의 노래.",
-    tracks:[{n:1,title:"겨울의 대삼각형",mood:"추운 밤 하늘을 올려다본 기억"},{n:2,title:"우리들의 발라드",mood:"같이 울었던 그 사람에게"},{n:3,title:"오늘이 가장 어렸던 날이야",mood:"지금을 살아야 하는 이유"},{n:4,title:"20에 50",mood:"서른을 앞두고 스무 살을 그리워하는"},{n:5,title:"나 지금도 충분히 버티고 있는데",mood:"무너지지 않으려고 애쓰는 모든 밤"},{n:6,title:"조명이 켜지고",mood:"무대 위에 서기 전 혼자인 시간"},{n:7,title:"사탄탱고",mood:"이상하게 중독되는 감정"},{n:8,title:"별이 비처럼 내리던 날",mood:"한 번도 잊지 못할 장면"}]},
-  { id:3,  title:"운명애",                              year:"2025", color:"#1a0d28",
-    desc:"사랑이 아니라 운명이었다고 믿고 싶은 마음의 기록.",
-    tracks:[{n:1,title:"운명애",mood:"이게 사랑인지 집착인지 모르던 때"},{n:2,title:"운외창천 (雲外蒼天)",mood:"구름 너머 푸른 하늘 — 포기하지 않기로"},{n:3,title:"테세우스의 배",mood:"변해도 여전히 나인가"},{n:4,title:"사랑엔 자막이 필요해",mood:"말하지 않으면 모르는 것들"},{n:5,title:"지구는 잘 돌아가네, 나 없이도",mood:"이별 후에도 세상은 평범하게"},{n:6,title:"내 소중한 마음은 비밀이야",mood:"표현 못 하고 삼킨 감정들"},{n:7,title:"지금 이 순간",mood:"지나가는 걸 알면서 붙잡고 싶은"}]},
-  { id:4,  title:"자발적으로 표류하는 우주비행사",       year:"2025", color:"#0a1a10",
-    desc:"길을 잃은 게 아니라 스스로 떠내려가기로 한 사람의 이야기.",
-    tracks:[{n:1,title:"자발적으로 표류하는 우주비행사",mood:"계획 없이 살아가는 것도 용기"},{n:2,title:"출근하기 싫은데 알람은 또 맞춰놨어",mood:"그래도 살아야 하니까"},{n:3,title:"사막에서 수영하기",mood:"불가능한 걸 계속 시도하는 마음"},{n:4,title:"별자리를 잇다",mood:"점들을 연결하면 별자리가 된다"}]},
-  { id:5,  title:"이 봄은 다른 이름이 될까",             year:"2025", color:"#1a0d14",
-    desc:"매년 오는 봄이지만 올해의 봄은 다를 것 같다는 예감.",
-    tracks:[{n:1,title:"이 봄은 다른 이름이 될까",mood:"변화를 기다리는 설렘"},{n:2,title:"갑자기 오래된 노래가 떠오른 이유",mood:"어떤 노래는 사람을 데려온다"},{n:3,title:"말하지 않은 것들의 무게",mood:"침묵이 쌓여 무거워진 관계"},{n:4,title:"꿈은 없고요, 돈은 많고 싶네요",mood:"솔직한 어른의 소망"},{n:5,title:"방해 금지 모드",mood:"혼자 있고 싶은 날"}]},
-  { id:6,  title:"사랑은 말이야",                        year:"2025", color:"#1a1408",
-    desc:"말로 표현하지 않으면 사랑도 존재하지 않는 것인가.",
-    tracks:[{n:1,title:"사랑은 말이야",mood:"표현해야 비로소 사랑이 된다"},{n:2,title:"F로 살기엔 세상은 너무 차가워",mood:"감정형 인간의 세상 적응기"},{n:3,title:"고백 연습",mood:"말하기 전 수백 번 머릿속으로"}]},
-  { id:7,  title:"사막 위의 잠수함",                     year:"2025", color:"#081420",
-    desc:"있을 수 없는 곳에 있는 것들의 이야기. 어울리지 않아서 아름다운.",
-    tracks:[{n:1,title:"사막 위의 잠수함",mood:"어울리지 않아서 오히려 눈에 띄는"},{n:2,title:"붐비는 무인도",mood:"사람들 속에서 혼자인 기분"},{n:3,title:"잠수함 일지",mood:"수면 아래에서 기록하는 것들"}]},
-  { id:8,  title:"不完全な踊り (불완전한 춤)",             year:"2025", color:"#1a1a08",
-    desc:"완벽하지 않아도 계속 춤추는 것.",
-    tracks:[{n:1,title:"不完全な踊り",mood:"완벽하지 않아도 계속"},{n:2,title:"闇が怖い幽霊",mood:"유령도 어둠이 무섭다"},{n:3,title:"星影の叫び",mood:"별빛도 소리를 지른다"}]},
-  { id:9,  title:"죽어가는 모든 것들을 사랑해야지",       year:"2026", color:"#0d1a0d",
-    desc:"사라져가는 것들에게 늦지 않게 사랑을 고백하는 앨범.",
-    tracks:[{n:1,title:"죽어가는 모든 것들을 사랑해야지",mood:"끝나기 전에 사랑하기"},{n:2,title:"꽃이 피든 말든",mood:"결과와 상관없이 피어나는 것들"},{n:3,title:"푸른 하늘 은하수",mood:"아득하고 맑은 것들"},{n:4,title:"마지막 여름",mood:"다시 오지 않을 그 계절"}]},
-  { id:10, title:"나는 오늘 또 어떤 핑계를 대었는가",     year:"2026", color:"#141420",
-    desc:"스스로를 솔직하게 바라보는 일.",
-    tracks:[{n:1,title:"나는 오늘 또 어떤 핑계를 대었는가",mood:"자기 자신을 마주하는 용기"},{n:2,title:"가짜의 삶",mood:"진짜를 잃어버린 날들"},{n:3,title:"인생은 산과 계곡",mood:"오르막과 내리막 사이"},{n:4,title:"핑계의 목록",mood:"내가 나에게 하는 변명들"}]},
-  { id:11, title:"ただ (그냥)",                           year:"2026", color:"#10101a",
-    desc:"이유 없이. 그냥. 때로는 설명하지 않아도 되는 감정이 있다.",
-    tracks:[{n:1,title:"ただ (그냥)",mood:"아무 이유 없이 슬픈 날"},{n:2,title:"夜の終わり (밤의 끝)",mood:"밤이 끝나고 아침이 오는 사이"}]},
+  { id:1,  title:"그대였죠",                           year:"2023", color:"#1a1428", desc:"처음 목소리를 꺼낸 날. 아무도 듣지 않아도 괜찮았던 새벽.", tracks:[{n:1,title:"그대였죠",mood:"그리움이 익숙해진 사람에게"},{n:2,title:"고장난시계",mood:"멈춘 시간 속에서 혼자 걷는 기분"},{n:3,title:"그 계절에",mood:"지나간 계절을 다시 꺼내는 밤"}]},
+  { id:2,  title:"오늘이 가장 어렸던 날이야",            year:"2024", color:"#0d1a2a", desc:"지금 이 순간이 남은 생에서 가장 젊은 날임을 아는 사람의 노래.", tracks:[{n:1,title:"겨울의 대삼각형",mood:"추운 밤 하늘을 올려다본 기억"},{n:2,title:"우리들의 발라드",mood:"같이 울었던 그 사람에게"},{n:3,title:"오늘이 가장 어렸던 날이야",mood:"지금을 살아야 하는 이유"},{n:4,title:"20에 50",mood:"서른을 앞두고 스무 살을 그리워하는"},{n:5,title:"나 지금도 충분히 버티고 있는데",mood:"무너지지 않으려고 애쓰는 모든 밤"},{n:6,title:"조명이 켜지고",mood:"무대 위에 서기 전 혼자인 시간"},{n:7,title:"사탄탱고",mood:"이상하게 중독되는 감정"},{n:8,title:"별이 비처럼 내리던 날",mood:"한 번도 잊지 못할 장면"}]},
+  { id:3,  title:"운명애",                              year:"2025", color:"#1a0d28", desc:"사랑이 아니라 운명이었다고 믿고 싶은 마음의 기록.", tracks:[{n:1,title:"운명애",mood:"이게 사랑인지 집착인지 모르던 때"},{n:2,title:"운외창천 (雲外蒼天)",mood:"구름 너머 푸른 하늘"},{n:3,title:"테세우스의 배",mood:"변해도 여전히 나인가"},{n:4,title:"사랑엔 자막이 필요해",mood:"말하지 않으면 모르는 것들"},{n:5,title:"지구는 잘 돌아가네, 나 없이도",mood:"이별 후에도 세상은 평범하게"},{n:6,title:"내 소중한 마음은 비밀이야",mood:"표현 못 하고 삼킨 감정들"},{n:7,title:"지금 이 순간",mood:"지나가는 걸 알면서 붙잡고 싶은"}]},
+  { id:4,  title:"자발적으로 표류하는 우주비행사",       year:"2025", color:"#0a1a10", desc:"길을 잃은 게 아니라 스스로 떠내려가기로 한 사람의 이야기.", tracks:[{n:1,title:"자발적으로 표류하는 우주비행사",mood:"계획 없이 살아가는 것도 용기"},{n:2,title:"출근하기 싫은데 알람은 또 맞춰놨어",mood:"그래도 살아야 하니까"},{n:3,title:"사막에서 수영하기",mood:"불가능한 걸 계속 시도하는 마음"},{n:4,title:"별자리를 잇다",mood:"점들을 연결하면 별자리가 된다"}]},
+  { id:5,  title:"이 봄은 다른 이름이 될까",             year:"2025", color:"#1a0d14", desc:"매년 오는 봄이지만 올해의 봄은 다를 것 같다는 예감.", tracks:[{n:1,title:"이 봄은 다른 이름이 될까",mood:"변화를 기다리는 설렘"},{n:2,title:"갑자기 오래된 노래가 떠오른 이유",mood:"어떤 노래는 사람을 데려온다"},{n:3,title:"말하지 않은 것들의 무게",mood:"침묵이 쌓여 무거워진 관계"},{n:4,title:"꿈은 없고요, 돈은 많고 싶네요",mood:"솔직한 어른의 소망"},{n:5,title:"방해 금지 모드",mood:"혼자 있고 싶은 날"}]},
+  { id:6,  title:"사랑은 말이야",                        year:"2025", color:"#1a1408", desc:"말로 표현하지 않으면 사랑도 존재하지 않는 것인가.", tracks:[{n:1,title:"사랑은 말이야",mood:"표현해야 비로소 사랑이 된다"},{n:2,title:"F로 살기엔 세상은 너무 차가워",mood:"감정형 인간의 세상 적응기"},{n:3,title:"고백 연습",mood:"말하기 전 수백 번 머릿속으로"}]},
+  { id:7,  title:"사막 위의 잠수함",                     year:"2025", color:"#081420", desc:"있을 수 없는 곳에 있는 것들의 이야기. 어울리지 않아서 아름다운.", tracks:[{n:1,title:"사막 위의 잠수함",mood:"어울리지 않아서 오히려 눈에 띄는"},{n:2,title:"붐비는 무인도",mood:"사람들 속에서 혼자인 기분"},{n:3,title:"잠수함 일지",mood:"수면 아래에서 기록하는 것들"}]},
+  { id:8,  title:"不完全な踊り (불완전한 춤)",             year:"2025", color:"#1a1a08", desc:"완벽하지 않아도 계속 춤추는 것.", tracks:[{n:1,title:"不完全な踊り",mood:"완벽하지 않아도 계속"},{n:2,title:"闇が怖い幽霊",mood:"유령도 어둠이 무섭다"},{n:3,title:"星影の叫び",mood:"별빛도 소리를 지른다"}]},
+  { id:9,  title:"죽어가는 모든 것들을 사랑해야지",       year:"2026", color:"#0d1a0d", desc:"사라져가는 것들에게 늦지 않게 사랑을 고백하는 앨범.", tracks:[{n:1,title:"죽어가는 모든 것들을 사랑해야지",mood:"끝나기 전에 사랑하기"},{n:2,title:"꽃이 피든 말든",mood:"결과와 상관없이 피어나는 것들"},{n:3,title:"푸른 하늘 은하수",mood:"아득하고 맑은 것들"},{n:4,title:"마지막 여름",mood:"다시 오지 않을 그 계절"}]},
+  { id:10, title:"나는 오늘 또 어떤 핑계를 대었는가",     year:"2026", color:"#141420", desc:"스스로를 솔직하게 바라보는 일.", tracks:[{n:1,title:"나는 오늘 또 어떤 핑계를 대었는가",mood:"자기 자신을 마주하는 용기"},{n:2,title:"가짜의 삶",mood:"진짜를 잃어버린 날들"},{n:3,title:"인생은 산과 계곡",mood:"오르막과 내리막 사이"},{n:4,title:"핑계의 목록",mood:"내가 나에게 하는 변명들"}]},
+  { id:11, title:"ただ (그냥)",                           year:"2026", color:"#10101a", desc:"이유 없이. 그냥. 때로는 설명하지 않아도 되는 감정이 있다.", tracks:[{n:1,title:"ただ (그냥)",mood:"아무 이유 없이 슬픈 날"},{n:2,title:"夜の終わり (밤의 끝)",mood:"밤이 끝나고 아침이 오는 사이"}]},
 ];
 
 const ALL_TRACKS = ALBUMS.flatMap(a => a.tracks.map(t => ({...t, album:a.title})));
 
 const CHART = [
-  {rank:1, title:"우리들의 발라드",                    album:"오늘이 가장 어렸던 날이야", trend:null},
-  {rank:2, title:"말하지 않은 것들의 무게",             album:"이 봄은 다른 이름이 될까",  trend:"up"},
-  {rank:3, title:"꽃이 피든 말든",                     album:"죽어가는 모든 것들을 사랑해야지", trend:"new"},
-  {rank:4, title:"내 소중한 마음은 비밀이야",           album:"운명애",                   trend:"down"},
-  {rank:5, title:"자발적으로 표류하는 우주비행사",      album:"자발적으로 표류하는 우주비행사", trend:"up"},
-  {rank:6, title:"운외창천 (雲外蒼天)",                 album:"운명애",                   trend:null},
-  {rank:7, title:"겨울의 대삼각형",                    album:"오늘이 가장 어렸던 날이야", trend:"down"},
-  {rank:8, title:"나는 오늘 또 어떤 핑계를 대었는가",  album:"나는 오늘 또 어떤 핑계를 대었는가", trend:"new"},
-  {rank:9, title:"고백 연습",                          album:"사랑은 말이야",             trend:"up"},
-  {rank:10,title:"별이 비처럼 내리던 날",               album:"오늘이 가장 어렸던 날이야", trend:null},
+  {rank:1, title:"우리들의 발라드",                    album:"오늘이 가장 어렸던 날이야",        trend:null},
+  {rank:2, title:"말하지 않은 것들의 무게",             album:"이 봄은 다른 이름이 될까",          trend:"up"},
+  {rank:3, title:"꽃이 피든 말든",                     album:"죽어가는 모든 것들을 사랑해야지",   trend:"new"},
+  {rank:4, title:"내 소중한 마음은 비밀이야",           album:"운명애",                           trend:"down"},
+  {rank:5, title:"자발적으로 표류하는 우주비행사",      album:"자발적으로 표류하는 우주비행사",    trend:"up"},
+  {rank:6, title:"운외창천 (雲外蒼天)",                 album:"운명애",                           trend:null},
+  {rank:7, title:"겨울의 대삼각형",                    album:"오늘이 가장 어렸던 날이야",        trend:"down"},
+  {rank:8, title:"나는 오늘 또 어떤 핑계를 대었는가",  album:"나는 오늘 또 어떤 핑계를 대었는가",trend:"new"},
+  {rank:9, title:"고백 연습",                          album:"사랑은 말이야",                    trend:"up"},
+  {rank:10,title:"별이 비처럼 내리던 날",               album:"오늘이 가장 어렸던 날이야",        trend:null},
 ];
 
 const OVERSEAS = [
   {flag:"🇺🇸",name:"미국",pct:32},{flag:"🇯🇵",name:"일본",pct:18},
   {flag:"🇹🇼",name:"대만",pct:12},{flag:"🇮🇳",name:"인도",pct:10},
-  {flag:"🇦🇺",name:"호주",pct:8},{flag:"🇨🇦",name:"캐나다",pct:6},
-  {flag:"🇹🇭",name:"태국",pct:5},{flag:"🌍",name:"기타",pct:9},
+  {flag:"🇦🇺",name:"호주",pct:8}, {flag:"🇨🇦",name:"캐나다",pct:6},
+  {flag:"🇹🇭",name:"태국",pct:5}, {flag:"🌍",name:"기타",pct:9},
 ];
 
 const TIMELINE = [
-  {year:"2023",    tag:"데뷔",   desc:"첫 싱글 '그대였죠' 발매. 밤하늘극장의 첫 목소리."},
-  {year:"2024.01", tag:"앨범",   desc:"'오늘이 가장 어렸던 날이야' 발매. 유튜브 최초 노출."},
-  {year:"2024.11", tag:"성장",   desc:"'우리들의 발라드' 유튜브 조회 12만 돌파."},
-  {year:"2025",    tag:"확장",   desc:"연간 7개 앨범 발매. 일본어 앨범으로 해외 유입 시작."},
-  {year:"2025.11", tag:"글로벌", desc:"해외 청취율 집계 시작. 8개국 유입 확인."},
-  {year:"2026.04", tag:"구독",   desc:"유튜브 구독자 400명 돌파."},
-  {year:"2026.05", tag:"발매",   desc:"새 싱글 발매."},
-  {year:"2026.06", tag:"예정",   desc:"정규앨범 7곡 발매 예정. 최대 규모 프로젝트."},
+  {year:"2023",    tag:"데뷔",   tagC:LIME,      desc:"첫 싱글 '그대였죠' 발매. 밤하늘극장의 첫 목소리."},
+  {year:"2024.01", tag:"앨범",   tagC:LIME,      desc:"'오늘이 가장 어렸던 날이야' 발매. 유튜브 최초 노출."},
+  {year:"2024.11", tag:"성장",   tagC:"#aaaaff", desc:"'우리들의 발라드' 유튜브 조회 12만 돌파."},
+  {year:"2025",    tag:"확장",   tagC:"#aaaaff", desc:"연간 7개 앨범 발매. 일본어 앨범으로 해외 유입 시작."},
+  {year:"2025.11", tag:"글로벌", tagC:"#aaaaff", desc:"해외 청취율 집계 시작. 8개국 유입 확인."},
+  {year:"2026.04", tag:"구독",   tagC:LIME,      desc:"유튜브 구독자 400명 돌파."},
+  {year:"2026.05", tag:"발매",   tagC:LIME,      desc:"새 싱글 발매."},
+  {year:"2026.06", tag:"예정",   tagC:"#ffcc44", desc:"정규앨범 7곡 발매 예정. 최대 규모 프로젝트."},
 ];
 
 const INIT_GB = [
   {id:1,name:"새벽여행자",pw:"1234",msg:"우리들의 발라드 듣고 밤새 울었어요. 고맙습니다.",time:"05.25",likes:14,reply:"늦은 새벽에 함께해줘서 저도 고마워요 — 밤하늘극장"},
   {id:2,name:"별빛수집가",pw:"1234",msg:"자발적으로 표류하는 우주비행사 진짜 제 얘기 같아요…",time:"05.24",likes:9,reply:""},
-  {id:3,name:"moonlight",pw:"1234",msg:"밤하늘극장 발견한 날이 올해 최고의 날이었어요",time:"05.23",likes:11,reply:"그 말이 저희한테도 최고의 댓글이에요 — 밤하늘극장"},
+  {id:3,name:"moonlight", pw:"1234",msg:"밤하늘극장 발견한 날이 올해 최고의 날이었어요",time:"05.23",likes:11,reply:"그 말이 저희한테도 최고의 댓글이에요 — 밤하늘극장"},
 ];
 
-// ── PRIMITIVES ───────────────────────────────────────────────
+// ── PRIMITIVES ──────────────────────────────────────
 function Stars() {
-  const s = useRef(Array.from({length:100},(_,i)=>({
-    id:i, x:Math.random()*100, y:Math.random()*100,
-    r:Math.random()*1.4+0.2, o:Math.random()*0.4+0.08, d:Math.random()*5+2,
-  }))).current;
+  const s = useRef(Array.from({length:100},(_,i)=>({id:i,x:Math.random()*100,y:Math.random()*100,r:Math.random()*1.4+0.2,o:Math.random()*0.4+0.08,d:Math.random()*5+2}))).current;
   return (
     <div style={{position:"fixed",inset:0,zIndex:0,pointerEvents:"none"}}>
-      {s.map(st=>(
-        <div key={st.id} style={{position:"absolute",left:`${st.x}%`,top:`${st.y}%`,
-          width:st.r*2,height:st.r*2,borderRadius:"50%",background:"#fff",
-          opacity:st.o,animation:`tw ${st.d}s ease-in-out infinite alternate`}}/>
-      ))}
+      {s.map(st=><div key={st.id} style={{position:"absolute",left:`${st.x}%`,top:`${st.y}%`,width:st.r*2,height:st.r*2,borderRadius:"50%",background:"#fff",opacity:st.o,animation:`tw ${st.d}s ease-in-out infinite alternate`}}/>)}
     </div>
   );
 }
 
-const G = ({children, acc, pad="16px 18px", style={}}) => (
-  <div style={{
-    background: acc ? "rgba(184,255,0,0.07)" : glass,
-    backdropFilter:"blur(24px)", WebkitBackdropFilter:"blur(24px)",
-    border:`1px solid ${acc ? "rgba(184,255,0,0.2)" : gb}`,
-    borderRadius:16, padding:pad, ...style,
-  }}>{children}</div>
+const G = ({children,acc,pad="16px 18px",style={}}) => (
+  <div style={{background:acc?"rgba(184,255,0,0.07)":glass,backdropFilter:"blur(24px)",WebkitBackdropFilter:"blur(24px)",border:`1px solid ${acc?"rgba(184,255,0,0.2)":gb}`,borderRadius:16,padding:pad,...style}}>
+    {children}
+  </div>
 );
 
 const Hr = ({my=0}) => <div style={{height:1,background:gb,margin:`${my}px 0`}}/>;
 
 const Tag = ({c=LIME,children}) => (
-  <span style={{fontSize:9,fontWeight:700,letterSpacing:"0.05em",padding:"2px 8px",borderRadius:20,
-    color:c,background:`${c}18`,border:`1px solid ${c}38`}}>{children}</span>
+  <span style={{fontSize:9,fontWeight:700,letterSpacing:"0.05em",padding:"2px 8px",borderRadius:20,color:c,background:`${c}18`,border:`1px solid ${c}38`,whiteSpace:"nowrap"}}>{children}</span>
 );
 
 const SecHead = ({title,sub}) => (
@@ -124,45 +90,19 @@ const SecHead = ({title,sub}) => (
   </div>
 );
 
-// ── HEADER ────────────────────────────────────────────────────
-function Header() {
-  return (
-    <div style={{
-      height:50, display:"flex", alignItems:"center", paddingInline:18,
-      background:"rgba(4,2,16,0.9)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)",
-      borderBottom:`1px solid rgba(184,255,0,0.1)`,
-      position:"sticky", top:0, zIndex:100,
-    }}>
-      <div style={{width:34,height:34,borderRadius:"50%",background:LIME,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,boxShadow:`0 0 14px ${LIME}44`,animation:"fl 4s ease-in-out infinite"}}>
-        🪐
-      </div>
-    </div>
-  );
-}
-
-// ── BOTTOM NAV ────────────────────────────────────────────────
+// ── BOTTOM NAV ──────────────────────────────────────
 const NAV_ITEMS = [
-  {id:"홈",   svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>},
-  {id:"소개", svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>},
-  {id:"음악", svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>},
+  {id:"홈",    svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>},
+  {id:"소개",  svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>},
+  {id:"음악",  svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>},
   {id:"방명록",svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>},
 ];
 
 function BottomNav({tab,setTab}) {
   return (
-    <div style={{
-      position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",
-      width:"100%",maxWidth:430,zIndex:200,
-      background:"rgba(3,1,14,0.97)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",
-      borderTop:`1px solid rgba(184,255,0,0.1)`,
-      display:"flex",
-    }}>
+    <div style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:900,zIndex:200,background:"rgba(3,1,14,0.97)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",borderTop:`1px solid rgba(184,255,0,0.1)`,display:"flex"}}>
       {NAV_ITEMS.map(it=>(
-        <button key={it.id} onClick={()=>setTab(it.id)} style={{
-          flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
-          gap:3,padding:"9px 0 7px",background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",
-          color:tab===it.id?LIME:muted,transition:"color 0.2s",position:"relative",
-        }}>
+        <button key={it.id} onClick={()=>setTab(it.id)} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:3,padding:"9px 0 7px",background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",color:tab===it.id?LIME:muted,transition:"color 0.2s",position:"relative"}}>
           {tab===it.id&&<div style={{position:"absolute",top:0,left:"50%",transform:"translateX(-50%)",width:22,height:2,background:LIME,borderRadius:2}}/>}
           {it.svg}
           <span style={{fontSize:9.5,fontWeight:tab===it.id?700:400}}>{it.id}</span>
@@ -172,23 +112,19 @@ function BottomNav({tab,setTab}) {
   );
 }
 
-// ══════════════════════════════════════════
-// 홈 탭
-// ══════════════════════════════════════════
-function HomeTab() {
+// ── 홈 ──────────────────────────────────────────────
+function HomeTab({isPC}) {
   const [track,setTrack]=useState(null);
   const [aiMsg,setAiMsg]=useState("");
   const [aiLoading,setAiLoading]=useState(true);
 
   useEffect(()=>{
-    const seed=new Date().toDateString();
-    let h=0; for(let c of seed) h=(h*31+c.charCodeAt(0))%ALL_TRACKS.length;
-    const picked=ALL_TRACKS[Math.abs(h)];
-    setTrack(picked);
+    const seed=new Date().toDateString(); let h=0;
+    for(let c of seed) h=(h*31+c.charCodeAt(0))%ALL_TRACKS.length;
+    const picked=ALL_TRACKS[Math.abs(h)]; setTrack(picked);
     const hr=new Date().getHours();
     const tc=hr>=22||hr<5?"늦은 새벽":hr<10?"이른 아침":hr<15?"한낮":hr<19?"오후":"저녁";
-    fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",headers:{"Content-Type":"application/json"},
+    fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,
         messages:[{role:"user",content:`밤하늘극장의 곡 "${picked.title}" (앨범: ${picked.album})을 오늘 ${tc}에 추천하는 감성적인 한두 문장. 45자 이내, 시적으로. 이모지 없이.`}]})
     }).then(r=>r.json()).then(d=>{setAiMsg((d.content?.map(c=>c.text||"").join("")||"").trim());setAiLoading(false);})
@@ -199,227 +135,250 @@ function HomeTab() {
   const trendColor = t => t==="up"?"#63b4ff":t==="down"?"#ff7070":t==="new"?LIME:muted;
   const trendLabel = t => t==="up"?"▲":t==="down"?"▼":t==="new"?"N":"—";
 
-  return (
-    <div style={{display:"flex",flexDirection:"column",gap:10}}>
-
-      {/* 오늘의 추천곡 — 중앙 강조 */}
-      <G acc style={{textAlign:"center",padding:"26px 20px",position:"relative",overflow:"hidden"}}>
-        <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.1) 0%,transparent 70%)",pointerEvents:"none"}}/>
-        <p style={{fontSize:10,fontWeight:700,color:LIME,letterSpacing:"0.15em",margin:"0 0 14px",opacity:0.8}}>TODAY'S PICK</p>
-        {track&&<>
-          <p style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 5px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.3,letterSpacing:"-0.3px"}}>{track.title}</p>
-          <p style={{fontSize:12,color:muted,margin:"0 0 6px"}}>{track.album}</p>
-          {track.mood&&<p style={{fontSize:12,color:`${LIME}88`,margin:"0 0 14px",fontStyle:"italic"}}>"{track.mood}"</p>}
-        </>}
-        <Hr my={0}/>
-        <div style={{marginTop:14,minHeight:20}}>
-          {aiLoading
-            ?<div style={{display:"flex",gap:8,alignItems:"center",justifyContent:"center"}}>
-                <div style={{width:5,height:5,borderRadius:"50%",background:LIME,animation:"pulse 1s infinite"}}/>
-                <span style={{fontSize:12,color:muted}}>AI 멘트 생성 중...</span>
-              </div>
-            :<p style={{fontSize:13,color:soft,margin:0,lineHeight:1.85,fontStyle:"italic"}}>"{aiMsg}"</p>
-          }
-        </div>
-      </G>
-
-      {/* 공지사항 */}
-      <G pad="0">
-        <div style={{padding:"16px 18px 12px"}}>
-          <SecHead title="공지사항"/>
-        </div>
-        <Hr/>
-        {[
-          {tag:"발매",   tagC:LIME,        date:"05.28", title:"새 싱글 발매",           desc:"모든 음원 플랫폼에서 지금 감상하세요."},
-          {tag:"예정",   tagC:"#ffcc44",   date:"06.09", title:"정규앨범 7곡 발매",       desc:"밤하늘극장 최대 규모의 정규앨범."},
-          {tag:"라이브", tagC:"#ff88cc",   date:"06.15", title:"유튜브 라이브",           desc:"팬들과 실시간으로 만나는 첫 라이브."},
-          {tag:"채널",   tagC:"#aaaaff",   date:"05.26", title:"구독자 401명 돌파",       desc:"함께해주신 모든 분들께 감사드립니다."},
-        ].map((n,i,arr)=>(
-          <div key={i}>
-            <div style={{display:"flex",gap:12,padding:"13px 18px",alignItems:"flex-start"}}>
-              <div style={{flexShrink:0,paddingTop:2,textAlign:"center",minWidth:42}}>
-                <Tag c={n.tagC}>{n.tag}</Tag>
-                <p style={{fontSize:9,color:muted,margin:"4px 0 0",fontFamily:"monospace"}}>{n.date}</p>
-              </div>
-              <div style={{minWidth:0}}>
-                <p style={{margin:"0 0 2px",fontSize:13,fontWeight:700,color:white}}>{n.title}</p>
-                <p style={{margin:0,fontSize:11,color:muted,lineHeight:1.5}}>{n.desc}</p>
-              </div>
-            </div>
-            {i<arr.length-1&&<Hr/>}
-          </div>
-        ))}
-      </G>
-
-      {/* TOP 10 */}
-      <G pad="0">
-        <div style={{padding:"16px 18px 12px"}}>
-          <SecHead title="TOP 10" sub="3월 판매 기준 정산 데이터"/>
-        </div>
-        <Hr/>
-        {CHART.map((t,i)=>(
-          <div key={i}>
-            <div style={{display:"flex",alignItems:"center",gap:12,padding:"11px 18px"}}>
-              <span style={{
-                width:22,textAlign:"center",fontFamily:"monospace",fontWeight:900,flexShrink:0,
-                fontSize:t.rank<=3?14:12,
-                color:rankColor(t.rank),
-              }}>{t.rank}</span>
-              <div style={{flex:1,minWidth:0}}>
-                <p style={{margin:"0 0 1px",fontSize:13,fontWeight:t.rank<=3?700:400,
-                  color:t.rank===1?white:t.rank<=3?"rgba(242,238,249,0.85)":soft,
-                  overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</p>
-                <p style={{margin:0,fontSize:10,color:muted,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.album}</p>
-              </div>
-              <span style={{fontSize:11,fontWeight:700,color:trendColor(t.trend),width:14,textAlign:"center",flexShrink:0}}>{trendLabel(t.trend)}</span>
-            </div>
-            {i<CHART.length-1&&<Hr/>}
-          </div>
-        ))}
-      </G>
-
-      {/* 해외 청취율 */}
-      <G>
-        <SecHead title="해외 청취율" sub="5월 유튜브 기준"/>
-        {OVERSEAS.map((o,i)=>(
-          <div key={i} style={{display:"flex",alignItems:"center",gap:10,marginBottom:i<OVERSEAS.length-1?10:0}}>
-            <span style={{fontSize:14,flexShrink:0}}>{o.flag}</span>
-            <span style={{fontSize:11,color:muted,width:42,flexShrink:0}}>{o.name}</span>
-            <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
-              <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${LIME}cc,#66bbff)`,borderRadius:4}}/>
-            </div>
-            <span style={{fontSize:10,color:LIME,fontFamily:"monospace",width:26,textAlign:"right"}}>{o.pct}%</span>
-          </div>
-        ))}
-      </G>
-    </div>
+  // 오늘의 추천곡
+  const TodayPick = (
+    <G acc style={{textAlign:"center",padding:"26px 20px",position:"relative",overflow:"hidden"}}>
+      <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.1) 0%,transparent 70%)",pointerEvents:"none"}}/>
+      <p style={{fontSize:10,fontWeight:700,color:LIME,letterSpacing:"0.15em",margin:"0 0 14px",opacity:0.8}}>TODAY'S PICK</p>
+      {track&&<>
+        <p style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 5px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.3,letterSpacing:"-0.3px"}}>{track.title}</p>
+        <p style={{fontSize:12,color:muted,margin:"0 0 6px"}}>{track.album}</p>
+        {track.mood&&<p style={{fontSize:12,color:`${LIME}88`,margin:"0 0 14px",fontStyle:"italic"}}>"{track.mood}"</p>}
+      </>}
+      <Hr my={0}/>
+      <div style={{marginTop:14,minHeight:20}}>
+        {aiLoading
+          ?<div style={{display:"flex",gap:8,alignItems:"center",justifyContent:"center"}}><div style={{width:5,height:5,borderRadius:"50%",background:LIME,animation:"pulse 1s infinite"}}/><span style={{fontSize:12,color:muted}}>AI 멘트 생성 중...</span></div>
+          :<p style={{fontSize:13,color:soft,margin:0,lineHeight:1.85,fontStyle:"italic"}}>"{aiMsg}"</p>
+        }
+      </div>
+    </G>
   );
-}
 
-// ══════════════════════════════════════════
-// 소개 탭
-// ══════════════════════════════════════════
-function AboutTab() {
-  return (
-    <div style={{display:"flex",flexDirection:"column",gap:10}}>
-
-      <G>
-        <SecHead title="밤하늘극장"/>
-        <p style={{fontSize:13,color:soft,lineHeight:1.95,margin:"0 0 14px"}}>
-          감정이 흐르는 무대, 별빛 같은 노래가 머무는 곳.<br/>
-          <strong style={{color:white}}>유우레이</strong>와 <strong style={{color:white}}>임보성</strong>이 함께하는 감성 인디 프로젝트입니다.<br/>
-          어둠 속에서도 빛나는 별처럼, 위로가 필요한 새벽에 당신 곁에 머물고 싶습니다.
-        </p>
-        <Hr my={4}/>
-        <p style={{fontSize:11,color:muted,margin:"10px 0 0",lineHeight:1.7}}>
-          @NightSkyTheater &nbsp;·&nbsp; 구독자 401명 &nbsp;·&nbsp; 유통 (주)와이지플러스
-        </p>
-      </G>
-
-      <G>
-        <SecHead title="아티스트"/>
-        {[
-          {name:"유우레이",role:"보컬 · 작사",desc:"목소리로 감정의 결을 만드는 사람. 밤하늘극장의 감성적 언어를 담당한다."},
-          {name:"임보성",role:"프로듀서 · 작곡",desc:"사운드로 세계관을 구축하는 사람. 밤하늘극장의 음악적 방향을 이끈다."},
-        ].map((a,i)=>(
-          <div key={i} style={{marginBottom:i===0?16:0}}>
-            <p style={{margin:"0 0 3px",fontSize:15,fontWeight:800,color:white}}>{a.name}</p>
-            <p style={{margin:"0 0 6px",fontSize:10,color:LIME,opacity:0.8,fontWeight:600}}>{a.role}</p>
-            <p style={{fontSize:12,color:muted,lineHeight:1.75,margin:0}}>{a.desc}</p>
-            {i===0&&<Hr my={14}/>}
+  // 공지
+  const Notice = (
+    <G pad="0">
+      <div style={{padding:"16px 18px 12px"}}><SecHead title="공지사항"/></div>
+      <Hr/>
+      {[
+        {tag:"발매",   tagC:LIME,      date:"05.28",title:"새 싱글 발매",       desc:"모든 음원 플랫폼에서 지금 감상하세요."},
+        {tag:"예정",   tagC:"#ffcc44", date:"06.09",title:"정규앨범 7곡 발매", desc:"밤하늘극장 최대 규모의 정규앨범."},
+        {tag:"라이브", tagC:"#ff88cc", date:"06.15",title:"유튜브 라이브",     desc:"팬들과 실시간으로 만나는 첫 라이브."},
+        {tag:"채널",   tagC:"#aaaaff", date:"05.26",title:"구독자 401명 돌파", desc:"함께해주신 모든 분들께 감사드립니다."},
+      ].map((n,i,arr)=>(
+        <div key={i}>
+          <div style={{display:"flex",gap:12,padding:"13px 18px",alignItems:"flex-start"}}>
+            <div style={{flexShrink:0,paddingTop:2,textAlign:"center",minWidth:42}}>
+              <Tag c={n.tagC}>{n.tag}</Tag>
+              <p style={{fontSize:9,color:muted,margin:"4px 0 0",fontFamily:"monospace"}}>{n.date}</p>
+            </div>
+            <div style={{minWidth:0}}>
+              <p style={{margin:"0 0 2px",fontSize:13,fontWeight:700,color:white}}>{n.title}</p>
+              <p style={{margin:0,fontSize:11,color:muted,lineHeight:1.5}}>{n.desc}</p>
+            </div>
           </div>
-        ))}
-      </G>
-
-      <G pad="0">
-        <div style={{padding:"16px 18px 12px"}}>
-          <SecHead title="연혁"/>
+          {i<arr.length-1&&<Hr/>}
         </div>
-        <Hr/>
-        <div style={{padding:"10px 18px 16px",position:"relative"}}>
-          <div style={{position:"absolute",left:30,top:14,bottom:14,width:1,background:`linear-gradient(to bottom,${LIME}55,transparent)`}}/>
-          {TIMELINE.map((t,i)=>{
-            const isLast = t.tag==="예정";
-            return (
-              <div key={i} style={{display:"flex",gap:14,marginBottom:i<TIMELINE.length-1?20:0}}>
-                <div style={{flexShrink:0,width:26,display:"flex",flexDirection:"column",alignItems:"center",zIndex:1,paddingTop:4}}>
-                  <div style={{width:10,height:10,borderRadius:"50%",
-                    background:isLast?LIME:"rgba(184,255,0,0.35)",
-                    border:`2px solid ${isLast?LIME:"rgba(184,255,0,0.25)"}`,
-                    boxShadow:isLast?`0 0 8px ${LIME}88`:"none",
-                  }}/>
-                </div>
-                <div style={{flex:1}}>
-                  <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:4}}>
-                    <span style={{fontSize:10,fontFamily:"monospace",color:LIME,fontWeight:700,opacity:0.75}}>{t.year}</span>
-                    <Tag c={t.tag==="예정"?"#ffcc44":t.tag==="발매"?LIME:"rgba(184,255,0,0.5)"}>{t.tag}</Tag>
+      ))}
+    </G>
+  );
+
+  // TOP10
+  const Top10 = (
+    <G pad="0">
+      <div style={{padding:"16px 18px 12px"}}><SecHead title="TOP 10" sub="3월 판매 기준 정산 데이터"/></div>
+      <Hr/>
+      {CHART.map((t,i)=>(
+        <div key={i}>
+          <div style={{display:"flex",alignItems:"center",gap:12,padding:"11px 18px"}}>
+            <span style={{width:22,textAlign:"center",fontFamily:"monospace",fontWeight:900,flexShrink:0,fontSize:t.rank<=3?14:12,color:rankColor(t.rank)}}>{t.rank}</span>
+            <div style={{flex:1,minWidth:0}}>
+              <p style={{margin:"0 0 1px",fontSize:13,fontWeight:t.rank<=3?700:400,color:t.rank===1?white:t.rank<=3?"rgba(242,238,249,0.85)":soft,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</p>
+              <p style={{margin:0,fontSize:10,color:muted,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.album}</p>
+            </div>
+            <span style={{fontSize:11,fontWeight:700,color:trendColor(t.trend),width:14,textAlign:"center",flexShrink:0}}>{trendLabel(t.trend)}</span>
+          </div>
+          {i<CHART.length-1&&<Hr/>}
+        </div>
+      ))}
+    </G>
+  );
+
+  // 해외
+  const Overseas = (
+    <G>
+      <SecHead title="해외 청취율" sub="5월 유튜브 기준"/>
+      {OVERSEAS.map((o,i)=>(
+        <div key={i} style={{display:"flex",alignItems:"center",gap:10,marginBottom:i<OVERSEAS.length-1?10:0}}>
+          <span style={{fontSize:14,flexShrink:0}}>{o.flag}</span>
+          <span style={{fontSize:11,color:muted,width:42,flexShrink:0}}>{o.name}</span>
+          <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
+            <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${LIME}cc,#66bbff)`,borderRadius:4}}/>
+          </div>
+          <span style={{fontSize:10,color:LIME,fontFamily:"monospace",width:26,textAlign:"right"}}>{o.pct}%</span>
+        </div>
+      ))}
+    </G>
+  );
+
+  // PC용 TOP10 — 5개씩 2컬럼으로 높이 압축
+  const Top10PC = (
+    <G pad="0">
+      <div style={{padding:"16px 18px 12px"}}><SecHead title="TOP 10" sub="3월 판매 기준 정산 데이터"/></div>
+      <Hr/>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr"}}>
+        {[CHART.slice(0,5), CHART.slice(5)].map((half, col) => (
+          <div key={col} style={{borderRight: col===0 ? `1px solid ${gb}` : "none"}}>
+            {half.map((t,i)=>(
+              <div key={i}>
+                <div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px"}}>
+                  <span style={{width:20,textAlign:"center",fontFamily:"monospace",fontWeight:900,flexShrink:0,fontSize:t.rank<=3?13:11,color:rankColor(t.rank)}}>{t.rank}</span>
+                  <div style={{flex:1,minWidth:0}}>
+                    <p style={{margin:"0 0 1px",fontSize:12,fontWeight:t.rank<=3?700:400,color:t.rank===1?white:t.rank<=3?"rgba(242,238,249,0.85)":soft,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</p>
+                    <p style={{margin:0,fontSize:9,color:muted,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.album}</p>
                   </div>
-                  <p style={{fontSize:12,color:soft,margin:0,lineHeight:1.7}}>{t.desc}</p>
+                  <span style={{fontSize:10,fontWeight:700,color:trendColor(t.trend),width:12,textAlign:"center",flexShrink:0}}>{trendLabel(t.trend)}</span>
                 </div>
+                {i<half.length-1&&<Hr/>}
               </div>
-            );
-          })}
-        </div>
-      </G>
-    </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </G>
   );
+
+  if (isPC) {
+    return (
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"start"}}>
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>{TodayPick}{Top10}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>{Notice}{Overseas}</div>
+      </div>
+    );
+  }
+  return <div style={{display:"flex",flexDirection:"column",gap:10}}>{TodayPick}{Notice}{Top10}{Overseas}</div>;
 }
 
-// ══════════════════════════════════════════
-// 음악 탭 — 디스코그래피
-// ══════════════════════════════════════════
-function MusicTab() {
+// ── 소개 (v6 그대로) ────────────────────────────────
+function AboutTab({isPC}) {
+
+  // 히어로 카드
+  const Hero = (
+    <G style={{textAlign:"center",position:"relative",overflow:"hidden",padding:"26px 22px"}}>
+      <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.08) 0%,transparent 70%)",pointerEvents:"none"}}/>
+      <div style={{width:68,height:68,borderRadius:"50%",background:LIME,margin:"0 auto 16px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:30,boxShadow:`0 0 28px ${LIME}44`,animation:"fl 4s ease-in-out infinite"}}>🪐</div>
+      <p style={{fontSize:11,color:LIME,fontWeight:700,margin:"0 0 6px",letterSpacing:"0.1em"}}>NIGHT SKY THEATER</p>
+      <h2 style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 6px",fontFamily:"'Noto Serif KR',serif"}}>밤하늘극장</h2>
+      <p style={{fontSize:12,color:muted,margin:"0 0 16px",lineHeight:1.7}}>@NightSkyTheater · 구독자 401명 · 유통 (주)와이지플러스</p>
+      <Hr my={4}/>
+      <p style={{fontSize:13,color:soft,lineHeight:1.95,margin:"14px 0 0",textAlign:"left"}}>
+        감정이 흐르는 무대, 별빛 같은 노래가 머무는 곳.<br/>
+        <strong style={{color:white}}>유우레이</strong>와 <strong style={{color:white}}>임보성</strong>이 함께하는 감성 인디 프로젝트입니다.<br/>
+        어둠 속에서도 빛나는 별처럼, 위로가 필요한 새벽에 당신 곁에 머물고 싶습니다.
+      </p>
+    </G>
+  );
+
+  // 아티스트
+  const Artists = (
+    <G>
+      <SecHead title="아티스트"/>
+      {[
+        {name:"유우레이",  role:"보컬 · 작사",    desc:"목소리로 감정의 결을 만드는 사람. 밤하늘극장의 감성적 언어를 담당한다."},
+        {name:"임보성",    role:"프로듀서 · 작곡", desc:"사운드로 세계관을 구축하는 사람. 밤하늘극장의 음악적 방향을 이끈다."},
+      ].map((a,i)=>(
+        <div key={i} style={{marginBottom:i===0?16:0}}>
+          <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}>
+            <div style={{width:40,height:40,borderRadius:"50%",background:"rgba(184,255,0,0.1)",border:"1px solid rgba(184,255,0,0.22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>
+              {i===0?"🎤":"🎹"}
+            </div>
+            <div>
+              <p style={{margin:0,fontSize:14,fontWeight:800,color:white}}>{a.name}</p>
+              <p style={{margin:0,fontSize:10,color:LIME,opacity:0.75,fontWeight:600}}>{a.role}</p>
+            </div>
+          </div>
+          <p style={{fontSize:12,color:muted,lineHeight:1.75,margin:0}}>{a.desc}</p>
+          {i===0&&<Hr my={14}/>}
+        </div>
+      ))}
+    </G>
+  );
+
+  // 타임라인
+  const Timeline = (
+    <G pad="0">
+      <div style={{padding:"16px 18px 12px"}}><SecHead title="연혁"/></div>
+      <Hr/>
+      <div style={{padding:"10px 18px 16px",position:"relative"}}>
+        <div style={{position:"absolute",left:30,top:14,bottom:14,width:1,background:`linear-gradient(to bottom,${LIME}55,transparent)`}}/>
+        {TIMELINE.map((t,i)=>(
+          <div key={i} style={{display:"flex",gap:14,marginBottom:i<TIMELINE.length-1?20:0}}>
+            <div style={{flexShrink:0,width:26,display:"flex",flexDirection:"column",alignItems:"center",zIndex:1,paddingTop:4}}>
+              <div style={{width:10,height:10,borderRadius:"50%",background:t.tag==="예정"?"#ffcc44":t.tagC==="rgba(184,255,0,0.5)"?"rgba(184,255,0,0.35)":LIME,border:`2px solid ${t.tag==="예정"?"#ffcc44":LIME}`,boxShadow:t.tag==="예정"?`0 0 8px #ffcc4488`:`0 0 6px ${LIME}55`}}/>
+            </div>
+            <div style={{flex:1}}>
+              <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:4,flexWrap:"wrap"}}>
+                <span style={{fontSize:10,fontFamily:"monospace",color:LIME,fontWeight:700,opacity:0.75}}>{t.year}</span>
+                <Tag c={t.tagC}>{t.tag}</Tag>
+              </div>
+              <p style={{fontSize:12,color:soft,margin:0,lineHeight:1.7}}>{t.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </G>
+  );
+
+  if (isPC) {
+    return (
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"start"}}>
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>{Hero}{Artists}</div>
+        <div>{Timeline}</div>
+      </div>
+    );
+  }
+  return <div style={{display:"flex",flexDirection:"column",gap:10}}>{Hero}{Artists}{Timeline}</div>;
+}
+
+// ── 음악 ────────────────────────────────────────────
+function MusicTab({isPC}) {
   const [selected,setSelected]=useState(null);
   const [trackIdx,setTrackIdx]=useState(0);
 
   if (selected !== null) {
-    const alb = ALBUMS[selected];
-    const tr = alb.tracks[trackIdx];
+    const alb=ALBUMS[selected], tr=alb.tracks[trackIdx];
     return (
-      <div style={{display:"flex",flexDirection:"column",gap:10}}>
-        <button onClick={()=>{setSelected(null);setTrackIdx(0);}} style={{
-          display:"flex",alignItems:"center",gap:6,background:"none",border:"none",
-          cursor:"pointer",color:LIME,fontSize:13,fontFamily:"inherit",padding:0,marginBottom:4,
-        }}>← 음반 목록</button>
-
-        {/* 앨범 헤더 */}
+      <div style={{maxWidth:isPC?560:undefined,margin:isPC?"0 auto":undefined,display:"flex",flexDirection:"column",gap:10}}>
+        <button onClick={()=>{setSelected(null);setTrackIdx(0);}} style={{display:"flex",alignItems:"center",gap:6,background:"none",border:"none",cursor:"pointer",color:LIME,fontSize:13,fontFamily:"inherit",padding:0,marginBottom:4}}>
+          ← 음반 목록
+        </button>
         <G acc>
           <div style={{textAlign:"center"}}>
-            {/* 커버 아트 — 컬러 블록 */}
-            <div style={{width:110,height:110,borderRadius:16,background:alb.color,border:`1px solid rgba(184,255,0,0.15)`,margin:"0 auto 16px",display:"flex",alignItems:"center",justifyContent:"center"}}>
-              <span style={{fontSize:10,color:"rgba(184,255,0,0.4)",fontFamily:"monospace",textAlign:"center",padding:"0 8px",lineHeight:1.5}}>{alb.title}</span>
+            <div style={{width:120,height:120,borderRadius:18,background:alb.color,border:"1px solid rgba(184,255,0,0.15)",margin:"0 auto 16px",display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <span style={{fontSize:9,color:"rgba(184,255,0,0.35)",fontFamily:"monospace",textAlign:"center",padding:"0 10px",lineHeight:1.5}}>{alb.title}</span>
             </div>
             <p style={{fontSize:10,color:LIME,fontWeight:700,margin:"0 0 4px",letterSpacing:"0.1em",opacity:0.8}}>{alb.year}</p>
             <p style={{fontSize:17,fontWeight:900,color:white,margin:"0 0 8px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.3,letterSpacing:"-0.3px"}}>{alb.title}</p>
             <p style={{fontSize:12,color:muted,lineHeight:1.7,margin:0,fontStyle:"italic"}}>"{alb.desc}"</p>
           </div>
           <Hr my={16}/>
-          {/* 진행 도트 */}
           <div style={{display:"flex",justifyContent:"center",gap:5}}>
             {alb.tracks.map((_,j)=>(
               <div key={j} onClick={()=>setTrackIdx(j)} style={{width:j===trackIdx?20:6,height:4,borderRadius:2,background:j===trackIdx?LIME:"rgba(184,255,0,0.2)",transition:"all 0.2s",cursor:"pointer"}}/>
             ))}
           </div>
         </G>
-
-        {/* 현재 트랙 */}
         <G style={{textAlign:"center",minHeight:120,display:"flex",flexDirection:"column",justifyContent:"center",padding:"24px 20px"}}>
           <p style={{fontSize:10,color:muted,margin:"0 0 6px",fontFamily:"monospace",letterSpacing:"0.1em"}}>TRACK {tr.n} / {alb.tracks.length}</p>
-          <p style={{fontSize:20,fontWeight:800,color:white,margin:"0 0 10px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.35,letterSpacing:"-0.3px"}}>{tr.title}</p>
+          <p style={{fontSize:20,fontWeight:800,color:white,margin:"0 0 10px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.35}}>{tr.title}</p>
           {tr.mood&&<p style={{fontSize:13,color:soft,lineHeight:1.75,fontStyle:"italic",margin:0}}>"{tr.mood}"</p>}
         </G>
-
-        {/* 이전/다음 */}
         <div style={{display:"flex",gap:8}}>
           <button onClick={()=>setTrackIdx(i=>Math.max(0,i-1))} disabled={trackIdx===0} style={{flex:1,padding:"12px",background:glass,border:`1px solid ${gb}`,borderRadius:12,cursor:trackIdx===0?"not-allowed":"pointer",color:trackIdx===0?muted:soft,fontSize:13,fontFamily:"inherit",opacity:trackIdx===0?0.4:1,transition:"all 0.2s"}}>← 이전</button>
           <button onClick={()=>setTrackIdx(i=>Math.min(alb.tracks.length-1,i+1))} disabled={trackIdx===alb.tracks.length-1} style={{flex:1,padding:"12px",background:trackIdx===alb.tracks.length-1?glass:"rgba(184,255,0,0.1)",border:`1px solid ${trackIdx===alb.tracks.length-1?gb:"rgba(184,255,0,0.25)"}`,borderRadius:12,cursor:trackIdx===alb.tracks.length-1?"not-allowed":"pointer",color:trackIdx===alb.tracks.length-1?muted:LIME,fontSize:13,fontFamily:"inherit",fontWeight:700,opacity:trackIdx===alb.tracks.length-1?0.4:1,transition:"all 0.2s"}}>다음 →</button>
         </div>
-
-        {/* 전체 트랙리스트 */}
         <G pad="0">
-          <div style={{padding:"14px 18px 10px"}}>
-            <p style={{fontSize:13,fontWeight:700,color:white,margin:0}}>수록곡</p>
-          </div>
+          <div style={{padding:"14px 18px 10px"}}><p style={{fontSize:13,fontWeight:700,color:white,margin:0}}>수록곡</p></div>
           <Hr/>
           {alb.tracks.map((t,j)=>(
             <div key={j}>
@@ -439,36 +398,22 @@ function MusicTab() {
     );
   }
 
-  // 앨범 그리드
+  const cols = isPC ? "1fr 1fr 1fr" : "1fr 1fr";
   return (
     <div>
-      <div style={{marginBottom:16}}>
-        <SecHead title="디스코그래피" sub={`총 ${ALBUMS.length}개 앨범`}/>
-      </div>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+      <div style={{marginBottom:16}}><SecHead title="디스코그래피" sub={`총 ${ALBUMS.length}개 앨범`}/></div>
+      <div style={{display:"grid",gridTemplateColumns:cols,gap:isPC?16:12}}>
         {[...ALBUMS].reverse().map((a,i)=>(
-          <button key={a.id} onClick={()=>{setSelected(ALBUMS.length-1-i);setTrackIdx(0);}} style={{
-            background:"none",border:"none",cursor:"pointer",padding:0,textAlign:"left",fontFamily:"inherit",
-          }}>
-            {/* 썸네일 */}
-            <div style={{
-              width:"100%",aspectRatio:"1/1",borderRadius:14,
-              background:a.color,
-              border:`1px solid rgba(255,255,255,0.08)`,
-              marginBottom:8,
-              display:"flex",alignItems:"center",justifyContent:"center",
-              transition:"all 0.2s",overflow:"hidden",position:"relative",
-            }}
+          <button key={a.id} onClick={()=>{setSelected(ALBUMS.length-1-i);setTrackIdx(0);}} style={{background:"none",border:"none",cursor:"pointer",padding:0,textAlign:"left",fontFamily:"inherit"}}>
+            <div style={{width:"100%",aspectRatio:"1/1",borderRadius:isPC?16:14,background:a.color,border:"1px solid rgba(255,255,255,0.08)",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.2s",overflow:"hidden",position:"relative"}}
               onMouseEnter={e=>e.currentTarget.style.borderColor="rgba(184,255,0,0.35)"}
               onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(255,255,255,0.08)"}>
-              {/* 앨범명 워터마크 */}
-              <p style={{fontSize:9,color:"rgba(184,255,0,0.25)",textAlign:"center",padding:"0 10px",lineHeight:1.5,fontWeight:700,wordBreak:"keep-all"}}>{a.title}</p>
-              {/* 연도 뱃지 */}
+              <p style={{fontSize:9,color:"rgba(184,255,0,0.25)",textAlign:"center",padding:"0 10px",lineHeight:1.5,fontWeight:700,wordBreak:"keep-all",margin:0}}>{a.title}</p>
               <div style={{position:"absolute",bottom:8,right:8,background:"rgba(0,0,0,0.6)",borderRadius:6,padding:"2px 7px"}}>
                 <span style={{fontSize:9,color:"rgba(255,255,255,0.5)",fontFamily:"monospace"}}>{a.year}</span>
               </div>
             </div>
-            <p style={{fontSize:12,fontWeight:700,color:white,margin:"0 0 2px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",lineHeight:1.3}}>{a.title}</p>
+            <p style={{fontSize:isPC?13:12,fontWeight:700,color:white,margin:"0 0 2px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",lineHeight:1.3}}>{a.title}</p>
             <p style={{fontSize:10,color:muted,margin:0}}>{a.tracks.length}곡</p>
           </button>
         ))}
@@ -477,10 +422,8 @@ function MusicTab() {
   );
 }
 
-// ══════════════════════════════════════════
-// 방명록 탭
-// ══════════════════════════════════════════
-function GuestbookTab() {
+// ── 방명록 ──────────────────────────────────────────
+function GuestbookTab({isPC}) {
   const [entries,setEntries]=useState(INIT_GB);
   const [name,setName]=useState(""); const [pw,setPw]=useState(""); const [msg,setMsg]=useState("");
   const [done,setDone]=useState(false);
@@ -514,16 +457,9 @@ function GuestbookTab() {
     if(v===entry.pw) setEntries(p=>p.filter(e=>e.id!==entry.id));
   };
 
-  return (
+  const inner = (
     <div style={{display:"flex",flexDirection:"column",gap:10}}>
-      <G acc>
-        <p style={{fontSize:13,color:soft,lineHeight:1.85,margin:0}}>
-          밤하늘극장을 찾아주셔서 감사해요.<br/>
-          이곳에 당신의 감정을 남겨주세요.<br/>
-          <span style={{fontSize:11,color:muted}}>닉네임 + 비밀번호로 작성 · 수정 · 삭제 가능합니다.</span>
-        </p>
-      </G>
-
+      <G acc><p style={{fontSize:13,color:soft,lineHeight:1.85,margin:0}}>밤하늘극장을 찾아주셔서 감사해요.<br/>이곳에 당신의 감정을 남겨주세요.<br/><span style={{fontSize:11,color:muted}}>닉네임 + 비밀번호로 작성 · 수정 · 삭제 가능합니다.</span></p></G>
       <G>
         <SecHead title="메시지 남기기"/>
         <div style={{display:"flex",gap:8,marginBottom:8}}>
@@ -533,16 +469,11 @@ function GuestbookTab() {
         <textarea value={msg} onChange={e=>setMsg(e.target.value)} onFocus={fo} onBlur={bl} placeholder="밤하늘극장에 남기고 싶은 말을 적어주세요" maxLength={150} rows={3} style={{...IS,width:"100%",resize:"none",lineHeight:1.65,marginBottom:8}}/>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
           <span style={{fontSize:10,color:muted}}>{msg.length}/150</span>
-          <button onClick={submit} style={{background:done?"rgba(184,255,0,0.15)":"rgba(255,255,255,0.07)",border:`1px solid ${done?"rgba(184,255,0,0.4)":gb}`,color:done?LIME:soft,borderRadius:10,padding:"8px 20px",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",transition:"all 0.3s"}}>
-            {done?"등록됨":"남기기"}
-          </button>
+          <button onClick={submit} style={{background:done?"rgba(184,255,0,0.15)":"rgba(255,255,255,0.07)",border:`1px solid ${done?"rgba(184,255,0,0.4)":gb}`,color:done?LIME:soft,borderRadius:10,padding:"8px 20px",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",transition:"all 0.3s"}}>{done?"등록됨":"남기기"}</button>
         </div>
       </G>
-
       <G pad="0">
-        <div style={{padding:"14px 18px 12px"}}>
-          <SecHead title={`방명록 — ${entries.length}개`}/>
-        </div>
+        <div style={{padding:"14px 18px 12px"}}><SecHead title={`방명록 — ${entries.length}개`}/></div>
         <Hr/>
         {entries.map((entry,idx)=>(
           <div key={entry.id}>
@@ -590,9 +521,7 @@ function GuestbookTab() {
                   <input value={adminPw} onChange={e=>{setAdminPw(e.target.value);setAdminErr(false);}} onFocus={fo} onBlur={bl} placeholder="관리자 비밀번호" type="password" style={{...IS,width:"100%",marginBottom:7}}/>
                   <textarea value={adminR} onChange={e=>setAdminR(e.target.value)} onFocus={fo} onBlur={bl} placeholder="답글 내용" rows={2} style={{...IS,width:"100%",resize:"none",marginBottom:7}}/>
                   {adminErr&&<p style={{fontSize:11,color:"#ff6666",margin:"0 0 7px"}}>비밀번호가 틀렸어요</p>}
-                  <button onClick={()=>submitAdmin(entry.id)} style={{background:"rgba(184,255,0,0.1)",border:"1px solid rgba(184,255,0,0.3)",color:LIME,borderRadius:9,padding:"8px 18px",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
-                    답글 등록
-                  </button>
+                  <button onClick={()=>submitAdmin(entry.id)} style={{background:"rgba(184,255,0,0.1)",border:"1px solid rgba(184,255,0,0.3)",color:LIME,borderRadius:9,padding:"8px 18px",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>답글 등록</button>
                 </div>
               )}
             </div>
@@ -602,13 +531,23 @@ function GuestbookTab() {
       </G>
     </div>
   );
+
+  return isPC
+    ? <div style={{maxWidth:640,margin:"0 auto"}}>{inner}</div>
+    : inner;
 }
 
-// ══════════════════════════════════════════
-// APP
-// ══════════════════════════════════════════
+// ── APP ─────────────────────────────────────────────
 export default function App() {
   const [tab,setTab]=useState("홈");
+  const [isPC,setIsPC]=useState(window.innerWidth>=768);
+
+  useEffect(()=>{
+    const fn=()=>setIsPC(window.innerWidth>=768);
+    window.addEventListener("resize",fn);
+    return ()=>window.removeEventListener("resize",fn);
+  },[]);
+
   return (
     <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#05021a 0%,#080520 35%,#0b0728 65%,#060418 100%)",color:white,fontFamily:"'Noto Sans KR','Apple SD Gothic Neo',sans-serif",position:"relative"}}>
       <style>{`
@@ -623,13 +562,12 @@ export default function App() {
         strong { font-weight:800 }
       `}</style>
       <Stars/>
-      <div style={{position:"relative",zIndex:1,maxWidth:430,margin:"0 auto",display:"flex",flexDirection:"column",minHeight:"100vh"}}>
-        <Header/>
-        <div style={{flex:1,padding:"12px 14px 76px",animation:"fin 0.3s ease both"}} key={tab}>
-          {tab==="홈"    && <HomeTab/>}
-          {tab==="소개"  && <AboutTab/>}
-          {tab==="음악"  && <MusicTab/>}
-          {tab==="방명록" && <GuestbookTab/>}
+      <div style={{position:"relative",zIndex:1,maxWidth:isPC?900:430,margin:"0 auto",display:"flex",flexDirection:"column",minHeight:"100vh"}}>
+        <div style={{flex:1,padding:isPC?"20px 24px 90px":"12px 14px 76px",animation:"fin 0.3s ease both"}} key={tab}>
+          {tab==="홈"    &&<HomeTab     isPC={isPC}/>}
+          {tab==="소개"  &&<AboutTab    isPC={isPC}/>}
+          {tab==="음악"  &&<MusicTab    isPC={isPC}/>}
+          {tab==="방명록"&&<GuestbookTab isPC={isPC}/>}
         </div>
         <BottomNav tab={tab} setTab={setTab}/>
       </div>
