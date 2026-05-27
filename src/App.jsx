@@ -1,527 +1,638 @@
+cat > /mnt/user-data/outputs/밤하늘극장_v7.jsx << 'ENDOFFILE'
 import { useState, useEffect, useRef } from "react";
 
+const LIME = "#B8FF00";
+const glass = "rgba(0,0,0,0.52)";
+const gb = "rgba(255,255,255,0.07)";
+const muted = "rgba(220,210,255,0.36)";
+const soft  = "rgba(220,210,255,0.70)";
+const white = "#F2EEF9";
 const ADMIN_PW = "bam2026!";
 
-const TICKER_MESSAGES = [
-  "🌌 유우레이 · 임보성 — 밤하늘극장에 오신 걸 환영합니다",
-  "🎵 새 싱글 2026.05.28 발매! 모든 플랫폼에서 지금 감상하세요",
-  "💿 정규앨범 2026.06.09 발매 예정 — 7곡의 새 이야기",
-  "⭐ 구독자 400명 돌파! 함께해주셔서 감사합니다",
-];
-
+// ── DATA ──────────────────────────────────────────────────────
 const ALBUMS = [
-  { title: "오늘이 가장 어렸던 날이야", year: "2024", color: "#3a2a5a", tracks: ["겨울의 대삼각형","우리들의 발라드","오늘이 가장 어렸던 날이야","20에 50","나 지금도 충분히 버티고 있는데","조명이 켜지고","사탄탱고","별이 비처럼 내리던 날"] },
-  { title: "운명애", year: "2025", color: "#1a3a4a", tracks: ["운명애","운외창천 (雲外蒼天)","테세우스의 배","사랑엔 자막이 필요해","지구는 잘 돌아가네, 나 없이도","내 소중한 마음은 비밀이야","지금 이 순간"] },
-  { title: "자발적으로 표류하는 우주비행사", year: "2025", color: "#2a3a1a", tracks: ["자발적으로 표류하는 우주비행사","출근하기 싫은데 알람은 또 맞춰놨어","사막에서 수영하기","별자리를 잇다"] },
-  { title: "이 봄은 다른 이름이 될까", year: "2025", color: "#3a1a2a", tracks: ["이 봄은 다른 이름이 될까","갑자기 오래된 노래가 떠오른 이유","말하지 않은 것들의 무게","꿈은 없고요, 돈은 많고 싶네요","방해 금지 모드"] },
-  { title: "사랑은 말이야", year: "2025", color: "#3a2a1a", tracks: ["사랑은 말이야","F로 살기엔 세상은 너무 차가워","고백 연습"] },
-  { title: "사막 위의 잠수함", year: "2025", color: "#1a2a3a", tracks: ["사막 위의 잠수함","붐비는 무인도","잠수함 일지"] },
-  { title: "죽어가는 모든 것들을 사랑해야지", year: "2026", color: "#2a1a3a", tracks: ["죽어가는 모든 것들을 사랑해야지","꽃이 피든 말든","푸른 하늘 은하수","마지막 여름"] },
-  { title: "나는 오늘 또 어떤 핑계를 대었는가", year: "2026", color: "#1a3a2a", tracks: ["나는 오늘 또 어떤 핑계를 대었는가","가짜의 삶","인생은 산과 계곡","핑계의 목록"] },
-  { title: "不完全な踊り (불완전한 춤)", year: "2025", color: "#3a3a1a", tracks: ["不完全な踊り","闇が怖い幽霊 (어둠이 무서운 유령)","星影の叫び (별빛의 외침)"] },
-  { title: "ただ (그냥)", year: "2026", color: "#1a1a3a", tracks: ["ただ (그냥)","夜の終わり (밤의 끝)"] },
-  { title: "그대였죠", year: "2023", color: "#2a2a3a", tracks: ["그대였죠","고장난시계","그 계절에"] },
+  { id:1,  title:"그대였죠",                           year:"2023", color:"#1a1428",
+    desc:"처음 목소리를 꺼낸 날. 아무도 듣지 않아도 괜찮았던 새벽.",
+    tracks:[{n:1,title:"그대였죠",mood:"그리움이 익숙해진 사람에게"},{n:2,title:"고장난시계",mood:"멈춘 시간 속에서 혼자 걷는 기분"},{n:3,title:"그 계절에",mood:"지나간 계절을 다시 꺼내는 밤"}]},
+  { id:2,  title:"오늘이 가장 어렸던 날이야",            year:"2024", color:"#0d1a2a",
+    desc:"지금 이 순간이 남은 생에서 가장 젊은 날임을 아는 사람의 노래.",
+    tracks:[{n:1,title:"겨울의 대삼각형",mood:"추운 밤 하늘을 올려다본 기억"},{n:2,title:"우리들의 발라드",mood:"같이 울었던 그 사람에게"},{n:3,title:"오늘이 가장 어렸던 날이야",mood:"지금을 살아야 하는 이유"},{n:4,title:"20에 50",mood:"서른을 앞두고 스무 살을 그리워하는"},{n:5,title:"나 지금도 충분히 버티고 있는데",mood:"무너지지 않으려고 애쓰는 모든 밤"},{n:6,title:"조명이 켜지고",mood:"무대 위에 서기 전 혼자인 시간"},{n:7,title:"사탄탱고",mood:"이상하게 중독되는 감정"},{n:8,title:"별이 비처럼 내리던 날",mood:"한 번도 잊지 못할 장면"}]},
+  { id:3,  title:"운명애",                              year:"2025", color:"#1a0d28",
+    desc:"사랑이 아니라 운명이었다고 믿고 싶은 마음의 기록.",
+    tracks:[{n:1,title:"운명애",mood:"이게 사랑인지 집착인지 모르던 때"},{n:2,title:"운외창천 (雲外蒼天)",mood:"구름 너머 푸른 하늘 — 포기하지 않기로"},{n:3,title:"테세우스의 배",mood:"변해도 여전히 나인가"},{n:4,title:"사랑엔 자막이 필요해",mood:"말하지 않으면 모르는 것들"},{n:5,title:"지구는 잘 돌아가네, 나 없이도",mood:"이별 후에도 세상은 평범하게"},{n:6,title:"내 소중한 마음은 비밀이야",mood:"표현 못 하고 삼킨 감정들"},{n:7,title:"지금 이 순간",mood:"지나가는 걸 알면서 붙잡고 싶은"}]},
+  { id:4,  title:"자발적으로 표류하는 우주비행사",       year:"2025", color:"#0a1a10",
+    desc:"길을 잃은 게 아니라 스스로 떠내려가기로 한 사람의 이야기.",
+    tracks:[{n:1,title:"자발적으로 표류하는 우주비행사",mood:"계획 없이 살아가는 것도 용기"},{n:2,title:"출근하기 싫은데 알람은 또 맞춰놨어",mood:"그래도 살아야 하니까"},{n:3,title:"사막에서 수영하기",mood:"불가능한 걸 계속 시도하는 마음"},{n:4,title:"별자리를 잇다",mood:"점들을 연결하면 별자리가 된다"}]},
+  { id:5,  title:"이 봄은 다른 이름이 될까",             year:"2025", color:"#1a0d14",
+    desc:"매년 오는 봄이지만 올해의 봄은 다를 것 같다는 예감.",
+    tracks:[{n:1,title:"이 봄은 다른 이름이 될까",mood:"변화를 기다리는 설렘"},{n:2,title:"갑자기 오래된 노래가 떠오른 이유",mood:"어떤 노래는 사람을 데려온다"},{n:3,title:"말하지 않은 것들의 무게",mood:"침묵이 쌓여 무거워진 관계"},{n:4,title:"꿈은 없고요, 돈은 많고 싶네요",mood:"솔직한 어른의 소망"},{n:5,title:"방해 금지 모드",mood:"혼자 있고 싶은 날"}]},
+  { id:6,  title:"사랑은 말이야",                        year:"2025", color:"#1a1408",
+    desc:"말로 표현하지 않으면 사랑도 존재하지 않는 것인가.",
+    tracks:[{n:1,title:"사랑은 말이야",mood:"표현해야 비로소 사랑이 된다"},{n:2,title:"F로 살기엔 세상은 너무 차가워",mood:"감정형 인간의 세상 적응기"},{n:3,title:"고백 연습",mood:"말하기 전 수백 번 머릿속으로"}]},
+  { id:7,  title:"사막 위의 잠수함",                     year:"2025", color:"#081420",
+    desc:"있을 수 없는 곳에 있는 것들의 이야기. 어울리지 않아서 아름다운.",
+    tracks:[{n:1,title:"사막 위의 잠수함",mood:"어울리지 않아서 오히려 눈에 띄는"},{n:2,title:"붐비는 무인도",mood:"사람들 속에서 혼자인 기분"},{n:3,title:"잠수함 일지",mood:"수면 아래에서 기록하는 것들"}]},
+  { id:8,  title:"不完全な踊り (불완전한 춤)",             year:"2025", color:"#1a1a08",
+    desc:"완벽하지 않아도 계속 춤추는 것.",
+    tracks:[{n:1,title:"不完全な踊り",mood:"완벽하지 않아도 계속"},{n:2,title:"闇が怖い幽霊",mood:"유령도 어둠이 무섭다"},{n:3,title:"星影の叫び",mood:"별빛도 소리를 지른다"}]},
+  { id:9,  title:"죽어가는 모든 것들을 사랑해야지",       year:"2026", color:"#0d1a0d",
+    desc:"사라져가는 것들에게 늦지 않게 사랑을 고백하는 앨범.",
+    tracks:[{n:1,title:"죽어가는 모든 것들을 사랑해야지",mood:"끝나기 전에 사랑하기"},{n:2,title:"꽃이 피든 말든",mood:"결과와 상관없이 피어나는 것들"},{n:3,title:"푸른 하늘 은하수",mood:"아득하고 맑은 것들"},{n:4,title:"마지막 여름",mood:"다시 오지 않을 그 계절"}]},
+  { id:10, title:"나는 오늘 또 어떤 핑계를 대었는가",     year:"2026", color:"#141420",
+    desc:"스스로를 솔직하게 바라보는 일.",
+    tracks:[{n:1,title:"나는 오늘 또 어떤 핑계를 대었는가",mood:"자기 자신을 마주하는 용기"},{n:2,title:"가짜의 삶",mood:"진짜를 잃어버린 날들"},{n:3,title:"인생은 산과 계곡",mood:"오르막과 내리막 사이"},{n:4,title:"핑계의 목록",mood:"내가 나에게 하는 변명들"}]},
+  { id:11, title:"ただ (그냥)",                           year:"2026", color:"#10101a",
+    desc:"이유 없이. 그냥. 때로는 설명하지 않아도 되는 감정이 있다.",
+    tracks:[{n:1,title:"ただ (그냥)",mood:"아무 이유 없이 슬픈 날"},{n:2,title:"夜の終わり (밤의 끝)",mood:"밤이 끝나고 아침이 오는 사이"}]},
 ];
 
-const ALL_TRACKS = ALBUMS.flatMap(a => a.tracks.map(t => ({ track: t, album: a.title })));
+const ALL_TRACKS = ALBUMS.flatMap(a => a.tracks.map(t => ({...t, album:a.title})));
 
 const CHART = [
-  { rank: 1, title: "우리들의 발라드", album: "오늘이 가장 어렸던 날이야", amount: "50,011", badge: null },
-  { rank: 2, title: "말하지 않은 것들의 무게", album: "이 봄은 다른 이름이 될까", amount: "1,910", badge: "▲" },
-  { rank: 3, title: "꽃이 피든 말든", album: "죽어가는 모든 것들을 사랑해야지", amount: "1,768", badge: "NEW" },
-  { rank: 4, title: "내 소중한 마음은 비밀이야", album: "운명애", amount: "1,709", badge: "▼" },
-  { rank: 5, title: "자발적으로 표류하는 우주비행사", album: "자발적으로 표류하는 우주비행사", amount: "1,433", badge: "▲" },
-];
-
-const PLATFORMS = [
-  { name: "유튜브", icon: "🎬", url: "https://youtube.com/@밤하늘극장", color: "#ff4444" },
-  { name: "멜론", icon: "🍈", url: "https://melon.com", color: "#00c73c" },
-  { name: "지니", icon: "🎵", url: "https://genie.co.kr", color: "#0066ff" },
-  { name: "바이브", icon: "💜", url: "https://vibe.naver.com", color: "#06d6a0" },
-  { name: "플로", icon: "🌊", url: "https://flo.kr", color: "#4fc3f7" },
-  { name: "벅스", icon: "🎶", url: "https://bugs.co.kr", color: "#ff6b35" },
-  { name: "애플뮤직", icon: "🍎", url: "https://music.apple.com", color: "#fc3c44" },
-  { name: "스포티파이", icon: "🟢", url: "https://spotify.com", color: "#1db954" },
-];
-
-const YOUTUBE_VIDEOS = [
-  { title: "우리들의 발라드 (Official Lyrics Video)", date: "2024.11.20", views: "12.4만", thumb: "🎬" },
-  { title: "겨울의 대삼각형 M/V", date: "2024.10.05", views: "8.1만", thumb: "🌌" },
-  { title: "꽃이 피든 말든 (Lyric Video)", date: "2026.04.10", views: "3.2만", thumb: "🌸" },
-  { title: "오늘의 밤하늘극장 Live Session", date: "2026.03.22", views: "2.8만", thumb: "🎙️" },
-];
-
-const CALENDAR_EVENTS = [
-  { date: "05.28", label: "싱글 발매", type: "release" },
-  { date: "06.09", label: "정규앨범 발매", type: "release" },
-  { date: "06.15", label: "유튜브 라이브", type: "live" },
+  {rank:1, title:"우리들의 발라드",                    album:"오늘이 가장 어렸던 날이야", trend:null},
+  {rank:2, title:"말하지 않은 것들의 무게",             album:"이 봄은 다른 이름이 될까",  trend:"up"},
+  {rank:3, title:"꽃이 피든 말든",                     album:"죽어가는 모든 것들을 사랑해야지", trend:"new"},
+  {rank:4, title:"내 소중한 마음은 비밀이야",           album:"운명애",                   trend:"down"},
+  {rank:5, title:"자발적으로 표류하는 우주비행사",      album:"자발적으로 표류하는 우주비행사", trend:"up"},
+  {rank:6, title:"운외창천 (雲外蒼天)",                 album:"운명애",                   trend:null},
+  {rank:7, title:"겨울의 대삼각형",                    album:"오늘이 가장 어렸던 날이야", trend:"down"},
+  {rank:8, title:"나는 오늘 또 어떤 핑계를 대었는가",  album:"나는 오늘 또 어떤 핑계를 대었는가", trend:"new"},
+  {rank:9, title:"고백 연습",                          album:"사랑은 말이야",             trend:"up"},
+  {rank:10,title:"별이 비처럼 내리던 날",               album:"오늘이 가장 어렸던 날이야", trend:null},
 ];
 
 const OVERSEAS = [
-  { flag: "🇺🇸", country: "미국", pct: 32 },
-  { flag: "🇯🇵", country: "일본", pct: 18 },
-  { flag: "🇹🇼", country: "대만", pct: 12 },
-  { flag: "🇮🇳", country: "인도", pct: 10 },
-  { flag: "🇦🇺", country: "호주", pct: 8 },
-  { flag: "🇨🇦", country: "캐나다", pct: 6 },
-  { flag: "🇹🇭", country: "태국", pct: 5 },
-  { flag: "🌍", country: "기타", pct: 9 },
+  {flag:"🇺🇸",name:"미국",pct:32},{flag:"🇯🇵",name:"일본",pct:18},
+  {flag:"🇹🇼",name:"대만",pct:12},{flag:"🇮🇳",name:"인도",pct:10},
+  {flag:"🇦🇺",name:"호주",pct:8},{flag:"🇨🇦",name:"캐나다",pct:6},
+  {flag:"🇹🇭",name:"태국",pct:5},{flag:"🌍",name:"기타",pct:9},
 ];
 
-const INIT_GUESTBOOK = [
-  { id: 1, name: "새벽여행자", pw: "1234", msg: "우리들의 발라드 듣고 밤새 울었어요. 고맙습니다.", time: "2026.05.25", likes: 14, reply: "늦은 새벽에 함께해줘서 저도 고마워요 🌙 — 밤하늘극장" },
-  { id: 2, name: "별빛수집가", pw: "1234", msg: "자발적으로 표류하는 우주비행사 진짜 제 얘기 같아요…", time: "2026.05.24", likes: 9, reply: "" },
-  { id: 3, name: "moonlight", pw: "1234", msg: "밤하늘극장 발견한 날이 올해 최고의 날이었어요", time: "2026.05.23", likes: 11, reply: "그 말이 저희한테도 최고의 댓글이에요 ✨ — 밤하늘극장" },
+const TIMELINE = [
+  {year:"2023",    tag:"데뷔",   desc:"첫 싱글 '그대였죠' 발매. 밤하늘극장의 첫 목소리."},
+  {year:"2024.01", tag:"앨범",   desc:"'오늘이 가장 어렸던 날이야' 발매. 유튜브 최초 노출."},
+  {year:"2024.11", tag:"성장",   desc:"'우리들의 발라드' 유튜브 조회 12만 돌파."},
+  {year:"2025",    tag:"확장",   desc:"연간 7개 앨범 발매. 일본어 앨범으로 해외 유입 시작."},
+  {year:"2025.11", tag:"글로벌", desc:"해외 청취율 집계 시작. 8개국 유입 확인."},
+  {year:"2026.04", tag:"구독",   desc:"유튜브 구독자 400명 돌파."},
+  {year:"2026.05", tag:"발매",   desc:"새 싱글 발매."},
+  {year:"2026.06", tag:"예정",   desc:"정규앨범 7곡 발매 예정. 최대 규모 프로젝트."},
 ];
 
-// 별 배경
+const INIT_GB = [
+  {id:1,name:"새벽여행자",pw:"1234",msg:"우리들의 발라드 듣고 밤새 울었어요. 고맙습니다.",time:"05.25",likes:14,reply:"늦은 새벽에 함께해줘서 저도 고마워요 — 밤하늘극장"},
+  {id:2,name:"별빛수집가",pw:"1234",msg:"자발적으로 표류하는 우주비행사 진짜 제 얘기 같아요…",time:"05.24",likes:9,reply:""},
+  {id:3,name:"moonlight",pw:"1234",msg:"밤하늘극장 발견한 날이 올해 최고의 날이었어요",time:"05.23",likes:11,reply:"그 말이 저희한테도 최고의 댓글이에요 — 밤하늘극장"},
+];
+
+// ── PRIMITIVES ───────────────────────────────────────────────
 function Stars() {
-  const stars = useRef(Array.from({ length: 100 }, (_, i) => ({
-    id: i, x: Math.random() * 100, y: Math.random() * 100,
-    size: Math.random() * 2.2 + 0.4, opacity: Math.random() * 0.55 + 0.15,
-    dur: Math.random() * 4 + 2,
+  const s = useRef(Array.from({length:100},(_,i)=>({
+    id:i, x:Math.random()*100, y:Math.random()*100,
+    r:Math.random()*1.4+0.2, o:Math.random()*0.4+0.08, d:Math.random()*5+2,
   }))).current;
   return (
-    <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0 }}>
-      {stars.map(s => (
-        <div key={s.id} style={{
-          position: "absolute", left: `${s.x}%`, top: `${s.y}%`,
-          width: s.size, height: s.size, borderRadius: "50%", background: "white",
-          opacity: s.opacity, animation: `twinkle ${s.dur}s ease-in-out infinite alternate`,
-        }} />
+    <div style={{position:"fixed",inset:0,zIndex:0,pointerEvents:"none"}}>
+      {s.map(st=>(
+        <div key={st.id} style={{position:"absolute",left:`${st.x}%`,top:`${st.y}%`,
+          width:st.r*2,height:st.r*2,borderRadius:"50%",background:"#fff",
+          opacity:st.o,animation:`tw ${st.d}s ease-in-out infinite alternate`}}/>
       ))}
     </div>
   );
 }
 
-// 상단 티커
-function Ticker() {
-  const text = TICKER_MESSAGES.join("　　✦　　");
+const G = ({children, acc, pad="16px 18px", style={}}) => (
+  <div style={{
+    background: acc ? "rgba(184,255,0,0.07)" : glass,
+    backdropFilter:"blur(24px)", WebkitBackdropFilter:"blur(24px)",
+    border:`1px solid ${acc ? "rgba(184,255,0,0.2)" : gb}`,
+    borderRadius:16, padding:pad, ...style,
+  }}>{children}</div>
+);
+
+const Hr = ({my=0}) => <div style={{height:1,background:gb,margin:`${my}px 0`}}/>;
+
+const Tag = ({c=LIME,children}) => (
+  <span style={{fontSize:9,fontWeight:700,letterSpacing:"0.05em",padding:"2px 8px",borderRadius:20,
+    color:c,background:`${c}18`,border:`1px solid ${c}38`}}>{children}</span>
+);
+
+const SecHead = ({title,sub}) => (
+  <div style={{marginBottom:16}}>
+    <p style={{fontSize:17,fontWeight:800,color:white,margin:0,letterSpacing:"-0.3px"}}>{title}</p>
+    {sub&&<p style={{fontSize:10,color:muted,margin:"3px 0 0"}}>{sub}</p>}
+  </div>
+);
+
+// ── HEADER ────────────────────────────────────────────────────
+function Header() {
   return (
     <div style={{
-      position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
-      background: "rgba(6,4,22,0.94)", backdropFilter: "blur(12px)",
-      borderBottom: "1px solid rgba(147,114,229,0.18)",
-      height: 34, display: "flex", alignItems: "center", overflow: "hidden",
+      height:50, display:"flex", alignItems:"center", paddingInline:18,
+      background:"rgba(4,2,16,0.9)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)",
+      borderBottom:`1px solid rgba(184,255,0,0.1)`,
+      position:"sticky", top:0, zIndex:100,
     }}>
-      <div style={{ animation: "ticker 45s linear infinite", whiteSpace: "nowrap", fontSize: 11, color: "#9080c8", paddingLeft: "100%" }}>
-        {text}&nbsp;&nbsp;&nbsp;&nbsp;{text}
+      <div style={{width:34,height:34,borderRadius:"50%",background:LIME,display:"flex",alignItems:"center",justifyContent:"center",fontSize:17,boxShadow:`0 0 14px ${LIME}44`,animation:"fl 4s ease-in-out infinite"}}>
+        🪐
       </div>
     </div>
   );
 }
 
-// 섹션 구분선 타이틀
-function STitle({ icon, title, sub }) {
+// ── BOTTOM NAV ────────────────────────────────────────────────
+const NAV_ITEMS = [
+  {id:"홈",   svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>},
+  {id:"소개", svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>},
+  {id:"음악", svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>},
+  {id:"방명록",svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>},
+];
+
+function BottomNav({tab,setTab}) {
   return (
-    <div style={{ marginBottom: 22, display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
-      <div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 17 }}>{icon}</span>
-          <h2 style={{ fontFamily: "'Noto Serif KR',serif", fontSize: 17, fontWeight: 700, color: "#e2d9f3", margin: 0, letterSpacing: "-0.3px" }}>{title}</h2>
-        </div>
-        {sub && <p style={{ fontSize: 11, color: "#484870", marginTop: 3, marginLeft: 25 }}>{sub}</p>}
-      </div>
-      <div style={{ height: 1, flex: 1, background: "linear-gradient(90deg, rgba(147,114,229,0.2), transparent)", marginLeft: 16, marginBottom: 4 }} />
+    <div style={{
+      position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",
+      width:"100%",maxWidth:430,zIndex:200,
+      background:"rgba(3,1,14,0.97)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",
+      borderTop:`1px solid rgba(184,255,0,0.1)`,
+      display:"flex",
+    }}>
+      {NAV_ITEMS.map(it=>(
+        <button key={it.id} onClick={()=>setTab(it.id)} style={{
+          flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
+          gap:3,padding:"9px 0 7px",background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",
+          color:tab===it.id?LIME:muted,transition:"color 0.2s",position:"relative",
+        }}>
+          {tab===it.id&&<div style={{position:"absolute",top:0,left:"50%",transform:"translateX(-50%)",width:22,height:2,background:LIME,borderRadius:2}}/>}
+          {it.svg}
+          <span style={{fontSize:9.5,fontWeight:tab===it.id?700:400}}>{it.id}</span>
+        </button>
+      ))}
     </div>
   );
 }
 
-// ── 히어로
-function Hero() {
-  return (
-    <header style={{ textAlign: "center", padding: "44px 0 52px", position: "relative" }}>
-      <div style={{ fontSize: 52, marginBottom: 14, display: "inline-block", animation: "floatY 5s ease-in-out infinite" }}>🌌</div>
-      <h1 style={{
-        fontFamily: "'Noto Serif KR',serif", fontSize: 38, fontWeight: 900, margin: "0 0 8px",
-        background: "linear-gradient(130deg, #d4beff 0%, #90c4fa 45%, #a8e8ea 100%)",
-        WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", letterSpacing: "-1.5px",
-      }}>밤하늘극장</h1>
-      <p style={{ fontSize: 12, color: "#4a4a72", letterSpacing: "0.18em", margin: "0 0 20px" }}>유우레이 · 임보성 · 감성 인디</p>
-      <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 14px", background: "rgba(147,114,229,0.1)", border: "1px solid rgba(147,114,229,0.2)", borderRadius: 30 }}>
-          <span style={{ fontSize: 11, color: "#9370cc" }}>구독자</span>
-          <span style={{ fontSize: 15, fontWeight: 900, color: "#c4a8f0" }}>400+</span>
-          <span style={{ fontSize: 10, color: "#63dcb4" }}>▲ 성장중</span>
-        </div>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 14px", background: "rgba(99,220,180,0.08)", border: "1px solid rgba(99,220,180,0.18)", borderRadius: 30 }}>
-          <span style={{ fontSize: 11, color: "#63dcb4" }}>🎵 05.28 싱글 발매</span>
-        </div>
-      </div>
-    </header>
-  );
-}
+// ══════════════════════════════════════════
+// 홈 탭
+// ══════════════════════════════════════════
+function HomeTab() {
+  const [track,setTrack]=useState(null);
+  const [aiMsg,setAiMsg]=useState("");
+  const [aiLoading,setAiLoading]=useState(true);
 
-// ── 소개
-function About() {
-  return (
-    <section style={{ marginBottom: 56 }}>
-      <STitle icon="🌌" title="밤하늘극장 소개" />
-      <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "22px 24px" }}>
-        <p style={{ fontSize: 13, color: "#a8a0c4", lineHeight: 2, margin: 0 }}>
-          밤하늘극장은 유우레이와 임보성이 함께하는 감성 인디 프로젝트입니다.<br />
-          어둠 속에서도 빛나는 별처럼, 위로가 필요한 새벽에 당신 곁에 머물고 싶습니다.<br />
-          <span style={{ color: "#7055aa", fontSize: 11.5 }}>유통: (주)와이지플러스 · 국내외 모든 음원 플랫폼 정식 발매</span>
-        </p>
-      </div>
-    </section>
-  );
-}
-
-// ── 오늘의 추천곡 AI
-function TodayTrack() {
-  const [track, setTrack] = useState(null);
-  const [aiMsg, setAiMsg] = useState("");
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const seed = new Date().toDateString();
-    let hash = 0;
-    for (let c of seed) hash = (hash * 31 + c.charCodeAt(0)) % ALL_TRACKS.length;
-    const picked = ALL_TRACKS[Math.abs(hash)];
+  useEffect(()=>{
+    const seed=new Date().toDateString();
+    let h=0; for(let c of seed) h=(h*31+c.charCodeAt(0))%ALL_TRACKS.length;
+    const picked=ALL_TRACKS[Math.abs(h)];
     setTrack(picked);
-    const h = new Date().getHours();
-    const timeCtx = h >= 22 || h < 5 ? "늦은 새벽" : h < 10 ? "이른 아침" : h < 15 ? "한낮" : h < 19 ? "오후" : "저녁";
-    fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514", max_tokens: 1000,
-        messages: [{ role: "user", content: `밤하늘극장의 곡 "${picked.track}" (앨범: ${picked.album})을 오늘 ${timeCtx}에 추천하는 감성적인 한두 문장 멘트를 써줘. 50자 이내로, 말투는 따뜻하고 시적으로. 이모지 1개만 끝에.` }]
-      })
-    }).then(r => r.json()).then(d => {
-      setAiMsg((d.content?.map(c => c.text || "").join("") || "").trim());
-      setLoading(false);
-    }).catch(() => { setAiMsg(`${timeCtx}의 밤하늘에 어울리는 한 곡을 골랐어요 🌙`); setLoading(false); });
-  }, []);
+    const hr=new Date().getHours();
+    const tc=hr>=22||hr<5?"늦은 새벽":hr<10?"이른 아침":hr<15?"한낮":hr<19?"오후":"저녁";
+    fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,
+        messages:[{role:"user",content:`밤하늘극장의 곡 "${picked.title}" (앨범: ${picked.album})을 오늘 ${tc}에 추천하는 감성적인 한두 문장. 45자 이내, 시적으로. 이모지 없이.`}]})
+    }).then(r=>r.json()).then(d=>{setAiMsg((d.content?.map(c=>c.text||"").join("")||"").trim());setAiLoading(false);})
+      .catch(()=>{setAiMsg(`${tc}의 밤하늘에 어울리는 한 곡`);setAiLoading(false);});
+  },[]);
 
-  if (!track) return null;
+  const rankColor = r => r===1?LIME:r===2?"rgba(184,255,0,0.65)":r===3?"rgba(184,255,0,0.4)":muted;
+  const trendColor = t => t==="up"?"#63b4ff":t==="down"?"#ff7070":t==="new"?LIME:muted;
+  const trendLabel = t => t==="up"?"▲":t==="down"?"▼":t==="new"?"N":"—";
+
   return (
-    <section style={{ marginBottom: 56 }}>
-      <STitle icon="⭐" title="오늘의 추천곡" sub={`${new Date().toLocaleDateString("ko-KR")} · 매일 자정 변경`} />
-      <div style={{ background: "linear-gradient(135deg, rgba(100,70,180,0.18) 0%, rgba(60,110,180,0.12) 100%)", border: "1px solid rgba(147,114,229,0.28)", borderRadius: 18, padding: "26px 24px", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", right: 20, top: 14, fontSize: 56, opacity: 0.06, pointerEvents: "none" }}>🎵</div>
-        <p style={{ fontSize: 10, color: "#7855b8", margin: "0 0 7px", letterSpacing: "0.12em", fontWeight: 700 }}>TODAY'S PICK</p>
-        <p style={{ fontSize: 22, fontWeight: 800, color: "#e8dff8", margin: "0 0 4px", fontFamily: "'Noto Serif KR',serif" }}>{track.track}</p>
-        <p style={{ fontSize: 12, color: "#636088", margin: "0 0 16px" }}>{track.album}</p>
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", paddingTop: 14 }}>
-          {loading
-            ? <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#9370cc", animation: "pulse 1.2s ease-in-out infinite" }} />
-                <span style={{ fontSize: 12, color: "#555580" }}>AI가 오늘의 멘트를 쓰고 있어요...</span>
+    <div style={{display:"flex",flexDirection:"column",gap:10}}>
+
+      {/* 오늘의 추천곡 — 중앙 강조 */}
+      <G acc style={{textAlign:"center",padding:"26px 20px",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.1) 0%,transparent 70%)",pointerEvents:"none"}}/>
+        <p style={{fontSize:10,fontWeight:700,color:LIME,letterSpacing:"0.15em",margin:"0 0 14px",opacity:0.8}}>TODAY'S PICK</p>
+        {track&&<>
+          <p style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 5px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.3,letterSpacing:"-0.3px"}}>{track.title}</p>
+          <p style={{fontSize:12,color:muted,margin:"0 0 6px"}}>{track.album}</p>
+          {track.mood&&<p style={{fontSize:12,color:`${LIME}88`,margin:"0 0 14px",fontStyle:"italic"}}>"{track.mood}"</p>}
+        </>}
+        <Hr my={0}/>
+        <div style={{marginTop:14,minHeight:20}}>
+          {aiLoading
+            ?<div style={{display:"flex",gap:8,alignItems:"center",justifyContent:"center"}}>
+                <div style={{width:5,height:5,borderRadius:"50%",background:LIME,animation:"pulse 1s infinite"}}/>
+                <span style={{fontSize:12,color:muted}}>AI 멘트 생성 중...</span>
               </div>
-            : <p style={{ fontSize: 13, color: "#c0b0e0", margin: 0, lineHeight: 1.75, fontStyle: "italic" }}>"{aiMsg}"</p>
+            :<p style={{fontSize:13,color:soft,margin:0,lineHeight:1.85,fontStyle:"italic"}}>"{aiMsg}"</p>
           }
         </div>
-      </div>
-    </section>
+      </G>
+
+      {/* 공지사항 */}
+      <G pad="0">
+        <div style={{padding:"16px 18px 12px"}}>
+          <SecHead title="공지사항"/>
+        </div>
+        <Hr/>
+        {[
+          {tag:"발매",   tagC:LIME,        date:"05.28", title:"새 싱글 발매",           desc:"모든 음원 플랫폼에서 지금 감상하세요."},
+          {tag:"예정",   tagC:"#ffcc44",   date:"06.09", title:"정규앨범 7곡 발매",       desc:"밤하늘극장 최대 규모의 정규앨범."},
+          {tag:"라이브", tagC:"#ff88cc",   date:"06.15", title:"유튜브 라이브",           desc:"팬들과 실시간으로 만나는 첫 라이브."},
+          {tag:"채널",   tagC:"#aaaaff",   date:"05.26", title:"구독자 401명 돌파",       desc:"함께해주신 모든 분들께 감사드립니다."},
+        ].map((n,i,arr)=>(
+          <div key={i}>
+            <div style={{display:"flex",gap:12,padding:"13px 18px",alignItems:"flex-start"}}>
+              <div style={{flexShrink:0,paddingTop:2,textAlign:"center",minWidth:42}}>
+                <Tag c={n.tagC}>{n.tag}</Tag>
+                <p style={{fontSize:9,color:muted,margin:"4px 0 0",fontFamily:"monospace"}}>{n.date}</p>
+              </div>
+              <div style={{minWidth:0}}>
+                <p style={{margin:"0 0 2px",fontSize:13,fontWeight:700,color:white}}>{n.title}</p>
+                <p style={{margin:0,fontSize:11,color:muted,lineHeight:1.5}}>{n.desc}</p>
+              </div>
+            </div>
+            {i<arr.length-1&&<Hr/>}
+          </div>
+        ))}
+      </G>
+
+      {/* TOP 10 */}
+      <G pad="0">
+        <div style={{padding:"16px 18px 12px"}}>
+          <SecHead title="TOP 10" sub="3월 판매 기준 정산 데이터"/>
+        </div>
+        <Hr/>
+        {CHART.map((t,i)=>(
+          <div key={i}>
+            <div style={{display:"flex",alignItems:"center",gap:12,padding:"11px 18px"}}>
+              <span style={{
+                width:22,textAlign:"center",fontFamily:"monospace",fontWeight:900,flexShrink:0,
+                fontSize:t.rank<=3?14:12,
+                color:rankColor(t.rank),
+              }}>{t.rank}</span>
+              <div style={{flex:1,minWidth:0}}>
+                <p style={{margin:"0 0 1px",fontSize:13,fontWeight:t.rank<=3?700:400,
+                  color:t.rank===1?white:t.rank<=3?"rgba(242,238,249,0.85)":soft,
+                  overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</p>
+                <p style={{margin:0,fontSize:10,color:muted,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.album}</p>
+              </div>
+              <span style={{fontSize:11,fontWeight:700,color:trendColor(t.trend),width:14,textAlign:"center",flexShrink:0}}>{trendLabel(t.trend)}</span>
+            </div>
+            {i<CHART.length-1&&<Hr/>}
+          </div>
+        ))}
+      </G>
+
+      {/* 해외 청취율 */}
+      <G>
+        <SecHead title="해외 청취율" sub="5월 유튜브 기준"/>
+        {OVERSEAS.map((o,i)=>(
+          <div key={i} style={{display:"flex",alignItems:"center",gap:10,marginBottom:i<OVERSEAS.length-1?10:0}}>
+            <span style={{fontSize:14,flexShrink:0}}>{o.flag}</span>
+            <span style={{fontSize:11,color:muted,width:42,flexShrink:0}}>{o.name}</span>
+            <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
+              <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${LIME}cc,#66bbff)`,borderRadius:4}}/>
+            </div>
+            <span style={{fontSize:10,color:LIME,fontFamily:"monospace",width:26,textAlign:"right"}}>{o.pct}%</span>
+          </div>
+        ))}
+      </G>
+    </div>
   );
 }
 
-// ── 최신 소식 + 캘린더 (나란히)
-function NewsAndCalendar() {
-  const news = [
-    { date: "2026.05.28", tag: "발매", title: "새 싱글 발매 🎉", desc: "모든 플랫폼에서 지금 바로 감상하세요." },
-    { date: "2026.06.09", tag: "예정", title: "정규앨범 7곡 발매", desc: "6월 9일, 7곡의 새 이야기가 찾아옵니다." },
-    { date: "2026.05.26", tag: "채널", title: "구독자 400명 돌파", desc: "함께해주신 모든 분들 덕분입니다." },
-  ];
-  const tagColor = t => t === "발매" ? "#63dcb4" : t === "예정" ? "#f0c060" : "#9370cc";
-  const evColor = t => t === "release" ? "#63dcb4" : "#f0c060";
-
+// ══════════════════════════════════════════
+// 소개 탭
+// ══════════════════════════════════════════
+function AboutTab() {
   return (
-    <section style={{ marginBottom: 56 }}>
-      <STitle icon="📡" title="최신 소식 & 일정" />
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-        {/* 뉴스 */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {news.map((n, i) => (
-            <div key={i} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 13, padding: "13px 15px", display: "flex", gap: 12, alignItems: "flex-start" }}>
-              <div style={{ flexShrink: 0 }}>
-                <span style={{ fontSize: 10, color: tagColor(n.tag), border: `1px solid ${tagColor(n.tag)}44`, borderRadius: 5, padding: "2px 6px", display: "block", textAlign: "center" }}>{n.tag}</span>
-                <p style={{ fontSize: 10, color: "#383858", margin: "4px 0 0", textAlign: "center" }}>{n.date.slice(5)}</p>
-              </div>
-              <div>
-                <p style={{ fontSize: 12, fontWeight: 700, color: "#ddd5f0", margin: "0 0 2px" }}>{n.title}</p>
-                <p style={{ fontSize: 11, color: "#606080", margin: 0, lineHeight: 1.5 }}>{n.desc}</p>
-              </div>
-            </div>
-          ))}
+    <div style={{display:"flex",flexDirection:"column",gap:10}}>
+
+      <G>
+        <SecHead title="밤하늘극장"/>
+        <p style={{fontSize:13,color:soft,lineHeight:1.95,margin:"0 0 14px"}}>
+          감정이 흐르는 무대, 별빛 같은 노래가 머무는 곳.<br/>
+          <strong style={{color:white}}>유우레이</strong>와 <strong style={{color:white}}>임보성</strong>이 함께하는 감성 인디 프로젝트입니다.<br/>
+          어둠 속에서도 빛나는 별처럼, 위로가 필요한 새벽에 당신 곁에 머물고 싶습니다.
+        </p>
+        <Hr my={4}/>
+        <p style={{fontSize:11,color:muted,margin:"10px 0 0",lineHeight:1.7}}>
+          @NightSkyTheater &nbsp;·&nbsp; 구독자 401명 &nbsp;·&nbsp; 유통 (주)와이지플러스
+        </p>
+      </G>
+
+      <G>
+        <SecHead title="아티스트"/>
+        {[
+          {name:"유우레이",role:"보컬 · 작사",desc:"목소리로 감정의 결을 만드는 사람. 밤하늘극장의 감성적 언어를 담당한다."},
+          {name:"임보성",role:"프로듀서 · 작곡",desc:"사운드로 세계관을 구축하는 사람. 밤하늘극장의 음악적 방향을 이끈다."},
+        ].map((a,i)=>(
+          <div key={i} style={{marginBottom:i===0?16:0}}>
+            <p style={{margin:"0 0 3px",fontSize:15,fontWeight:800,color:white}}>{a.name}</p>
+            <p style={{margin:"0 0 6px",fontSize:10,color:LIME,opacity:0.8,fontWeight:600}}>{a.role}</p>
+            <p style={{fontSize:12,color:muted,lineHeight:1.75,margin:0}}>{a.desc}</p>
+            {i===0&&<Hr my={14}/>}
+          </div>
+        ))}
+      </G>
+
+      <G pad="0">
+        <div style={{padding:"16px 18px 12px"}}>
+          <SecHead title="연혁"/>
         </div>
-        {/* 캘린더 */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <p style={{ fontSize: 11, color: "#484870", margin: "0 0 4px" }}>📅 2026년 주요 일정</p>
-          {CALENDAR_EVENTS.map((ev, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12 }}>
-              <span style={{ fontFamily: "monospace", fontSize: 13, fontWeight: 700, color: "#7855b8", flexShrink: 0, width: 34 }}>{ev.date}</span>
-              <span style={{ fontSize: 10, padding: "2px 7px", background: `${evColor(ev.type)}18`, color: evColor(ev.type), border: `1px solid ${evColor(ev.type)}44`, borderRadius: 6, flexShrink: 0 }}>{ev.type === "release" ? "발매" : "라이브"}</span>
-              <span style={{ fontSize: 12, color: "#b0a8cc" }}>{ev.label}</span>
-            </div>
-          ))}
-          {/* 해외 현황 미니 */}
-          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "12px 14px", marginTop: 2 }}>
-            <p style={{ fontSize: 11, color: "#484870", margin: "0 0 8px" }}>🌍 해외 청취 TOP5</p>
-            {OVERSEAS.slice(0, 5).map((o, i) => (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: i < 4 ? 6 : 0 }}>
-                <span style={{ fontSize: 14 }}>{o.flag}</span>
-                <span style={{ fontSize: 11, color: "#8888aa", width: 34, flexShrink: 0 }}>{o.country}</span>
-                <div style={{ flex: 1, background: "rgba(255,255,255,0.05)", borderRadius: 3, height: 4 }}>
-                  <div style={{ width: `${o.pct}%`, height: "100%", background: "linear-gradient(90deg,#7855b8,#5599ee)", borderRadius: 3 }} />
+        <Hr/>
+        <div style={{padding:"10px 18px 16px",position:"relative"}}>
+          <div style={{position:"absolute",left:30,top:14,bottom:14,width:1,background:`linear-gradient(to bottom,${LIME}55,transparent)`}}/>
+          {TIMELINE.map((t,i)=>{
+            const isLast = t.tag==="예정";
+            return (
+              <div key={i} style={{display:"flex",gap:14,marginBottom:i<TIMELINE.length-1?20:0}}>
+                <div style={{flexShrink:0,width:26,display:"flex",flexDirection:"column",alignItems:"center",zIndex:1,paddingTop:4}}>
+                  <div style={{width:10,height:10,borderRadius:"50%",
+                    background:isLast?LIME:"rgba(184,255,0,0.35)",
+                    border:`2px solid ${isLast?LIME:"rgba(184,255,0,0.25)"}`,
+                    boxShadow:isLast?`0 0 8px ${LIME}88`:"none",
+                  }}/>
                 </div>
-                <span style={{ fontSize: 10, color: "#7855b8", fontFamily: "monospace", width: 26, textAlign: "right" }}>{o.pct}%</span>
+                <div style={{flex:1}}>
+                  <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:4}}>
+                    <span style={{fontSize:10,fontFamily:"monospace",color:LIME,fontWeight:700,opacity:0.75}}>{t.year}</span>
+                    <Tag c={t.tag==="예정"?"#ffcc44":t.tag==="발매"?LIME:"rgba(184,255,0,0.5)"}>{t.tag}</Tag>
+                  </div>
+                  <p style={{fontSize:12,color:soft,margin:0,lineHeight:1.7}}>{t.desc}</p>
+                </div>
               </div>
+            );
+          })}
+        </div>
+      </G>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════
+// 음악 탭 — 디스코그래피
+// ══════════════════════════════════════════
+function MusicTab() {
+  const [selected,setSelected]=useState(null);
+  const [trackIdx,setTrackIdx]=useState(0);
+
+  if (selected !== null) {
+    const alb = ALBUMS[selected];
+    const tr = alb.tracks[trackIdx];
+    return (
+      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+        <button onClick={()=>{setSelected(null);setTrackIdx(0);}} style={{
+          display:"flex",alignItems:"center",gap:6,background:"none",border:"none",
+          cursor:"pointer",color:LIME,fontSize:13,fontFamily:"inherit",padding:0,marginBottom:4,
+        }}>← 음반 목록</button>
+
+        {/* 앨범 헤더 */}
+        <G acc>
+          <div style={{textAlign:"center"}}>
+            {/* 커버 아트 — 컬러 블록 */}
+            <div style={{width:110,height:110,borderRadius:16,background:alb.color,border:`1px solid rgba(184,255,0,0.15)`,margin:"0 auto 16px",display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <span style={{fontSize:10,color:"rgba(184,255,0,0.4)",fontFamily:"monospace",textAlign:"center",padding:"0 8px",lineHeight:1.5}}>{alb.title}</span>
+            </div>
+            <p style={{fontSize:10,color:LIME,fontWeight:700,margin:"0 0 4px",letterSpacing:"0.1em",opacity:0.8}}>{alb.year}</p>
+            <p style={{fontSize:17,fontWeight:900,color:white,margin:"0 0 8px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.3,letterSpacing:"-0.3px"}}>{alb.title}</p>
+            <p style={{fontSize:12,color:muted,lineHeight:1.7,margin:0,fontStyle:"italic"}}>"{alb.desc}"</p>
+          </div>
+          <Hr my={16}/>
+          {/* 진행 도트 */}
+          <div style={{display:"flex",justifyContent:"center",gap:5}}>
+            {alb.tracks.map((_,j)=>(
+              <div key={j} onClick={()=>setTrackIdx(j)} style={{width:j===trackIdx?20:6,height:4,borderRadius:2,background:j===trackIdx?LIME:"rgba(184,255,0,0.2)",transition:"all 0.2s",cursor:"pointer"}}/>
             ))}
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+        </G>
 
-// ── 인기 순위 + 플랫폼 (나란히)
-function ChartAndPlatforms() {
-  const badgeStyle = b => {
-    if (b === "NEW") return { bg: "rgba(99,220,180,0.14)", color: "#63dcb4" };
-    if (b === "▲") return { bg: "rgba(99,180,255,0.12)", color: "#63b4ff" };
-    if (b === "▼") return { bg: "rgba(255,120,120,0.11)", color: "#ff7878" };
-    return null;
-  };
-  return (
-    <section style={{ marginBottom: 56 }}>
-      <STitle icon="🎵" title="인기 순위 & 플랫폼" sub="※ 3월 판매 기준 정산 데이터" />
-      <div style={{ display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: 12, alignItems: "start" }}>
-        {/* 차트 */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          {CHART.map((t, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 11, padding: "10px 13px", borderRadius: 11, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", transition: "all 0.2s", cursor: "default" }}
-              onMouseEnter={e => e.currentTarget.style.background = "rgba(147,114,229,0.1)"}
-              onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.03)"}>
-              <span style={{ width: 22, textAlign: "center", fontSize: t.rank === 1 ? 15 : 11, fontWeight: 900, color: t.rank === 1 ? "#f0d060" : t.rank <= 3 ? "#a090d0" : "#38385a", fontFamily: "monospace", flexShrink: 0 }}>
-                {t.rank === 1 ? "👑" : t.rank}
-              </span>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ margin: 0, fontSize: 12, fontWeight: 600, color: "#ddd5f0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.title}</p>
-                <p style={{ margin: 0, fontSize: 10, color: "#484870", marginTop: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t.album}</p>
+        {/* 현재 트랙 */}
+        <G style={{textAlign:"center",minHeight:120,display:"flex",flexDirection:"column",justifyContent:"center",padding:"24px 20px"}}>
+          <p style={{fontSize:10,color:muted,margin:"0 0 6px",fontFamily:"monospace",letterSpacing:"0.1em"}}>TRACK {tr.n} / {alb.tracks.length}</p>
+          <p style={{fontSize:20,fontWeight:800,color:white,margin:"0 0 10px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.35,letterSpacing:"-0.3px"}}>{tr.title}</p>
+          {tr.mood&&<p style={{fontSize:13,color:soft,lineHeight:1.75,fontStyle:"italic",margin:0}}>"{tr.mood}"</p>}
+        </G>
+
+        {/* 이전/다음 */}
+        <div style={{display:"flex",gap:8}}>
+          <button onClick={()=>setTrackIdx(i=>Math.max(0,i-1))} disabled={trackIdx===0} style={{flex:1,padding:"12px",background:glass,border:`1px solid ${gb}`,borderRadius:12,cursor:trackIdx===0?"not-allowed":"pointer",color:trackIdx===0?muted:soft,fontSize:13,fontFamily:"inherit",opacity:trackIdx===0?0.4:1,transition:"all 0.2s"}}>← 이전</button>
+          <button onClick={()=>setTrackIdx(i=>Math.min(alb.tracks.length-1,i+1))} disabled={trackIdx===alb.tracks.length-1} style={{flex:1,padding:"12px",background:trackIdx===alb.tracks.length-1?glass:"rgba(184,255,0,0.1)",border:`1px solid ${trackIdx===alb.tracks.length-1?gb:"rgba(184,255,0,0.25)"}`,borderRadius:12,cursor:trackIdx===alb.tracks.length-1?"not-allowed":"pointer",color:trackIdx===alb.tracks.length-1?muted:LIME,fontSize:13,fontFamily:"inherit",fontWeight:700,opacity:trackIdx===alb.tracks.length-1?0.4:1,transition:"all 0.2s"}}>다음 →</button>
+        </div>
+
+        {/* 전체 트랙리스트 */}
+        <G pad="0">
+          <div style={{padding:"14px 18px 10px"}}>
+            <p style={{fontSize:13,fontWeight:700,color:white,margin:0}}>수록곡</p>
+          </div>
+          <Hr/>
+          {alb.tracks.map((t,j)=>(
+            <div key={j}>
+              <div onClick={()=>setTrackIdx(j)} style={{display:"flex",alignItems:"center",gap:12,padding:"11px 18px",cursor:"pointer",background:j===trackIdx?"rgba(184,255,0,0.06)":"transparent",transition:"background 0.15s"}}>
+                <span style={{fontSize:10,color:j===trackIdx?LIME:muted,fontFamily:"monospace",width:16,flexShrink:0}}>{t.n}</span>
+                <div style={{flex:1,minWidth:0}}>
+                  <p style={{margin:"0 0 1px",fontSize:13,fontWeight:j===trackIdx?700:400,color:j===trackIdx?white:soft,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</p>
+                  {t.mood&&<p style={{margin:0,fontSize:10,color:muted,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontStyle:"italic"}}>{t.mood}</p>}
+                </div>
+                {j===trackIdx&&<span style={{fontSize:10,color:LIME,flexShrink:0}}>▶</span>}
               </div>
-              {t.badge && (() => { const bs = badgeStyle(t.badge); return <span style={{ fontSize: 9, padding: "2px 5px", borderRadius: 5, background: bs.bg, color: bs.color, fontWeight: 700, flexShrink: 0 }}>{t.badge}</span>; })()}
-              <span style={{ fontSize: 10, color: "#484870", fontFamily: "monospace", flexShrink: 0 }}>{t.amount}원</span>
+              {j<alb.tracks.length-1&&<Hr/>}
             </div>
           ))}
-        </div>
-        {/* 플랫폼 */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7 }}>
-          {PLATFORMS.map((p, i) => (
-            <a key={i} href={p.url} target="_blank" rel="noreferrer" style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 12px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 11, textDecoration: "none", transition: "all 0.2s" }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = `${p.color}55`; e.currentTarget.style.background = `${p.color}12`; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"; e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}>
-              <span style={{ fontSize: 17 }}>{p.icon}</span>
-              <span style={{ fontSize: 11, color: "#b0a8cc", fontWeight: 600 }}>{p.name}</span>
-            </a>
-          ))}
-        </div>
+        </G>
       </div>
-    </section>
-  );
-}
+    );
+  }
 
-// ── 발매 음반
-function Discography() {
-  const [open, setOpen] = useState(null);
+  // 앨범 그리드
   return (
-    <section style={{ marginBottom: 56 }}>
-      <STitle icon="💿" title="발매 음반" sub={`총 ${ALBUMS.length}개 앨범`} />
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7 }}>
-        {ALBUMS.map((a, i) => (
-          <div key={i} style={{ borderRadius: 12, overflow: "hidden" }}>
-            <button onClick={() => setOpen(open === i ? null : i)} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "11px 14px", background: open === i ? `${a.color}dd` : "rgba(255,255,255,0.04)", border: `1px solid ${open === i ? "rgba(147,114,229,0.3)" : "rgba(255,255,255,0.07)"}`, borderRadius: open === i ? "12px 12px 0 0" : 12, borderBottom: open === i ? "none" : undefined, cursor: "pointer", textAlign: "left", fontFamily: "inherit", transition: "all 0.2s" }}>
-              <div style={{ minWidth: 0 }}>
-                <p style={{ margin: 0, fontSize: 12, fontWeight: 700, color: "#e0d8f8", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{a.title}</p>
-                <p style={{ margin: 0, fontSize: 10, color: "#7070a0", marginTop: 2 }}>{a.year} · {a.tracks.length}곡</p>
-              </div>
-              <span style={{ color: "#7855b8", fontSize: 10, flexShrink: 0, marginLeft: 8 }}>{open === i ? "▲" : "▼"}</span>
-            </button>
-            {open === i && (
-              <div style={{ background: `${a.color}99`, border: "1px solid rgba(147,114,229,0.2)", borderTop: "none", borderRadius: "0 0 12px 12px", padding: "8px 14px 12px" }}>
-                {a.tracks.map((t, j) => (
-                  <div key={j} style={{ display: "flex", gap: 8, padding: "5px 0", borderBottom: j < a.tracks.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
-                    <span style={{ fontSize: 9, color: "#484870", fontFamily: "monospace", width: 14, flexShrink: 0, paddingTop: 1 }}>{j + 1}</span>
-                    <span style={{ fontSize: 11, color: "#b8b0d0" }}>{t}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+    <div>
+      <div style={{marginBottom:16}}>
+        <SecHead title="디스코그래피" sub={`총 ${ALBUMS.length}개 앨범`}/>
       </div>
-    </section>
-  );
-}
-
-// ── 유튜브
-function Youtube() {
-  return (
-    <section style={{ marginBottom: 56 }}>
-      <STitle icon="🎬" title="유튜브 최신 영상" sub="밤하늘극장 공식 채널" />
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-        {YOUTUBE_VIDEOS.map((v, i) => (
-          <div key={i} style={{ display: "flex", gap: 12, alignItems: "center", padding: "11px 13px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, cursor: "pointer", transition: "all 0.2s" }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(255,68,68,0.3)"}
-            onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"}>
-            <div style={{ width: 46, height: 34, background: "rgba(255,68,68,0.12)", borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>{v.thumb}</div>
-            <div style={{ minWidth: 0 }}>
-              <p style={{ margin: 0, fontSize: 11, fontWeight: 600, color: "#ddd5f0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{v.title}</p>
-              <p style={{ margin: 0, fontSize: 10, color: "#484870", marginTop: 2 }}>{v.date} · {v.views}</p>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+        {[...ALBUMS].reverse().map((a,i)=>(
+          <button key={a.id} onClick={()=>{setSelected(ALBUMS.length-1-i);setTrackIdx(0);}} style={{
+            background:"none",border:"none",cursor:"pointer",padding:0,textAlign:"left",fontFamily:"inherit",
+          }}>
+            {/* 썸네일 */}
+            <div style={{
+              width:"100%",aspectRatio:"1/1",borderRadius:14,
+              background:a.color,
+              border:`1px solid rgba(255,255,255,0.08)`,
+              marginBottom:8,
+              display:"flex",alignItems:"center",justifyContent:"center",
+              transition:"all 0.2s",overflow:"hidden",position:"relative",
+            }}
+              onMouseEnter={e=>e.currentTarget.style.borderColor="rgba(184,255,0,0.35)"}
+              onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(255,255,255,0.08)"}>
+              {/* 앨범명 워터마크 */}
+              <p style={{fontSize:9,color:"rgba(184,255,0,0.25)",textAlign:"center",padding:"0 10px",lineHeight:1.5,fontWeight:700,wordBreak:"keep-all"}}>{a.title}</p>
+              {/* 연도 뱃지 */}
+              <div style={{position:"absolute",bottom:8,right:8,background:"rgba(0,0,0,0.6)",borderRadius:6,padding:"2px 7px"}}>
+                <span style={{fontSize:9,color:"rgba(255,255,255,0.5)",fontFamily:"monospace"}}>{a.year}</span>
+              </div>
             </div>
-          </div>
+            <p style={{fontSize:12,fontWeight:700,color:white,margin:"0 0 2px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",lineHeight:1.3}}>{a.title}</p>
+            <p style={{fontSize:10,color:muted,margin:0}}>{a.tracks.length}곡</p>
+          </button>
         ))}
       </div>
-      <a href="https://youtube.com/@밤하늘극장" target="_blank" rel="noreferrer" style={{ display: "block", textAlign: "center", fontSize: 12, color: "#7855b8", padding: "10px", marginTop: 8, textDecoration: "none", border: "1px solid rgba(147,114,229,0.18)", borderRadius: 10, transition: "border-color 0.2s" }}
-        onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(147,114,229,0.4)"}
-        onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(147,114,229,0.18)"}>
-        채널 전체 보기 →
-      </a>
-    </section>
+    </div>
   );
 }
 
-// ── 방명록
-function Guestbook() {
-  const [entries, setEntries] = useState(INIT_GUESTBOOK);
-  const [name, setName] = useState(""); const [pw, setPw] = useState(""); const [msg, setMsg] = useState("");
-  const [done, setDone] = useState(false);
-  const [adminTarget, setAdminTarget] = useState(null); const [adminPwInput, setAdminPwInput] = useState(""); const [adminReply, setAdminReply] = useState(""); const [adminErr, setAdminErr] = useState(false);
-  const [editTarget, setEditTarget] = useState(null); const [editPw, setEditPw] = useState(""); const [editMsg, setEditMsg] = useState(""); const [editErr, setEditErr] = useState(false);
-  const nextId = useRef(4);
+// ══════════════════════════════════════════
+// 방명록 탭
+// ══════════════════════════════════════════
+function GuestbookTab() {
+  const [entries,setEntries]=useState(INIT_GB);
+  const [name,setName]=useState(""); const [pw,setPw]=useState(""); const [msg,setMsg]=useState("");
+  const [done,setDone]=useState(false);
+  const [adminT,setAdminT]=useState(null); const [adminPw,setAdminPw]=useState(""); const [adminR,setAdminR]=useState(""); const [adminErr,setAdminErr]=useState(false);
+  const [editT,setEditT]=useState(null); const [editPw,setEditPw]=useState(""); const [editMsg,setEditMsg]=useState(""); const [editErr,setEditErr]=useState(false);
+  const nid=useRef(4);
 
-  const IS = { background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 9, color: "#ddd5f0", padding: "9px 12px", fontSize: 12, outline: "none", fontFamily: "inherit", boxSizing: "border-box" };
+  const IS={background:"rgba(255,255,255,0.05)",border:`1px solid ${gb}`,borderRadius:10,color:white,padding:"10px 13px",fontSize:12,outline:"none",fontFamily:"inherit",boxSizing:"border-box",transition:"border-color 0.2s"};
+  const fo=e=>e.target.style.borderColor="rgba(184,255,0,0.35)";
+  const bl=e=>e.target.style.borderColor=gb;
 
-  const submit = () => {
-    if (!name.trim() || !pw.trim() || !msg.trim()) return;
-    setEntries(p => [{ id: nextId.current++, name: name.trim(), pw: pw.trim(), msg: msg.trim(), time: new Date().toLocaleDateString("ko-KR").replace(/\. /g,".").slice(0,-1), likes: 0, reply: "" }, ...p]);
-    setName(""); setPw(""); setMsg(""); setDone(true); setTimeout(() => setDone(false), 2000);
+  const submit=()=>{
+    if(!name.trim()||!pw.trim()||!msg.trim()) return;
+    setEntries(p=>[{id:nid.current++,name:name.trim(),pw:pw.trim(),msg:msg.trim(),time:new Date().toLocaleDateString("ko-KR").replace(/\. /g,".").slice(0,-1),likes:0,reply:""},...p]);
+    setName(""); setPw(""); setMsg(""); setDone(true); setTimeout(()=>setDone(false),2500);
   };
-  const like = id => setEntries(p => p.map(e => e.id === id ? { ...e, likes: e.likes + 1 } : e));
-  const submitAdmin = id => {
-    if (adminPwInput !== ADMIN_PW) { setAdminErr(true); return; }
-    setEntries(p => p.map(e => e.id === id ? { ...e, reply: adminReply } : e));
-    setAdminTarget(null); setAdminPwInput(""); setAdminReply(""); setAdminErr(false);
+  const like=id=>setEntries(p=>p.map(e=>e.id===id?{...e,likes:e.likes+1}:e));
+  const submitAdmin=id=>{
+    if(adminPw!==ADMIN_PW){setAdminErr(true);return;}
+    setEntries(p=>p.map(e=>e.id===id?{...e,reply:adminR}:e));
+    setAdminT(null); setAdminPw(""); setAdminR(""); setAdminErr(false);
   };
-  const startEdit = e => { setEditTarget(e.id); setEditMsg(e.msg); setEditPw(""); setEditErr(false); };
-  const submitEdit = entry => {
-    if (editPw !== entry.pw) { setEditErr(true); return; }
-    setEntries(p => p.map(e => e.id === entry.id ? { ...e, msg: editMsg } : e));
-    setEditTarget(null); setEditPw(""); setEditMsg(""); setEditErr(false);
+  const startEdit=e=>{setEditT(e.id);setEditMsg(e.msg);setEditPw("");setEditErr(false);};
+  const subEdit=entry=>{
+    if(editPw!==entry.pw){setEditErr(true);return;}
+    setEntries(p=>p.map(e=>e.id===entry.id?{...e,msg:editMsg}:e));
+    setEditT(null); setEditPw(""); setEditMsg(""); setEditErr(false);
   };
-  const deleteEntry = entry => {
-    const v = window.prompt("비밀번호를 입력하세요");
-    if (v === entry.pw) setEntries(p => p.filter(e => e.id !== entry.id));
+  const del=entry=>{
+    const v=window.prompt("비밀번호를 입력하세요");
+    if(v===entry.pw) setEntries(p=>p.filter(e=>e.id!==entry.id));
   };
 
   return (
-    <section style={{ marginBottom: 40 }}>
-      <STitle icon="💌" title="방명록" sub="밤하늘극장을 찾아주신 분들의 이야기" />
-      {/* 입력 */}
-      <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(147,114,229,0.18)", borderRadius: 15, padding: "16px", marginBottom: 14 }}>
-        <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
-          <input value={name} onChange={e => setName(e.target.value)} placeholder="닉네임" maxLength={12} style={{ ...IS, width: 96 }} />
-          <input value={pw} onChange={e => setPw(e.target.value)} placeholder="비밀번호" type="password" maxLength={20} style={{ ...IS, width: 106 }} />
+    <div style={{display:"flex",flexDirection:"column",gap:10}}>
+      <G acc>
+        <p style={{fontSize:13,color:soft,lineHeight:1.85,margin:0}}>
+          밤하늘극장을 찾아주셔서 감사해요.<br/>
+          이곳에 당신의 감정을 남겨주세요.<br/>
+          <span style={{fontSize:11,color:muted}}>닉네임 + 비밀번호로 작성 · 수정 · 삭제 가능합니다.</span>
+        </p>
+      </G>
+
+      <G>
+        <SecHead title="메시지 남기기"/>
+        <div style={{display:"flex",gap:8,marginBottom:8}}>
+          <input value={name} onChange={e=>setName(e.target.value)} onFocus={fo} onBlur={bl} placeholder="닉네임" maxLength={12} style={{...IS,width:88}}/>
+          <input value={pw} onChange={e=>setPw(e.target.value)} onFocus={fo} onBlur={bl} placeholder="비밀번호" type="password" maxLength={20} style={{...IS,flex:1}}/>
         </div>
-        <textarea value={msg} onChange={e => setMsg(e.target.value)} placeholder="밤하늘극장에 남기고 싶은 말을 적어주세요 🌙" maxLength={150} rows={2} style={{ ...IS, width: "100%", resize: "none", lineHeight: 1.6, marginBottom: 8 }} />
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontSize: 10, color: "#383858" }}>{msg.length}/150 · 비밀번호로 수정·삭제 가능</span>
-          <button onClick={submit} style={{ background: done ? "rgba(99,220,180,0.18)" : "rgba(147,114,229,0.22)", border: `1px solid ${done ? "rgba(99,220,180,0.38)" : "rgba(147,114,229,0.38)"}`, color: done ? "#63dcb4" : "#c4a8f0", borderRadius: 9, padding: "7px 18px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", transition: "all 0.3s" }}>
-            {done ? "✓ 등록됨" : "남기기 ✨"}
+        <textarea value={msg} onChange={e=>setMsg(e.target.value)} onFocus={fo} onBlur={bl} placeholder="밤하늘극장에 남기고 싶은 말을 적어주세요" maxLength={150} rows={3} style={{...IS,width:"100%",resize:"none",lineHeight:1.65,marginBottom:8}}/>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <span style={{fontSize:10,color:muted}}>{msg.length}/150</span>
+          <button onClick={submit} style={{background:done?"rgba(184,255,0,0.15)":"rgba(255,255,255,0.07)",border:`1px solid ${done?"rgba(184,255,0,0.4)":gb}`,color:done?LIME:soft,borderRadius:10,padding:"8px 20px",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",transition:"all 0.3s"}}>
+            {done?"등록됨":"남기기"}
           </button>
         </div>
-      </div>
-      {/* 목록 */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-        {entries.map(entry => (
-          <div key={entry.id} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 13, padding: "13px 15px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
-              <span style={{ fontSize: 12, fontWeight: 700, color: "#a888d8" }}>{entry.name}</span>
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                <span style={{ fontSize: 10, color: "#383858" }}>{entry.time}</span>
-                <button onClick={() => startEdit(entry)} style={{ fontSize: 10, color: "#484870", background: "none", border: "none", cursor: "pointer", padding: 0 }}>수정</button>
-                <button onClick={() => deleteEntry(entry)} style={{ fontSize: 10, color: "#5a2a3a", background: "none", border: "none", cursor: "pointer", padding: 0 }}>삭제</button>
-              </div>
-            </div>
-            {editTarget === entry.id ? (
-              <div style={{ marginBottom: 8 }}>
-                <textarea value={editMsg} onChange={e => setEditMsg(e.target.value)} maxLength={150} rows={2} style={{ ...IS, width: "100%", resize: "none", marginBottom: 6 }} />
-                <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                  <input value={editPw} onChange={e => setEditPw(e.target.value)} placeholder="비밀번호 확인" type="password" style={{ ...IS, flex: 1 }} />
-                  <button onClick={() => submitEdit(entry)} style={{ background: "rgba(147,114,229,0.22)", border: "1px solid rgba(147,114,229,0.38)", color: "#c4a8f0", borderRadius: 8, padding: "7px 13px", fontSize: 11, cursor: "pointer", fontFamily: "inherit" }}>저장</button>
-                  <button onClick={() => setEditTarget(null)} style={{ background: "none", border: "1px solid rgba(255,255,255,0.1)", color: "#555578", borderRadius: 8, padding: "7px 10px", fontSize: 11, cursor: "pointer", fontFamily: "inherit" }}>취소</button>
+      </G>
+
+      <G pad="0">
+        <div style={{padding:"14px 18px 12px"}}>
+          <SecHead title={`방명록 — ${entries.length}개`}/>
+        </div>
+        <Hr/>
+        {entries.map((entry,idx)=>(
+          <div key={entry.id}>
+            <div style={{padding:"14px 18px"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+                <span style={{fontSize:13,fontWeight:700,color:LIME}}>{entry.name}</span>
+                <div style={{display:"flex",gap:10,alignItems:"center"}}>
+                  <span style={{fontSize:10,color:muted,fontFamily:"monospace"}}>{entry.time}</span>
+                  <button onClick={()=>startEdit(entry)} style={{fontSize:10,color:muted,background:"none",border:"none",cursor:"pointer",padding:0}}>수정</button>
+                  <button onClick={()=>del(entry)} style={{fontSize:10,color:"rgba(255,80,80,0.5)",background:"none",border:"none",cursor:"pointer",padding:0}}>삭제</button>
                 </div>
-                {editErr && <p style={{ fontSize: 11, color: "#ff7878", margin: "4px 0 0" }}>비밀번호가 틀렸어요</p>}
               </div>
-            ) : (
-              <p style={{ fontSize: 13, color: "#b8b0d0", margin: "0 0 10px", lineHeight: 1.75 }}>{entry.msg}</p>
-            )}
-            {entry.reply && (
-              <div style={{ background: "rgba(120,90,200,0.1)", border: "1px solid rgba(120,90,200,0.2)", borderRadius: 9, padding: "10px 12px", marginBottom: 10 }}>
-                <p style={{ fontSize: 10, color: "#7855b8", fontWeight: 700, margin: "0 0 4px" }}>🌌 밤하늘극장</p>
-                <p style={{ fontSize: 12, color: "#a898c8", margin: 0, lineHeight: 1.7 }}>{entry.reply}</p>
+              {editT===entry.id?(
+                <div style={{marginBottom:8}}>
+                  <textarea value={editMsg} onChange={e=>setEditMsg(e.target.value)} maxLength={150} rows={2} style={{...IS,width:"100%",resize:"none",marginBottom:6}}/>
+                  <div style={{display:"flex",gap:6}}>
+                    <input value={editPw} onChange={e=>setEditPw(e.target.value)} placeholder="비밀번호 확인" type="password" style={{...IS,flex:1}}/>
+                    <button onClick={()=>subEdit(entry)} style={{background:"rgba(255,255,255,0.07)",border:`1px solid ${gb}`,color:soft,borderRadius:9,padding:"8px 12px",fontSize:11,cursor:"pointer",fontFamily:"inherit"}}>저장</button>
+                    <button onClick={()=>setEditT(null)} style={{background:"none",border:`1px solid ${gb}`,color:muted,borderRadius:9,padding:"8px 9px",fontSize:11,cursor:"pointer",fontFamily:"inherit"}}>취소</button>
+                  </div>
+                  {editErr&&<p style={{fontSize:11,color:"#ff6666",margin:"4px 0 0"}}>비밀번호가 틀렸어요</p>}
+                </div>
+              ):(
+                <p style={{fontSize:13,color:soft,margin:"0 0 10px",lineHeight:1.82}}>{entry.msg}</p>
+              )}
+              {entry.reply&&(
+                <div style={{background:"rgba(184,255,0,0.06)",border:"1px solid rgba(184,255,0,0.18)",borderRadius:10,padding:"10px 13px",marginBottom:10}}>
+                  <p style={{fontSize:10,color:LIME,fontWeight:700,margin:"0 0 4px",opacity:0.8}}>밤하늘극장</p>
+                  <p style={{fontSize:12,color:"rgba(200,230,150,0.72)",margin:0,lineHeight:1.75}}>{entry.reply}</p>
+                </div>
+              )}
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                <button onClick={()=>like(entry.id)} style={{display:"flex",alignItems:"center",gap:5,background:"rgba(255,255,255,0.04)",border:`1px solid ${gb}`,borderRadius:20,padding:"4px 13px",cursor:"pointer",fontSize:12,color:muted,fontFamily:"inherit",transition:"all 0.15s"}}
+                  onMouseEnter={e=>{e.currentTarget.style.background="rgba(220,60,90,0.1)";e.currentTarget.style.borderColor="rgba(220,60,90,0.28)";}}
+                  onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,0.04)";e.currentTarget.style.borderColor=gb;}}>
+                  ♡ {entry.likes}
+                </button>
+                <button onClick={()=>{setAdminT(adminT===entry.id?null:entry.id);setAdminPw("");setAdminR(entry.reply||"");setAdminErr(false);}} style={{fontSize:10,color:"rgba(255,255,255,0.12)",background:"none",border:"none",cursor:"pointer",fontFamily:"inherit"}}>
+                  {adminT===entry.id?"닫기":"관리자 답글"}
+                </button>
               </div>
-            )}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <button onClick={() => like(entry.id)} style={{ display: "flex", alignItems: "center", gap: 5, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 20, padding: "4px 12px", cursor: "pointer", fontSize: 12, color: "#8880b8", fontFamily: "inherit", transition: "all 0.15s" }}
-                onMouseEnter={e => { e.currentTarget.style.background = "rgba(220,80,120,0.13)"; e.currentTarget.style.borderColor = "rgba(220,80,120,0.28)"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}>
-                🤍 <span style={{ fontSize: 11 }}>{entry.likes}</span>
-              </button>
-              <button onClick={() => { setAdminTarget(adminTarget === entry.id ? null : entry.id); setAdminPwInput(""); setAdminReply(entry.reply || ""); setAdminErr(false); }} style={{ fontSize: 10, color: "#383858", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit" }}>
-                {adminTarget === entry.id ? "닫기" : "관리자 답글"}
-              </button>
+              {adminT===entry.id&&(
+                <div style={{marginTop:10,background:"rgba(0,0,0,0.5)",border:"1px solid rgba(184,255,0,0.18)",borderRadius:12,padding:"14px"}}>
+                  <p style={{fontSize:10,color:LIME,fontWeight:700,margin:"0 0 10px",opacity:0.8}}>관리자 답글 작성</p>
+                  <input value={adminPw} onChange={e=>{setAdminPw(e.target.value);setAdminErr(false);}} onFocus={fo} onBlur={bl} placeholder="관리자 비밀번호" type="password" style={{...IS,width:"100%",marginBottom:7}}/>
+                  <textarea value={adminR} onChange={e=>setAdminR(e.target.value)} onFocus={fo} onBlur={bl} placeholder="답글 내용" rows={2} style={{...IS,width:"100%",resize:"none",marginBottom:7}}/>
+                  {adminErr&&<p style={{fontSize:11,color:"#ff6666",margin:"0 0 7px"}}>비밀번호가 틀렸어요</p>}
+                  <button onClick={()=>submitAdmin(entry.id)} style={{background:"rgba(184,255,0,0.1)",border:"1px solid rgba(184,255,0,0.3)",color:LIME,borderRadius:9,padding:"8px 18px",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
+                    답글 등록
+                  </button>
+                </div>
+              )}
             </div>
-            {adminTarget === entry.id && (
-              <div style={{ marginTop: 10, background: "rgba(0,0,0,0.28)", border: "1px solid rgba(120,90,200,0.22)", borderRadius: 10, padding: "12px" }}>
-                <p style={{ fontSize: 11, color: "#7855b8", margin: "0 0 8px", fontWeight: 700 }}>🔐 관리자 답글 작성</p>
-                <input value={adminPwInput} onChange={e => { setAdminPwInput(e.target.value); setAdminErr(false); }} placeholder="관리자 비밀번호" type="password" style={{ ...IS, width: "100%", marginBottom: 6 }} />
-                <textarea value={adminReply} onChange={e => setAdminReply(e.target.value)} placeholder="답글 내용을 입력하세요" rows={2} style={{ ...IS, width: "100%", resize: "none", marginBottom: 6 }} />
-                {adminErr && <p style={{ fontSize: 11, color: "#ff7878", margin: "0 0 6px" }}>비밀번호가 틀렸어요</p>}
-                <button onClick={() => submitAdmin(entry.id)} style={{ background: "rgba(120,90,200,0.28)", border: "1px solid rgba(120,90,200,0.48)", color: "#c4a8f0", borderRadius: 8, padding: "7px 16px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>답글 등록</button>
-              </div>
-            )}
+            {idx<entries.length-1&&<Hr/>}
           </div>
         ))}
-      </div>
-    </section>
+      </G>
+    </div>
   );
 }
 
-// ── 메인
+// ══════════════════════════════════════════
+// APP
+// ══════════════════════════════════════════
 export default function App() {
+  const [tab,setTab]=useState("홈");
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(155deg,#030218 0%,#07051e 35%,#0b0828 65%,#05031a 100%)", color: "#e0d8f8", fontFamily: "'Noto Sans KR','Apple SD Gothic Neo',sans-serif", position: "relative" }}>
+    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#05021a 0%,#080520 35%,#0b0728 65%,#060418 100%)",color:white,fontFamily:"'Noto Sans KR','Apple SD Gothic Neo',sans-serif",position:"relative"}}>
       <style>{`
-        @keyframes twinkle { from{opacity:.1} to{opacity:.8} }
-        @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-        @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
-        @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-        *{box-sizing:border-box}
-        textarea::placeholder,input::placeholder{color:#30304a}
-        ::-webkit-scrollbar{width:3px}
-        ::-webkit-scrollbar-thumb{background:rgba(120,85,184,0.25);border-radius:3px}
-        @media(max-width:600px){
-          .two-col{grid-template-columns:1fr !important}
-          .disc-grid{grid-template-columns:1fr !important}
-        }
+        @keyframes tw    { from{opacity:.05} to{opacity:.65} }
+        @keyframes fl    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+        @keyframes pulse { 0%,100%{opacity:.15} 50%{opacity:1} }
+        @keyframes fin   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        * { box-sizing:border-box }
+        textarea::placeholder,input::placeholder { color:rgba(255,255,255,0.13) }
+        ::-webkit-scrollbar { width:3px }
+        ::-webkit-scrollbar-thumb { background:rgba(184,255,0,0.16);border-radius:3px }
+        strong { font-weight:800 }
       `}</style>
-      <Stars />
-      <Ticker />
-      <div style={{ position: "relative", zIndex: 1, maxWidth: 960, margin: "0 auto", padding: "34px 24px 60px", animation: "fadeUp 0.7s ease both" }}>
-        <Hero />
-        <About />
-        <TodayTrack />
-        <div className="two-col"><NewsAndCalendar /></div>
-        <ChartAndPlatforms />
-        <div className="disc-grid"><Discography /></div>
-        <Youtube />
-        <Guestbook />
-        <footer style={{ textAlign: "center", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 20, marginTop: 10 }}>
-          <p style={{ fontSize: 10, color: "#22223a", margin: 0 }}>© 2026 밤하늘극장 · 유통 (주)와이지플러스</p>
-        </footer>
+      <Stars/>
+      <div style={{position:"relative",zIndex:1,maxWidth:430,margin:"0 auto",display:"flex",flexDirection:"column",minHeight:"100vh"}}>
+        <Header/>
+        <div style={{flex:1,padding:"12px 14px 76px",animation:"fin 0.3s ease both"}} key={tab}>
+          {tab==="홈"    && <HomeTab/>}
+          {tab==="소개"  && <AboutTab/>}
+          {tab==="음악"  && <MusicTab/>}
+          {tab==="방명록" && <GuestbookTab/>}
+        </div>
+        <BottomNav tab={tab} setTab={setTab}/>
       </div>
     </div>
   );
