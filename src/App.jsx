@@ -1,4 +1,3 @@
-cat > /mnt/user-data/outputs/밤하늘극장_v7.jsx << 'ENDOFFILE'
 import { useState, useEffect, useRef } from "react";
 
 const LIME = "#B8FF00";
