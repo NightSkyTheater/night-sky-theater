@@ -186,7 +186,7 @@ function HomeTab({isPC}) {
   // TOP10
   const Top10 = (
     <G pad="0">
-      <div style={{padding:"16px 18px 12px"}}><SecHead title="TOP 10" sub="3월 판매 기준 정산 데이터"/></div>
+      <div style={{padding:"16px 18px 12px"}}><SecHead title="밤하늘극장 TOP 10" sub="26년 3월 기준"/></div>
       <Hr/>
       {CHART.map((t,i)=>(
         <div key={i}>
@@ -224,7 +224,7 @@ function HomeTab({isPC}) {
   // PC용 TOP10 — 5개씩 2컬럼으로 높이 압축
   const Top10PC = (
     <G pad="0">
-      <div style={{padding:"16px 18px 12px"}}><SecHead title="TOP 10" sub="3월 판매 기준 정산 데이터"/></div>
+      <div style={{padding:"16px 18px 12px"}}><SecHead title="밤하늘극장 TOP 10" sub="26년 3월 기준"/></div>
       <Hr/>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr"}}>
         {[CHART.slice(0,5), CHART.slice(5)].map((half, col) => (
