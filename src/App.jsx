@@ -84,7 +84,7 @@ const Tag = ({c=LIME,children}) => (
 );
 
 const SecHead = ({title,sub}) => (
-  <div style={{marginBottom:16}}>
+  <div style={{marginBottom:4}}>
     <p style={{fontSize:17,fontWeight:800,color:white,margin:0,letterSpacing:"-0.3px"}}>{title}</p>
     {sub&&<p style={{fontSize:10,color:muted,margin:"3px 0 0"}}>{sub}</p>}
   </div>
