@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 
 const LIME = "#B8FF00";
-const glass = "rgba(30,20,60,0.72)";
-const gb = "rgba(255,255,255,0.13)";
+const glass = "rgba(0,0,0,0.52)";
+const gb = "rgba(255,255,255,0.07)";
 const muted = "rgba(220,210,255,0.36)";
 const soft  = "rgba(220,210,255,0.70)";
 const white = "#F2EEF9";
@@ -25,16 +25,16 @@ const ALBUMS = [
 const ALL_TRACKS = ALBUMS.flatMap(a => a.tracks.map(t => ({...t, album:a.title})));
 
 const CHART = [
-  {rank:1, title:"우리들의 발라드",                    trend:null},
-  {rank:2, title:"말하지 않은 것들의 무게",             trend:"up"},
-  {rank:3, title:"꽃이 피든 말든",                     trend:"new"},
-  {rank:4, title:"내 소중한 마음은 비밀이야",           trend:"down"},
-  {rank:5, title:"자발적으로 표류하는 우주비행사",      trend:"up"},
-  {rank:6, title:"운외창천 (雲外蒼天)",                 trend:null},
-  {rank:7, title:"겨울의 대삼각형",                    trend:"down"},
-  {rank:8, title:"나는 오늘 또 어떤 핑계를 대었는가",  trend:"new"},
-  {rank:9, title:"고백 연습",                          trend:"up"},
-  {rank:10,title:"별이 비처럼 내리던 날",               trend:null},
+  {rank:1, title:"우리들의 발라드",                    album:"오늘이 가장 어렸던 날이야",        trend:null},
+  {rank:2, title:"말하지 않은 것들의 무게",             album:"이 봄은 다른 이름이 될까",          trend:"up"},
+  {rank:3, title:"꽃이 피든 말든",                     album:"죽어가는 모든 것들을 사랑해야지",   trend:"new"},
+  {rank:4, title:"내 소중한 마음은 비밀이야",           album:"운명애",                           trend:"down"},
+  {rank:5, title:"자발적으로 표류하는 우주비행사",      album:"자발적으로 표류하는 우주비행사",    trend:"up"},
+  {rank:6, title:"운외창천 (雲外蒼天)",                 album:"운명애",                           trend:null},
+  {rank:7, title:"겨울의 대삼각형",                    album:"오늘이 가장 어렸던 날이야",        trend:"down"},
+  {rank:8, title:"나는 오늘 또 어떤 핑계를 대었는가",  album:"나는 오늘 또 어떤 핑계를 대었는가",trend:"new"},
+  {rank:9, title:"고백 연습",                          album:"사랑은 말이야",                    trend:"up"},
+  {rank:10,title:"별이 비처럼 내리던 날",               album:"오늘이 가장 어렸던 날이야",        trend:null},
 ];
 
 const OVERSEAS = [
@@ -42,21 +42,6 @@ const OVERSEAS = [
   {flag:"🇹🇼",name:"대만",pct:12},{flag:"🇮🇳",name:"인도",pct:10},
   {flag:"🇦🇺",name:"호주",pct:8}, {flag:"🇨🇦",name:"캐나다",pct:6},
   {flag:"🇹🇭",name:"태국",pct:5}, {flag:"🌍",name:"기타",pct:9},
-];
-
-// 구독자 추이 데이터 (월별)
-const SUB_DATA = [
-  {month:"'24.01", subs:12},
-  {month:"'24.04", subs:28},
-  {month:"'24.07", subs:55},
-  {month:"'24.10", subs:89},
-  {month:"'25.01", subs:134},
-  {month:"'25.04", subs:178},
-  {month:"'25.07", subs:220},
-  {month:"'25.10", subs:271},
-  {month:"'26.01", subs:318},
-  {month:"'26.03", subs:356},
-  {month:"'26.05", subs:402},
 ];
 
 const TIMELINE = [
@@ -127,169 +112,464 @@ function BottomNav({tab,setTab}) {
   );
 }
 
-// ── 구독자 추이 미니 라인차트 (SVG) ─────────────────
-function SubChart() {
-  const W = 100, H = 48;
-  const maxS = Math.max(...SUB_DATA.map(d=>d.subs));
-  const pts = SUB_DATA.map((d,i)=>({
-    x: (i/(SUB_DATA.length-1))*W,
-    y: H - (d.subs/maxS)*(H-6) - 2,
-    ...d
-  }));
-  const polyline = pts.map(p=>`${p.x},${p.y}`).join(" ");
-  const area = `0,${H} ${polyline} ${W},${H}`;
-  const last = pts[pts.length-1];
+// ─────────────────────────────────────────────────────────────
+// HOME TAB 수정본
+// ─────────────────────────────────────────────────────────────
 
-  return (
-    <div style={{width:"100%",position:"relative"}}>
-      <svg viewBox={`0 0 ${W} ${H}`} style={{width:"100%",height:56,overflow:"visible",display:"block"}}>
-        <defs>
-          <linearGradient id="subGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={LIME} stopOpacity="0.18"/>
-            <stop offset="100%" stopColor={LIME} stopOpacity="0"/>
-          </linearGradient>
-        </defs>
-        <polygon points={area} fill="url(#subGrad)"/>
-        <polyline points={polyline} fill="none" stroke={LIME} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-        <circle cx={last.x} cy={last.y} r="2" fill={LIME}/>
-        <circle cx={last.x} cy={last.y} r="4" fill="none" stroke={LIME} strokeWidth="0.8" strokeOpacity="0.4"/>
-      </svg>
-      {/* x축 레이블: 처음·중간·끝만 */}
-      <div style={{display:"flex",justifyContent:"space-between",marginTop:2}}>
-        {[pts[0], pts[Math.floor(pts.length/2)], pts[pts.length-1]].map((p,i)=>(
-          <span key={i} style={{fontSize:9,color:muted,fontFamily:"monospace"}}>{p.month}</span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── 홈 ──────────────────────────────────────────────
 function HomeTab({isPC}) {
   const [track,setTrack]=useState(null);
+  const [now,setNow]=useState(new Date());
 
   useEffect(()=>{
-    const seed=new Date().toDateString(); let h=0;
-    for(let c of seed) h=(h*31+c.charCodeAt(0))%ALL_TRACKS.length;
-    setTrack(ALL_TRACKS[Math.abs(h)]);
+    const seed=new Date().toDateString();
+
+    let h=0;
+
+    for(let c of seed){
+      h=(h*31+c.charCodeAt(0))%ALL_TRACKS.length;
+    }
+
+    const picked=ALL_TRACKS[Math.abs(h)];
+    setTrack(picked);
+
+    const timer=setInterval(()=>{
+      setNow(new Date());
+    },1000);
+
+    return ()=>clearInterval(timer);
   },[]);
 
-  const rankColor = r => r===1?LIME:r===2?"rgba(184,255,0,0.65)":r===3?"rgba(184,255,0,0.4)":muted;
-  const trendColor = t => t==="up"?"#63b4ff":t==="down"?"#ff7070":t==="new"?LIME:muted;
-  const trendLabel = t => t==="up"?"▲":t==="down"?"▼":t==="new"?"N":"—";
+  const rankColor = r =>
+    r===1
+      ?LIME
+      :r===2
+      ?"rgba(184,255,0,0.65)"
+      :r===3
+      ?"rgba(184,255,0,0.4)"
+      :muted;
 
-  // 오늘의 추천곡
+  const trendColor = t =>
+    t==="up"
+      ?"#63b4ff"
+      :t==="down"
+      ?"#ff7070"
+      :t==="new"
+      ?LIME
+      :muted;
+
+  const trendLabel = t =>
+    t==="up"
+      ?"▲"
+      :t==="down"
+      ?"▼"
+      :t==="new"
+      ?"N"
+      :"—";
+
+  // TODAY PICK
   const TodayPick = (
-    <G acc style={{textAlign:"center",padding:"26px 20px",position:"relative",overflow:"hidden"}}>
-      <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.1) 0%,transparent 70%)",pointerEvents:"none"}}/>
-      <p style={{fontSize:10,fontWeight:700,color:LIME,letterSpacing:"0.12em",margin:"0 0 18px",opacity:0.8}}>오늘의 밤하늘극장 추천곡</p>
-      {track&&<>
-        <p style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 6px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.3,letterSpacing:"-0.3px"}}>{track.title}</p>
-        <p style={{fontSize:12,color:muted,margin:"0 0 10px"}}>{track.album}</p>
-        {track.mood&&<p style={{fontSize:13,color:`${LIME}88`,margin:0,fontStyle:"italic"}}>"{track.mood}"</p>}
-      </>}
+    <G
+      acc
+      style={{
+        textAlign:"center",
+        padding:"26px 20px",
+        position:"relative",
+        overflow:"hidden"
+      }}
+    >
+      <div
+        style={{
+          position:"absolute",
+          inset:0,
+          background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.1) 0%,transparent 70%)",
+          pointerEvents:"none"
+        }}
+      />
+
+      <p
+        style={{
+          fontSize:10,
+          fontWeight:700,
+          color:LIME,
+          letterSpacing:"0.15em",
+          margin:"0 0 14px",
+          opacity:0.8
+        }}
+      >
+        TODAY'S PICK
+      </p>
+
+      {track&&(
+        <>
+          <p
+            style={{
+              fontSize:22,
+              fontWeight:900,
+              color:white,
+              margin:"0 0 5px",
+              fontFamily:"'Noto Serif KR',serif",
+              lineHeight:1.3,
+              letterSpacing:"-0.3px"
+            }}
+          >
+            {track.title}
+          </p>
+
+          {track.mood&&(
+            <p
+              style={{
+                fontSize:12,
+                color:`${LIME}88`,
+                margin:"0 0 14px",
+                fontStyle:"italic"
+              }}
+            >
+              "{track.mood}"
+            </p>
+          )}
+        </>
+      )}
+
+      <Hr my={0}/>
+
+      <div style={{marginTop:14}}>
+        <p
+          style={{
+            fontSize:13,
+            color:soft,
+            margin:0,
+            lineHeight:1.8,
+            fontFamily:"monospace"
+          }}
+        >
+          {now.toLocaleDateString("ko-KR")}
+          <br/>
+          {now.toLocaleTimeString("ko-KR")}
+        </p>
+      </div>
     </G>
   );
 
-  // 공지 — 태그/날짜/제목 열 정렬
+  // 공지사항
   const Notice = (
     <G pad="0">
-      <div style={{padding:"16px 18px 12px"}}><SecHead title="공지사항"/></div>
+      <div style={{padding:"16px 18px 12px"}}>
+        <SecHead title="공지사항"/>
+      </div>
+
       <Hr/>
+
       {[
-        {tag:"발매",   tagC:LIME,      date:"05.28",title:"새 싱글 발매"},
-        {tag:"예정",   tagC:"#ffcc44", date:"06.09",title:"정규앨범 7곡 발매"},
-        {tag:"라이브", tagC:"#ff88cc", date:"06.15",title:"유튜브 라이브"},
-        {tag:"채널",   tagC:"#aaaaff", date:"05.26",title:"구독자 401명 돌파"},
+        {tag:"발매",tagC:LIME,date:"05.28",title:"새 싱글 발매"},
+        {tag:"예정",tagC:"#ffcc44",date:"06.09",title:"정규앨범 7곡 발매"},
+        {tag:"라이브",tagC:"#ff88cc",date:"06.15",title:"유튜브 라이브"},
+        {tag:"채널",tagC:"#aaaaff",date:"05.26",title:"구독자 401명 돌파"},
       ].map((n,i,arr)=>(
         <div key={i}>
-          <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 18px"}}>
-            <div style={{width:52,flexShrink:0}}><Tag c={n.tagC}>{n.tag}</Tag></div>
-            <span style={{width:44,flexShrink:0,fontSize:11,fontFamily:"monospace",color:"rgba(220,210,255,0.75)",fontWeight:600}}>{n.date}</span>
-            <p style={{margin:0,fontSize:13,fontWeight:600,color:white,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1}}>{n.title}</p>
+          <div
+            style={{
+              display:"flex",
+              alignItems:"center",
+              gap:10,
+              padding:"13px 18px"
+            }}
+          >
+            <Tag c={n.tagC}>{n.tag}</Tag>
+
+            <span
+              style={{
+                fontSize:10,
+                color:muted,
+                fontFamily:"monospace"
+              }}
+            >
+              {n.date}
+            </span>
+
+            <span
+              style={{
+                fontSize:12,
+                color:white,
+                fontWeight:600,
+                overflow:"hidden",
+                textOverflow:"ellipsis",
+                whiteSpace:"nowrap"
+              }}
+            >
+              {n.title}
+            </span>
           </div>
+
           {i<arr.length-1&&<Hr/>}
         </div>
       ))}
     </G>
   );
 
-  // 구독자 추이
-  const SubSection = (
-    <G>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:14}}>
-        <SecHead title="구독자 추이" sub="유튜브 채널 · 2024.01 ~"/>
-        <div style={{textAlign:"right"}}>
-          <p style={{fontSize:22,fontWeight:900,color:LIME,margin:0,fontFamily:"monospace",lineHeight:1}}>402</p>
-          <p style={{fontSize:9,color:muted,margin:"3px 0 0"}}>현재 구독자</p>
-        </div>
-      </div>
-      <SubChart/>
-      <div style={{display:"flex",justifyContent:"space-between",marginTop:10}}>
-        {[
-          {label:"이번 달 증가",val:"+46"},
-          {label:"전월 대비",val:"+12.9%"},
-          {label:"목표",val:"1,000"},
-        ].map((s,i)=>(
-          <div key={i} style={{textAlign:"center"}}>
-            <p style={{fontSize:14,fontWeight:800,color:i===0?LIME:i===1?"#63b4ff":soft,margin:0}}>{s.val}</p>
-            <p style={{fontSize:9,color:muted,margin:"2px 0 0"}}>{s.label}</p>
-          </div>
-        ))}
-      </div>
-    </G>
-  );
-
-  // TOP10 — 제목만
+  // TOP10
   const Top10 = (
     <G pad="0">
-      <div style={{padding:"16px 18px 12px"}}><SecHead title="밤하늘극장 인기곡 TOP 10" sub="'26년 3월 기준"/></div>
+      <div style={{padding:"16px 18px 12px"}}>
+        <SecHead
+          title="밤하늘극장 발매곡 TOP 10"
+          sub="26년 3월 기준"
+        />
+      </div>
+
       <Hr/>
+
       {CHART.map((t,i)=>(
         <div key={i}>
-          <div style={{display:"flex",alignItems:"center",gap:12,padding:"11px 18px"}}>
-            <span style={{width:22,textAlign:"center",fontFamily:"monospace",fontWeight:900,flexShrink:0,fontSize:t.rank<=3?14:12,color:rankColor(t.rank)}}>{t.rank}</span>
-            <p style={{flex:1,margin:0,fontSize:13,fontWeight:t.rank<=3?700:400,color:t.rank===1?white:t.rank<=3?"rgba(242,238,249,0.85)":soft,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</p>
-            <span style={{fontSize:11,fontWeight:700,color:trendColor(t.trend),width:14,textAlign:"center",flexShrink:0}}>{trendLabel(t.trend)}</span>
+          <div
+            style={{
+              display:"flex",
+              alignItems:"center",
+              gap:12,
+              padding:"11px 18px"
+            }}
+          >
+            <span
+              style={{
+                width:22,
+                textAlign:"center",
+                fontFamily:"monospace",
+                fontWeight:900,
+                flexShrink:0,
+                fontSize:t.rank<=3?14:12,
+                color:rankColor(t.rank)
+              }}
+            >
+              {t.rank}
+            </span>
+
+            <div style={{flex:1,minWidth:0}}>
+              <p
+                style={{
+                  margin:0,
+                  fontSize:13,
+                  fontWeight:t.rank<=3?700:400,
+                  color:
+                    t.rank===1
+                      ?white
+                      :t.rank<=3
+                      ?"rgba(242,238,249,0.85)"
+                      :soft,
+                  overflow:"hidden",
+                  textOverflow:"ellipsis",
+                  whiteSpace:"nowrap"
+                }}
+              >
+                {t.title}
+              </p>
+            </div>
+
+            <span
+              style={{
+                fontSize:11,
+                fontWeight:700,
+                color:trendColor(t.trend),
+                width:14,
+                textAlign:"center",
+                flexShrink:0
+              }}
+            >
+              {trendLabel(t.trend)}
+            </span>
           </div>
+
           {i<CHART.length-1&&<Hr/>}
         </div>
       ))}
     </G>
   );
 
-  // 해외 — 이모지 플래그, 열 고정 정렬
-  const Overseas = (
+  // 구독자 그래프
+  const SubscriberGraph = (
     <G>
-      <SecHead title="해외 청취율" sub="5월 유튜브 기준"/>
-      <div style={{marginTop:10}}>
-        {OVERSEAS.map((o,i)=>(
-          <div key={i} style={{display:"flex",alignItems:"center",marginBottom:i<OVERSEAS.length-1?10:0}}>
-            <span style={{fontSize:16,flexShrink:0,lineHeight:1,width:28}}>{o.flag}</span>
-            <span style={{fontSize:11,color:muted,width:46,flexShrink:0}}>{o.name}</span>
-            <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
-              <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${LIME}cc,#66bbff)`,borderRadius:4}}/>
-            </div>
-            <span style={{fontSize:10,color:LIME,fontFamily:"monospace",width:32,textAlign:"right"}}>{o.pct}%</span>
+      <SecHead title="구독자 추이"/>
+
+      <div
+        style={{
+          marginTop:18,
+          display:"flex",
+          alignItems:"flex-end",
+          justifyContent:"space-between",
+          gap:8,
+          height:140
+        }}
+      >
+        {[
+          {m:"1월",v:120},
+          {m:"2월",v:170},
+          {m:"3월",v:230},
+          {m:"4월",v:310},
+          {m:"5월",v:401},
+        ].map((d,i)=>(
+          <div
+            key={i}
+            style={{
+              flex:1,
+              display:"flex",
+              flexDirection:"column",
+              alignItems:"center",
+              gap:8
+            }}
+          >
+            <div
+              style={{
+                width:"100%",
+                maxWidth:38,
+                height:`${d.v/4}px`,
+                background:`linear-gradient(to top, ${LIME}, rgba(184,255,0,0.25))`,
+                borderRadius:"10px 10px 4px 4px",
+                boxShadow:`0 0 12px rgba(184,255,0,0.15)`
+              }}
+            />
+
+            <span
+              style={{
+                fontSize:9,
+                color:muted
+              }}
+            >
+              {d.m}
+            </span>
           </div>
         ))}
       </div>
+
+      <p
+        style={{
+          margin:"14px 0 0",
+          fontSize:11,
+          color:LIME,
+          textAlign:"right",
+          fontFamily:"monospace"
+        }}
+      >
+        현재 401명
+      </p>
     </G>
   );
 
+  // 해외 청취율
+  const Overseas = (
+    <G>
+      <SecHead title="해외 청취율" sub="5월 유튜브 기준"/>
+
+      {OVERSEAS.map((o,i)=>(
+        <div
+          key={i}
+          style={{
+            display:"flex",
+            alignItems:"center",
+            gap:10,
+            marginBottom:i<OVERSEAS.length-1?10:0
+          }}
+        >
+          <span
+            style={{
+              fontSize:16,
+              flexShrink:0
+            }}
+          >
+            {o.flag}
+          </span>
+
+          <div
+            style={{
+              flex:1,
+              background:"rgba(255,255,255,0.05)",
+              borderRadius:4,
+              height:5,
+              overflow:"hidden"
+            }}
+          >
+            <div
+              style={{
+                width:`${o.pct}%`,
+                height:"100%",
+                background:`linear-gradient(90deg,${LIME}cc,#66bbff)`,
+                borderRadius:4
+              }}
+            />
+          </div>
+
+          <span
+            style={{
+              fontSize:10,
+              color:LIME,
+              fontFamily:"monospace",
+              width:26,
+              textAlign:"right"
+            }}
+          >
+            {o.pct}%
+          </span>
+        </div>
+      ))}
+    </G>
+  );
+
+  // PC
   if (isPC) {
     return (
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"start"}}>
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>{TodayPick}{Top10}</div>
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>{Notice}{SubSection}{Overseas}</div>
+      <div
+        style={{
+          display:"grid",
+          gridTemplateColumns:"1fr 1fr",
+          gap:14,
+          alignItems:"start"
+        }}
+      >
+        <div
+          style={{
+            display:"flex",
+            flexDirection:"column",
+            gap:14
+          }}
+        >
+          {TodayPick}
+          {Top10}
+        </div>
+
+        <div
+          style={{
+            display:"flex",
+            flexDirection:"column",
+            gap:14
+          }}
+        >
+          {Notice}
+          {SubscriberGraph}
+          {Overseas}
+        </div>
       </div>
     );
   }
-  return <div style={{display:"flex",flexDirection:"column",gap:10}}>{TodayPick}{Notice}{Top10}{SubSection}{Overseas}</div>;
+
+  // MOBILE
+  return (
+    <div
+      style={{
+        display:"flex",
+        flexDirection:"column",
+        gap:10
+      }}
+    >
+      {TodayPick}
+      {Notice}
+      {Top10}
+      {SubscriberGraph}
+      {Overseas}
+    </div>
+  );
 }
 
-// ── 소개 ────────────────────────────────────────────
+// ── 소개 (v6 그대로) ────────────────────────────────
 function AboutTab({isPC}) {
+
+  // 히어로 카드
   const Hero = (
     <G style={{textAlign:"center",position:"relative",overflow:"hidden",padding:"26px 22px"}}>
       <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.08) 0%,transparent 70%)",pointerEvents:"none"}}/>
@@ -305,16 +585,20 @@ function AboutTab({isPC}) {
       </p>
     </G>
   );
+
+  // 아티스트
   const Artists = (
     <G>
       <SecHead title="아티스트"/>
       {[
-        {name:"유우레이",role:"보컬 · 작사",desc:"목소리로 감정의 결을 만드는 사람. 밤하늘극장의 감성적 언어를 담당한다."},
-        {name:"임보성",role:"프로듀서 · 작곡",desc:"사운드로 세계관을 구축하는 사람. 밤하늘극장의 음악적 방향을 이끈다."},
+        {name:"유우레이",  role:"보컬 · 작사",    desc:"목소리로 감정의 결을 만드는 사람. 밤하늘극장의 감성적 언어를 담당한다."},
+        {name:"임보성",    role:"프로듀서 · 작곡", desc:"사운드로 세계관을 구축하는 사람. 밤하늘극장의 음악적 방향을 이끈다."},
       ].map((a,i)=>(
         <div key={i} style={{marginBottom:i===0?16:0}}>
           <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}>
-            <div style={{width:40,height:40,borderRadius:"50%",background:"rgba(184,255,0,0.1)",border:"1px solid rgba(184,255,0,0.22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{i===0?"🎤":"🎹"}</div>
+            <div style={{width:40,height:40,borderRadius:"50%",background:"rgba(184,255,0,0.1)",border:"1px solid rgba(184,255,0,0.22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>
+              {i===0?"🎤":"🎹"}
+            </div>
             <div>
               <p style={{margin:0,fontSize:14,fontWeight:800,color:white}}>{a.name}</p>
               <p style={{margin:0,fontSize:10,color:LIME,opacity:0.75,fontWeight:600}}>{a.role}</p>
@@ -326,6 +610,8 @@ function AboutTab({isPC}) {
       ))}
     </G>
   );
+
+  // 타임라인
   const Timeline = (
     <G pad="0">
       <div style={{padding:"16px 18px 12px"}}><SecHead title="연혁"/></div>
@@ -335,7 +621,7 @@ function AboutTab({isPC}) {
         {TIMELINE.map((t,i)=>(
           <div key={i} style={{display:"flex",gap:14,marginBottom:i<TIMELINE.length-1?20:0}}>
             <div style={{flexShrink:0,width:26,display:"flex",flexDirection:"column",alignItems:"center",zIndex:1,paddingTop:4}}>
-              <div style={{width:10,height:10,borderRadius:"50%",background:t.tag==="예정"?"#ffcc44":LIME,border:`2px solid ${t.tag==="예정"?"#ffcc44":LIME}`,boxShadow:t.tag==="예정"?`0 0 8px #ffcc4488`:`0 0 6px ${LIME}55`}}/>
+              <div style={{width:10,height:10,borderRadius:"50%",background:t.tag==="예정"?"#ffcc44":t.tagC==="rgba(184,255,0,0.5)"?"rgba(184,255,0,0.35)":LIME,border:`2px solid ${t.tag==="예정"?"#ffcc44":LIME}`,boxShadow:t.tag==="예정"?`0 0 8px #ffcc4488`:`0 0 6px ${LIME}55`}}/>
             </div>
             <div style={{flex:1}}>
               <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:4,flexWrap:"wrap"}}>
@@ -349,6 +635,7 @@ function AboutTab({isPC}) {
       </div>
     </G>
   );
+
   if (isPC) {
     return (
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"start"}}>
@@ -369,7 +656,9 @@ function MusicTab({isPC}) {
     const alb=ALBUMS[selected], tr=alb.tracks[trackIdx];
     return (
       <div style={{maxWidth:isPC?560:undefined,margin:isPC?"0 auto":undefined,display:"flex",flexDirection:"column",gap:10}}>
-        <button onClick={()=>{setSelected(null);setTrackIdx(0);}} style={{display:"flex",alignItems:"center",gap:6,background:"none",border:"none",cursor:"pointer",color:LIME,fontSize:13,fontFamily:"inherit",padding:0,marginBottom:4}}>← 음반 목록</button>
+        <button onClick={()=>{setSelected(null);setTrackIdx(0);}} style={{display:"flex",alignItems:"center",gap:6,background:"none",border:"none",cursor:"pointer",color:LIME,fontSize:13,fontFamily:"inherit",padding:0,marginBottom:4}}>
+          ← 음반 목록
+        </button>
         <G acc>
           <div style={{textAlign:"center"}}>
             <div style={{width:120,height:120,borderRadius:18,background:alb.color,border:"1px solid rgba(184,255,0,0.15)",margin:"0 auto 16px",display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -550,7 +839,9 @@ function GuestbookTab({isPC}) {
     </div>
   );
 
-  return isPC ? <div style={{maxWidth:640,margin:"0 auto"}}>{inner}</div> : inner;
+  return isPC
+    ? <div style={{maxWidth:640,margin:"0 auto"}}>{inner}</div>
+    : inner;
 }
 
 // ── APP ─────────────────────────────────────────────
@@ -565,7 +856,7 @@ export default function App() {
   },[]);
 
   return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)",color:white,fontFamily:"'Noto Sans KR','Apple SD Gothic Neo',sans-serif",position:"relative"}}>
+    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#05021a 0%,#080520 35%,#0b0728 65%,#060418 100%)",color:white,fontFamily:"'Noto Sans KR','Apple SD Gothic Neo',sans-serif",position:"relative"}}>
       <style>{`
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
         @keyframes fl    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
