@@ -6,7 +6,6 @@ const gb = "rgba(255,255,255,0.13)";
 const muted = "rgba(220,210,255,0.36)";
 const soft  = "rgba(220,210,255,0.70)";
 const white = "#F2EEF9";
-const ADMIN_PW = "bam2026!";
 
 const ALBUMS = [
   { id:1,  title:"그대였죠",                           year:"2023", color:"#1a1428", desc:"처음 목소리를 꺼낸 날. 아무도 듣지 않아도 괜찮았던 새벽.", tracks:[{n:1,title:"그대였죠",mood:"그리움이 익숙해진 사람에게"},{n:2,title:"고장난시계",mood:"멈춘 시간 속에서 혼자 걷는 기분"},{n:3,title:"그 계절에",mood:"지나간 계절을 다시 꺼내는 밤"}]},
@@ -442,6 +441,7 @@ function MusicTab({isPC}) {
 
 // ── 방명록 ──────────────────────────────────────────
 function GuestbookTab({isPC}) {
+  const ENABLE_ADMIN = false;
   const [entries,setEntries]=useState(INIT_GB);
   const [name,setName]=useState(""); const [pw,setPw]=useState(""); const [msg,setMsg]=useState("");
   const [done,setDone]=useState(false);
@@ -460,7 +460,6 @@ function GuestbookTab({isPC}) {
   };
   const like=id=>setEntries(p=>p.map(e=>e.id===id?{...e,likes:e.likes+1}:e));
   const submitAdmin=id=>{
-    if(adminPw!==ADMIN_PW){setAdminErr(true);return;}
     setEntries(p=>p.map(e=>e.id===id?{...e,reply:adminR}:e));
     setAdminT(null); setAdminPw(""); setAdminR(""); setAdminErr(false);
   };
@@ -529,11 +528,28 @@ function GuestbookTab({isPC}) {
                   onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,0.04)";e.currentTarget.style.borderColor=gb;}}>
                   ♡ {entry.likes}
                 </button>
-                <button onClick={()=>{setAdminT(adminT===entry.id?null:entry.id);setAdminPw("");setAdminR(entry.reply||"");setAdminErr(false);}} style={{fontSize:10,color:"rgba(255,255,255,0.12)",background:"none",border:"none",cursor:"pointer",fontFamily:"inherit"}}>
-                  {adminT===entry.id?"닫기":"관리자 답글"}
-                </button>
+                {ENABLE_ADMIN && (
+  <button
+    onClick={()=>{
+      setAdminT(adminT===entry.id?null:entry.id);
+      setAdminPw("");
+      setAdminR(entry.reply||"");
+      setAdminErr(false);
+    }}
+    style={{
+      fontSize:10,
+      color:"rgba(255,255,255,0.12)",
+      background:"none",
+      border:"none",
+      cursor:"pointer",
+      fontFamily:"inherit"
+    }}
+  >
+    {adminT===entry.id?"닫기":"관리자 답글"}
+  </button>
+)}
               </div>
-              {adminT===entry.id&&(
+              {ENABLE_ADMIN && adminT===entry.id && (
                 <div style={{marginTop:10,background:"rgba(0,0,0,0.5)",border:"1px solid rgba(184,255,0,0.18)",borderRadius:12,padding:"14px"}}>
                   <p style={{fontSize:10,color:LIME,fontWeight:700,margin:"0 0 10px",opacity:0.8}}>관리자 답글 작성</p>
                   <input value={adminPw} onChange={e=>{setAdminPw(e.target.value);setAdminErr(false);}} onFocus={fo} onBlur={bl} placeholder="관리자 비밀번호" type="password" style={{...IS,width:"100%",marginBottom:7}}/>
