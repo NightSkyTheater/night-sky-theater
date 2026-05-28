@@ -384,14 +384,7 @@ function MusicTab({isPC}) {
     height:120,
     borderRadius:18,
 
-    backgroundImage: `
-      linear-gradient(
-        to top,
-        rgba(0,0,0,0.35),
-        rgba(0,0,0,0.05)
-      ),
-      url(${alb.cover})
-    `,
+    backgroundImage:`url(${a.cover})`,
 
     backgroundColor:alb.color,
     backgroundSize:"cover",
@@ -411,7 +404,6 @@ function MusicTab({isPC}) {
     boxShadow:`0 10px 30px ${alb.color}44`
   }}
 >
-              <span style={{fontSize:9,color:"rgba(184,255,0,0.35)",fontFamily:"monospace",textAlign:"center",padding:"0 10px",lineHeight:1.5}}>{alb.title}</span>
             </div>
             <p style={{fontSize:10,color:LIME,fontWeight:700,margin:"0 0 4px",letterSpacing:"0.1em",opacity:0.8}}>{alb.year}</p>
             <p style={{fontSize:17,fontWeight:900,color:white,margin:"0 0 8px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.3,letterSpacing:"-0.3px"}}>{alb.title}</p>
@@ -467,14 +459,7 @@ function MusicTab({isPC}) {
     aspectRatio:"1/1",
     borderRadius:isPC?16:14,
 
-    backgroundImage: `
-      linear-gradient(
-        to top,
-        rgba(0,0,0,0.45),
-        rgba(0,0,0,0.1)
-      ),
-      url(${a.cover})
-    `,
+    backgroundImage:`url(${alb.cover})`,
 
     backgroundColor:a.color,
     backgroundSize:"cover",
@@ -507,18 +492,7 @@ function MusicTab({isPC}) {
     e.currentTarget.style.boxShadow=`0 10px 35px ${a.color}33`;
   }}
 >
-              <p style={{
-  fontSize:10,
-  color:"rgba(255,255,255,0.88)",
-  textShadow:"0 2px 12px rgba(0,0,0,0.8)",
-  textAlign:"center",
-  padding:"0 12px",
-  lineHeight:1.5,
-  fontWeight:700,
-  letterSpacing:"0.03em",
-  wordBreak:"keep-all",
-  margin:0
-}}>{a.title}</p>
+             
               <div style={{position:"absolute",bottom:8,right:8,background:"rgba(0,0,0,0.6)",borderRadius:6,padding:"2px 7px"}}>
                 <span style={{fontSize:9,color:"rgba(255,255,255,0.5)",fontFamily:"monospace"}}>{a.year}</span>
               </div>
