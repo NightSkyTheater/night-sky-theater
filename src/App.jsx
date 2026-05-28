@@ -271,7 +271,7 @@ function HomeTab({isPC}) {
       <div style={{marginTop:10}}>
         {OVERSEAS.map((o,i)=>(
           <div key={i} style={{display:"flex",alignItems:"center",marginBottom:i<OVERSEAS.length-1?10:0}}>
-            <span style={{fontSize:16,flexShrink:0,lineHeight:1,width:28,fontFamily:"'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif"}}>{o.flag}</span>
+            <span style={{fontSize:16,flexShrink:0,lineHeight:1,width:28,fontFamily:"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Twemoji Mozilla',sans-serif"}}>{o.flag}</span>
             <span style={{fontSize:11,color:muted,width:46,flexShrink:0}}>{o.name}</span>
             <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
               <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${LIME}cc,#66bbff)`,borderRadius:4}}/>
