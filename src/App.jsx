@@ -180,7 +180,7 @@ function HomeTab({isPC}) {
 
   // 오늘의 추천곡
   const TodayPick = (
-    <G acc style={{textAlign:"center",padding:"26px 20px",position:"relative",overflow:"hidden"}}>
+    <G acc style={{padding:"26px 20px",position:"relative",overflow:"hidden"}}>
       <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.1) 0%,transparent 70%)",pointerEvents:"none"}}/>
       <p style={{fontSize:10,fontWeight:700,color:LIME,letterSpacing:"0.12em",margin:"0 0 18px",opacity:0.8}}>오늘의 밤하늘극장 추천곡</p>
       {track&&<>
@@ -265,7 +265,7 @@ function HomeTab({isPC}) {
       <div style={{marginTop:10}}>
         {OVERSEAS.map((o,i)=>(
           <div key={i} style={{display:"flex",alignItems:"center",marginBottom:i<OVERSEAS.length-1?10:0}}>
-            <span style={{fontSize:16,flexShrink:0,lineHeight:1,width:28}}>{o.flag}</span>
+            <span style={{fontSize:16,flexShrink:0,lineHeight:1,width:28,fontFamily:"'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif"}}>{o.flag}</span>
             <span style={{fontSize:11,color:muted,width:46,flexShrink:0}}>{o.name}</span>
             <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
               <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${LIME}cc,#66bbff)`,borderRadius:4}}/>
@@ -565,13 +565,16 @@ export default function App() {
   },[]);
 
   return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)",color:white,fontFamily:"'Noto Sans KR','Apple SD Gothic Neo',sans-serif",position:"relative"}}>
+    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)",color:white,fontFamily:"'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif",position:"relative"}}>
       <style>{`
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
         @keyframes fl    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
         @keyframes pulse { 0%,100%{opacity:.15} 50%{opacity:1} }
         @keyframes fin   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-        * { box-sizing:border-box }
+        * { box-sizing:border-box; }
+        body { font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif; text-align:left; }
+        p, span, div { text-align:inherit; }
         textarea::placeholder,input::placeholder { color:rgba(255,255,255,0.13) }
         ::-webkit-scrollbar { width:3px }
         ::-webkit-scrollbar-thumb { background:rgba(184,255,0,0.16);border-radius:3px }
