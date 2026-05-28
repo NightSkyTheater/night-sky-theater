@@ -8,17 +8,24 @@ const soft  = "rgba(220,210,255,0.70)";
 const white = "#F2EEF9";
 
 const ALBUMS = [
-  { id:1,  title:"그대였죠",                           year:"2023", color:"#1a1428", desc:"처음 목소리를 꺼낸 날. 아무도 듣지 않아도 괜찮았던 새벽.", tracks:[{n:1,title:"그대였죠",mood:"그리움이 익숙해진 사람에게"},{n:2,title:"고장난시계",mood:"멈춘 시간 속에서 혼자 걷는 기분"},{n:3,title:"그 계절에",mood:"지나간 계절을 다시 꺼내는 밤"}]},
-  { id:2,  title:"오늘이 가장 어렸던 날이야",            year:"2024", color:"#0d1a2a", desc:"지금 이 순간이 남은 생에서 가장 젊은 날임을 아는 사람의 노래.", tracks:[{n:1,title:"겨울의 대삼각형",mood:"추운 밤 하늘을 올려다본 기억"},{n:2,title:"우리들의 발라드",mood:"같이 울었던 그 사람에게"},{n:3,title:"오늘이 가장 어렸던 날이야",mood:"지금을 살아야 하는 이유"},{n:4,title:"20에 50",mood:"서른을 앞두고 스무 살을 그리워하는"},{n:5,title:"나 지금도 충분히 버티고 있는데",mood:"무너지지 않으려고 애쓰는 모든 밤"},{n:6,title:"조명이 켜지고",mood:"무대 위에 서기 전 혼자인 시간"},{n:7,title:"사탄탱고",mood:"이상하게 중독되는 감정"},{n:8,title:"별이 비처럼 내리던 날",mood:"한 번도 잊지 못할 장면"}]},
-  { id:3,  title:"운명애",                              year:"2025", color:"#1a0d28", desc:"사랑이 아니라 운명이었다고 믿고 싶은 마음의 기록.", tracks:[{n:1,title:"운명애",mood:"이게 사랑인지 집착인지 모르던 때"},{n:2,title:"운외창천 (雲外蒼天)",mood:"구름 너머 푸른 하늘"},{n:3,title:"테세우스의 배",mood:"변해도 여전히 나인가"},{n:4,title:"사랑엔 자막이 필요해",mood:"말하지 않으면 모르는 것들"},{n:5,title:"지구는 잘 돌아가네, 나 없이도",mood:"이별 후에도 세상은 평범하게"},{n:6,title:"내 소중한 마음은 비밀이야",mood:"표현 못 하고 삼킨 감정들"},{n:7,title:"지금 이 순간",mood:"지나가는 걸 알면서 붙잡고 싶은"}]},
-  { id:4,  title:"자발적으로 표류하는 우주비행사",       year:"2025", color:"#0a1a10", desc:"길을 잃은 게 아니라 스스로 떠내려가기로 한 사람의 이야기.", tracks:[{n:1,title:"자발적으로 표류하는 우주비행사",mood:"계획 없이 살아가는 것도 용기"},{n:2,title:"출근하기 싫은데 알람은 또 맞춰놨어",mood:"그래도 살아야 하니까"},{n:3,title:"사막에서 수영하기",mood:"불가능한 걸 계속 시도하는 마음"},{n:4,title:"별자리를 잇다",mood:"점들을 연결하면 별자리가 된다"}]},
-  { id:5,  title:"이 봄은 다른 이름이 될까",             year:"2025", color:"#1a0d14", desc:"매년 오는 봄이지만 올해의 봄은 다를 것 같다는 예감.", tracks:[{n:1,title:"이 봄은 다른 이름이 될까",mood:"변화를 기다리는 설렘"},{n:2,title:"갑자기 오래된 노래가 떠오른 이유",mood:"어떤 노래는 사람을 데려온다"},{n:3,title:"말하지 않은 것들의 무게",mood:"침묵이 쌓여 무거워진 관계"},{n:4,title:"꿈은 없고요, 돈은 많고 싶네요",mood:"솔직한 어른의 소망"},{n:5,title:"방해 금지 모드",mood:"혼자 있고 싶은 날"}]},
-  { id:6,  title:"사랑은 말이야",                        year:"2025", color:"#1a1408", desc:"말로 표현하지 않으면 사랑도 존재하지 않는 것인가.", tracks:[{n:1,title:"사랑은 말이야",mood:"표현해야 비로소 사랑이 된다"},{n:2,title:"F로 살기엔 세상은 너무 차가워",mood:"감정형 인간의 세상 적응기"},{n:3,title:"고백 연습",mood:"말하기 전 수백 번 머릿속으로"}]},
-  { id:7,  title:"사막 위의 잠수함",                     year:"2025", color:"#081420", desc:"있을 수 없는 곳에 있는 것들의 이야기. 어울리지 않아서 아름다운.", tracks:[{n:1,title:"사막 위의 잠수함",mood:"어울리지 않아서 오히려 눈에 띄는"},{n:2,title:"붐비는 무인도",mood:"사람들 속에서 혼자인 기분"},{n:3,title:"잠수함 일지",mood:"수면 아래에서 기록하는 것들"}]},
-  { id:8,  title:"不完全な踊り (불완전한 춤)",             year:"2025", color:"#1a1a08", desc:"완벽하지 않아도 계속 춤추는 것.", tracks:[{n:1,title:"不完全な踊り",mood:"완벽하지 않아도 계속"},{n:2,title:"闇が怖い幽霊",mood:"유령도 어둠이 무섭다"},{n:3,title:"星影の叫び",mood:"별빛도 소리를 지른다"}]},
-  { id:9,  title:"죽어가는 모든 것들을 사랑해야지",       year:"2026", color:"#0d1a0d", desc:"사라져가는 것들에게 늦지 않게 사랑을 고백하는 앨범.", tracks:[{n:1,title:"죽어가는 모든 것들을 사랑해야지",mood:"끝나기 전에 사랑하기"},{n:2,title:"꽃이 피든 말든",mood:"결과와 상관없이 피어나는 것들"},{n:3,title:"푸른 하늘 은하수",mood:"아득하고 맑은 것들"},{n:4,title:"마지막 여름",mood:"다시 오지 않을 그 계절"}]},
-  { id:10, title:"나는 오늘 또 어떤 핑계를 대었는가",     year:"2026", color:"#141420", desc:"스스로를 솔직하게 바라보는 일.", tracks:[{n:1,title:"나는 오늘 또 어떤 핑계를 대었는가",mood:"자기 자신을 마주하는 용기"},{n:2,title:"가짜의 삶",mood:"진짜를 잃어버린 날들"},{n:3,title:"인생은 산과 계곡",mood:"오르막과 내리막 사이"},{n:4,title:"핑계의 목록",mood:"내가 나에게 하는 변명들"}]},
-  { id:11, title:"ただ (그냥)",                           year:"2026", color:"#10101a", desc:"이유 없이. 그냥. 때로는 설명하지 않아도 되는 감정이 있다.", tracks:[{n:1,title:"ただ (그냥)",mood:"아무 이유 없이 슬픈 날"},{n:2,title:"夜の終わり (밤의 끝)",mood:"밤이 끝나고 아침이 오는 사이"}]},
+  { id:1,  title:"그대였죠",                       cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966895/%EC%95%A8%EB%B2%94%EC%BB%A4%EB%B2%84_xc7hz4.jpg",    year:"2023", color:"#1a1428", desc:"처음 목소리를 꺼낸 날. 아무도 듣지 않아도 괜찮았던 새벽.", tracks:[{n:1,title:"그대였죠",mood:"그리움이 익숙해진 사람에게"},{n:2,title:"고장난시계",mood:"멈춘 시간 속에서 혼자 걷는 기분"},{n:3,title:"그 계절에",mood:"지나간 계절을 다시 꺼내는 밤"}]},
+  { id:2,  title:"자발적으로 표류하는 우주비행사",    cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779967018/%EC%9E%90%EB%B0%9C%EC%A0%81%EC%9C%BC%EB%A1%9C_%ED%91%9C%EB%A5%98%ED%95%98%EB%8A%94_%EC%9A%B0%EC%A3%BC%EB%B9%84%ED%96%89%EC%82%AC_%EC%95%A8%EB%B2%94%EC%BB%A4%EB%B2%84_sdpihs.png",   year:"2025", color:"#0a1a10", desc:"길을 잃은 게 아니라 스스로 떠내려가기로 한 사람의 이야기.", tracks:[{n:1,title:"자발적으로 표류하는 우주비행사",mood:"계획 없이 살아가는 것도 용기"},{n:2,title:"출근하기 싫은데 알람은 또 맞춰놨어",mood:"그래도 살아야 하니까"},{n:3,title:"사막에서 수영하기",mood:"불가능한 걸 계속 시도하는 마음"},{n:4,title:"별자리를 잇다",mood:"점들을 연결하면 별자리가 된다"}]},
+  { id:3,  title:"오늘이 가장 어렸던 날이야",        cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966970/3000x3000_q8gi5t.png",    year:"2024", color:"#0d1a2a", desc:"지금 이 순간이 남은 생에서 가장 젊은 날임을 아는 사람의 노래.", tracks:[{n:1,title:"겨울의 대삼각형",mood:"추운 밤 하늘을 올려다본 기억"},{n:2,title:"우리들의 발라드",mood:"같이 울었던 그 사람에게"},{n:3,title:"오늘이 가장 어렸던 날이야",mood:"지금을 살아야 하는 이유"},{n:4,title:"20에 50",mood:"서른을 앞두고 스무 살을 그리워하는"},{n:5,title:"나 지금도 충분히 버티고 있는데",mood:"무너지지 않으려고 애쓰는 모든 밤"},{n:6,title:"조명이 켜지고",mood:"무대 위에 서기 전 혼자인 시간"},{n:7,title:"사탄탱고",mood:"이상하게 중독되는 감정"},{n:8,title:"별이 비처럼 내리던 날",mood:"한 번도 잊지 못할 장면"}]},
+  { id:3,  title:"전우치",        cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779967377/%EC%A0%84%EC%9A%B0%EC%B9%98_%EC%95%A8%EB%B2%94%EC%BB%A4%EB%B2%84_ukeahe.jpg",    year:"2024", color:"#0d1a2a", desc:"지금 이 순간이 남은 생에서 가장 젊은 날임을 아는 사람의 노래.", tracks:[{n:1,title:"겨울의 대삼각형",mood:"추운 밤 하늘을 올려다본 기억"},{n:2,title:"우리들의 발라드",mood:"같이 울었던 그 사람에게"},{n:3,title:"오늘이 가장 어렸던 날이야",mood:"지금을 살아야 하는 이유"},{n:4,title:"20에 50",mood:"서른을 앞두고 스무 살을 그리워하는"},{n:5,title:"나 지금도 충분히 버티고 있는데",mood:"무너지지 않으려고 애쓰는 모든 밤"},{n:6,title:"조명이 켜지고",mood:"무대 위에 서기 전 혼자인 시간"},{n:7,title:"사탄탱고",mood:"이상하게 중독되는 감정"},{n:8,title:"별이 비처럼 내리던 날",mood:"한 번도 잊지 못할 장면"}]},
+  { id:5,  title:"사랑은 말이야",                  cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966790/%EC%82%AC%EB%9E%91%EC%9D%80%EB%A7%90%EC%9D%B4%EC%95%BC_di0mm2.jpg",      year:"2025", color:"#1a1408", desc:"말로 표현하지 않으면 사랑도 존재하지 않는 것인가.", tracks:[{n:1,title:"사랑은 말이야",mood:"표현해야 비로소 사랑이 된다"},{n:2,title:"F로 살기엔 세상은 너무 차가워",mood:"감정형 인간의 세상 적응기"},{n:3,title:"고백 연습",mood:"말하기 전 수백 번 머릿속으로"}]},
+  { id:6,  title:"이 봄은 다른 이름이 될까",        cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966788/%EC%9D%B4-%EB%B4%84%EC%9D%B4-%EB%8B%A4%EB%A5%B8-%EC%9D%B4%EB%A6%84%EC%9D%B4-%EB%90%A0%EA%B9%8C_xbyrlh.jpg",     year:"2025", color:"#1a0d14", desc:"매년 오는 봄이지만 올해의 봄은 다를 것 같다는 예감.", tracks:[{n:1,title:"이 봄은 다른 이름이 될까",mood:"변화를 기다리는 설렘"},{n:2,title:"갑자기 오래된 노래가 떠오른 이유",mood:"어떤 노래는 사람을 데려온다"},{n:3,title:"말하지 않은 것들의 무게",mood:"침묵이 쌓여 무거워진 관계"},{n:4,title:"꿈은 없고요, 돈은 많고 싶네요",mood:"솔직한 어른의 소망"},{n:5,title:"방해 금지 모드",mood:"혼자 있고 싶은 날"}]},
+  { id:7,  title:"不完全な踊り (불완전한 춤)",      cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779967108/%EC%95%A8%EB%B2%94%EC%BB%A4%EB%B2%84_vdepkn.png",       year:"2025", color:"#1a1a08", desc:"완벽하지 않아도 계속 춤추는 것.", tracks:[{n:1,title:"不完全な踊り",mood:"완벽하지 않아도 계속"},{n:2,title:"闇が怖い幽霊",mood:"유령도 어둠이 무섭다"},{n:3,title:"星影の叫び",mood:"별빛도 소리를 지른다"}]},
+  { id:8,  title:"운명애",                         cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966790/%EC%9A%B4%EB%AA%85%EC%95%A0_gqdkn5.jpg",     year:"2025", color:"#1a0d28", desc:"사랑이 아니라 운명이었다고 믿고 싶은 마음의 기록.", tracks:[{n:1,title:"운명애",mood:"이게 사랑인지 집착인지 모르던 때"},{n:2,title:"운외창천 (雲外蒼天)",mood:"구름 너머 푸른 하늘"},{n:3,title:"테세우스의 배",mood:"변해도 여전히 나인가"},{n:4,title:"사랑엔 자막이 필요해",mood:"말하지 않으면 모르는 것들"},{n:5,title:"지구는 잘 돌아가네, 나 없이도",mood:"이별 후에도 세상은 평범하게"},{n:6,title:"내 소중한 마음은 비밀이야",mood:"표현 못 하고 삼킨 감정들"},{n:7,title:"지금 이 순간",mood:"지나가는 걸 알면서 붙잡고 싶은"}]},
+  { id:9,  title:"사막 위의 잠수함",               cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966790/%EC%82%AC%EB%A7%89%EC%9C%84%EC%9E%A0%EC%88%98%ED%95%A8_mkrsr0.jpg",      year:"2025", color:"#081420", desc:"있을 수 없는 곳에 있는 것들의 이야기. 어울리지 않아서 아름다운.", tracks:[{n:1,title:"사막 위의 잠수함",mood:"어울리지 않아서 오히려 눈에 띄는"},{n:2,title:"붐비는 무인도",mood:"사람들 속에서 혼자인 기분"},{n:3,title:"잠수함 일지",mood:"수면 아래에서 기록하는 것들"}]},
+  { id:10, title:"나는 오늘 또 어떤 핑계를 대었는가",  cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966789/%ED%95%91%EA%B3%84_wpo1gr.jpg",   year:"2026", color:"#141420", desc:"스스로를 솔직하게 바라보는 일.", tracks:[{n:1,title:"나는 오늘 또 어떤 핑계를 대었는가",mood:"자기 자신을 마주하는 용기"},{n:2,title:"가짜의 삶",mood:"진짜를 잃어버린 날들"},{n:3,title:"인생은 산과 계곡",mood:"오르막과 내리막 사이"},{n:4,title:"핑계의 목록",mood:"내가 나에게 하는 변명들"}]},
+  { id:11,  title:"죽어가는 모든 것들을 사랑해야지",   cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966786/%EC%A3%BD%EC%96%B4%EA%B0%80%EB%8A%94_e3imwp.jpg",    year:"2026", color:"#0d1a0d", desc:"사라져가는 것들에게 늦지 않게 사랑을 고백하는 앨범.", tracks:[{n:1,title:"죽어가는 모든 것들을 사랑해야지",mood:"끝나기 전에 사랑하기"},{n:2,title:"꽃이 피든 말든",mood:"결과와 상관없이 피어나는 것들"},{n:3,title:"푸른 하늘 은하수",mood:"아득하고 맑은 것들"},{n:4,title:"마지막 여름",mood:"다시 오지 않을 그 계절"}]},  
+  { id:12, title:"ただ (그냥)",                    cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966789/%EB%B0%94%EB%9E%8C%EC%9D%B4%EC%A2%8B%EC%95%84%EC%84%9C_g0sya3.jpg",       year:"2026", color:"#10101a", desc:"이유 없이. 그냥. 때로는 설명하지 않아도 되는 감정이 있다.", tracks:[{n:1,title:"ただ (그냥)",mood:"아무 이유 없이 슬픈 날"},{n:2,title:"夜の終わり (밤의 끝)",mood:"밤이 끝나고 아침이 오는 사이"}]},
+  { id:13, title:"어느 새벽에 또 울었어",                    cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966792/%EC%96%B4%EB%8A%90-%EC%83%88%EB%B2%BD%EC%97%90-%EB%98%90-%EC%9A%B8%EC%97%88%EC%96%B4_xeouv9.png",       year:"2026", color:"#10101a", desc:"이유 없이. 그냥. 때로는 설명하지 않아도 되는 감정이 있다.", tracks:[{n:1,title:"ただ (그냥)",mood:"아무 이유 없이 슬픈 날"},{n:2,title:"夜の終わり (밤의 끝)",mood:"밤이 끝나고 아침이 오는 사이"}]},
+  { id:14, title:"엄마가 띄워줬던 나는 점점 가라앉고 있어",       cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966787/%EC%97%84%EB%A7%88%EA%B0%80-%EB%9D%84%EC%9B%8C%EC%A4%AC%EB%8D%98-%EB%82%98%EB%8A%94_sqgtao.jpg",       year:"2026", color:"#10101a", desc:"이유 없이. 그냥. 때로는 설명하지 않아도 되는 감정이 있다.", tracks:[{n:1,title:"ただ (그냥)",mood:"아무 이유 없이 슬픈 날"},{n:2,title:"夜の終わり (밤의 끝)",mood:"밤이 끝나고 아침이 오는 사이"}]},
+  { id:15, title:"아픈 청춘들아",                    cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966787/%EC%95%84%ED%94%88%EC%B2%AD%EC%B6%98%EB%93%A4%EC%95%84_dq3gbm.jpg",       year:"2026", color:"#10101a", desc:"이유 없이. 그냥. 때로는 설명하지 않아도 되는 감정이 있다.", tracks:[{n:1,title:"ただ (그냥)",mood:"아무 이유 없이 슬픈 날"},{n:2,title:"夜の終わり (밤의 끝)",mood:"밤이 끝나고 아침이 오는 사이"}]},
+  { id:16, title:"허수아비에게",                    cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966787/%ED%97%88%EC%88%98%EC%95%84%EB%B9%84%EC%97%90%EA%B2%8C_itqady.jpg",       year:"2026", color:"#10101a", desc:"이유 없이. 그냥. 때로는 설명하지 않아도 되는 감정이 있다.", tracks:[{n:1,title:"ただ (그냥)",mood:"아무 이유 없이 슬픈 날"},{n:2,title:"夜の終わり (밤의 끝)",mood:"밤이 끝나고 아침이 오는 사이"}]},
+  { id:17, title:"SKIP",                    cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966789/skip_bfymrk.jpg",       year:"2026", color:"#10101a", desc:"이유 없이. 그냥. 때로는 설명하지 않아도 되는 감정이 있다.", tracks:[{n:1,title:"ただ (그냥)",mood:"아무 이유 없이 슬픈 날"},{n:2,title:"夜の終わり (밤의 끝)",mood:"밤이 끝나고 아침이 오는 사이"}]},
+  { id:18, title:"두려운 것 투성이야, 세상은",        cover:"https://res.cloudinary.com/dhc9ufcgr/image/upload/q_auto/f_auto/v1779966789/%EB%91%90%EB%A0%A4%EC%9A%B4-%EA%B2%83-%ED%88%AC%EC%84%B1%EC%9D%B4%EC%95%BC_-%EC%84%B8%EC%83%81%EC%9D%80_myby7o.jpg",       year:"2026", color:"#10101a", desc:"이유 없이. 그냥. 때로는 설명하지 않아도 되는 감정이 있다.", tracks:[{n:1,title:"ただ (그냥)",mood:"아무 이유 없이 슬픈 날"},{n:2,title:"夜の終わり (밤의 끝)",mood:"밤이 끝나고 아침이 오는 사이"}]},
 ];
 
 const ALL_TRACKS = ALBUMS.flatMap(a => a.tracks.map(t => ({...t, album:a.title})));
@@ -371,7 +378,39 @@ function MusicTab({isPC}) {
         <button onClick={()=>{setSelected(null);setTrackIdx(0);}} style={{display:"flex",alignItems:"center",gap:6,background:"none",border:"none",cursor:"pointer",color:LIME,fontSize:13,fontFamily:"inherit",padding:0,marginBottom:4}}>← 음반 목록</button>
         <G acc>
           <div style={{textAlign:"center"}}>
-            <div style={{width:120,height:120,borderRadius:18,background:alb.color,border:"1px solid rgba(184,255,0,0.15)",margin:"0 auto 16px",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <div
+  style={{
+    width:120,
+    height:120,
+    borderRadius:18,
+
+    backgroundImage: `
+      linear-gradient(
+        to top,
+        rgba(0,0,0,0.35),
+        rgba(0,0,0,0.05)
+      ),
+      url(${alb.cover})
+    `,
+
+    backgroundColor:alb.color,
+    backgroundSize:"cover",
+    backgroundPosition:"center",
+    backgroundRepeat:"no-repeat",
+
+    border:"1px solid rgba(184,255,0,0.15)",
+
+    margin:"0 auto 16px",
+
+    display:"flex",
+    alignItems:"center",
+    justifyContent:"center",
+
+    overflow:"hidden",
+
+    boxShadow:`0 10px 30px ${alb.color}44`
+  }}
+>
               <span style={{fontSize:9,color:"rgba(184,255,0,0.35)",fontFamily:"monospace",textAlign:"center",padding:"0 10px",lineHeight:1.5}}>{alb.title}</span>
             </div>
             <p style={{fontSize:10,color:LIME,fontWeight:700,margin:"0 0 4px",letterSpacing:"0.1em",opacity:0.8}}>{alb.year}</p>
@@ -422,10 +461,64 @@ function MusicTab({isPC}) {
       <div style={{display:"grid",gridTemplateColumns:cols,gap:isPC?16:12}}>
         {[...ALBUMS].reverse().map((a,i)=>(
           <button key={a.id} onClick={()=>{setSelected(ALBUMS.length-1-i);setTrackIdx(0);}} style={{background:"none",border:"none",cursor:"pointer",padding:0,textAlign:"left",fontFamily:"inherit"}}>
-            <div style={{width:"100%",aspectRatio:"1/1",borderRadius:isPC?16:14,background:a.color,border:"1px solid rgba(255,255,255,0.08)",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.2s",overflow:"hidden",position:"relative"}}
-              onMouseEnter={e=>e.currentTarget.style.borderColor="rgba(184,255,0,0.35)"}
-              onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(255,255,255,0.08)"}>
-              <p style={{fontSize:9,color:"rgba(184,255,0,0.25)",textAlign:"center",padding:"0 10px",lineHeight:1.5,fontWeight:700,wordBreak:"keep-all",margin:0}}>{a.title}</p>
+            <div
+  style={{
+    width:"100%",
+    aspectRatio:"1/1",
+    borderRadius:isPC?16:14,
+
+    backgroundImage: `
+      linear-gradient(
+        to top,
+        rgba(0,0,0,0.45),
+        rgba(0,0,0,0.1)
+      ),
+      url(${a.cover})
+    `,
+
+    backgroundColor:a.color,
+    backgroundSize:"cover",
+    backgroundPosition:"center",
+    backgroundRepeat:"no-repeat",
+
+    border:"1px solid rgba(255,255,255,0.08)",
+    marginBottom:8,
+
+    display:"flex",
+    alignItems:"center",
+    justifyContent:"center",
+
+    transition:"all 0.25s ease",
+    overflow:"hidden",
+    position:"relative",
+
+    boxShadow:`0 10px 35px ${a.color}33`
+  }}
+
+  onMouseEnter={e=>{
+    e.currentTarget.style.borderColor="rgba(184,255,0,0.35)";
+    e.currentTarget.style.transform="translateY(-4px) scale(1.02)";
+    e.currentTarget.style.boxShadow=`0 18px 45px ${a.color}55`;
+  }}
+
+  onMouseLeave={e=>{
+    e.currentTarget.style.borderColor="rgba(255,255,255,0.08)";
+    e.currentTarget.style.transform="translateY(0) scale(1)";
+    e.currentTarget.style.boxShadow=`0 10px 35px ${a.color}33`;
+  }}
+>
+              <p style={{
+  fontSize:10,
+  color:"rgba(255,255,255,0.88)",
+  textShadow:"0 2px 12px rgba(0,0,0,0.8)",
+  textAlign:"center",
+  padding:"0 12px",
+  lineHeight:1.5,
+  fontWeight:700,
+  letterSpacing:"0.03em",
+  wordBreak:"keep-all",
+  margin:0
+}}>{a.title}</p>
               <div style={{position:"absolute",bottom:8,right:8,background:"rgba(0,0,0,0.6)",borderRadius:6,padding:"2px 7px"}}>
                 <span style={{fontSize:9,color:"rgba(255,255,255,0.5)",fontFamily:"monospace"}}>{a.year}</span>
               </div>
