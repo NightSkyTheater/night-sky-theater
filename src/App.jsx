@@ -44,10 +44,14 @@ const CHART = [
 ];
 
 const OVERSEAS = [
-  {flag:"🇺🇸",name:"미국",pct:32},{flag:"🇯🇵",name:"일본",pct:18},
-  {flag:"🇹🇼",name:"대만",pct:12},{flag:"🇮🇳",name:"인도",pct:10},
-  {flag:"🇦🇺",name:"호주",pct:8}, {flag:"🇨🇦",name:"캐나다",pct:6},
-  {flag:"🇹🇭",name:"태국",pct:5}, {flag:"🌍",name:"기타",pct:9},
+  {flag:"🇺🇸",name:"미국",pct:32},
+  {flag:"🇯🇵",name:"일본",pct:18},
+  {flag:"🇹🇼",name:"대만",pct:12},
+  {flag:"🇮🇳",name:"인도",pct:10},
+  {flag:"🇦🇺",name:"호주",pct:8},
+  {flag:"🇨🇦",name:"캐나다",pct:6},
+  {flag:"🇹🇭",name:"태국",pct:5},
+  {flag:"🌍",name:"기타",pct:9},
 ];
 
 // 구독자 추이 데이터 (월별)
@@ -645,7 +649,13 @@ export default function App() {
         @keyframes pulse { 0%,100%{opacity:.15} 50%{opacity:1} }
         @keyframes fin   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
         * { box-sizing:border-box; }
-        body { font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif; text-align:left; }
+        body { font-family:''Pretendard',
+    'Apple SD Gothic Neo',
+    'Noto Sans KR',
+    'Segoe UI Emoji',
+    'Apple Color Emoji',
+    'Noto Color Emoji',
+    sans-serif; text-align:left; }
         p, span, div { text-align:inherit; }
         textarea::placeholder,input::placeholder { color:rgba(255,255,255,0.13) }
         ::-webkit-scrollbar { width:3px }
