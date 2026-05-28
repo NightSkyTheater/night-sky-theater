@@ -186,7 +186,7 @@ function HomeTab({isPC}) {
 
   // 오늘의 추천곡
   const TodayPick = (
-    <G acc style={{padding:"26px 20px",position:"relative",overflow:"hidden"}}>
+    <G acc style={{padding:"26px 20px",position:"relative",overflow:"hidden", textAlign:"center"}}>
       <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.1) 0%,transparent 70%)",pointerEvents:"none"}}/>
       <p style={{fontSize:10,fontWeight:700,color:LIME,letterSpacing:"0.12em",margin:"0 0 18px",opacity:0.8}}>오늘의 밤하늘극장 추천곡</p>
       {track&&<>
@@ -285,13 +285,13 @@ function HomeTab({isPC}) {
 
   if (isPC) {
     return (
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"start"}}>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,textAlign:"left",alignItems:"start"}}>
         <div style={{display:"flex",flexDirection:"column",gap:14}}>{TodayPick}{Top10}</div>
         <div style={{display:"flex",flexDirection:"column",gap:14}}>{Notice}{SubSection}{Overseas}</div>
       </div>
     );
   }
-  return <div style={{display:"flex",flexDirection:"column",gap:10}}>{TodayPick}{Notice}{Top10}{SubSection}{Overseas}</div>;
+  return <div style={{display:"flex",flexDirection:"column",gap:10,textAlign:"left"}}>{TodayPick}{Notice}{Top10}{SubSection}{Overseas}</div>;
 }
 
 // ── 소개 ────────────────────────────────────────────
