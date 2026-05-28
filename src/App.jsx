@@ -211,7 +211,7 @@ function HomeTab({isPC}) {
         <div key={i}>
           <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 18px"}}>
             <div style={{width:52,flexShrink:0}}><Tag c={n.tagC}>{n.tag}</Tag></div>
-            <span style={{width:44,flexShrink:0,fontSize:11,fontFamily:"monospace",color:"rgba(220,210,255,0.75)",fontWeight:600}}>{n.date}</span>
+            <span style={{width:44,flexShrink:0,fontSize:11,color:"rgba(220,210,255,0.75)",fontWeight:600}}>{n.date}</span>
             <p style={{margin:0,fontSize:13,fontWeight:600,color:white,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1}}>{n.title}</p>
           </div>
           {i<arr.length-1&&<Hr/>}
@@ -226,7 +226,7 @@ function HomeTab({isPC}) {
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:14}}>
         <SecHead title="구독자 추이" sub="유튜브 채널 · 2024.01 ~"/>
         <div style={{textAlign:"right"}}>
-          <p style={{fontSize:22,fontWeight:900,color:LIME,margin:0,fontFamily:"monospace",lineHeight:1}}>402</p>
+          <p style={{fontSize:22,fontWeight:900,color:LIME,margin:0,lineHeight:1}}>402</p>
           <p style={{fontSize:9,color:muted,margin:"3px 0 0"}}>현재 구독자</p>
         </div>
       </div>
@@ -254,7 +254,7 @@ function HomeTab({isPC}) {
       {CHART.map((t,i)=>(
         <div key={i}>
           <div style={{display:"flex",alignItems:"center",gap:12,padding:"11px 18px"}}>
-            <span style={{width:22,textAlign:"center",fontFamily:"monospace",fontWeight:900,flexShrink:0,fontSize:t.rank<=3?14:12,color:rankColor(t.rank)}}>{t.rank}</span>
+            <span style={{width:22,textAlign:"center",fontWeight:900,flexShrink:0,fontSize:t.rank<=3?14:12,color:rankColor(t.rank)}}>{t.rank}</span>
             <p style={{flex:1,margin:0,fontSize:13,fontWeight:t.rank<=3?700:400,color:t.rank===1?white:t.rank<=3?"rgba(242,238,249,0.85)":soft,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</p>
             <span style={{fontSize:11,fontWeight:700,color:trendColor(t.trend),width:14,textAlign:"center",flexShrink:0}}>{trendLabel(t.trend)}</span>
           </div>
@@ -276,7 +276,7 @@ function HomeTab({isPC}) {
             <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
               <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${LIME}cc,#66bbff)`,borderRadius:4}}/>
             </div>
-            <span style={{fontSize:10,color:LIME,fontFamily:"monospace",width:32,textAlign:"right"}}>{o.pct}%</span>
+            <span style={{fontSize:10,color:LIME,width:32,textAlign:"right"}}>{o.pct}%</span>
           </div>
         ))}
       </div>
@@ -345,7 +345,7 @@ function AboutTab({isPC}) {
             </div>
             <div style={{flex:1}}>
               <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:4,flexWrap:"wrap"}}>
-                <span style={{fontSize:10,fontFamily:"monospace",color:LIME,fontWeight:700,opacity:0.75}}>{t.year}</span>
+                <span style={{fontSize:10,color:LIME,fontWeight:700,opacity:0.75}}>{t.year}</span>
                 <Tag c={t.tagC}>{t.tag}</Tag>
               </div>
               <p style={{fontSize:12,color:soft,margin:0,lineHeight:1.7}}>{t.desc}</p>
@@ -409,7 +409,7 @@ function MusicTab({isPC}) {
           </div>
         </G>
         <G style={{textAlign:"center",minHeight:120,display:"flex",flexDirection:"column",justifyContent:"center",padding:"24px 20px"}}>
-          <p style={{fontSize:10,color:muted,margin:"0 0 6px",fontFamily:"monospace",letterSpacing:"0.1em"}}>TRACK {tr.n} / {alb.tracks.length}</p>
+          <p style={{fontSize:10,color:muted,margin:"0 0 6px",letterSpacing:"0.1em"}}>TRACK {tr.n} / {alb.tracks.length}</p>
           <p style={{fontSize:20,fontWeight:800,color:white,margin:"0 0 10px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.35}}>{tr.title}</p>
           {tr.mood&&<p style={{fontSize:13,color:soft,lineHeight:1.75,fontStyle:"italic",margin:0}}>"{tr.mood}"</p>}
         </G>
@@ -423,7 +423,7 @@ function MusicTab({isPC}) {
           {alb.tracks.map((t,j)=>(
             <div key={j}>
               <div onClick={()=>setTrackIdx(j)} style={{display:"flex",alignItems:"center",gap:12,padding:"11px 18px",cursor:"pointer",background:j===trackIdx?"rgba(184,255,0,0.06)":"transparent",transition:"background 0.15s"}}>
-                <span style={{fontSize:10,color:j===trackIdx?LIME:muted,fontFamily:"monospace",width:16,flexShrink:0}}>{t.n}</span>
+                <span style={{fontSize:10,color:j===trackIdx?LIME:muted,width:16,flexShrink:0}}>{t.n}</span>
                 <div style={{flex:1,minWidth:0}}>
                   <p style={{margin:"0 0 1px",fontSize:13,fontWeight:j===trackIdx?700:400,color:j===trackIdx?white:soft,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</p>
                   {t.mood&&<p style={{margin:0,fontSize:10,color:muted,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontStyle:"italic"}}>{t.mood}</p>}
