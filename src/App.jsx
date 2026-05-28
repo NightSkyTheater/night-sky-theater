@@ -384,23 +384,15 @@ function MusicTab({isPC}) {
     height:120,
     borderRadius:18,
 
-    backgroundImage:`url(${a.cover})`,
+    backgroundImage:`url(${alb.cover})`,
 
     backgroundColor:alb.color,
     backgroundSize:"cover",
     backgroundPosition:"center",
     backgroundRepeat:"no-repeat",
-
     border:"1px solid rgba(184,255,0,0.15)",
-
     margin:"0 auto 16px",
-
-    display:"flex",
-    alignItems:"center",
-    justifyContent:"center",
-
     overflow:"hidden",
-
     boxShadow:`0 10px 30px ${alb.color}44`
   }}
 >
@@ -459,7 +451,7 @@ function MusicTab({isPC}) {
     aspectRatio:"1/1",
     borderRadius:isPC?16:14,
 
-    backgroundImage:`url(${alb.cover})`,
+    backgroundImage:`url(${a.cover})`,
 
     backgroundColor:a.color,
     backgroundSize:"cover",
@@ -493,9 +485,6 @@ function MusicTab({isPC}) {
   }}
 >
              
-              <div style={{position:"absolute",bottom:8,right:8,background:"rgba(0,0,0,0.6)",borderRadius:6,padding:"2px 7px"}}>
-                <span style={{fontSize:9,color:"rgba(255,255,255,0.5)",fontFamily:"monospace"}}>{a.year}</span>
-              </div>
             </div>
             <p style={{fontSize:isPC?13:12,fontWeight:700,color:white,margin:"0 0 2px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",lineHeight:1.3}}>{a.title}</p>
             <p style={{fontSize:10,color:muted,margin:0}}>{a.tracks.length}곡</p>
