@@ -275,7 +275,7 @@ function HomeTab({isPC}) {
         {OVERSEAS.map((o,i)=>(
           <div key={i} style={{display:"flex",alignItems:"center",marginBottom:i<OVERSEAS.length-1?10:0}}>
 <div style={{
-  width:28,
+  width:34,
   flexShrink:0,
   display:"flex",
   alignItems:"center",
@@ -331,7 +331,7 @@ function HomeTab({isPC}) {
             <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
               <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${ACCENT}cc,#4f8ef7)`,borderRadius:4}}/>
             </div>
-            <span style={{fontSize:12,color:ACCENT,width:32,textAlign:"right"}}>{o.pct}%</span>
+            <span style={{fontSize:11,color:ACCENT,width:32,textAlign:"right"}}>{o.pct}%</span>
           </div>
         ))}
       </div>
