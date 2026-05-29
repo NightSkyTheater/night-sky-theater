@@ -327,11 +327,11 @@ function HomeTab({isPC}) {
     </span>
   )}
 </div>
-            <span style={{fontSize:11,color:muted,width:46,flexShrink:0}}>{o.name}</span>
+            <span style={{fontSize:12,color:muted,width:46,flexShrink:0}}>{o.name}</span>
             <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
               <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${ACCENT}cc,#4f8ef7)`,borderRadius:4}}/>
             </div>
-            <span style={{fontSize:10,color:ACCENT,width:32,textAlign:"right"}}>{o.pct}%</span>
+            <span style={{fontSize:12,color:ACCENT,width:32,textAlign:"right"}}>{o.pct}%</span>
           </div>
         ))}
       </div>
