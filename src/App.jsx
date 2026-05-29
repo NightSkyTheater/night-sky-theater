@@ -306,7 +306,7 @@ function HomeTab({isPC}) {
 ) : (
   <span
     style={{
-      fontSize:15,
+      fontSize:18,
       fontFamily:EMOJI_FONT,
       lineHeight:1,
     }}
