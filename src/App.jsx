@@ -46,14 +46,14 @@ const CHART = [
 ];
 
 const OVERSEAS = [
-  {flag:"https://flagcdn.com/us.svg", name:"미국",   pct:32},
-  {flag:"https://flagcdn.com/jp.svg", name:"일본",   pct:18},
-  {flag:"https://flagcdn.com/tw.svg", name:"대만",   pct:12},
-  {flag:"https://flagcdn.com/in.svg", name:"인도",   pct:10},
-  {flag:"https://flagcdn.com/au.svg", name:"호주",   pct:8},
+  {flag:"https://flagcdn.com/us.svg", name:"미국", pct:32},
+  {flag:"https://flagcdn.com/jp.svg", name:"일본", pct:18},
+  {flag:"https://flagcdn.com/tw.svg", name:"대만", pct:12},
+  {flag:"https://flagcdn.com/in.svg", name:"인도", pct:10},
+  {flag:"https://flagcdn.com/au.svg", name:"호주", pct:8},
   {flag:"https://flagcdn.com/ca.svg", name:"캐나다", pct:6},
-  {flag:"https://flagcdn.com/th.svg", name:"태국",   pct:5},
-  {flag:"https://flagcdn.com/un.svg", name:"기타",   pct:9},
+  {flag:"https://flagcdn.com/th.svg", name:"태국", pct:5},
+  {flag:null, name:"기타", pct:9},
 ];
 
 const SUB_DATA = [
@@ -274,27 +274,31 @@ function HomeTab({isPC}) {
       <div style={{marginTop:10}}>
         {OVERSEAS.map((o,i)=>(
           <div key={i} style={{display:"flex",alignItems:"center",marginBottom:i<OVERSEAS.length-1?10:0}}>
-            <div style={{
+<div style={{
   width:28,
   flexShrink:0,
   display:"flex",
   alignItems:"center",
   justifyContent:"center",
 }}>
-  <img
-    src={o.flag}
-    alt={o.name}
-    draggable={false}
-    style={{
-      width:18,
-      height:18,
-      borderRadius:"50%",
-      objectFit:"cover",
-      boxShadow:"0 0 6px rgba(255,255,255,0.12)",
-      userSelect:"none",
-      pointerEvents:"none",
-    }}
-  />
+  {o.flag ? (
+    <img
+      src={o.flag}
+      alt={o.name}
+      draggable={false}
+      style={{
+        width:18,
+        height:18,
+        borderRadius:"50%",
+        objectFit:"cover",
+        boxShadow:"0 0 6px rgba(255,255,255,0.12)",
+        userSelect:"none",
+        pointerEvents:"none",
+      }}
+    />
+  ) : (
+    <span style={{fontSize:15}}>🌍</span>
+  )}
 </div>
             <span style={{fontSize:11,color:muted,width:46,flexShrink:0}}>{o.name}</span>
             <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
