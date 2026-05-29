@@ -282,23 +282,38 @@ function HomeTab({isPC}) {
   justifyContent:"center",
 }}>
   {o.flag ? (
-    <img
-      src={o.flag}
-      alt={o.name}
-      draggable={false}
-      style={{
-        width:18,
-        height:18,
-        borderRadius:"50%",
-        objectFit:"cover",
-        boxShadow:"0 0 6px rgba(255,255,255,0.12)",
-        userSelect:"none",
-        pointerEvents:"none",
-      }}
-    />
-  ) : (
-    <span style={{fontSize:15}}>🌍</span>
-  )}
+    <div style={{
+      width:18,
+      height:18,
+      borderRadius:"50%",
+      overflow:"hidden",
+      boxShadow:"0 0 6px rgba(255,255,255,0.12)",
+    }}>
+      <img
+        src={o.flag}
+        alt={o.name}
+        draggable={false}
+        style={{
+          width:"100%",
+          height:"100%",
+          objectFit:"cover",
+          display:"block",
+          userSelect:"none",
+          pointerEvents:"none",
+        }}
+      />
+    </div>
+) : (
+  <span
+    style={{
+      fontSize:15,
+      fontFamily:EMOJI_FONT,
+      lineHeight:1,
+    }}
+  >
+    🌍
+  </span>
+)}
 </div>
             <span style={{fontSize:11,color:muted,width:46,flexShrink:0}}>{o.name}</span>
             <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
