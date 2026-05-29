@@ -46,14 +46,14 @@ const CHART = [
 ];
 
 const OVERSEAS = [
-  {flag:"https://flagcdn.com/us.svg", name:"미국", pct:32},
-  {flag:"https://flagcdn.com/jp.svg", name:"일본", pct:18},
-  {flag:"https://flagcdn.com/tw.svg", name:"대만", pct:12},
-  {flag:"https://flagcdn.com/in.svg", name:"인도", pct:10},
-  {flag:"https://flagcdn.com/au.svg", name:"호주", pct:8},
-  {flag:"https://flagcdn.com/ca.svg", name:"캐나다", pct:6},
-  {flag:"https://flagcdn.com/th.svg", name:"태국", pct:5},
-  {flag:null, name:"기타", pct:9},
+  {flag:"https://flagcdn.com/us.svg", emoji:"🇺🇸", name:"미국", pct:32},
+  {flag:"https://flagcdn.com/jp.svg", emoji:"🇯🇵", name:"일본", pct:18},
+  {flag:"https://flagcdn.com/tw.svg", emoji:"🇹🇼", name:"대만", pct:12},
+  {flag:"https://flagcdn.com/in.svg", emoji:"🇮🇳", name:"인도", pct:10},
+  {flag:"https://flagcdn.com/au.svg", emoji:"🇦🇺", name:"호주", pct:8},
+  {flag:"https://flagcdn.com/ca.svg", emoji:"🇨🇦", name:"캐나다", pct:6},
+  {flag:"https://flagcdn.com/th.svg", emoji:"🇹🇭", name:"태국", pct:5},
+  {flag:null, emoji:"🌍", name:"기타", pct:9},
 ];
 
 const SUB_DATA = [
@@ -281,39 +281,51 @@ function HomeTab({isPC}) {
   alignItems:"center",
   justifyContent:"center",
 }}>
-  {o.flag ? (
-    <div style={{
-      width:18,
-      height:18,
-      borderRadius:"50%",
-      overflow:"hidden",
-      boxShadow:"0 0 6px rgba(255,255,255,0.12)",
-    }}>
-      <img
-        src={o.flag}
-        alt={o.name}
-        draggable={false}
+  {isPC ? (
+    o.flag ? (
+      <div style={{
+        width:18,
+        height:18,
+        borderRadius:"50%",
+        overflow:"hidden",
+        boxShadow:"0 0 6px rgba(255,255,255,0.12)",
+      }}>
+        <img
+          src={o.flag}
+          alt={o.name}
+          draggable={false}
+          style={{
+            width:"100%",
+            height:"100%",
+            objectFit:"cover",
+            display:"block",
+            userSelect:"none",
+            pointerEvents:"none",
+          }}
+        />
+      </div>
+    ) : (
+      <span
         style={{
-          width:"100%",
-          height:"100%",
-          objectFit:"cover",
-          display:"block",
-          userSelect:"none",
-          pointerEvents:"none",
+          fontSize:18,
+          fontFamily:EMOJI_FONT,
+          lineHeight:1,
         }}
-      />
-    </div>
-) : (
-  <span
-    style={{
-      fontSize:18,
-      fontFamily:EMOJI_FONT,
-      lineHeight:1,
-    }}
-  >
-    🌍
-  </span>
-)}
+      >
+        🌍
+      </span>
+    )
+  ) : (
+    <span
+      style={{
+        fontSize:18,
+        fontFamily:EMOJI_FONT,
+        lineHeight:1,
+      }}
+    >
+      {o.emoji}
+    </span>
+  )}
 </div>
             <span style={{fontSize:11,color:muted,width:46,flexShrink:0}}>{o.name}</span>
             <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
