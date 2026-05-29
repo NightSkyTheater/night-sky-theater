@@ -46,14 +46,14 @@ const CHART = [
 ];
 
 const OVERSEAS = [
-  {flag:"🇺🇸",name:"미국",pct:32},
-  {flag:"🇯🇵",name:"일본",pct:18},
-  {flag:"🇹🇼",name:"대만",pct:12},
-  {flag:"🇮🇳",name:"인도",pct:10},
-  {flag:"🇦🇺",name:"호주",pct:8},
-  {flag:"🇨🇦",name:"캐나다",pct:6},
-  {flag:"🇹🇭",name:"태국",pct:5},
-  {flag:"🌍",name:"기타",pct:9},
+  {flag:"https://flagcdn.com/us.svg", name:"미국",   pct:32},
+  {flag:"https://flagcdn.com/jp.svg", name:"일본",   pct:18},
+  {flag:"https://flagcdn.com/tw.svg", name:"대만",   pct:12},
+  {flag:"https://flagcdn.com/in.svg", name:"인도",   pct:10},
+  {flag:"https://flagcdn.com/au.svg", name:"호주",   pct:8},
+  {flag:"https://flagcdn.com/ca.svg", name:"캐나다", pct:6},
+  {flag:"https://flagcdn.com/th.svg", name:"태국",   pct:5},
+  {flag:"https://flagcdn.com/un.svg", name:"기타",   pct:9},
 ];
 
 const SUB_DATA = [
@@ -274,13 +274,28 @@ function HomeTab({isPC}) {
       <div style={{marginTop:10}}>
         {OVERSEAS.map((o,i)=>(
           <div key={i} style={{display:"flex",alignItems:"center",marginBottom:i<OVERSEAS.length-1?10:0}}>
-            <span style={{
-              fontSize:16,
-              flexShrink:0,
-              lineHeight:1,
-              width:28,
-              fontFamily: EMOJI_FONT,
-            }}>{o.flag}</span>
+            <div style={{
+  width:28,
+  flexShrink:0,
+  display:"flex",
+  alignItems:"center",
+  justifyContent:"center",
+}}>
+  <img
+    src={o.flag}
+    alt={o.name}
+    draggable={false}
+    style={{
+      width:18,
+      height:18,
+      borderRadius:"50%",
+      objectFit:"cover",
+      boxShadow:"0 0 6px rgba(255,255,255,0.12)",
+      userSelect:"none",
+      pointerEvents:"none",
+    }}
+  />
+</div>
             <span style={{fontSize:11,color:muted,width:46,flexShrink:0}}>{o.name}</span>
             <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
               <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${ACCENT}cc,#4f8ef7)`,borderRadius:4}}/>
