@@ -110,7 +110,7 @@ const Tag = ({c=LIME,children}) => (
 
 const SecHead = ({title,sub}) => (
   <div style={{marginBottom:4}}>
-    <p style={{fontSize:17,fontWeight:800,color:white,margin:0,letterSpacing:"-0.3px"}}>{title}</p>
+    <p style={{fontSize:17,fontWeight:800,lineHeight:1,color:white,margin:0,letterSpacing:"-0.3px"}}>{title}</p>
     {sub&&<p style={{fontSize:10,color:muted,margin:"3px 0 0"}}>{sub}</p>}
   </div>
 );
@@ -280,7 +280,7 @@ const increase = currentSubs - prevSubs;
 const growth   = ((increase / prevSubs) * 100).toFixed(1);
   const SubSection = (
     <G>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:14}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
         <SecHead title="유튜브 채널 분석" sub="최근 7개월 기준"/>
         <div style={{textAlign:"right"}}>
           <p style={{fontSize:22,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>402</p>
@@ -288,7 +288,7 @@ const growth   = ((increase / prevSubs) * 100).toFixed(1);
         </div>
       </div>
       <SubChart/>
-<div style={{display:"flex",justifyContent:"space-between",marginTop:14}}>
+<div style={{display:"flex",justifyContent:"space-around",marginTop:14}}>
   {[
   {label:"최근 30일 증가",val:`+${increase}`},
   {label:"채널 성장률",val:`+${growth}%`},
