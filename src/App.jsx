@@ -688,6 +688,102 @@ const growth   = ((increase / prevSubs) * 100).toFixed(1);
 
 // ── 소개 ────────────────────────────────────────────
 function AboutTab({isPC}) {
+  const STREAMING = [
+    {
+      name: "YouTube",
+      color: "#FF0000",
+      bg: "rgba(255,0,0,0.12)",
+      border: "rgba(255,0,0,0.25)",
+      url: "https://www.youtube.com/@NightSkyTheater",
+      svg: (
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="#FF0000">
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+        </svg>
+      )
+    },
+    {
+      name: "Melon",
+      color: "#00CD3C",
+      bg: "rgba(0,205,60,0.10)",
+      border: "rgba(0,205,60,0.25)",
+      url: "https://www.melon.com",
+      svg: (
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+          <ellipse cx="12" cy="13" rx="9" ry="8" fill="#00CD3C"/>
+          <path d="M12 5C12 5 7 7 6 13" stroke="#fff" strokeWidth="1.5" strokeLinecap="round"/>
+          <path d="M12 5 Q14 2 17 3" stroke="#00CD3C" strokeWidth="2" strokeLinecap="round" fill="none"/>
+          <path d="M12 4.5 Q13.5 1.5 17.5 2.5" stroke="#4a4a4a" strokeWidth="1.3" strokeLinecap="round" fill="none"/>
+          <text x="12" y="15.5" textAnchor="middle" fill="#fff" fontSize="7" fontWeight="bold" fontFamily="sans-serif">melon</text>
+        </svg>
+      )
+    },
+    {
+      name: "Spotify",
+      color: "#1DB954",
+      bg: "rgba(29,185,84,0.10)",
+      border: "rgba(29,185,84,0.25)",
+      url: "https://open.spotify.com",
+      svg: (
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="#1DB954">
+          <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+        </svg>
+      )
+    },
+    {
+      name: "Apple Music",
+      color: "#FA243C",
+      bg: "rgba(250,36,60,0.10)",
+      border: "rgba(250,36,60,0.25)",
+      url: "https://music.apple.com",
+      svg: (
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="#FA243C">
+          <path d="M23.994 6.124a9.23 9.23 0 0 0-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 0 0-1.877-.726 10.496 10.496 0 0 0-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026C4.786.07 4.043.15 3.34.428 2.004.958 1.04 1.88.475 3.208a5.494 5.494 0 0 0-.39 1.548c-.04.27-.066.543-.077.817v13.5c.016.297.04.595.09.89.196 1.164.715 2.14 1.582 2.955.672.628 1.47 1.01 2.353 1.206.41.09.83.128 1.25.147l.484.019H18.44c.303-.012.604-.036.904-.084 1.07-.176 2.003-.651 2.76-1.42.58-.592.975-1.31 1.2-2.11.1-.36.158-.727.188-1.098.012-.15.02-.298.026-.448l.001-.139V6.124zm-7.54 5.897c-.044.057-.094.107-.148.154l-4.957 4.127a.826.826 0 0 1-.536.193.831.831 0 0 1-.536-1.465l4.423-3.68-4.423-3.68a.831.831 0 0 1 1.072-1.272l4.957 4.127c.055.047.105.097.148.154.104.137.166.308.166.496 0 .188-.062.358-.166.496v-.65z"/>
+        </svg>
+      )
+    },
+    {
+      name: "YouTube Music",
+      color: "#FF0000",
+      bg: "rgba(255,0,0,0.10)",
+      border: "rgba(255,0,0,0.22)",
+      url: "https://music.youtube.com",
+      svg: (
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+          <circle cx="12" cy="12" r="12" fill="#FF0000"/>
+          <circle cx="12" cy="12" r="4.5" fill="white"/>
+          <circle cx="12" cy="12" r="2" fill="#FF0000"/>
+          <polygon points="10.5,9.5 15.5,12 10.5,14.5" fill="white"/>
+        </svg>
+      )
+    },
+    {
+      name: "Genie",
+      color: "#00A2E0",
+      bg: "rgba(0,162,224,0.10)",
+      border: "rgba(0,162,224,0.25)",
+      url: "https://www.genie.co.kr",
+      svg: (
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+          <circle cx="12" cy="12" r="11" fill="#00A2E0"/>
+          <text x="12" y="16" textAnchor="middle" fill="#fff" fontSize="9.5" fontWeight="bold" fontFamily="sans-serif">genie</text>
+        </svg>
+      )
+    },
+    {
+      name: "Bugs",
+      color: "#FF5500",
+      bg: "rgba(255,85,0,0.10)",
+      border: "rgba(255,85,0,0.25)",
+      url: "https://music.bugs.co.kr",
+      svg: (
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+          <circle cx="12" cy="12" r="11" fill="#FF5500"/>
+          <text x="12" y="16" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="bold" fontFamily="sans-serif">bugs</text>
+        </svg>
+      )
+    },
+  ];
+
   const Hero = (
     <G style={{textAlign:"center",position:"relative",overflow:"hidden",padding:"26px 22px"}}>
       <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.08) 0%,transparent 70%)",pointerEvents:"none"}}/>
@@ -703,6 +799,7 @@ function AboutTab({isPC}) {
       </p>
     </G>
   );
+
   const Artists = (
     <G>
       <SecHead title="아티스트"/>
@@ -724,38 +821,60 @@ function AboutTab({isPC}) {
       ))}
     </G>
   );
-  const Timeline = (
-    <G pad="0">
-      <div style={{padding:"20px 18px 12px"}}><SecHead title="연혁"/></div>
-      <Hr/>
-      <div style={{padding:"10px 18px 16px",position:"relative"}}>
-        <div style={{position:"absolute",left:30,top:14,bottom:14,width:1,background:`linear-gradient(to bottom,${ACCENT}55,transparent)`}}/>
-        {TIMELINE.map((t,i)=>(
-          <div key={i} style={{display:"flex",gap:14,textAlign:"left",marginBottom:i<TIMELINE.length-1?20:0}}>
-            <div style={{flexShrink:0,width:26,display:"flex",flexDirection:"column",alignItems:"center",zIndex:1,paddingTop:4}}>
-              <div style={{width:10,height:10,borderRadius:"50%",background:t.tag==="예정"?"#f59e0b":ACCENT,border:`2px solid ${t.tag==="예정"?"#f59e0b":ACCENT}`,boxShadow:t.tag==="예정"?`0 0 8px #f59e0b88`:`0 0 6px ${ACCENT}55`}}/>
+
+  const Streaming = (
+    <G>
+      <SecHead title="음원 스트리밍" sub="밤하늘극장 음악 바로 듣기"/>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(4, 1fr)",gap:10,marginTop:14}}>
+        {STREAMING.map((s, i) => (
+          
+            key={i}
+            href={s.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display:"flex",
+              flexDirection:"column",
+              alignItems:"center",
+              gap:7,
+              padding:"14px 8px 12px",
+              background:s.bg,
+              border:`1px solid ${s.border}`,
+              borderRadius:14,
+              textDecoration:"none",
+              transition:"all 0.2s",
+              cursor:"pointer",
+            }}
+            onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow=`0 8px 20px ${s.color}22`;}}
+            onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="none";}}
+          >
+            <div style={{
+              width:44,
+              height:44,
+              borderRadius:"50%",
+              background:"rgba(0,0,0,0.25)",
+              border:`1.5px solid ${s.border}`,
+              display:"flex",
+              alignItems:"center",
+              justifyContent:"center",
+              flexShrink:0,
+            }}>
+              {s.svg}
             </div>
-            <div style={{flex:1}}>
-              <div style={{display:"block",alignItems:"center",gap:7,marginBottom:4,flexWrap:"wrap"}}>
-                <span style={{fontSize:10,color:ACCENT,fontWeight:700,opacity:0.75,marginRight:10}}>{t.year}</span>
-                <Tag c={t.tagC}>{t.tag}</Tag>
-              </div>
-              <p style={{fontSize:12,color:soft,margin:0,lineHeight:1.7}}>{t.desc}</p>
-            </div>
-          </div>
+            <span style={{fontSize:10,color:soft,fontWeight:600,textAlign:"center",lineHeight:1.3,whiteSpace:"nowrap"}}>{s.name}</span>
+          </a>
         ))}
       </div>
     </G>
   );
-  if (isPC) {
-    return (
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,alignItems:"start"}}>
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>{Hero}{Artists}</div>
-        <div>{Timeline}</div>
-      </div>
-    );
-  }
-  return <div style={{display:"flex",flexDirection:"column",gap:10}}>{Hero}{Artists}{Timeline}</div>;
+
+  return (
+    <div style={{display:"flex",flexDirection:"column",gap:10}}>
+      {Hero}
+      {Artists}
+      {Streaming}
+    </div>
+  );
 }
 
 // ── 음악 ────────────────────────────────────────────
