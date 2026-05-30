@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-// 🌍 Firebase 관련 임포트를 최상단으로 이동 및 통합
+// 🌍 Firebase 관련 임포트 최상단 통합
 import {
   collection,
   addDoc,
@@ -118,19 +118,19 @@ const ALBUMS = [
   },
   {
     id: 7,
-    title: "不完全な踊り", // 💡 깨진 표기 수정
+    title: "不完全な踊り",
     cover: "https://down.mixtape.so/NAS/img/4/6/a/8/46a838a2a7a75c0a0336cd1e51677f4f.png",
     year: "2026",
     color: "#1a1a08",
     desc: "불완전한 자신을 받아들이고 자신만의 속도로 살아가는 청춘.",
     tracks: [
       { n: 1, title: "今日が一番幼い日", mood: "今日が一番幼い日\n明日は私たちの描く夢" },
-      { n: 2, title: "不完全な踊り", mood: "プラスマイナスのない世界\n天国と地獄 その中にいるじゃん" },
-      { n: 3, title: "音の出ない心", mood: "慣れた日々に溶けていくように\n私の手をすり抜けていった" }, // 💡 오타 수정
-      { n: 4, title: "星影의 叫び", mood: "星の間で君을 부른다\n静かに風が流れる" },
-      { n: 5, title: "君のために", mood: "君のために生きてるんだよ\n君だからこうしてるんだよ" },
-      { n: 6, title: "私、ドラゴンじゃないのに", mood: "白い息が出ちゃう\n私、ドラゴンじゃないのに" },
-      { n: 7, title: "闇가 무서운 幽霊", mood: "暗くて 見えなくて\n静寂に飲まれそうで" }
+      { n: 2, title: "不完全な踊り", mood: "プラスマイナスのない世界\n天国と地獄 그 안에 있잖아" },
+      { n: 3, title: "音の出ない心", mood: "익숙한 나날에 녹아들듯이\n내 손을 빠져나갔어" },
+      { n: 4, title: "별빛의 외침", mood: "별들 사이에서 너를 부른다\n고요하게 바람이 흐른다" },
+      { n: 5, title: "너를 위해", mood: "너 때문에 사는 거야\n너라서 이러는 거야" },
+      { n: 6, title: "나, 드래곤이 아닌데도", mood: "하얀 입김이 나와 버려\n나, 드래곤이 아닌데도" },
+      { n: 7, title: "어둠이 무서운 유령", mood: "어둡고 보이지 않아서\n정적에 삼켜질 것 같아" }
     ]
   },
   {
@@ -205,9 +205,9 @@ const ALBUMS = [
     color: "#10101a",
     desc: "이유 없이도 괜찮은 순간들을 받아들이며, 있는 그대로의 삶을 살아가다.",
     tracks: [
-      { n: 1, title: "ただ風が好きだから", mood: "ただ風が好きだから\nもう少し歩くことにしたよ" },
-      { n: 2, title: "ただやるだけさ", mood: "ただやるだけさ\nドラマチックな展開はないけれど" },
-      { n: 3, title: "ただ普通に生きたいんだ", mood: "ただ普通に生きたいんだ\n私の歩幅まで急かさないでよ" }
+      { n: 1, title: "ただ風が好きだから", mood: "그저 바람이 좋으니까\n조금 더 걷기로 했어" },
+      { n: 2, title: "ただやるだけさ", mood: "그냥 하는 거지 뭐\n드라마틱한 전개는 없겠지만" },
+      { n: 3, title: "ただ普通に生きたいんだ", mood: "그냥 평범하게 살고 싶어\n내 보폭까지 재촉하지 마" }
     ]
   },
   {
@@ -625,7 +625,7 @@ function AboutTab({isPC}) {
       <div style={{width:68,height:68,borderRadius:"50%",background:LIME,margin:"0 auto 16px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:30,boxShadow:`0 0 28px ${LIME}44`,fontFamily:EMOJI_FONT}}>🪐</div>
       <p style={{fontSize:11,color:LIME,fontWeight:700,margin:"0 0 6px",letterSpacing:"0.1em"}}>NIGHT SKY THEATER</p>
       <h2 style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 6px"}}>밤하늘극장</h2>
-      <p style={{fontSize:12,color:muted,lineHeight:1.7}}>@NightSkyTheater · 구독자 401명 · 유통 (주)와이지플러스</p>
+      <p style={{fontSize:12,color:muted,lineHeight:1.7}}>@NightSkyTheater · 구독자 410명 · 유통 (주)와이지플러스</p>
       <Hr my={10}/>
       <p style={{fontSize:13,color:soft,lineHeight:1.9,textAlign:"left"}}>
         감정이 흐르는 무대, 별빛 같은 노래가 머무는 곳.<br/>
@@ -717,7 +717,7 @@ function MusicTab({isPC}) {
             <p style={{fontSize:12,color:muted,lineHeight:1.7,margin:0,fontStyle:"italic"}}>"{alb.desc}"</p>
           </div>
           <Hr my={16}/>
-          <div style={{display:"flex",justifyCenter:"center",gap:5}}>
+          <div style={{display:"flex",justifyContent:"center",gap:5}}> {/* 💡 justifyCenter -> justifyContent 수정 */}
             {alb.tracks.map((_,j)=>(
               <div key={j} onClick={()=>setTrackIdx(j)} style={{width:j===trackIdx?20:6,height:4,borderRadius:2,background:j===trackIdx?ACCENT:"rgba(91,79,245,0.2)",transition:"all 0.2s",cursor:"pointer"}}/>
             ))}
@@ -763,10 +763,10 @@ function MusicTab({isPC}) {
               style={{width:"100%",aspectRatio:"1/1",borderRadius:isPC?16:14,backgroundImage:`url(${a.cover})`,backgroundColor:a.color,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat",border:"1px solid rgba(255,255,255,0.08)",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.25s ease",overflow:"hidden",position:"relative",boxShadow:`0 10px 35px ${a.color}33`}}
               onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(184,255,0,0.35)";e.currentTarget.style.transform="translateY(-4px) scale(1.02)";e.currentTarget.style.boxShadow=`0 18px 45px ${a.color}55`;}}
               onMouseLeave={e => {
-  e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
-  e.currentTarget.style.transform = "translateY(0) scale(1)";
-  e.currentTarget.style.boxShadow = `0 10px 35px ${a.color}33`;
-}}
+                e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
+                e.currentTarget.style.transform = "translateY(0) scale(1)";
+                e.currentTarget.style.boxShadow = `0 10px 35px ${a.color}33`;
+              }}
             />
             <p style={{fontSize:isPC?13:12,fontWeight:700,color:white,margin:"0 0 2px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",lineHeight:1.3}}>{a.title}</p>
             <p style={{fontSize:10,color:muted,margin:0}}>{a.tracks.length}곡</p>
@@ -778,30 +778,17 @@ function MusicTab({isPC}) {
 }
 
 // ── 방명록 (Firebase 버전) ─────────────────────────────
-
-import { useState, useEffect, useRef } from "react";
-import {
-  collection,
-  addDoc,
-  deleteDoc,
-  doc,
-  query,
-  orderBy,
-  onSnapshot,
-} from "firebase/firestore";
-import { db } from "./firebase";
-
 function timeAgo(date) {
   if (!date) return "";
-
+  const targetDate = date instanceof Date ? date : (date.toDate ? date.toDate() : new Date(date));
   const now = new Date();
-  const diff = Math.floor((now - date) / 1000);
+  const diff = Math.floor((now - targetDate) / 1000);
 
   if (diff < 60) return "방금 전";
   if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
   if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
 
-  return date.toLocaleDateString("ko-KR");
+  return targetDate.toLocaleDateString("ko-KR");
 }
 
 function GuestbookTab() {
@@ -811,9 +798,6 @@ function GuestbookTab() {
   const [msg, setMsg] = useState("");
   const [animId, setAnimId] = useState(null);
 
-  const nid = useRef(1);
-
-  // 🌍 실시간 데이터 (핵심: onSnapshot)
   useEffect(() => {
     const q = query(
       collection(db, "guestbook"),
@@ -831,7 +815,6 @@ function GuestbookTab() {
     return () => unsub();
   }, []);
 
-  // ✍️ 글 작성 (애니메이션 포함)
   const submit = async () => {
     if (!name.trim() || !pw.trim() || !msg.trim()) return;
 
@@ -847,57 +830,40 @@ function GuestbookTab() {
       createdAt: new Date(),
     };
 
-    const docRef = await addDoc(collection(db, "guestbook"), newEntry);
-
-    // 🌠 생성 애니메이션 트리거
-    setAnimId(docRef.id);
-
-    setName("");
-    setPw("");
-    setMsg("");
-
-    setTimeout(() => setAnimId(null), 1000);
+    try {
+      const docRef = await addDoc(collection(db, "guestbook"), newEntry);
+      setAnimId(docRef.id);
+      setName("");
+      setPw("");
+      setMsg("");
+      setTimeout(() => setAnimId(null), 1000);
+    } catch (err) {
+      console.error("Error adding document: ", err);
+    }
   };
 
-  // 🗑 삭제
   const del = async (entry) => {
     const input = window.prompt("비밀번호를 입력하세요");
     if (!input) return;
 
     if (input === entry.pw) {
-      await deleteDoc(doc(db, "guestbook", entry.id));
+      try {
+        await deleteDoc(doc(db, "guestbook", entry.id));
+      } catch (err) {
+        console.error("Error deleting document: ", err);
+      }
     } else {
       alert("비밀번호가 틀렸습니다.");
     }
   };
 
   return (
-    <div
-      style={{
-        position: "relative",
-        minHeight: "85vh",
-        color: "#fff",
-        overflow: "hidden",
-      }}
-    >
-      {/* 🌌 헤더 */}
-      <div
-        style={{
-          padding: "16px",
-          textAlign: "center",
-          background: "rgba(255,255,255,0.05)",
-          backdropFilter: "blur(10px)",
-          borderRadius: "16px",
-          margin: "10px",
-        }}
-      >
+    <div style={{ position: "relative", minHeight: "85vh", color: "#fff", overflow: "hidden" }}>
+      <div style={{ padding: "16px", textAlign: "center", background: "rgba(255,255,255,0.05)", backdropFilter: "blur(10px)", borderRadius: "16px", margin: "10px" }}>
         <h2 style={{ margin: 0 }}>🌌 밤하늘 방명록</h2>
-        <p style={{ fontSize: "12px", opacity: 0.6 }}>
-          당신의 한 줄이 별이 됩니다
-        </p>
+        <p style={{ fontSize: "12px", opacity: 0.6 }}>당신의 한 줄이 별이 됩니다</p>
       </div>
 
-      {/* ⭐ 낙서 영역 */}
       <div style={{ position: "relative", minHeight: "60vh" }}>
         {entries.map((e) => (
           <div
@@ -910,96 +876,40 @@ function GuestbookTab() {
               maxWidth: "220px",
               padding: "10px",
               cursor: "pointer",
-              animation:
-                animId === e.id
-                  ? "fallStar 1s ease-out"
-                  : "float 4s ease-in-out infinite",
+              animation: animId === e.id ? "fallStar 1s ease-out" : "float 4s ease-in-out infinite",
               transition: "all 0.3s",
             }}
           >
-            <div
-              style={{
-                fontSize: "13px",
-                color: e.color || "#fff",
-                textShadow: "0 2px 6px rgba(0,0,0,0.8)",
-                whiteSpace: "pre-line",
-              }}
-            >
+            <div style={{ fontSize: "13px", color: e.color || "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.8)", whiteSpace: "pre-line" }}>
               {e.msg}
             </div>
-
-            <div style={{ fontSize: "10px", opacity: 0.6 }}>
-              {e.name} · {timeAgo(e.createdAt?.toDate?.() || e.createdAt)}
+            <div style={{ fontSize: "10px", opacity: 0.6, marginTop: "4px" }}>
+              {e.name} · {timeAgo(e.createdAt)}
             </div>
           </div>
         ))}
       </div>
 
-      {/* ✍️ 입력 */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: "50px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "90%",
-          maxWidth: "500px",
-          background: "rgba(255,255,255,0.08)",
-          backdropFilter: "blur(12px)",
-          padding: "12px",
-          borderRadius: "16px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "8px",
-        }}
-      >
+      <div style={{ position: "fixed", bottom: "75px", left: "50%", transform: "translateX(-50%)", width: "90%", maxWidth: "500px", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(12px)", padding: "12px", borderRadius: "16px", display: "flex", flexDirection: "column", gap: "8px", zIndex: 10 }}>
         <div style={{ display: "flex", gap: "6px" }}>
-          <input
-            placeholder="이름"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            style={{ flex: 1 }}
-          />
-          <input
-            placeholder="비밀번호"
-            type="password"
-            value={pw}
-            onChange={(e) => setPw(e.target.value)}
-            style={{ flex: 1 }}
-          />
+          <input placeholder="이름" value={name} onChange={(e) => setName(e.target.value)} style={{ flex: 1 }} />
+          <input placeholder="비밀번호" type="password" value={pw} onChange={(e) => setPw(e.target.value)} style={{ flex: 1 }} />
         </div>
-
-        <textarea
-          placeholder="밤하늘에 남길 이야기..."
-          value={msg}
-          onChange={(e) => setMsg(e.target.value)}
-          rows={2}
-        />
-
+        <textarea placeholder="밤하늘에 남길 이야기..." value={msg} onChange={(e) => setMsg(e.target.value)} rows={2} />
         <button onClick={submit}>🌠 남기기</button>
       </div>
 
-      {/* 🎨 애니메이션 */}
       <style>{`
         @keyframes float {
           0% { transform: translateY(0px); }
           50% { transform: translateY(-6px); }
           100% { transform: translateY(0px); }
         }
-
         @keyframes fallStar {
-          0% {
-            transform: translateY(-40px) scale(0.5);
-            opacity: 0;
-          }
-          50% {
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(0px) scale(1);
-          }
+          0% { transform: translateY(-40px) scale(0.5); opacity: 0; }
+          50% { opacity: 1; }
+          100% { transform: translateY(0px) scale(1); }
         }
-
         input, textarea {
           background: rgba(255,255,255,0.15);
           border: 1px solid rgba(255,255,255,0.2);
@@ -1008,7 +918,6 @@ function GuestbookTab() {
           padding: 8px;
           outline: none;
         }
-
         button {
           background: white;
           color: black;
@@ -1023,18 +932,16 @@ function GuestbookTab() {
   );
 }
 
-export default GuestbookTab;
-
-// ── APP (메인 컴포넌트 하나만 단일 Export Default) ───────────────────
+// ── APP (메인 컴포넌트 단일 Export Default) ───────────────────
 export default function App() {
-  const [tab,setTab]=useState("홈");
-  const [isPC,setIsPC]=useState(window.innerWidth>=768);
+  const [tab, setTab] = useState("홈");
+  const [isPC, setIsPC] = useState(window.innerWidth >= 768);
 
-  useEffect(()=>{
-    const fn=()=>setIsPC(window.innerWidth>=768);
-    window.addEventListener("resize",fn);
-    return ()=>window.removeEventListener("resize",fn);
-  },[]);
+  useEffect(() => {
+    const fn = () => setIsPC(window.innerWidth >= 768);
+    window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
+  }, []);
 
   useEffect(() => {
     if (document.querySelector('script[src*="chart.umd.js"]')) return;
@@ -1044,7 +951,7 @@ export default function App() {
   }, []);
 
   return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)",color:white,fontFamily:"'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif",position:"relative"}}>
+    <div style={{ minHeight: "100vh", background: "linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)", color: white, fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}>
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
@@ -1052,22 +959,22 @@ export default function App() {
         @keyframes pulse { 0%,100%{opacity:.15} 50%{opacity:1} }
         @keyframes fin   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
         * { box-sizing:border-box; }
-        body { font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif; text-align:left; }
+        body { font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif; text-align:left; margin:0; }
         p, span, div { text-align:inherit; }
-        textarea::placeholder,input::placeholder { color:rgba(255,255,255,0.13) }
+        textarea::placeholder, input::placeholder { color:rgba(255,255,255,0.3) }
         ::-webkit-scrollbar { width:3px }
         ::-webkit-scrollbar-thumb { background:rgba(184,255,0,0.16);border-radius:3px }
         strong { font-weight:800 }
       `}</style>
-      <Stars/>
-      <div style={{position:"relative",zIndex:1,maxWidth:isPC?900:430,margin:"0 auto",display:"flex",flexDirection:"column",minHeight:"100vh"}}>
-        <div style={{flex:1,padding:isPC?"20px 24px 90px":"12px 14px 76px",animation:"fin 0.3s ease both"} } key={tab}>
-          {tab==="홈"    &&<HomeTab     isPC={isPC}/>}
-          {tab==="소개"  &&<AboutTab    isPC={isPC}/>}
-          {tab==="음악"  &&<MusicTab    isPC={isPC}/>}
-          {tab==="방명록"&&<GuestbookTab isPC={isPC}/>}
+      <Stars />
+      <div style={{ position: "relative", zIndex: 1, maxWidth: isPC ? 900 : 430, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+        <div style={{ flex: 1, padding: isPC ? "20px 24px 90px" : "12px 14px 140px", animation: "fin 0.3s ease both" }} key={tab}>
+          {tab === "홈" && <HomeTab isPC={isPC} />}
+          {tab === "소개" && <AboutTab isPC={isPC} />}
+          {tab === "음악" && <MusicTab isPC={isPC} />}
+          {tab === "방명록" && <GuestbookTab />}
         </div>
-        <BottomNav tab={tab} setTab={setTab}/>
+        <BottomNav tab={tab} setTab={setTab} />
       </div>
     </div>
   );
