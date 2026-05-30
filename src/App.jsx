@@ -936,229 +936,174 @@ function MusicTab({isPC}) {
 // 기존 GuestbookTab 함수 전체를 이걸로 교체하세요
 // 상단에 아래 상수들도 추가해주세요 (이미 있으면 스킵)
  
-import React, { useState, useRef } from "react";
+import { useState } from "react";
 
-// 가상의 초기 데이터 (위치 랜덤 배치를 위한 x, y 좌표값 추가)
-const INIT_GB = [
-  { id: 1, name: "레이니돌", msg: "신기한 기능이네요. :)", time: "2026. 05. 30", x: 15, y: 12, color: "#ffb3ba" },
-  { id: 2, name: "올드비", msg: "와우 정말 좋은 프로그램이네요.\n부담없이 쓸 수 있을 것 같아요.", time: "2026. 05. 30", x: 45, y: 25, color: "#baffc9" },
-  { id: 3, name: "얼리어답터", msg: "이거 재미있네요..! :) 저도 하나 달아볼까나?", time: "2026. 05. 30", x: 20, y: 50, color: "#bae1ff" },
-];
+export default function NightSkyGuestbook() {
+  const [posts, setPosts] = useState([
+    { id: 1, text: "오늘 밤하늘 너무 예쁘다…" },
+    { id: 2, text: "여기 글 남기고 갑니다 ✨" },
+  ]);
 
-export default function GuestbookTab({ isPC }) {
-  const [entries, setEntries] = useState(INIT_GB);
-  const [name, setName] = useState("");
-  const [pw, setPw] = useState("");
-  const [msg, setMsg] = useState("");
-  const [done, setDone] = useState(false);
+  const [input, setInput] = useState("");
 
-  const nid = useRef(4);
+  const addPost = () => {
+    if (!input.trim()) return;
 
-  // 공통 인풋 스타일
-  const inputStyle = {
-    background: "rgba(255, 255, 255, 0.15)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
-    borderRadius: "8px",
-    color: "#ffffff",
-    padding: "8px 12px",
-    fontSize: "12px",
-    outline: "none",
-    fontFamily: "inherit",
-  };
-
-  // 등록 핸들러
-  const submit = () => {
-    if (!name.trim() || !pw.trim() || !msg.trim()) return;
-
-    setEntries((p) => [
-      ...p,
+    setPosts((prev) => [
+      ...prev,
       {
-        id: nid.current++,
-        name: name.trim(),
-        pw: pw.trim(),
-        msg: msg.trim(),
-        time: new Date().toLocaleDateString("ko-KR").slice(0, -1),
-        // 새 글이 추가될 때 화면에 겹치지 않도록 랜덤한 위치 지정 (롤링페이퍼 감성)
-        x: Math.floor(Math.random() * 65) + 10, // 10% ~ 75% 사이
-        y: Math.floor(Math.random() * 55) + 5,  // 5% ~ 60% 사이
-        color: ["#fff", "#ffe4e1", "#e0ffff", "#f0fff0", "#fffacd"][Math.floor(Math.random() * 5)]
+        id: Date.now(),
+        text: input,
       },
     ]);
 
-    setName("");
-    setPw("");
-    setMsg("");
-    setDone(true);
-    setTimeout(() => setDone(false), 2000);
-  };
-
-  // 삭제 핸들러 (심플 윈도우 프롬프트 대체)
-  const del = (entry) => {
-    const v = window.prompt("비밀번호를 입력하세요");
-    if (v === entry.pw) {
-      setEntries((p) => p.filter((e) => e.id !== entry.id));
-    } else if (v !== null) {
-      alert("비밀번호가 틀렸습니다.");
-    }
+    setInput("");
   };
 
   return (
-    <div style={{ 
-      position: "relative", 
-      minHeight: "85vh", 
-      display: "flex", 
-      flexDirection: "column",
-      justifyContent: "space-between",
-      color: "#fff"
-    }}>
+    <div style={styles.wrap}>
+      {/* 밤하늘 배경 */}
+      <div style={styles.sky} />
 
-      {/* 🌌 상단 타이틀 섹션 (얕은 투명 글라스) */}
-      <div style={{
-        padding: "16px",
-        background: "rgba(255, 255, 255, 0.03)",
-        backdropFilter: "blur(4px)",
-        WebkitBackdropFilter: "blur(4px)",
-        borderRadius: "16px",
-        border: "1px solid rgba(255, 255, 255, 0.05)",
-        textAlign: "center",
-        zIndex: 2
-      }}>
-        <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#e0e0e0" }}>
-          밤하늘 낙서장
-        </h2>
-        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)", margin: 0 }}>
-          밤하늘에 지워지지 않을 당신의 한 줄을 남겨주세요.
-        </p>
-      </div>
+      {/* 별 효과 레이어 */}
+      <div style={styles.stars} />
 
-      {/* 📌 밤하늘 메모보드 (글씨들이 자유롭게 배치되는 공간) */}
-      <div style={{ 
-        position: "relative", 
-        flex: 1, 
-        minHeight: "400px", 
-        marginTop: "20px",
-        marginBottom: "180px" // 하단 고정 인풋창 영역 확보
-      }}>
-        {entries.map((e) => (
+      {/* 메모 흐름 영역 */}
+      <div style={styles.feed}>
+        {posts.map((p, i) => (
           <div
-            key={e.id}
+            key={p.id}
             style={{
-              position: "absolute",
-              left: `${e.x}%`,
-              top: `${e.y}%`,
-              maxWidth: "220px",
-              padding: "10px",
-              cursor: "pointer",
-              animation: "floatAnimation 4s ease-in-out infinite",
-              transition: "transform 0.2s"
+              ...styles.post,
+              opacity: 0.85 + (i % 3) * 0.05,
+              transform: `translateX(${(i % 2) * 10}px)`,
             }}
-            onClick={() => {
-              if(window.confirm("이 낙서를 삭제하시겠습니까?")) del(e);
-            }}
-            title="클릭하여 삭제"
           >
-            {/* 글씨 자체를 강조하고 테두리를 없앤 미니멀 포스트잇 느낌 */}
-            <p style={{
-              margin: 0,
-              fontSize: "13px",
-              lineHeight: "1.5",
-              color: e.color || "#fff",
-              textShadow: "0 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.2)",
-              whiteSpace: "pre-line",
-              fontFamily: "gothic"
-            }}>
-              {e.msg}
-            </p>
-            <div style={{ 
-              marginTop: "4px", 
-              fontSize: "10px", 
-              color: "rgba(255,255,255,0.4)",
-              display: "flex",
-              gap: "6px"
-            }}>
-              <span>by {e.name}</span>
-              <span>·</span>
-              <span>{e.time}</span>
-            </div>
+            ✦ {p.text}
           </div>
         ))}
       </div>
 
-      {/* 📥 하단 고정형 입력창 (투명 흰색 글라스모피즘) */}
-      <div style={{
-        position: "fixed",
-        bottom: "60px", // 하단 탭 바로 위쪽에 위치하도록 설정 (실제 탭 높이에 맞게 조절 가능)
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "calc(100% - 32px)",
-        maxWidth: "500px",
-        background: "rgba(255, 255, 255, 0.08)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-        borderRadius: "20px",
-        border: "1px solid rgba(255, 255, 255, 0.15)",
-        padding: "14px",
-        boxShadow: "0 -10px 30px rgba(0, 0, 0, 0.5)",
-        zIndex: 10,
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px"
-      }}>
-        {/* 이름 / 비밀번호 한 줄 배치 */}
-        <div style={{ display: "flex", gap: "8px" }}>
-          <input 
-            value={name} 
-            onChange={e => setName(e.target.value)}
-            placeholder="이름"
-            style={{ ...inputStyle, width: "90px" }} 
-          />
-          <input 
-            value={pw} 
-            onChange={e => setPw(e.target.value)}
-            placeholder="비밀번호"
-            type="password"
-            style={{ ...inputStyle, flex: 1 }} 
-          />
-          <button 
-            onClick={submit}
-            style={{
-              padding: "0 16px",
-              borderRadius: "8px",
-              border: "none",
-              background: done ? "#baffc9" : "#ffffff",
-              color: done ? "#121212" : "#121212",
-              fontWeight: "700",
-              fontSize: "12px",
-              cursor: "pointer",
-              transition: "all 0.2s"
-            }}
-          >
-            {done ? "기록 완료 ✨" : "남기기"}
-          </button>
+      {/* 하단 고정 UI (타이틀 + 입력창) */}
+      <div style={styles.bottomGlass}>
+        <div style={styles.title}>
+          🌌 밤하늘 방명록
+          <div style={styles.subtitle}>
+            이곳에 당신의 흔적을 남겨주세요
+          </div>
         </div>
 
-        {/* 텍스트 입력창 */}
-        <textarea 
-          value={msg} 
-          onChange={e => setMsg(e.target.value)}
-          placeholder="밤하늘 극장에 남길 이야기를 적어주세요..."
-          rows={2}
-          style={{ ...inputStyle, width: "100%", resize: "none", background: "rgba(0,0,0,0.2)" }} 
-        />
+        <div style={styles.inputRow}>
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="밤하늘에 글을 남겨보세요..."
+            style={styles.input}
+          />
+          <button onClick={addPost} style={styles.button}>
+            남기기
+          </button>
+        </div>
       </div>
-
-      {/* 🪄 잔잔한 별 무빙을 위한 전역 스타일 애니메이션 추가 */}
-      <style>{`
-        @keyframes floatAnimation {
-          0% { transform: translateY(0px); }
-          50% { transform: translateY(-6px); }
-          100% { transform: translateY(0px); }
-        }
-      `}</style>
-
     </div>
   );
 }
+
+const styles = {
+  wrap: {
+    position: "relative",
+    height: "100vh",
+    overflow: "hidden",
+    fontFamily: "sans-serif",
+    color: "white",
+  },
+
+  sky: {
+    position: "absolute",
+    inset: 0,
+    background:
+      "radial-gradient(circle at 20% 20%, #1a1a40, transparent 40%)," +
+      "radial-gradient(circle at 80% 30%, #2b1b4d, transparent 45%)," +
+      "radial-gradient(circle at 50% 80%, #0d1020, #05060f)",
+  },
+
+  stars: {
+    position: "absolute",
+    inset: 0,
+    backgroundImage:
+      "radial-gradient(white 1px, transparent 1px)",
+    backgroundSize: "3px 3px",
+    opacity: 0.15,
+  },
+
+  feed: {
+    position: "absolute",
+    top: 0,
+    bottom: 120,
+    left: 0,
+    right: 0,
+    padding: "60px 20px",
+    overflowY: "auto",
+    display: "flex",
+    flexDirection: "column",
+    gap: "18px",
+  },
+
+  post: {
+    fontSize: "16px",
+    letterSpacing: "0.5px",
+    color: "rgba(255,255,255,0.9)",
+    textShadow: "0 0 10px rgba(255,255,255,0.15)",
+  },
+
+  bottomGlass: {
+    position: "fixed",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: "14px 16px",
+    backdropFilter: "blur(14px)",
+    background: "rgba(255,255,255,0.08)",
+    borderTop: "1px solid rgba(255,255,255,0.12)",
+  },
+
+  title: {
+    fontSize: "14px",
+    marginBottom: "8px",
+    opacity: 0.9,
+  },
+
+  subtitle: {
+    fontSize: "11px",
+    opacity: 0.6,
+    marginTop: "2px",
+  },
+
+  inputRow: {
+    display: "flex",
+    gap: "8px",
+  },
+
+  input: {
+    flex: 1,
+    padding: "10px 12px",
+    borderRadius: "10px",
+    border: "none",
+    outline: "none",
+    background: "rgba(0,0,0,0.3)",
+    color: "white",
+  },
+
+  button: {
+    padding: "10px 14px",
+    borderRadius: "10px",
+    border: "none",
+    background: "#B8FF00",
+    color: "#000",
+    fontWeight: "bold",
+    cursor: "pointer",
+  },
+};
  
 
 // ── APP ─────────────────────────────────────────────
