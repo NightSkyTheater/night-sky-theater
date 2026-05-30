@@ -894,7 +894,7 @@ function GuestbookTab() {
         textAlign: "center",
         zIndex: 2
       }}>
-        <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#e0e0e0" }}>
+        <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#B8FF00" }}>
           밤하늘 낙서장
         </h2>
         <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)", margin: 0 }}>
@@ -1007,7 +1007,7 @@ function GuestbookTab() {
         <textarea 
           value={msg} 
           onChange={e => setMsg(e.target.value)}
-          placeholder="밤하늘 극장에 남길 이야기를 적어주세요..."
+          placeholder="당신의 한 줄이 별이 됩니다"
           rows={2}
           style={{ ...inputStyle, width: "100%", resize: "none", background: "rgba(0,0,0,0.2)" }} 
         />
