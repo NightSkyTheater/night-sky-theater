@@ -300,14 +300,14 @@ const CHART = [
 ];
 
 const OVERSEAS = [
-  { flag: "https://flagcdn.com/in.svg", name: "인도", pct: 32 },
-  { flag: "https://flagcdn.com/jp.svg", name: "일본", pct: 14 },
-  { flag: "https://flagcdn.com/tw.svg", name: "대만", pct: 10 },
-  { flag: "https://flagcdn.com/us.svg", name: "미국", pct: 8 },
-  { flag: "https://flagcdn.com/ua.svg", name: "우크라이나", pct: 7 },
-  { flag: "https://flagcdn.com/id.svg", name: "인도네시아", pct: 5 },
-  { flag: "https://flagcdn.com/tr.svg", name: "튀르키예", pct: 5 },
-  { flag: null, name: "기타", pct: 19 },
+  { flag: "https://flagcdn.com/in.svg", emoji: "🇮🇳", name: "인도", pct: 32 },
+  { flag: "https://flagcdn.com/jp.svg", emoji: "🇯🇵", name: "일본", pct: 14 },
+  { flag: "https://flagcdn.com/tw.svg", emoji: "🇹🇼", name: "대만", pct: 10 },
+  { flag: "https://flagcdn.com/us.svg", emoji: "🇺🇸", name: "미국", pct: 8 },
+  { flag: "https://flagcdn.com/ua.svg", emoji: "🇺🇦", name: "우크라이나", pct: 7 },
+  { flag: "https://flagcdn.com/id.svg", emoji: "🇮🇩", name: "인도네시아", pct: 5 },
+  { flag: "https://flagcdn.com/tr.svg", emoji: "🇹🇷", name: "튀르키예", pct: 5 },
+  { flag: null, emoji: "🌍", name: "기타", pct: 19 },
 ];
 
 const SUB_DATA = [
@@ -608,24 +608,57 @@ const growth   = ((increase / prevSubs) * 100).toFixed(1);
       <div style={{marginTop:10}}>
         {OVERSEAS.map((o,i)=>(
           <div key={i} style={{display:"flex",alignItems:"center",marginBottom:i<OVERSEAS.length-1?10:0}}>
-<div style={{ width: 34, flexShrink: 0, display:"flex", justifyContent:"center" }}>
-  {o.flag ? (
-    isPC ? (
-      <img
-        src={o.flag}
-        alt={o.name}
-        style={{
-          width: 18,
-          height: 18,
-          borderRadius: "50%",
-          objectFit: "cover"
-        }}
-      />
+<div style={{
+  width:34,
+  flexShrink:0,
+  display:"flex",
+  alignItems:"center",
+  justifyContent:"center",
+}}>
+  {isPC ? (
+    o.flag ? (
+      <div style={{
+        width:18,
+        height:18,
+        borderRadius:"50%",
+        overflow:"hidden",
+        boxShadow:"0 0 6px rgba(255,255,255,0.12)",
+      }}>
+        <img
+          src={o.flag}
+          alt={o.name}
+          draggable={false}
+          style={{
+            width:"100%",
+            height:"100%",
+            objectFit:"cover",
+            display:"block",
+            userSelect:"none",
+            pointerEvents:"none",
+          }}
+        />
+      </div>
     ) : (
-      <span style={{ fontSize: 18 }}>🌍</span>
+      <span
+        style={{
+          fontSize:18,
+          fontFamily:EMOJI_FONT,
+          lineHeight:1,
+        }}
+      >
+        🌍
+      </span>
     )
   ) : (
-    <span style={{ fontSize: 18 }}>🌍</span>
+    <span
+      style={{
+        fontSize:18,
+        fontFamily:EMOJI_FONT,
+        lineHeight:1,
+      }}
+    >
+      {o.emoji}
+    </span>
   )}
 </div>
             <span style={{fontSize:12,color:muted,width:46,flexShrink:0}}>{o.name}</span>
