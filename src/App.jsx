@@ -273,11 +273,15 @@ function HomeTab({isPC}) {
       ))}
     </G>
   );
+const currentSubs = SUB_DATA[SUB_DATA.length - 1].subs;
+const prevSubs    = SUB_DATA[SUB_DATA.length - 2].subs;
 
+const increase = currentSubs - prevSubs;
+const growth   = ((increase / prevSubs) * 100).toFixed(1);
   const SubSection = (
     <G>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:14}}>
-        <SecHead title="구독자 추이" sub="유튜브 채널 · 2024.01 ~"/>
+        <SecHead title="유튜브 채널 분석" sub="최근 7개월 기준"/>
         <div style={{textAlign:"right"}}>
           <p style={{fontSize:22,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>402</p>
           <p style={{fontSize:9,color:muted,margin:"3px 0 0"}}>현재 구독자</p>
@@ -286,10 +290,10 @@ function HomeTab({isPC}) {
       <SubChart/>
 <div style={{display:"flex",justifyContent:"space-between",marginTop:10}}>
   {[
-    {label:"최근 30일 증가",val:"+21"},
-    {label:"채널 성장률",val:"+5.5%"},
-    {label:"재방문 시청자",val:"38%"},
-  ].map((s,i)=>(
+  {label:"최근 30일 증가",val:`+${increase}`},
+  {label:"채널 성장률",val:`+${growth}%`},
+  {label:"조회수",val:"17.7만회"},
+].map((s,i)=>(
     <div key={i} style={{textAlign:"center"}}>
       <p style={{
         fontSize:14,
@@ -317,7 +321,7 @@ function HomeTab({isPC}) {
 
   const Top10 = (
     <G pad="0">
-      <div style={{padding:"16px 18px 12px"}}><SecHead title="밤하늘극장 인기곡 TOP 10" sub="'26년 3월 기준"/></div>
+      <div style={{padding:"16px 18px 12px"}}><SecHead title="밤하늘극장 인기차트 TOP 10" sub="'26년 5월 기준"/></div>
       <Hr/>
       {CHART.map((t,i)=>(
         <div key={i}>
