@@ -290,13 +290,13 @@ const CHART = [
   {rank:1, title:"우리들의 발라드",                    trend:null},
   {rank:2, title:"말하지 않은 것들의 무게",             trend:"up"},
   {rank:3, title:"꽃이 피든 말든",                     trend:"new"},
-  {rank:4, title:"내 소중한 마음은 비밀이야",           trend:"null"},
+  {rank:4, title:"내 소중한 마음은 비밀이야",           trend:null},
   {rank:5, title:"자발적으로 표류하는 우주비행사",      trend:"up"},
-  {rank:6, title:"운외창천 (雲外蒼天)",                 trend:down},
+  {rank:6, title:"운외창천 (雲外蒼天)",                 trend:"down"},
   {rank:7, title:"운명애",                    trend:"down"},
   {rank:8, title:"나는 오늘 또 어떤 핑계를 대었는가",  trend:"new"},
-  {rank:9, title:"출근하기 싫은데 알람은 또 맞춰놨어",                          trend:"down"},
-  {rank:10,title:"죽어가는 모든 것들을 사랑해야지",               trend:"new"}
+  {rank:9, title:"출근하기 싫은데 알람은 또 맞춰놨어", trend:"down"},
+  {rank:10,title:"죽어가는 모든 것들을 사랑해야지",  trend:"new"},
 ];
 
 const OVERSEAS = [
@@ -1025,6 +1025,10 @@ useEffect(() => {
     <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)",color:white,fontFamily:"'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif",position:"relative"}}>
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        <script
+  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"
+  async
+/>
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
         @keyframes fl    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
         @keyframes pulse { 0%,100%{opacity:.15} 50%{opacity:1} }
