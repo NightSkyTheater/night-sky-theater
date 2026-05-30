@@ -908,14 +908,33 @@ function MusicTab({isPC}) {
 }
 
 // ── 방명록 (리뉴얼 완료) ─────────────────────────────
-function GuestbookTab({ isPC }) {
-  const [entries, setEntries] = useState(INIT_GB);
+import React, { useState, useRef, useEffect } from "react";
+
+const INIT_GB = [
+  { id: 1, name: "레이니돌", msg: "신기한 기능이네요. :)", time: "2026. 05. 30", x: 15, y: 12, color: "#ffb3ba" },
+  { id: 2, name: "올드비", msg: "와우 정말 좋은 프로그램이네요.\n부담없이 쓸 수 있을 것 같아요.", time: "2026. 05. 30", x: 45, y: 25, color: "#baffc9" },
+  { id: 3, name: "얼리어답터", msg: "이거 재미있네요..! :) 저도 하나 달아볼까나?", time: "2026. 05. 30", x: 20, y: 50, color: "#bae1ff" },
+];
+
+export default function GuestbookTab({ isPC }) {
+  // 1. 초기값 설정 시 localStorage에 저장된 데이터가 있다면 불러오고, 없다면 INIT_GB를 사용합니다.
+  const [entries, setEntries] = useState(() => {
+    const saved = localStorage.getItem("night_sky_guestbook");
+    return saved ? JSON.parse(saved) : INIT_GB;
+  });
+
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState(false);
 
-  const nid = useRef(4);
+  // 2. id가 중복되지 않도록 기존 항목 중 가장 큰 id값 다음부터 시작하게 설정합니다.
+  const nid = useRef(entries.length > 0 ? Math.max(...entries.map(e => e.id)) + 1 : 4);
+
+  // 3. entries 데이터가 바뀔 때마다 자동으로 브라우저(localStorage)에 저장합니다.
+  useEffect(() => {
+    localStorage.setItem("night_sky_guestbook", JSON.stringify(entries));
+  }, [entries]);
 
   const inputStyle = {
     background: "rgba(255, 255, 255, 0.15)",
@@ -971,6 +990,7 @@ function GuestbookTab({ isPC }) {
       color: "#fff"
     }}>
 
+      {/* 🌌 상단 타이틀 섹션 */}
       <div style={{
         padding: "16px",
         background: "rgba(255, 255, 255, 0.03)",
@@ -989,6 +1009,7 @@ function GuestbookTab({ isPC }) {
         </p>
       </div>
 
+      {/* 📌 밤하늘 메모보드 */}
       <div style={{ 
         position: "relative", 
         flex: 1, 
@@ -1040,6 +1061,7 @@ function GuestbookTab({ isPC }) {
         ))}
       </div>
 
+      {/* 📥 하단 고정형 입력창 */}
       <div style={{
         position: "fixed",
         bottom: "60px",
