@@ -516,7 +516,7 @@ function HomeTab({isPC}) {
   },[]);
 
   const rankColor = r => r===1?ACCENT:r===2?"rgba(91,79,245,0.65)":r===3?"rgba(91,79,245,0.4)":muted;
-  const trendColor = t => t==="up"?"#4f8ef7":t==="down"?"#f87171":t==="new"?ACCENT:muted;
+  const trendColor = t => t==="up"?"#f87171":t==="down"?"#4f8ef7":t==="new"?ACCENT:muted;
   const trendLabel = t => t==="up"?"▲":t==="down"?"▼":t==="new"?"N":"—";
 
   const TodayPick = (
@@ -839,16 +839,7 @@ const Streaming = (
               <p style={{margin:0,fontSize:13,fontWeight:800,color:white}}>
                 {p.name}
               </p>
-              <p style={{margin:0,fontSize:10,color:muted}}>
-                Official Channel
-              </p>
             </div>
-          </div>
-
-          <div style={{textAlign:"right"}}>
-            <p style={{margin:0,fontSize:11,color:p.color,fontWeight:700}}>
-              OPEN
-            </p>
           </div>
 
         </a>
