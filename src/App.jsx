@@ -775,7 +775,6 @@ function AboutTab({isPC}) {
     </G>
   );
 
-  // 🎧 스트리밍 링크
 // 🎧 스트리밍 링크
 const Streaming = (
   <G>
@@ -934,178 +933,317 @@ function MusicTab({isPC}) {
 }
 
 // ── 방명록 ──────────────────────────────────────────
-function GuestbookTab({isPC}) {
+function GuestbookTab({ isPC }) {
   const [entries, setEntries] = useState(INIT_GB);
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState(false);
+
+  const [menuOpen, setMenuOpen] = useState(null);
   const [editT, setEditT] = useState(null);
   const [editPw, setEditPw] = useState("");
   const [editMsg, setEditMsg] = useState("");
   const [editErr, setEditErr] = useState(false);
 
-  // 이번 세션에서 이미 좋아요 누른 항목 id를 추적
-  const likedSet = useRef(new Set());
   const nid = useRef(4);
 
   const IS = {
-    background:"rgba(255,255,255,0.05)",
-    border:`1px solid ${gb}`,
-    borderRadius:10,
-    color:white,
-    padding:"10px 13px",
-    fontSize:12,
-    outline:"none",
-    fontFamily:"inherit",
-    boxSizing:"border-box",
-    transition:"border-color 0.2s"
+    background: "rgba(255,255,255,0.05)",
+    border: `1px solid ${gb}`,
+    borderRadius: 12,
+    color: white,
+    padding: "10px 13px",
+    fontSize: 12,
+    outline: "none",
+    fontFamily: "inherit"
   };
-  const fo = e => e.target.style.borderColor = "rgba(184,255,0,0.35)";
-  const bl = e => e.target.style.borderColor = gb;
 
   const submit = () => {
     if (!name.trim() || !pw.trim() || !msg.trim()) return;
-    setEntries(p => [{
-      id: nid.current++,
-      name: name.trim(),
-      pw: pw.trim(),
-      msg: msg.trim(),
-      time: new Date().toLocaleDateString("ko-KR").replace(/\. /g,".").slice(0,-1),
-      likes: 0,
-      reply: ""
-    }, ...p]);
-    setName(""); setPw(""); setMsg("");
+
+    setEntries(p => [
+      {
+        id: nid.current++,
+        name: name.trim(),
+        pw: pw.trim(),
+        msg: msg.trim(),
+        time: new Date().toLocaleDateString("ko-KR").slice(0, -1),
+        reply: ""
+      },
+      ...p
+    ]);
+
+    setName("");
+    setPw("");
+    setMsg("");
     setDone(true);
-    setTimeout(() => setDone(false), 2500);
+    setTimeout(() => setDone(false), 2000);
   };
 
-  const like = id => {
-    if (likedSet.current.has(id)) return; // 이미 누른 경우 무시
-    likedSet.current.add(id);
-    setEntries(p => p.map(e => e.id === id ? {...e, likes: e.likes + 1} : e));
-  };
-
-  const startEdit = e => {
+  const startEdit = (e) => {
     setEditT(e.id);
     setEditMsg(e.msg);
     setEditPw("");
     setEditErr(false);
+    setMenuOpen(null);
   };
 
-  const subEdit = entry => {
-    if (editPw !== entry.pw) { setEditErr(true); return; }
-    setEntries(p => p.map(e => e.id === entry.id ? {...e, msg: editMsg} : e));
-    setEditT(null); setEditPw(""); setEditMsg(""); setEditErr(false);
+  const saveEdit = (entry) => {
+    if (editPw !== entry.pw) {
+      setEditErr(true);
+      return;
+    }
+
+    setEntries(p =>
+      p.map(e =>
+        e.id === entry.id ? { ...e, msg: editMsg } : e
+      )
+    );
+
+    setEditT(null);
+    setEditPw("");
+    setEditMsg("");
+    setEditErr(false);
   };
 
-  const del = entry => {
+  const del = (entry) => {
     const v = window.prompt("비밀번호를 입력하세요");
-    if (v === entry.pw) setEntries(p => p.filter(e => e.id !== entry.id));
+    if (v === entry.pw) {
+      setEntries(p => p.filter(e => e.id !== entry.id));
+    }
   };
 
-  const inner = (
-    <div style={{display:"flex",flexDirection:"column",gap:10}}>
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+
+      {/* 안내 */}
       <G acc>
-        <p style={{fontSize:13,color:soft,lineHeight:1.85,margin:0}}>
-          밤하늘극장을 찾아주셔서 감사해요.<br/>
-          이곳에 당신의 감정을 남겨주세요.<br/>
-          <span style={{fontSize:11,color:muted}}>닉네임 + 비밀번호로 작성 · 수정 · 삭제 가능합니다.</span>
+        <p style={{ fontSize: 13, color: soft, lineHeight: 1.8, margin: 0 }}>
+          이곳은 방명록이 아니라,<br />
+          <span style={{ color: LIME }}>감정이 별로 기록되는 공간</span>입니다.<br />
+          당신의 하루를 조용히 남겨주세요.
         </p>
       </G>
 
+      {/* 입력 */}
       <G>
-        <SecHead title="메시지 남기기"/>
-        <div style={{display:"flex",gap:8,marginBottom:8}}>
-          <input value={name} onChange={e=>setName(e.target.value)} onFocus={fo} onBlur={bl} placeholder="닉네임" maxLength={12} style={{...IS,width:88}}/>
-          <input value={pw} onChange={e=>setPw(e.target.value)} onFocus={fo} onBlur={bl} placeholder="비밀번호" type="password" maxLength={20} style={{...IS,flex:1}}/>
+        <SecHead title="별 기록 남기기" sub="anonymous memory log" />
+
+        <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+          <input
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder="이름"
+            maxLength={12}
+            style={{ ...IS, width: 100 }}
+          />
+
+          <input
+            value={pw}
+            onChange={e => setPw(e.target.value)}
+            placeholder="비밀번호"
+            type="password"
+            style={{ ...IS, flex: 1 }}
+          />
         </div>
-        <textarea value={msg} onChange={e=>setMsg(e.target.value)} onFocus={fo} onBlur={bl} placeholder="밤하늘극장에 남기고 싶은 말을 적어주세요" maxLength={150} rows={3} style={{...IS,width:"100%",resize:"none",lineHeight:1.65,marginBottom:8}}/>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <span style={{fontSize:10,color:muted}}>{msg.length}/150</span>
-          <button onClick={submit} style={{background:done?"rgba(184,255,0,0.15)":"rgba(255,255,255,0.07)",border:`1px solid ${done?"rgba(184,255,0,0.4)":gb}`,color:done?LIME:soft,borderRadius:10,padding:"8px 20px",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",transition:"all 0.3s"}}>
-            {done ? "등록됨" : "남기기"}
+
+        <textarea
+          value={msg}
+          onChange={e => setMsg(e.target.value)}
+          placeholder="오늘의 감정을 별에 남겨주세요..."
+          maxLength={160}
+          rows={4}
+          style={{
+            ...IS,
+            width: "100%",
+            marginTop: 8,
+            resize: "none",
+            lineHeight: 1.7
+          }}
+        />
+
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
+          <span style={{ fontSize: 10, color: muted }}>
+            {msg.length}/160
+          </span>
+
+          <button
+            onClick={submit}
+            style={{
+              background: done ? "rgba(184,255,0,0.15)" : "rgba(255,255,255,0.06)",
+              border: `1px solid ${done ? "rgba(184,255,0,0.4)" : gb}`,
+              color: done ? LIME : soft,
+              borderRadius: 10,
+              padding: "8px 18px",
+              fontSize: 12,
+              fontWeight: 700,
+              cursor: "pointer"
+            }}
+          >
+            {done ? "기록됨 ✨" : "별에 기록"}
           </button>
         </div>
       </G>
 
+      {/* 리스트 */}
       <G pad="0">
-        <div style={{padding:"14px 18px 12px"}}><SecHead title={`방명록 — ${entries.length}개`}/></div>
-        <Hr/>
-        {entries.map((entry, idx) => {
-          const alreadyLiked = likedSet.current.has(entry.id);
-          return (
-            <div key={entry.id}>
-              <div style={{padding:"14px 18px"}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-                  <span style={{fontSize:13,fontWeight:700,color:ACCENT}}>{entry.name}</span>
-                  <div style={{display:"flex",gap:10,alignItems:"center"}}>
-                    <span style={{fontSize:10,color:muted,fontFamily:"monospace"}}>{entry.time}</span>
-                    <button onClick={()=>startEdit(entry)} style={{fontSize:10,color:muted,background:"none",border:"none",cursor:"pointer",padding:0}}>수정</button>
-                    <button onClick={()=>del(entry)} style={{fontSize:10,color:"rgba(255,80,80,0.5)",background:"none",border:"none",cursor:"pointer",padding:0}}>삭제</button>
-                  </div>
-                </div>
+        <div style={{ padding: "14px 18px 10px" }}>
+          <SecHead title={`별 기록 보관소 — ${entries.length}`} />
+        </div>
 
-                {editT === entry.id ? (
-                  <div style={{marginBottom:8}}>
-                    <textarea value={editMsg} onChange={e=>setEditMsg(e.target.value)} maxLength={150} rows={2} style={{...IS,width:"100%",resize:"none",marginBottom:6}}/>
-                    <div style={{display:"flex",gap:6}}>
-                      <input value={editPw} onChange={e=>setEditPw(e.target.value)} placeholder="비밀번호 확인" type="password" style={{...IS,flex:1}}/>
-                      <button onClick={()=>subEdit(entry)} style={{background:"rgba(255,255,255,0.07)",border:`1px solid ${gb}`,color:soft,borderRadius:9,padding:"8px 12px",fontSize:11,cursor:"pointer",fontFamily:"inherit"}}>저장</button>
-                      <button onClick={()=>setEditT(null)} style={{background:"none",border:`1px solid ${gb}`,color:muted,borderRadius:9,padding:"8px 9px",fontSize:11,cursor:"pointer",fontFamily:"inherit"}}>취소</button>
+        <Hr />
+
+        {entries.map((entry, i) => (
+          <div key={entry.id}>
+            <div style={{ padding: "14px 18px", position: "relative" }}>
+
+              {/* header */}
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: ACCENT }}>
+                  {entry.name}
+                </span>
+
+                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <span style={{ fontSize: 10, color: muted }}>
+                    {entry.time}
+                  </span>
+
+                  {/* menu */}
+                  <button
+                    onClick={() =>
+                      setMenuOpen(menuOpen === entry.id ? null : entry.id)
+                    }
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: muted,
+                      cursor: "pointer",
+                      fontSize: 14
+                    }}
+                  >
+                    ⋯
+                  </button>
+
+                  {menuOpen === entry.id && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        right: 18,
+                        top: 40,
+                        background: "rgba(10,10,20,0.95)",
+                        border: `1px solid ${gb}`,
+                        borderRadius: 10,
+                        overflow: "hidden",
+                        zIndex: 10
+                      }}
+                    >
+                      <button
+                        onClick={() => startEdit(entry)}
+                        style={{
+                          display: "block",
+                          padding: "8px 12px",
+                          background: "none",
+                          border: "none",
+                          color: soft,
+                          fontSize: 11,
+                          cursor: "pointer"
+                        }}
+                      >
+                        수정
+                      </button>
+
+                      <button
+                        onClick={() => del(entry)}
+                        style={{
+                          display: "block",
+                          padding: "8px 12px",
+                          background: "none",
+                          border: "none",
+                          color: "#ff6666",
+                          fontSize: 11,
+                          cursor: "pointer"
+                        }}
+                      >
+                        삭제
+                      </button>
                     </div>
-                    {editErr && <p style={{fontSize:11,color:"#ff6666",margin:"4px 0 0"}}>비밀번호가 틀렸어요</p>}
-                  </div>
-                ) : (
-                  <p style={{fontSize:13,color:soft,margin:"0 0 10px",lineHeight:1.82}}>{entry.msg}</p>
-                )}
+                  )}
+                </div>
+              </div>
 
-                {entry.reply && (
-                  <div style={{background:"rgba(91,79,245,0.06)",border:"1px solid rgba(91,79,245,0.18)",borderRadius:10,padding:"10px 13px",marginBottom:10}}>
-                    <p style={{fontSize:10,color:ACCENT,fontWeight:700,margin:"0 0 4px",opacity:0.8}}>밤하늘극장</p>
-                    <p style={{fontSize:12,color:"rgba(200,230,150,0.72)",margin:0,lineHeight:1.75}}>{entry.reply}</p>
-                  </div>
-                )}
+              {/* edit */}
+              {editT === entry.id ? (
+                <div style={{ marginTop: 10 }}>
+                  <textarea
+                    value={editMsg}
+                    onChange={e => setEditMsg(e.target.value)}
+                    rows={3}
+                    style={{ ...IS, width: "100%", resize: "none" }}
+                  />
 
-                <button
-                  onClick={() => like(entry.id)}
+                  <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
+                    <input
+                      value={editPw}
+                      onChange={e => setEditPw(e.target.value)}
+                      placeholder="비밀번호"
+                      type="password"
+                      style={{ ...IS, flex: 1 }}
+                    />
+
+                    <button
+                      onClick={() => saveEdit(entry)}
+                      style={{
+                        background: "rgba(255,255,255,0.06)",
+                        border: `1px solid ${gb}`,
+                        color: soft,
+                        borderRadius: 8,
+                        padding: "8px 12px",
+                        cursor: "pointer"
+                      }}
+                    >
+                      저장
+                    </button>
+                  </div>
+
+                  {editErr && (
+                    <p style={{ fontSize: 11, color: "#ff6666" }}>
+                      비밀번호가 틀렸습니다
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <p style={{ fontSize: 13, color: soft, lineHeight: 1.8 }}>
+                  {entry.msg}
+                </p>
+              )}
+
+              {/* reply */}
+              {entry.reply && (
+                <div
                   style={{
-                    display:"flex",
-                    alignItems:"center",
-                    gap:5,
-                    background: alreadyLiked ? "rgba(220,60,90,0.12)" : "rgba(255,255,255,0.04)",
-                    border: `1px solid ${alreadyLiked ? "rgba(220,60,90,0.32)" : gb}`,
-                    borderRadius:20,
-                    padding:"4px 13px",
-                    cursor: alreadyLiked ? "default" : "pointer",
-                    fontSize:12,
-                    color: alreadyLiked ? "#ff6688" : muted,
-                    fontFamily:"inherit",
-                    transition:"all 0.15s"
-                  }}
-                  onMouseEnter={e => {
-                    if (alreadyLiked) return;
-                    e.currentTarget.style.background = "rgba(220,60,90,0.1)";
-                    e.currentTarget.style.borderColor = "rgba(220,60,90,0.28)";
-                  }}
-                  onMouseLeave={e => {
-                    if (alreadyLiked) return;
-                    e.currentTarget.style.background = "rgba(255,255,255,0.04)";
-                    e.currentTarget.style.borderColor = gb;
+                    marginTop: 10,
+                    padding: "10px 12px",
+                    borderLeft: `2px solid ${ACCENT}`,
+                    background: "rgba(184,255,0,0.05)"
                   }}
                 >
-                  {alreadyLiked ? "♥" : "♡"} {entry.likes}
-                </button>
-              </div>
-              {idx < entries.length - 1 && <Hr/>}
+                  <p style={{ fontSize: 10, color: LIME, margin: 0 }}>
+                    밤하늘 반응
+                  </p>
+                  <p style={{ fontSize: 12, color: muted, margin: "4px 0 0" }}>
+                    {entry.reply}
+                  </p>
+                </div>
+              )}
             </div>
-          );
-        })}
+
+            {i < entries.length - 1 && <Hr />}
+          </div>
+        ))}
       </G>
     </div>
   );
-
-  return isPC ? <div style={{maxWidth:640,margin:"0 auto"}}>{inner}</div> : inner;
 }
 
 // ── APP ─────────────────────────────────────────────
