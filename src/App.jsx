@@ -1,15 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-// 🌍 Firebase 관련 임포트를 최상단으로 이동 및 통합
-import {
-  collection,
-  addDoc,
-  deleteDoc,
-  doc,
-  query,
-  orderBy,
-  onSnapshot,
-} from "firebase/firestore";
-import { db } from "./firebase";
 
 const ACCENT = "#B8FF00";
 const LIME   = ACCENT;
@@ -18,7 +7,7 @@ const gb     = "rgba(255,255,255,0.13)";
 const muted  = "rgba(220,210,255,0.36)";
 const soft   = "rgba(220,210,255,0.70)";
 const white  = "#F2EEF9";
-const EMOJI_FONT = "'Twemoji Mozilla','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
+const EMOJI_FONT_STACK = "'Twemoji Mozilla','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
 
 const ALBUMS = [
   {
@@ -59,7 +48,7 @@ const ALBUMS = [
     color: "#0d1a2a",
     desc: "지금 이 순간의 청춘과 삶을 온전히 살아내는 이야기.",
     tracks: [
-      { n: 1, title: "겨울의 대삼각형", mood: "가깝운 듯 멀게 엇갈린 세 점처럼\n우린 서로를 바라보며 빛나고 있어" },
+      { n: 1, title: "겨울의 대삼각형", mood: "가까운 듯 멀게 엇갈린 세 점처럼\n우린 서로를 바라보며 빛나고 있어" },
       { n: 2, title: "오늘이 가장 어렸던 날이야", mood: "오늘이 가장 어렸던 날이야\n내일은 우리가 그린 꿈이야" },
       { n: 3, title: "너 때문에", mood: "너 때문에 사는 거야\n너라서 이러는 거야" },
       { n: 4, title: "우리들의 발라드", mood: "밤하늘에 울려 퍼지는 우리들의 발라드\n별빛보다 더 오래 반짝일 이야기" },
@@ -118,7 +107,7 @@ const ALBUMS = [
   },
   {
     id: 7,
-    title: "不完全な踊り", // 💡 깨진 표기 수정
+    title: "不完全な踊리 (불완전한 춤)",
     cover: "https://down.mixtape.so/NAS/img/4/6/a/8/46a838a2a7a75c0a0336cd1e51677f4f.png",
     year: "2026",
     color: "#1a1a08",
@@ -126,11 +115,11 @@ const ALBUMS = [
     tracks: [
       { n: 1, title: "今日が一番幼い日", mood: "今日が一番幼い日\n明日は私たちの描く夢" },
       { n: 2, title: "不完全な踊り", mood: "プラスマイナスのない世界\n天国と地獄 その中にいるじゃん" },
-      { n: 3, title: "音の出ない心", mood: "慣れた日々に溶けていくように\n私の手をすり抜けていった" }, // 💡 오타 수정
-      { n: 4, title: "星影의 叫び", mood: "星の間で君을 부른다\n静かに風が流れる" },
+      { n: 3, title: "音の出ない心", mood: "慣れた日々に溶けていくように\n私の手をす리抜けていった" },
+      { n: 4, title: "星影の叫び", mood: "星の間で君を呼ぶ\n静かに風が流れる" },
       { n: 5, title: "君のために", mood: "君のために生きてるんだよ\n君だからこうしてるんだよ" },
       { n: 6, title: "私、ドラゴンじゃないのに", mood: "白い息が出ちゃう\n私、ドラゴンじゃないのに" },
-      { n: 7, title: "闇가 무서운 幽霊", mood: "暗くて 見えなくて\n静寂に飲まれそうで" }
+      { n: 7, title: "闇が怖い幽霊", mood: "暗くて 見えなくて\n静寂に飲まれそうで" }
     ]
   },
   {
@@ -278,7 +267,7 @@ const ALBUMS = [
     desc: "고통을 견디는 대신 불필요한 어둠을 건너뛰는 용기",
     tracks: [
       { n: 1, title: "SKIP", mood: "I just skip, skip Like a broken scene\nBad days fade away Like they've never been" },
-      { n: 2, title: "We didn't win, we just went numb", mood: "Is this what it means to finally grow up?\nTo pour out the soul and just fill the cup?" },
+      { n: 2, title: "We didn't win, we just went numb", mood: "s this what it means to finally grow up?\nTo pour out the soul and just fill the cup?" },
       { n: 3, title: "Oh, how beautiful this world can be", mood: "Oh, how beautiful this world can be\nThe breath we take, the stars above" }
     ]
   },
@@ -345,6 +334,16 @@ const PLATFORMS = [
   { name:"Apple Music", url:"music.apple.com/...", color:"#FA2D48", icon:"🍎" }
 ];
 
+// 새로운 포스트잇 감성 롤링페이퍼를 위한 위치값 포함 초기 데이터
+const INIT_GB = [
+  { id: 1, name: "레이니돌", pw: "1234", msg: "신기한 기능이네요. :)", time: "2026. 05. 30", x: 15, y: 12, color: "#ffb3ba" },
+  { id: 2, name: "올드비", pw: "1234", msg: "와우 정말 좋은 프로그램이네요.\n부담없이 쓸 수 있을 것 같아요.", time: "2026. 05. 30", x: 45, y: 25, color: "#baffc9" },
+  { id: 3, name: "얼리어답터", pw: "1234", msg: "이거 재미있네요..! :) 저도 하나 달아볼까나?", time: "2026. 05. 30", x: 20, y: 50, color: "#bae1ff" },
+];
+
+const EMOJI_FONT = EMOJI_FONT_STACK;
+
+// ── PRIMITIVES ──────────────────────────────────────
 function Stars() {
   const s = useRef(Array.from({length:100},(_,i)=>({id:i,x:Math.random()*100,y:Math.random()*100,r:Math.random()*1.4+0.2,o:Math.random()*0.4+0.08,d:Math.random()*5+2}))).current;
   return (
@@ -373,6 +372,7 @@ const SecHead = ({title,sub}) => (
   </div>
 );
 
+// ── BOTTOM NAV ──────────────────────────────────────
 const NAV_ITEMS = [
   {id:"홈",    svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>},
   {id:"소개",  svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>},
@@ -394,6 +394,7 @@ function BottomNav({tab,setTab}) {
   );
 }
 
+// ── 유튜브 채널 분석 ─────────────────
 function SubChart() {
   const canvasRef = useRef(null);
   const chartRef  = useRef(null);
@@ -482,6 +483,7 @@ function SubChart() {
   );
 }
 
+// ── 홈 ──────────────────────────────────────────────
 function HomeTab({isPC}) {
   const [track,setTrack]=useState(null);
 
@@ -502,7 +504,8 @@ function HomeTab({isPC}) {
       {track&&<>
         <p style={{fontSize:22,fontWeight:700,color:white,margin:"0 0 6px",lineHeight:1.3,letterSpacing:"-0.3px"}}>{track.title}</p>
         <p style={{fontSize:12,color:muted,margin:"0 0 10px"}}>{track.album}</p>
-        {track.mood&&<p style={{fontSize:13,color:`${LIME}88`,margin:0,fontFamily:"'Noto Serif KR',serif",transform: "skewX(-12deg)", display: "inline-block",whiteSpace:"pre-line"}}>"{track.mood}"</p>}
+        {track.mood&&<p style={{fontSize:13,color:`${LIME}88`,margin:0,fontFamily:"'Noto Serif KR',serif",transform: "skewX(-12deg)",
+display: "inline-block",whiteSpace:"pre-line"}}>"{track.mood}"</p>}
       </>}
     </G>
   );
@@ -513,12 +516,13 @@ function HomeTab({isPC}) {
       <Hr/>
       {[
         {tag:"채널",   tagC:"#aaaaff", date:"04.25",title:"유튜브 구독자 400명 돌파"},
-        {tag:"정규",   tagC:"#ff8b94", date:"05.28",title:"'허수아비에게' 발매"},
-        {tag:"미니",   tagC:"#ffd3b6", date:"05.28",title:"'SKIP' 발매"},
-        {tag:"싱글",   tagC:"#a8e6cf", date:"05.28",title:"'두려운 것 투성이야, 세상은' 발매"},
-        {tag:"예정",   tagC:"#ffcc44", date:"06.09",title:"'별 하나와 달 하나, 그리고 나의 마음' 발매 예정"},
+        {tag:"정규",   tagC:"#ff8b94",      date:"05.28",title:"'허수아비에게' 발매"},
+        {tag:"미니",   tagC:"#ffd3b6",      date:"05.28",title:"'SKIP' 발매"},
+        {tag:"싱글",   tagC:"#a8e6cf",      date:"05.28",title:"'두려운 것 투성이야, 세상은' 발매"},
+        {tag:"예정", tagC:"#ffcc44", date:"06.09",title:"'별 하나와 달 하나, 그리고 나의 마음' 발매 예정"},
+        
       ].map((n,i,arr)=>(
-        <div key={n.title + n.date}>
+        <div key={i}>
           <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 18px"}}>
             <div style={{width:56,flexShrink:0}}><Tag c={n.tagC}>{n.tag}</Tag></div>
             <span style={{width:44,flexShrink:0,fontSize:11,color:"rgba(220,210,255,0.75)",fontWeight:600}}>{n.date}</span>
@@ -529,12 +533,11 @@ function HomeTab({isPC}) {
       ))}
     </G>
   );
+const currentSubs = SUB_DATA[SUB_DATA.length - 1].subs;
+const prevSubs    = SUB_DATA[SUB_DATA.length - 2].subs;
 
-  const currentSubs = SUB_DATA[SUB_DATA.length - 1].subs;
-  const prevSubs    = SUB_DATA[SUB_DATA.length - 2].subs;
-  const increase = currentSubs - prevSubs;
-  const growth   = ((increase / prevSubs) * 100).toFixed(1);
-
+const increase = currentSubs - prevSubs;
+const growth   = ((increase / prevSubs) * 100).toFixed(1);
   const SubSection = (
     <G>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
@@ -545,18 +548,34 @@ function HomeTab({isPC}) {
         </div>
       </div>
       <SubChart/>
-      <div style={{display:"flex",justifyContent:"space-around",marginTop:14}}>
-        {[
-          {label:"최근 30일 증가",val:`+${increase}`},
-          {label:"채널 성장률",val:`+${growth}%`},
-          {label:"조회수",val:"17.7만회"},
-        ].map((s,i)=>(
-          <div key={s.label} style={{textAlign:"center"}}>
-            <p style={{fontSize:14,fontWeight:800,color: i===0 ? ACCENT : i===1 ? "#4f8ef7" : "#c8d98a"}}>{s.val}</p>
-            <p style={{fontSize:9,color:muted,margin:"-2px 0 0"}}>{s.label}</p>
-          </div>
-        ))}
-      </div>
+<div style={{display:"flex",justifyContent:"space-around",marginTop:14}}>
+  {[
+  {label:"최근 30일 증가",val:`+${increase}`},
+  {label:"채널 성장률",val:`+${growth}%`},
+  {label:"조회수",val:"17.7만회"},
+].map((s,i)=>(
+    <div key={i} style={{textAlign:"center"}}>
+      <p style={{
+        fontSize:14,
+        fontWeight:800,
+        color:
+          i===0 ? ACCENT :
+          i===1 ? "#4f8ef7" :
+          "#c8d98a"
+      }}>
+        {s.val}
+      </p>
+
+      <p style={{
+        fontSize:9,
+        color:muted,
+        margin:"-2px 0 0"
+      }}>
+        {s.label}
+      </p>
+    </div>
+  ))}
+</div>
     </G>
   );
 
@@ -565,7 +584,7 @@ function HomeTab({isPC}) {
       <div style={{padding:"20px 18px 12px"}}><SecHead title="밤하늘극장 인기차트 TOP 10" sub="'26년 5월 기준"/></div>
       <Hr/>
       {CHART.map((t,i)=>(
-        <div key={t.title}>
+        <div key={i}>
           <div style={{display:"flex",alignItems:"center",gap:12,padding:"11px 18px"}}>
             <span style={{width:22,textAlign:"center",fontWeight:900,flexShrink:0,fontSize:t.rank<=3?14:12,color:rankColor(t.rank)}}>{t.rank}</span>
             <p style={{flex:1,margin:0,fontSize:13,fontWeight:t.rank<=3?700:400,color:t.rank===1?white:t.rank<=3?"rgba(242,238,249,0.85)":soft,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</p>
@@ -582,20 +601,60 @@ function HomeTab({isPC}) {
       <SecHead title="해외 청취율" sub="5월 유튜브 기준"/>
       <div style={{marginTop:10}}>
         {OVERSEAS.map((o,i)=>(
-          <div key={o.name} style={{display:"flex",alignItems:"center",marginBottom:i<OVERSEAS.length-1?10:0}}>
-            <div style={{width:34,flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
-              {isPC ? (
-                o.flag ? (
-                  <div style={{width:18,height:18,borderRadius:"50%",overflow:"hidden",boxShadow:"0 0 6px rgba(255,255,255,0.12)"}}>
-                    <img src={o.flag} alt={o.name} draggable={false} style={{width:"100%",height:"100%",objectFit:"cover",display:"block",userSelect:"none",pointerEvents:"none"}}/>
-                  </div>
-                ) : (
-                  <span style={{fontSize:18,fontFamily:EMOJI_FONT,lineHeight:1}}>🌍</span>
-                )
-              ) : (
-                <span style={{fontSize:18,fontFamily:EMOJI_FONT,lineHeight:1}}>{o.emoji || "🌍"}</span>
-              )}
-            </div>
+          <div key={i} style={{display:"flex",alignItems:"center",marginBottom:i<OVERSEAS.length-1?10:0}}>
+<div style={{
+  width:34,
+  flexShrink:0,
+  display:"flex",
+  alignItems:"center",
+  justifyContent:"center",
+}}>
+  {isPC ? (
+    o.flag ? (
+      <div style={{
+        width:18,
+        height:18,
+        borderRadius:"50%",
+        overflow:"hidden",
+        boxShadow:"0 0 6px rgba(255,255,255,0.12)",
+      }}>
+        <img
+          src={o.flag}
+          alt={o.name}
+          draggable={false}
+          style={{
+            width:"100%",
+            height:"100%",
+            objectFit:"cover",
+            display:"block",
+            userSelect:"none",
+            pointerEvents:"none",
+          }}
+        />
+      </div>
+    ) : (
+      <span
+        style={{
+          fontSize:18,
+          fontFamily:EMOJI_FONT,
+          lineHeight:1,
+        }}
+      >
+        🌍
+      </span>
+    )
+  ) : (
+    <span
+      style={{
+        fontSize:18,
+        fontFamily:EMOJI_FONT,
+        lineHeight:1,
+      }}
+    >
+      {o.emoji}
+    </span>
+  )}
+</div>
             <span style={{fontSize:12,color:muted,width:68,flexShrink:0}}>{o.name}</span>
             <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
               <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${ACCENT}cc,#4f8ef7)`,borderRadius:4}}/>
@@ -618,15 +677,33 @@ function HomeTab({isPC}) {
   return <div style={{display:"flex",flexDirection:"column",gap:10,textAlign:"left"}}>{TodayPick}{Notice}{Top10}{SubSection}{Overseas}</div>;
 }
 
+// ── 소개 ────────────────────────────────────────────
 function AboutTab({isPC}) {
   const Hero = (
     <G style={{textAlign:"center",position:"relative",overflow:"hidden",padding:"26px 22px"}}>
       <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.08) 0%,transparent 70%)",pointerEvents:"none"}}/>
-      <div style={{width:68,height:68,borderRadius:"50%",background:LIME,margin:"0 auto 16px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:30,boxShadow:`0 0 28px ${LIME}44`,fontFamily:EMOJI_FONT}}>🪐</div>
-      <p style={{fontSize:11,color:LIME,fontWeight:700,margin:"0 0 6px",letterSpacing:"0.1em"}}>NIGHT SKY THEATER</p>
-      <h2 style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 6px"}}>밤하늘극장</h2>
-      <p style={{fontSize:12,color:muted,lineHeight:1.7}}>@NightSkyTheater · 구독자 401명 · 유통 (주)와이지플러스</p>
+      <div style={{
+        width:68,height:68,borderRadius:"50%",
+        background:LIME,margin:"0 auto 16px",
+        display:"flex",alignItems:"center",justifyContent:"center",
+        fontSize:30,boxShadow:`0 0 28px ${LIME}44`,
+        fontFamily:EMOJI_FONT
+      }}>🪐</div>
+
+      <p style={{fontSize:11,color:LIME,fontWeight:700,margin:"0 0 6px",letterSpacing:"0.1em"}}>
+        NIGHT SKY THEATER
+      </p>
+
+      <h2 style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 6px"}}>
+        밤하늘극장
+      </h2>
+
+      <p style={{fontSize:12,color:muted,lineHeight:1.7}}>
+        @NightSkyTheater · 구독자 401명 · 유통 (주)와이지플러스
+      </p>
+
       <Hr my={10}/>
+
       <p style={{fontSize:13,color:soft,lineHeight:1.9,textAlign:"left"}}>
         감정이 흐르는 무대, 별빛 같은 노래가 머무는 곳.<br/>
         <strong style={{color:white}}>유우레이</strong>와 <strong style={{color:white}}>임보성</strong>이 함께하는 감성 인디 프로젝트입니다.
@@ -638,58 +715,114 @@ function AboutTab({isPC}) {
     <G>
       <SecHead title="아티스트"/>
       {[
-        {name:"유우레이", role:"보컬 · 작사", desc:"목소리로 감정의 결을 만드는 사람.", emoji:"🎤"},
-        {name:"임보성", role:"프로듀서 · 작곡", desc:"사운드로 세계관을 구축하는 사람.", emoji:"🎹"}
+        {
+          name:"유우레이",
+          role:"보컬 · 작사",
+          desc:"목소리로 감정의 결을 만드는 사람.",
+          emoji:"🎤"
+        },
+        {
+          name:"임보성",
+          role:"프로듀서 · 작곡",
+          desc:"사운드로 세계관을 구축하는 사람.",
+          emoji:"🎹"
+        }
       ].map((a,i)=>(
-        <div key={a.name} style={{marginBottom:i===0?16:0}}>
+        <div key={i} style={{marginBottom:i===0?16:0}}>
           <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}>
-            <div style={{width:40,height:40,borderRadius:"50%",background:"rgba(184,255,0,0.1)",border:"1px solid rgba(184,255,0,0.22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,fontFamily:EMOJI_FONT}}>{a.emoji}</div>
+            <div style={{
+              width:40,height:40,borderRadius:"50%",
+              background:"rgba(184,255,0,0.1)",
+              border:"1px solid rgba(184,255,0,0.22)",
+              display:"flex",alignItems:"center",justifyContent:"center",
+              fontSize:18,fontFamily:EMOJI_FONT
+            }}>{a.emoji}</div>
+
             <div>
               <p style={{margin:0,fontSize:14,fontWeight:800,color:white}}>{a.name}</p>
               <p style={{margin:0,fontSize:10,color:LIME,opacity:0.75}}>{a.role}</p>
             </div>
           </div>
-          <p style={{fontSize:12,color:muted,lineHeight:1.7,margin:0}}>{a.desc}</p>
+
+          <p style={{fontSize:12,color:muted,lineHeight:1.7,margin:0}}>
+            {a.desc}
+          </p>
         </div>
       ))}
     </G>
   );
 
-  const Streaming = (
-    <G>
-      <SecHead title="링크" sub="Streaming & Social"/>
-      <div style={{marginTop:12, display:"grid", gridTemplateColumns: isPC ? "1fr 1fr" : "1fr", gap:10}}>
-        {PLATFORMS.map((p)=>(
-          <a
-            key={p.name}
-            href={"https://" + p.url}
-            target="_blank"
-            rel="noreferrer"
-            style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"12px 14px",borderRadius:14,background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.06)",textDecoration:"none",transition:"all 0.2s ease",position:"relative",overflow:"hidden"}}
-            onMouseEnter={e=>{
-              e.currentTarget.style.transform="translateX(4px)";
-              e.currentTarget.style.borderColor=p.color+"66";
-              e.currentTarget.style.background=p.color+"10";
-            }}
-            onMouseLeave={e=>{
-              e.currentTarget.style.transform="translateX(0)";
-              e.currentTarget.style.borderColor="rgba(255,255,255,0.06)";
-              e.currentTarget.style.background="rgba(255,255,255,0.04)";
-            }}
-          >
-            <div style={{display:"flex",alignItems:"center",gap:12}}>
-              <div style={{width:34,height:34,borderRadius:10,background:p.color+"22",border:`1px solid ${p.color}55`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>
-                {p.icon}
-              </div>
-              <div>
-                <p style={{margin:0,fontSize:13,fontWeight:800,color:white}}>{p.name}</p>
-              </div>
+const Streaming = (
+  <G>
+    <SecHead title="링크" sub="Streaming & Social"/>
+
+    <div
+      style={{
+        marginTop:12,
+        display:"grid",
+        gridTemplateColumns: isPC ? "1fr 1fr" : "1fr",
+        gap:10
+      }}
+    >
+
+      {PLATFORMS.map((p,i)=>(
+        <a
+          key={i}
+          href={"https://" + p.url}
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            display:"flex",
+            alignItems:"center",
+            justifyContent:"space-between",
+            padding:"12px 14px",
+            borderRadius:14,
+            background:"rgba(255,255,255,0.04)",
+            border:"1px solid rgba(255,255,255,0.06)",
+            textDecoration:"none",
+            transition:"all 0.2s ease",
+            position:"relative",
+            overflow:"hidden"
+          }}
+          onMouseEnter={e=>{
+            e.currentTarget.style.transform="translateX(4px)";
+            e.currentTarget.style.borderColor=p.color+"66";
+            e.currentTarget.style.background=p.color+"10";
+          }}
+          onMouseLeave={e=>{
+            e.currentTarget.style.transform="translateX(0)";
+            e.currentTarget.style.borderColor="rgba(255,255,255,0.06)";
+            e.currentTarget.style.background="rgba(255,255,255,0.04)";
+          }}
+        >
+
+          <div style={{display:"flex",alignItems:"center",gap:12}}>
+            <div style={{
+              width:34,height:34,
+              borderRadius:10,
+              background:p.color+"22",
+              border:`1px solid ${p.color}55`,
+              display:"flex",
+              alignItems:"center",
+              justifyContent:"center",
+              fontSize:16
+            }}>
+              {p.icon}
             </div>
-          </a>
-        ))}
-      </div>
-    </G>
-  );
+
+            <div>
+              <p style={{margin:0,fontSize:13,fontWeight:800,color:white}}>
+                {p.name}
+              </p>
+            </div>
+          </div>
+
+        </a>
+      ))}
+
+    </div>
+  </G>
+);
 
   return (
     <div style={{display:"flex",flexDirection:"column",gap:10}}>
@@ -700,6 +833,7 @@ function AboutTab({isPC}) {
   );
 }
 
+// ── 음악 ────────────────────────────────────────────
 function MusicTab({isPC}) {
   const [selected,setSelected]=useState(null);
   const [trackIdx,setTrackIdx]=useState(0);
@@ -717,7 +851,7 @@ function MusicTab({isPC}) {
             <p style={{fontSize:12,color:muted,lineHeight:1.7,margin:0,fontStyle:"italic"}}>"{alb.desc}"</p>
           </div>
           <Hr my={16}/>
-          <div style={{display:"flex",justifyCenter:"center",gap:5}}>
+          <div style={{display:"flex",justifyContent:"center",gap:5}}>
             {alb.tracks.map((_,j)=>(
               <div key={j} onClick={()=>setTrackIdx(j)} style={{width:j===trackIdx?20:6,height:4,borderRadius:2,background:j===trackIdx?ACCENT:"rgba(91,79,245,0.2)",transition:"all 0.2s",cursor:"pointer"}}/>
             ))}
@@ -736,7 +870,7 @@ function MusicTab({isPC}) {
           <div style={{padding:"14px 18px 10px"}}><p style={{fontSize:13,fontWeight:700,color:white,margin:0}}>수록곡</p></div>
           <Hr/>
           {alb.tracks.map((t,j)=>(
-            <div key={t.title}>
+            <div key={j}>
               <div onClick={()=>setTrackIdx(j)} style={{display:"flex",alignItems:"center",gap:12,padding:"11px 18px",cursor:"pointer",background:j===trackIdx?"rgba(184,255,0,0.06)":"transparent",transition:"background 0.15s"}}>
                 <span style={{fontSize:10,color:j===trackIdx?ACCENT:muted,width:16,flexShrink:0}}>{t.n}</span>
                 <div style={{flex:1,minWidth:0}}>
@@ -758,11 +892,11 @@ function MusicTab({isPC}) {
       <div style={{marginBottom:16}}><SecHead title="디스코그래피" sub={`총 ${ALBUMS.length}개 앨범`}/></div>
       <div style={{display:"grid",gridTemplateColumns:cols,gap:isPC?16:12}}>
         {[...ALBUMS].reverse().map((a,i)=>(
-          <button key={a.id} onClick={()=>{setSelected(ALBUMS.length-1-i);setTrackIdx(0);}} style={{background:"none",border:"none",cursor:"pointer",padding:0,textAlign:"left",fontFamily:"inherit",width:"100%",minWidth:0}}>
+          <button key={a.id+"-"+i} onClick={()=>{setSelected(ALBUMS.length-1-i);setTrackIdx(0);}} style={{background:"none",border:"none",cursor:"pointer",padding:0,textAlign:"left",fontFamily:"inherit",width:"100%",minWidth:0}}>
             <div
               style={{width:"100%",aspectRatio:"1/1",borderRadius:isPC?16:14,backgroundImage:`url(${a.cover})`,backgroundColor:a.color,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat",border:"1px solid rgba(255,255,255,0.08)",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.25s ease",overflow:"hidden",position:"relative",boxShadow:`0 10px 35px ${a.color}33`}}
               onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(184,255,0,0.35)";e.currentTarget.style.transform="translateY(-4px) scale(1.02)";e.currentTarget.style.boxShadow=`0 18px 45px ${a.color}55`;}}
-              onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,0.08)";e.currentTarget.style.transform="translateY(0) scale(1)";e.currentTarget.style.boxShadow={`0 10px 35px ${a.color}33`;}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,0.08)";e.currentTarget.style.transform="translateY(0) scale(1)";e.currentTarget.style.boxShadow=`0 10px 35px ${a.color}33`;}}
             />
             <p style={{fontSize:isPC?13:12,fontWeight:700,color:white,margin:"0 0 2px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",lineHeight:1.3}}>{a.title}</p>
             <p style={{fontSize:10,color:muted,margin:0}}>{a.tracks.length}곡</p>
@@ -773,17 +907,33 @@ function MusicTab({isPC}) {
   );
 }
 
+// ── 방명록 (Firebase 버전) ─────────────────────────────
+
+import { useState, useEffect, useRef } from "react";
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  query,
+  orderBy,
+  onSnapshot,
+} from "firebase/firestore";
+import { db } from "./firebase";
+
 function timeAgo(date) {
   if (!date) return "";
+
   const now = new Date();
   const diff = Math.floor((now - date) / 1000);
+
   if (diff < 60) return "방금 전";
   if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
   if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
+
   return date.toLocaleDateString("ko-KR");
 }
 
-// 💡 export default 제거
 function GuestbookTab() {
   const [entries, setEntries] = useState([]);
   const [name, setName] = useState("");
@@ -791,11 +941,15 @@ function GuestbookTab() {
   const [msg, setMsg] = useState("");
   const [animId, setAnimId] = useState(null);
 
+  const nid = useRef(1);
+
+  // 🌍 실시간 데이터 (핵심: onSnapshot)
   useEffect(() => {
     const q = query(
       collection(db, "guestbook"),
       orderBy("createdAt", "desc")
     );
+
     const unsub = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((d) => ({
         id: d.id,
@@ -803,11 +957,14 @@ function GuestbookTab() {
       }));
       setEntries(data);
     });
+
     return () => unsub();
   }, []);
 
+  // ✍️ 글 작성 (애니메이션 포함)
   const submit = async () => {
     if (!name.trim() || !pw.trim() || !msg.trim()) return;
+
     const newEntry = {
       name: name.trim(),
       pw: pw.trim(),
@@ -819,17 +976,24 @@ function GuestbookTab() {
       ],
       createdAt: new Date(),
     };
+
     const docRef = await addDoc(collection(db, "guestbook"), newEntry);
+
+    // 🌠 생성 애니메이션 트리거
     setAnimId(docRef.id);
+
     setName("");
     setPw("");
     setMsg("");
+
     setTimeout(() => setAnimId(null), 1000);
   };
 
+  // 🗑 삭제
   const del = async (entry) => {
     const input = window.prompt("비밀번호를 입력하세요");
     if (!input) return;
+
     if (input === entry.pw) {
       await deleteDoc(doc(db, "guestbook", entry.id));
     } else {
@@ -838,12 +1002,32 @@ function GuestbookTab() {
   };
 
   return (
-    <div style={{ position: "relative", minHeight: "85vh", color: "#fff", overflow: "hidden" }}>
-      <div style={{ padding: "16px", textAlign: "center", background: "rgba(255,255,255,0.05)", backdropFilter: "blur(10px)", borderRadius: "16px", margin: "10px" }}>
+    <div
+      style={{
+        position: "relative",
+        minHeight: "85vh",
+        color: "#fff",
+        overflow: "hidden",
+      }}
+    >
+      {/* 🌌 헤더 */}
+      <div
+        style={{
+          padding: "16px",
+          textAlign: "center",
+          background: "rgba(255,255,255,0.05)",
+          backdropFilter: "blur(10px)",
+          borderRadius: "16px",
+          margin: "10px",
+        }}
+      >
         <h2 style={{ margin: 0 }}>🌌 밤하늘 방명록</h2>
-        <p style={{ fontSize: "12px", opacity: 0.6 }}>당신의 한 줄이 별이 됩니다</p>
+        <p style={{ fontSize: "12px", opacity: 0.6 }}>
+          당신의 한 줄이 별이 됩니다
+        </p>
       </div>
 
+      {/* ⭐ 낙서 영역 */}
       <div style={{ position: "relative", minHeight: "60vh" }}>
         {entries.map((e) => (
           <div
@@ -856,13 +1040,24 @@ function GuestbookTab() {
               maxWidth: "220px",
               padding: "10px",
               cursor: "pointer",
-              animation: animId === e.id ? "fallStar 1s ease-out" : "float 4s ease-in-out infinite",
+              animation:
+                animId === e.id
+                  ? "fallStar 1s ease-out"
+                  : "float 4s ease-in-out infinite",
               transition: "all 0.3s",
             }}
           >
-            <div style={{ fontSize: "13px", color: e.color || "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.8)", whiteSpace: "pre-line" }}>
+            <div
+              style={{
+                fontSize: "13px",
+                color: e.color || "#fff",
+                textShadow: "0 2px 6px rgba(0,0,0,0.8)",
+                whiteSpace: "pre-line",
+              }}
+            >
               {e.msg}
             </div>
+
             <div style={{ fontSize: "10px", opacity: 0.6 }}>
               {e.name} · {timeAgo(e.createdAt?.toDate?.() || e.createdAt)}
             </div>
@@ -870,34 +1065,97 @@ function GuestbookTab() {
         ))}
       </div>
 
-      <div style={{ position: "fixed", bottom: "50px", left: "50%", transform: "translateX(-50%)", width: "90%", maxWidth: "500px", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(12px)", padding: "12px", borderRadius: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>
+      {/* ✍️ 입력 */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: "50px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "90%",
+          maxWidth: "500px",
+          background: "rgba(255,255,255,0.08)",
+          backdropFilter: "blur(12px)",
+          padding: "12px",
+          borderRadius: "16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+        }}
+      >
         <div style={{ display: "flex", gap: "6px" }}>
-          <input placeholder="이름" value={name} onChange={(e) => setName(e.target.value)} style={{ flex: 1 }} />
-          <input placeholder="비밀번호" type="password" value={pw} onChange={(e) => setPw(e.target.value)} style={{ flex: 1 }} />
+          <input
+            placeholder="이름"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            style={{ flex: 1 }}
+          />
+          <input
+            placeholder="비밀번호"
+            type="password"
+            value={pw}
+            onChange={(e) => setPw(e.target.value)}
+            style={{ flex: 1 }}
+          />
         </div>
-        <textarea placeholder="밤하늘에 남길 이야기..." value={msg} onChange={(e) => setMsg(e.target.value)} rows={2} />
+
+        <textarea
+          placeholder="밤하늘에 남길 이야기..."
+          value={msg}
+          onChange={(e) => setMsg(e.target.value)}
+          rows={2}
+        />
+
         <button onClick={submit}>🌠 남기기</button>
       </div>
 
+      {/* 🎨 애니메이션 */}
       <style>{`
         @keyframes float {
           0% { transform: translateY(0px); }
           50% { transform: translateY(-6px); }
           100% { transform: translateY(0px); }
         }
+
         @keyframes fallStar {
-          0% { transform: translateY(-40px) scale(0.5); opacity: 0; }
-          50% { opacity: 1; }
-          100% { transform: translateY(0px) scale(1); }
+          0% {
+            transform: translateY(-40px) scale(0.5);
+            opacity: 0;
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(0px) scale(1);
+          }
         }
-        input, textarea { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: white; padding: 8px; outline: none; }
-        button { background: white; color: black; border: none; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        input, textarea {
+          background: rgba(255,255,255,0.15);
+          border: 1px solid rgba(255,255,255,0.2);
+          border-radius: 8px;
+          color: white;
+          padding: 8px;
+          outline: none;
+        }
+
+        button {
+          background: white;
+          color: black;
+          border: none;
+          padding: 8px;
+          border-radius: 8px;
+          font-weight: bold;
+          cursor: pointer;
+        }
       `}</style>
     </div>
   );
 }
 
-// ── APP (메인 컴포넌트 하나만 단일 Export Default) ───────────────────
+export default GuestbookTab;
+
+// ── APP (메인 컴포넌트 한 개만 Export) ───────────────────
 export default function App() {
   const [tab,setTab]=useState("홈");
   const [isPC,setIsPC]=useState(window.innerWidth>=768);
@@ -919,12 +1177,16 @@ export default function App() {
     <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)",color:white,fontFamily:"'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif",position:"relative"}}>
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
         @keyframes fl    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
         @keyframes pulse { 0%,100%{opacity:.15} 50%{opacity:1} }
         @keyframes fin   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
         * { box-sizing:border-box; }
-        body { font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif; text-align:left; }
+        body {
+          font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif;
+          text-align:left;
+        }
         p, span, div { text-align:inherit; }
         textarea::placeholder,input::placeholder { color:rgba(255,255,255,0.13) }
         ::-webkit-scrollbar { width:3px }
