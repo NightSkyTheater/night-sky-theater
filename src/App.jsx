@@ -57,17 +57,13 @@ const OVERSEAS = [
 ];
 
 const SUB_DATA = [
-  {month:"'24.01", subs:12},
-  {month:"'24.04", subs:28},
-  {month:"'24.07", subs:55},
-  {month:"'24.10", subs:89},
-  {month:"'25.01", subs:134},
-  {month:"'25.04", subs:178},
-  {month:"'25.07", subs:220},
-  {month:"'25.10", subs:271},
-  {month:"'26.01", subs:318},
-  {month:"'26.03", subs:356},
-  {month:"'26.05", subs:402},
+  {month:"11월", subs:248},
+  {month:"12월", subs:271},
+  {month:"1월",  subs:318},
+  {month:"2월",  subs:336},
+  {month:"3월",  subs:356},
+  {month:"4월",  subs:381},
+  {month:"5월",  subs:402},
 ];
 
 const TIMELINE = [
@@ -169,9 +165,18 @@ function SubChart() {
         <circle cx={last.x} cy={last.y} r="4" fill="none" stroke={ACCENT} strokeWidth="0.8" strokeOpacity="0.4"/>
       </svg>
       <div style={{display:"flex",justifyContent:"space-between",marginTop:2}}>
-        {[pts[0], pts[Math.floor(pts.length/2)], pts[pts.length-1]].map((p,i)=>(
-          <span key={i} style={{fontSize:9,color:muted,fontFamily:"monospace"}}>{p.month}</span>
-        ))}
+        {pts.map((p,i)=>(
+  <span
+    key={i}
+    style={{
+      fontSize:9,
+      color:muted,
+      fontFamily:"monospace"
+    }}
+  >
+    {p.month}
+  </span>
+))}
       </div>
     </div>
   );
@@ -215,7 +220,7 @@ function HomeTab({isPC}) {
       ].map((n,i,arr)=>(
         <div key={i}>
           <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 18px"}}>
-            <div style={{width:52,flexShrink:0}}><Tag c={n.tagC}>{n.tag}</Tag></div>
+            <div style={{width:56,flexShrink:0}}><Tag c={n.tagC}>{n.tag}</Tag></div>
             <span style={{width:44,flexShrink:0,fontSize:11,color:"rgba(220,210,255,0.75)",fontWeight:600}}>{n.date}</span>
             <p style={{margin:0,fontSize:13,fontWeight:600,color:white,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1}}>{n.title}</p>
           </div>
@@ -235,18 +240,34 @@ function HomeTab({isPC}) {
         </div>
       </div>
       <SubChart/>
-      <div style={{display:"flex",justifyContent:"space-between",marginTop:10}}>
-        {[
-          {label:"이번 달 증가",val:"+46"},
-          {label:"전월 대비",val:"+12.9%"},
-          {label:"목표",val:"1,000"},
-        ].map((s,i)=>(
-          <div key={i} style={{textAlign:"center"}}>
-            <p style={{fontSize:14,fontWeight:800,color:i===0?ACCENT:i===1?"#4f8ef7":soft,margin:0}}>{s.val}</p>
-            <p style={{fontSize:9,color:muted,margin:"2px 0 0"}}>{s.label}</p>
-          </div>
-        ))}
-      </div>
+<div style={{display:"flex",justifyContent:"space-between",marginTop:10}}>
+  {[
+    {label:"최근 30일 증가",val:"+21"},
+    {label:"채널 성장률",val:"+5.5%"},
+    {label:"재방문 시청자",val:"38%"},
+  ].map((s,i)=>(
+    <div key={i} style={{textAlign:"center"}}>
+      <p style={{
+        fontSize:14,
+        fontWeight:800,
+        color:
+          i===0 ? ACCENT :
+          i===1 ? "#4f8ef7" :
+          "#c8d98a"
+      }}>
+        {s.val}
+      </p>
+
+      <p style={{
+        fontSize:9,
+        color:muted,
+        margin:"2px 0 0"
+      }}>
+        {s.label}
+      </p>
+    </div>
+  ))}
+</div>
     </G>
   );
 
