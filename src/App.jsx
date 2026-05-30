@@ -288,7 +288,7 @@ const growth   = ((increase / prevSubs) * 100).toFixed(1);
         </div>
       </div>
       <SubChart/>
-<div style={{display:"flex",justifyContent:"space-between",marginTop:10}}>
+<div style={{display:"flex",justifyContent:"space-between",marginTop:14}}>
   {[
   {label:"최근 30일 증가",val:`+${increase}`},
   {label:"채널 성장률",val:`+${growth}%`},
@@ -309,7 +309,7 @@ const growth   = ((increase / prevSubs) * 100).toFixed(1);
       <p style={{
         fontSize:9,
         color:muted,
-        margin:"2px 0 0"
+        margin:"-2px 0 0"
       }}>
         {s.label}
       </p>
