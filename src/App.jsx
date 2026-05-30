@@ -907,16 +907,22 @@ function MusicTab({isPC}) {
   );
 }
 
-// ── 방명록 (리뉴얼 완료) ─────────────────────────────
+// ── 방명록 (Firebase 버전) ─────────────────────────────
+
+import { useState, useEffect, useRef } from "react";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  orderBy,
+  query,
+} from "firebase/firestore";
+import { db } from "./firebase";
+
 function GuestbookTab({ isPC }) {
-  const getInitialEntries = () => {
-    if (typeof window === "undefined") return INIT_GB;
-
-    const saved = localStorage.getItem("guestbook");
-    return saved ? JSON.parse(saved) : INIT_GB;
-  };
-
-  const [entries, setEntries] = useState(getInitialEntries);
+  const [entries, setEntries] = useState([]);
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
@@ -924,10 +930,27 @@ function GuestbookTab({ isPC }) {
 
   const nid = useRef(4);
 
-  // ✅ 핵심: 변경될 때마다 저장
+  // ── 데이터 불러오기 ─────────────────────────────
+  const fetchEntries = async () => {
+    const q = query(
+      collection(db, "guestbook"),
+      orderBy("createdAt", "desc")
+    );
+
+    const snapshot = await getDocs(q);
+
+    setEntries(
+      snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+    );
+  };
+
+  // 최초 로딩
   useEffect(() => {
-    localStorage.setItem("guestbook", JSON.stringify(entries));
-  }, [entries]);
+    fetchEntries();
+  }, []);
 
   const inputStyle = {
     background: "rgba(255, 255, 255, 0.15)",
@@ -940,36 +963,39 @@ function GuestbookTab({ isPC }) {
     fontFamily: "inherit",
   };
 
-  const submit = () => {
+  // ── 글 작성 (Firebase 저장) ─────────────────────────────
+  const submit = async () => {
     if (!name.trim() || !pw.trim() || !msg.trim()) return;
 
-    setEntries((p) => [
-      ...p,
-      {
-        id: nid.current++,
-        name: name.trim(),
-        pw: pw.trim(),
-        msg: msg.trim(),
-        time: new Date().toLocaleDateString("ko-KR").slice(0, -1),
-        x: Math.floor(Math.random() * 65) + 10,
-        y: Math.floor(Math.random() * 55) + 5,
-        color: ["#fff", "#ffe4e1", "#e0ffff", "#f0fff0", "#fffacd"][
-          Math.floor(Math.random() * 5)
-        ],
-      },
-    ]);
+    await addDoc(collection(db, "guestbook"), {
+      name: name.trim(),
+      pw: pw.trim(),
+      msg: msg.trim(),
+      time: new Date().toLocaleDateString("ko-KR"),
+      x: Math.floor(Math.random() * 65) + 10,
+      y: Math.floor(Math.random() * 55) + 5,
+      color: ["#fff", "#ffe4e1", "#e0ffff", "#f0fff0", "#fffacd"][
+        Math.floor(Math.random() * 5)
+      ],
+      createdAt: new Date(),
+    });
 
     setName("");
     setPw("");
     setMsg("");
     setDone(true);
     setTimeout(() => setDone(false), 2000);
+
+    fetchEntries(); // 다시 불러오기
   };
 
-  const del = (entry) => {
+  // ── 삭제 ─────────────────────────────
+  const del = async (entry) => {
     const v = window.prompt("비밀번호를 입력하세요");
+
     if (v === entry.pw) {
-      setEntries((p) => p.filter((e) => e.id !== entry.id));
+      await deleteDoc(doc(db, "guestbook", entry.id));
+      fetchEntries();
     } else if (v !== null) {
       alert("비밀번호가 틀렸습니다.");
     }
@@ -1127,6 +1153,8 @@ function GuestbookTab({ isPC }) {
     </div>
   );
 }
+
+export default GuestbookTab;
 
 // ── APP (메인 컴포넌트 한 개만 Export) ───────────────────
 export default function App() {
