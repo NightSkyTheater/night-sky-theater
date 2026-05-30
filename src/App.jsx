@@ -523,10 +523,12 @@ display: "inline-block",whiteSpace:"pre-line"}}>"{track.mood}"</p>}
       <div style={{padding:"20px 18px 12px"}}><SecHead title="공지사항"/></div>
       <Hr/>
       {[
-        {tag:"발매",   tagC:LIME,      date:"05.28",title:"새 싱글 발매"},
-        {tag:"예정",   tagC:"#ffcc44", date:"06.09",title:"정규앨범 7곡 발매"},
-        {tag:"라이브", tagC:"#ff88cc", date:"06.15",title:"유튜브 라이브"},
-        {tag:"채널",   tagC:"#aaaaff", date:"05.26",title:"구독자 401명 돌파"},
+        {tag:"채널",   tagC:"#ffcc44", date:"04.25",title:"유튜브 구독자 400명 돌파"},
+        {tag:"정규",   tagC:"#ff8b94",      date:"05.28",title:"[허수아비에게] 발매"},
+        {tag:"미니",   tagC:"#ffd3b6",      date:"05.28",title:"[SKIP] 발매"},
+        {tag:"싱글",   tagC:"#a8e6cf",      date:"05.28",title:"[두려운 것 투성이야, 세상은] 발매"},
+        {tag:"발매예정", tagC:"#ff88cc", date:"06.09",title:"[별 하나와 달 하나, 그리고 나의 마음] 발매 예정"},
+        
       ].map((n,i,arr)=>(
         <div key={i}>
           <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 18px"}}>
