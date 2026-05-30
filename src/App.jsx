@@ -320,6 +320,20 @@ const SUB_DATA = [
   {month:"5월",  subs:410},
 ];
 
+const PLATFORMS = [
+  { name:"Instagram", url:"instagram.com/happy__in", color:"#E1306C", icon:"📷" },
+  { name:"Facebook", url:"facebook.com/Happyin0", color:"#1877F2", icon:"📘" },
+  { name:"TikTok", url:"tiktok.com/@nightsky_theater", color:"#111", icon:"🎵" },
+  { name:"Melon", url:"melon.com/artist/...", color:"#00D564", icon:"🎧" },
+  { name:"Genie Music", url:"genie.co.kr/...", color:"#3DA5FF", icon:"🎧" },
+  { name:"FLO", url:"music-flo.com/...", color:"#7C4DFF", icon:"🎵" },
+  { name:"VIBE", url:"vibe.naver.com/...", color:"#00C73C", icon:"🎶" },
+  { name:"Bugs", url:"music.bugs.co.kr/...", color:"#FF3B30", icon:"🎧" },
+  { name:"YouTube Music", url:"music.youtube.com/...", color:"#FF0000", icon:"▶" },
+  { name:"Spotify", url:"open.spotify.com/artist/...", color:"#1DB954", icon:"🟢" },
+  { name:"Apple Music", url:"music.apple.com/...", color:"#FA2D48", icon:"🍎" }
+];
+
 const TIMELINE = [
   {year:"2025.09", tag:"싱글",   tagC:LIME,      desc:"첫 싱글 [그대였죠] 발매. 밤하늘극장의 첫 목소리"},
   {year:"2026.01", tag:"정규",   tagC:LIME,      desc:"[자발적으로 표류하는 우주비행사] 발매"},
@@ -762,39 +776,81 @@ function AboutTab({isPC}) {
   );
 
   // 🎧 스트리밍 링크
-  const Streaming = (
-    <G>
-      <SecHead title="스트리밍"/>
-      <div style={{display:"flex",gap:12,flexWrap:"wrap",marginTop:10}}>
+const Streaming = (
+  <G>
+    <SecHead title="링크" sub="Streaming & Social"/>
 
-        {[
-          {name:"YouTube", color:"#ff3b3b"},
-          {name:"Spotify", color:"#1DB954"},
-          {name:"Apple Music", color:"#ff2d55"},
-          {name:"SoundCloud", color:"#ff8800"}
-        ].map((p,i)=>(
-          <div key={i}
-            style={{
-              width:44,height:44,borderRadius:"50%",
+    <div style={{marginTop:12, display:"flex", flexDirection:"column", gap:10}}>
+
+      {PLATFORMS.map((p,i)=>(
+        <a
+          key={i}
+          href={"https://" + p.url}
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            display:"flex",
+            alignItems:"center",
+            justifyContent:"space-between",
+            padding:"12px 14px",
+            borderRadius:14,
+            background:"rgba(255,255,255,0.04)",
+            border:"1px solid rgba(255,255,255,0.06)",
+            textDecoration:"none",
+            transition:"all 0.2s ease",
+            position:"relative",
+            overflow:"hidden"
+          }}
+          onMouseEnter={e=>{
+            e.currentTarget.style.transform="translateX(4px)";
+            e.currentTarget.style.borderColor=p.color+"66";
+            e.currentTarget.style.background=p.color+"10";
+          }}
+          onMouseLeave={e=>{
+            e.currentTarget.style.transform="translateX(0)";
+            e.currentTarget.style.borderColor="rgba(255,255,255,0.06)";
+            e.currentTarget.style.background="rgba(255,255,255,0.04)";
+          }}
+        >
+
+          {/* LEFT */}
+          <div style={{display:"flex",alignItems:"center",gap:12}}>
+            <div style={{
+              width:34,height:34,
+              borderRadius:10,
               background:p.color+"22",
               border:`1px solid ${p.color}55`,
-              display:"flex",alignItems:"center",justifyContent:"center",
-              color:p.color,
-              fontSize:10,
-              fontWeight:800,
-              cursor:"pointer"
+              display:"flex",
+              alignItems:"center",
+              justifyContent:"center",
+              fontSize:16
             }}>
-            {p.name[0]}
+              {p.icon}
+            </div>
+
+            <div>
+              <p style={{margin:0,fontSize:13,fontWeight:800,color:white}}>
+                {p.name}
+              </p>
+              <p style={{margin:0,fontSize:10,color:muted}}>
+                Official Channel
+              </p>
+            </div>
           </div>
-        ))}
 
-      </div>
+          {/* RIGHT */}
+          <div style={{textAlign:"right"}}>
+            <p style={{margin:0,fontSize:11,color:p.color,fontWeight:700}}>
+              OPEN
+            </p>
+          </div>
 
-      <p style={{fontSize:10,color:muted,marginTop:10}}>
-        클릭 시 각 플랫폼으로 이동 (추후 링크 연결 가능)
-      </p>
-    </G>
-  );
+        </a>
+      ))}
+
+    </div>
+  </G>
+);
 
   // ✅ 항상 1단
   return (
