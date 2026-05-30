@@ -814,7 +814,7 @@ function MusicTab({isPC}) {
   if (selected !== null) {
     const alb=ALBUMS[selected], tr=alb.tracks[trackIdx];
     return (
-      <div style={{maxWidth:isPC?560:undefined,margin:isPC?"0 auto":undefined,display:"flex",flexDirection:"column",gap:10}}>
+      <div style={{maxWidth:isPC?900:undefined,margin:isPC?"0 auto":undefined,display:"flex",flexDirection:"column",gap:10}}>
         <button onClick={()=>{setSelected(null);setTrackIdx(0);}} style={{display:"flex",alignItems:"center",gap:6,background:"none",border:"none",cursor:"pointer",color:ACCENT,fontSize:13,fontFamily:"inherit",padding:0,marginBottom:4}}>← 음반 목록</button>
         <G acc>
           <div style={{textAlign:"center"}}>
@@ -848,7 +848,6 @@ function MusicTab({isPC}) {
                 <span style={{fontSize:10,color:j===trackIdx?ACCENT:muted,width:16,flexShrink:0}}>{t.n}</span>
                 <div style={{flex:1,minWidth:0}}>
                   <p style={{margin:"0 0 1px",fontSize:13,fontWeight:j===trackIdx?700:400,color:j===trackIdx?white:soft,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</p>
-                  {t.mood&&<p style={{margin:0,fontSize:10,color:muted,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontStyle:"italic"}}>{t.mood}</p>}
                 </div>
                 {j===trackIdx&&<span style={{fontSize:10,color:ACCENT,flexShrink:0}}>▶</span>}
               </div>
