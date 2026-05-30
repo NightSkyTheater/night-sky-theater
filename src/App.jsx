@@ -932,174 +932,354 @@ function MusicTab({isPC}) {
   );
 }
 
-import { useState } from "react";
-
-export default function NightSkyGuestbook() {
-  const [posts, setPosts] = useState([
-    { id: 1, text: "오늘 밤하늘 너무 예쁘다…" },
-    { id: 2, text: "여기 글 남기고 갑니다 ✨" },
-  ]);
-
-  const [input, setInput] = useState("");
-
-  const addPost = () => {
-    if (!input.trim()) return;
-
-    setPosts((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        text: input,
-      },
-    ]);
-
-    setInput("");
+// ── 방명록 완전 리뉴얼 ─────────────────────────────
+// 기존 GuestbookTab 함수 전체를 이걸로 교체하세요
+// 상단에 아래 상수들도 추가해주세요 (이미 있으면 스킵)
+ 
+const ADMIN_PW = "nightsky";
+ 
+const NAME_COLORS = [
+  "#B8FF00","#4f8ef7","#f87171","#a78bfa","#34d399",
+  "#fb923c","#f472b6","#60a5fa","#facc15","#2dd4bf"
+];
+function nameColor(name) {
+  let h = 0;
+  for (let c of name) h = (h * 31 + c.charCodeAt(0)) % NAME_COLORS.length;
+  return NAME_COLORS[Math.abs(h)];
+}
+ 
+const INIT_GB_NEW = [
+  {id:1,name:"새벽여행자",pw:"1234",msg:"우리들의 발라드 듣고 밤새 울었어요. 고맙습니다.",time:"05.25",likes:14,reply:"늦은 새벽에 함께해줘서 저도 고마워요 — 밤하늘극장"},
+  {id:2,name:"별빛수집가",pw:"1234",msg:"자발적으로 표류하는 우주비행사 진짜 제 얘기 같아요…",time:"05.24",likes:9,reply:""},
+  {id:3,name:"moonlight",pw:"1234",msg:"밤하늘극장 발견한 날이 올해 최고의 날이었어요",time:"05.23",likes:11,reply:"그 말이 저희한테도 최고의 댓글이에요 — 밤하늘극장"},
+];
+ 
+function GuestbookTab({isPC}) {
+  const [entries, setEntries] = useState(INIT_GB_NEW);
+  const [loaded, setLoaded] = useState(false);
+ 
+  // 입력
+  const [name, setName] = useState("");
+  const [pw, setPw] = useState("");
+  const [msg, setMsg] = useState("");
+  const [done, setDone] = useState(false);
+  const [inputOpen, setInputOpen] = useState(false);
+ 
+  // 수정
+  const [editId, setEditId] = useState(null);
+  const [editMsg, setEditMsg] = useState("");
+  const [editPw, setEditPw] = useState("");
+  const [editErr, setEditErr] = useState(false);
+ 
+  // 답글
+  const [replyId, setReplyId] = useState(null);
+  const [replyMsg, setReplyMsg] = useState("");
+  const [replyPw, setReplyPw] = useState("");
+  const [replyErr, setReplyErr] = useState(false);
+ 
+  const likedSet = useRef(new Set());
+  const nid = useRef(100);
+ 
+  // storage 로드
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const r = await window.storage.get("gb_entries", true);
+        if (r?.value) { const p = JSON.parse(r.value); if (Array.isArray(p) && p.length) setEntries(p); }
+      } catch(_) {}
+      try {
+        const r = await window.storage.get("gb_liked", true);
+        if (r?.value) JSON.parse(r.value).forEach(id => likedSet.current.add(id));
+      } catch(_) {}
+      try {
+        const r = await window.storage.get("gb_nid", true);
+        if (r?.value) nid.current = parseInt(r.value);
+      } catch(_) {}
+      setLoaded(true);
+    };
+    load();
+  }, []);
+ 
+  const saveAll = async (next) => {
+    try { await window.storage.set("gb_entries", JSON.stringify(next), true); } catch(_) {}
   };
-
+ 
+  const submit = async () => {
+    if (!name.trim() || !pw.trim() || !msg.trim()) return;
+    const now = new Date();
+    const time = `${String(now.getMonth()+1).padStart(2,"0")}.${String(now.getDate()).padStart(2,"0")}`;
+    const entry = { id: nid.current++, name: name.trim(), pw: pw.trim(), msg: msg.trim(), time, likes: 0, reply: "" };
+    const next = [entry, ...entries];
+    setEntries(next);
+    await saveAll(next);
+    try { await window.storage.set("gb_nid", String(nid.current), true); } catch(_) {}
+    setName(""); setPw(""); setMsg("");
+    setInputOpen(false);
+    setDone(true);
+    setTimeout(() => setDone(false), 2000);
+  };
+ 
+  const like = async (id) => {
+    if (likedSet.current.has(id)) return;
+    likedSet.current.add(id);
+    const next = entries.map(e => e.id === id ? {...e, likes: e.likes + 1} : e);
+    setEntries(next); await saveAll(next);
+    try { await window.storage.set("gb_liked", JSON.stringify([...likedSet.current]), true); } catch(_) {}
+  };
+ 
+  const subEdit = async (entry) => {
+    if (editPw !== entry.pw) { setEditErr(true); return; }
+    const next = entries.map(e => e.id === entry.id ? {...e, msg: editMsg} : e);
+    setEntries(next); await saveAll(next);
+    setEditId(null); setEditPw(""); setEditMsg(""); setEditErr(false);
+  };
+ 
+  const del = async (entry) => {
+    const v = window.prompt("비밀번호를 입력하세요");
+    if (v === entry.pw || v === ADMIN_PW) {
+      const next = entries.filter(e => e.id !== entry.id);
+      setEntries(next); await saveAll(next);
+    }
+  };
+ 
+  const subReply = async (entry) => {
+    if (replyPw !== ADMIN_PW) { setReplyErr(true); return; }
+    const next = entries.map(e => e.id === entry.id ? {...e, reply: replyMsg} : e);
+    setEntries(next); await saveAll(next);
+    setReplyId(null); setReplyPw(""); setReplyMsg(""); setReplyErr(false);
+  };
+ 
+  const IS = {
+    background:"rgba(255,255,255,0.07)",
+    border:"1px solid rgba(255,255,255,0.12)",
+    borderRadius:8,
+    color:white,
+    padding:"9px 12px",
+    fontSize:12,
+    outline:"none",
+    fontFamily:"inherit",
+    boxSizing:"border-box",
+    transition:"border-color 0.2s"
+  };
+  const fo = e => e.target.style.borderColor = "rgba(184,255,0,0.4)";
+  const bl = e => e.target.style.borderColor = "rgba(255,255,255,0.12)";
+ 
   return (
-    <div style={styles.wrap}>
-      {/* 밤하늘 배경 */}
-      <div style={styles.sky} />
-
-      {/* 별 효과 레이어 */}
-      <div style={styles.stars} />
-
-      {/* 메모 흐름 영역 */}
-      <div style={styles.feed}>
-        {posts.map((p, i) => (
-          <div
-            key={p.id}
+    <div style={{position:"relative",minHeight:"100%"}}>
+ 
+      {/* ── 타이틀 섹션 ── */}
+      <div style={{
+        marginBottom:32,
+        background:"rgba(255,255,255,0.04)",
+        backdropFilter:"blur(16px)",
+        WebkitBackdropFilter:"blur(16px)",
+        border:"1px solid rgba(255,255,255,0.08)",
+        borderRadius:16,
+        padding:"20px 20px 16px",
+      }}>
+        <p style={{fontSize:10,color:LIME,fontWeight:700,letterSpacing:"0.12em",margin:"0 0 6px",opacity:0.8}}>NIGHT SKY GUESTBOOK</p>
+        <p style={{fontSize:18,fontWeight:900,color:white,margin:"0 0 6px",letterSpacing:"-0.3px"}}>밤하늘에 남겨주세요</p>
+        <p style={{fontSize:12,color:muted,margin:0,lineHeight:1.75}}>
+          이 밤하늘은 당신의 말들로 채워집니다.<br/>
+          어떤 감정이든, 어떤 말이든 괜찮아요.
+        </p>
+        {done && (
+          <p style={{fontSize:11,color:LIME,margin:"10px 0 0",fontWeight:700,opacity:0.9}}>✓ 밤하늘에 새겨졌어요</p>
+        )}
+      </div>
+ 
+      {/* ── 메시지 목록 — 카드 없이 글씨만 ── */}
+      {!loaded ? (
+        <p style={{fontSize:12,color:muted,textAlign:"center",padding:"40px 0"}}>불러오는 중...</p>
+      ) : (
+        <div style={{
+          display:"flex",
+          flexDirection:"column",
+          gap:0,
+          // 하단 고정 입력창 높이만큼 패딩
+          paddingBottom: inputOpen ? 220 : 110
+        }}>
+          {entries.map((entry) => {
+            const nc = nameColor(entry.name);
+            const liked = likedSet.current.has(entry.id);
+            return (
+              <div key={entry.id} style={{
+                padding:"22px 4px 20px",
+                borderBottom:"1px solid rgba(255,255,255,0.05)",
+              }}>
+                {/* 닉네임 줄 */}
+                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
+                  <div style={{display:"flex",alignItems:"center",gap:8}}>
+                    <span style={{
+                      fontSize:13,fontWeight:800,color:nc,
+                      textShadow:`0 0 18px ${nc}55`
+                    }}>{entry.name}</span>
+                    <span style={{fontSize:10,color:"rgba(255,255,255,0.2)",fontFamily:"monospace"}}>{entry.time}</span>
+                  </div>
+                  <div style={{display:"flex",gap:10,alignItems:"center"}}>
+                    <button onClick={()=>{ setEditId(entry.id); setEditMsg(entry.msg); setEditPw(""); setEditErr(false); setReplyId(null); }} style={{fontSize:10,color:"rgba(255,255,255,0.2)",background:"none",border:"none",cursor:"pointer",padding:0,fontFamily:"inherit"}}>수정</button>
+                    <button onClick={()=>del(entry)} style={{fontSize:10,color:"rgba(255,80,80,0.3)",background:"none",border:"none",cursor:"pointer",padding:0,fontFamily:"inherit"}}>삭제</button>
+                    <button onClick={()=>{ setReplyId(entry.id); setReplyMsg(entry.reply||""); setReplyPw(""); setReplyErr(false); setEditId(null); }} style={{fontSize:10,color:"rgba(184,255,0,0.3)",background:"none",border:"none",cursor:"pointer",padding:0,fontFamily:"inherit"}}>답글</button>
+                  </div>
+                </div>
+ 
+                {/* 본문 */}
+                {editId === entry.id ? (
+                  <div style={{marginBottom:10}}>
+                    <textarea value={editMsg} onChange={e=>setEditMsg(e.target.value)} maxLength={150} rows={2}
+                      onFocus={fo} onBlur={bl}
+                      style={{...IS,width:"100%",resize:"none",marginBottom:6}}/>
+                    <div style={{display:"flex",gap:6}}>
+                      <input value={editPw} onChange={e=>setEditPw(e.target.value)} placeholder="비밀번호 확인" type="password"
+                        onFocus={fo} onBlur={bl} style={{...IS,flex:1}}/>
+                      <button onClick={()=>subEdit(entry)} style={{background:"rgba(255,255,255,0.07)",border:"1px solid rgba(255,255,255,0.12)",color:soft,borderRadius:8,padding:"8px 12px",fontSize:11,cursor:"pointer",fontFamily:"inherit"}}>저장</button>
+                      <button onClick={()=>setEditId(null)} style={{background:"none",border:"1px solid rgba(255,255,255,0.08)",color:muted,borderRadius:8,padding:"8px 9px",fontSize:11,cursor:"pointer",fontFamily:"inherit"}}>취소</button>
+                    </div>
+                    {editErr && <p style={{fontSize:11,color:"#ff6666",margin:"4px 0 0"}}>비밀번호가 틀렸어요</p>}
+                  </div>
+                ) : (
+                  <p style={{
+                    fontSize:14,
+                    color:"rgba(220,210,255,0.82)",
+                    margin:"0 0 12px",
+                    lineHeight:1.85,
+                    letterSpacing:"0.01em",
+                    whiteSpace:"pre-wrap"
+                  }}>{entry.msg}</p>
+                )}
+ 
+                {/* 관리자 답글 */}
+                {entry.reply && replyId !== entry.id && (
+                  <p style={{
+                    fontSize:12,
+                    color:`${LIME}88`,
+                    margin:"0 0 10px",
+                    lineHeight:1.75,
+                    paddingLeft:12,
+                    borderLeft:`2px solid ${LIME}30`,
+                  }}>
+                    <span style={{fontSize:10,color:LIME,fontWeight:700,marginRight:8,opacity:0.7}}>밤하늘극장</span>
+                    {entry.reply}
+                  </p>
+                )}
+ 
+                {/* 관리자 답글 입력 */}
+                {replyId === entry.id && (
+                  <div style={{marginBottom:10,paddingLeft:12,borderLeft:`2px solid ${LIME}30`}}>
+                    <textarea value={replyMsg} onChange={e=>setReplyMsg(e.target.value)} maxLength={200} rows={2}
+                      placeholder="답글 입력..." onFocus={fo} onBlur={bl}
+                      style={{...IS,width:"100%",resize:"none",marginBottom:6}}/>
+                    <div style={{display:"flex",gap:6}}>
+                      <input value={replyPw} onChange={e=>setReplyPw(e.target.value)} placeholder="관리자 비밀번호" type="password"
+                        onFocus={fo} onBlur={bl} style={{...IS,flex:1}}/>
+                      <button onClick={()=>subReply(entry)} style={{background:`${LIME}18`,border:`1px solid ${LIME}40`,color:LIME,borderRadius:8,padding:"8px 12px",fontSize:11,cursor:"pointer",fontFamily:"inherit",fontWeight:700}}>등록</button>
+                      <button onClick={()=>setReplyId(null)} style={{background:"none",border:"1px solid rgba(255,255,255,0.08)",color:muted,borderRadius:8,padding:"8px 9px",fontSize:11,cursor:"pointer",fontFamily:"inherit"}}>취소</button>
+                    </div>
+                    {replyErr && <p style={{fontSize:11,color:"#ff6666",margin:"4px 0 0"}}>관리자 비밀번호가 틀렸어요</p>}
+                  </div>
+                )}
+ 
+                {/* 좋아요 */}
+                <button
+                  onClick={() => like(entry.id)}
+                  style={{
+                    display:"flex",alignItems:"center",gap:5,
+                    background:"none",border:"none",
+                    cursor: liked ? "default" : "pointer",
+                    fontSize:12,
+                    color: liked ? "#ff6688" : "rgba(255,255,255,0.18)",
+                    fontFamily:"inherit",padding:0,
+                    transition:"color 0.2s"
+                  }}
+                >
+                  {liked ? "♥" : "♡"} <span style={{fontSize:11}}>{entry.likes}</span>
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      )}
+ 
+      {/* ── 하단 고정 입력창 ── */}
+      <div style={{
+        position:"fixed",
+        bottom:48, // 탭바 높이
+        left:"50%",
+        transform:"translateX(-50%)",
+        width:"100%",
+        maxWidth: isPC ? 900 : 430,
+        zIndex:150,
+        background:"rgba(8,4,28,0.72)",
+        backdropFilter:"blur(24px)",
+        WebkitBackdropFilter:"blur(24px)",
+        borderTop:"1px solid rgba(255,255,255,0.08)",
+        padding: inputOpen ? "14px 16px 10px" : "10px 16px 10px",
+        transition:"padding 0.2s"
+      }}>
+        {/* 입력 열렸을 때 */}
+        {inputOpen && (
+          <div style={{marginBottom:10}}>
+            <div style={{display:"flex",gap:8,marginBottom:8}}>
+              <input value={name} onChange={e=>setName(e.target.value)} onFocus={fo} onBlur={bl}
+                placeholder="닉네임" maxLength={12}
+                style={{...IS,width:86}}/>
+              <input value={pw} onChange={e=>setPw(e.target.value)} onFocus={fo} onBlur={bl}
+                placeholder="비밀번호" type="password" maxLength={20}
+                style={{...IS,flex:1}}/>
+            </div>
+            <textarea value={msg} onChange={e=>setMsg(e.target.value)} onFocus={fo} onBlur={bl}
+              placeholder="밤하늘에 남길 말을 적어주세요…" maxLength={150} rows={2}
+              style={{...IS,width:"100%",resize:"none",lineHeight:1.65}}/>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:6}}>
+              <span style={{fontSize:10,color:muted}}>{msg.length}/150</span>
+            </div>
+          </div>
+        )}
+ 
+        {/* 버튼 줄 */}
+        <div style={{display:"flex",gap:8}}>
+          <button
+            onClick={() => setInputOpen(o => !o)}
             style={{
-              ...styles.post,
-              opacity: 0.85 + (i % 3) * 0.05,
-              transform: `translateX(${(i % 2) * 10}px)`,
+              flex:1,
+              background:"rgba(255,255,255,0.05)",
+              border:"1px solid rgba(255,255,255,0.1)",
+              color: inputOpen ? muted : "rgba(220,210,255,0.5)",
+              borderRadius:10,
+              padding:"10px 0",
+              fontSize:12,
+              cursor:"pointer",
+              fontFamily:"inherit",
+              transition:"all 0.2s"
             }}
           >
-            ✦ {p.text}
-          </div>
-        ))}
-      </div>
-
-      {/* 하단 고정 UI (타이틀 + 입력창) */}
-      <div style={styles.bottomGlass}>
-        <div style={styles.title}>
-          🌌 밤하늘 방명록
-          <div style={styles.subtitle}>
-            이곳에 당신의 흔적을 남겨주세요
-          </div>
-        </div>
-
-        <div style={styles.inputRow}>
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="밤하늘에 글을 남겨보세요..."
-            style={styles.input}
-          />
-          <button onClick={addPost} style={styles.button}>
-            남기기
+            {inputOpen ? "닫기" : "✎  밤하늘에 남기기"}
           </button>
+          {inputOpen && (
+            <button
+              onClick={submit}
+              style={{
+                flexShrink:0,
+                background:`${LIME}18`,
+                border:`1px solid ${LIME}40`,
+                color:LIME,
+                borderRadius:10,
+                padding:"10px 20px",
+                fontSize:12,
+                fontWeight:700,
+                cursor:"pointer",
+                fontFamily:"inherit",
+                transition:"all 0.2s"
+              }}
+            >
+              남기기
+            </button>
+          )}
         </div>
       </div>
     </div>
   );
 }
-
-const styles = {
-  wrap: {
-    position: "relative",
-    height: "100vh",
-    overflow: "hidden",
-    fontFamily: "sans-serif",
-    color: "white",
-  },
-
-  sky: {
-    position: "absolute",
-    inset: 0,
-    background:
-      "radial-gradient(circle at 20% 20%, #1a1a40, transparent 40%)," +
-      "radial-gradient(circle at 80% 30%, #2b1b4d, transparent 45%)," +
-      "radial-gradient(circle at 50% 80%, #0d1020, #05060f)",
-  },
-
-  stars: {
-    position: "absolute",
-    inset: 0,
-    backgroundImage:
-      "radial-gradient(white 1px, transparent 1px)",
-    backgroundSize: "3px 3px",
-    opacity: 0.15,
-  },
-
-  feed: {
-    position: "absolute",
-    top: 0,
-    bottom: 120,
-    left: 0,
-    right: 0,
-    padding: "60px 20px",
-    overflowY: "auto",
-    display: "flex",
-    flexDirection: "column",
-    gap: "18px",
-  },
-
-  post: {
-    fontSize: "16px",
-    letterSpacing: "0.5px",
-    color: "rgba(255,255,255,0.9)",
-    textShadow: "0 0 10px rgba(255,255,255,0.15)",
-  },
-
-  bottomGlass: {
-    position: "fixed",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: "14px 16px",
-    backdropFilter: "blur(14px)",
-    background: "rgba(255,255,255,0.08)",
-    borderTop: "1px solid rgba(255,255,255,0.12)",
-  },
-
-  title: {
-    fontSize: "14px",
-    marginBottom: "8px",
-    opacity: 0.9,
-  },
-
-  subtitle: {
-    fontSize: "11px",
-    opacity: 0.6,
-    marginTop: "2px",
-  },
-
-  inputRow: {
-    display: "flex",
-    gap: "8px",
-  },
-
-  input: {
-    flex: 1,
-    padding: "10px 12px",
-    borderRadius: "10px",
-    border: "none",
-    outline: "none",
-    background: "rgba(0,0,0,0.3)",
-    color: "white",
-  },
-
-  button: {
-    padding: "10px 14px",
-    borderRadius: "10px",
-    border: "none",
-    background: "#B8FF00",
-    color: "#000",
-    fontWeight: "bold",
-    cursor: "pointer",
-  },
-};
  
 
 // ── APP ─────────────────────────────────────────────
