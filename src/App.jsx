@@ -688,114 +688,34 @@ const growth   = ((increase / prevSubs) * 100).toFixed(1);
 
 // ── 소개 ────────────────────────────────────────────
 function AboutTab({isPC}) {
-  const STREAMING = [
-    {
-      name: "YouTube",
-      color: "#FF0000",
-      bg: "rgba(255,0,0,0.12)",
-      border: "rgba(255,0,0,0.25)",
-      url: "https://www.youtube.com/@NightSkyTheater",
-      svg: (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="#FF0000">
-          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-        </svg>
-      )
-    },
-    {
-      name: "Melon",
-      color: "#00CD3C",
-      bg: "rgba(0,205,60,0.10)",
-      border: "rgba(0,205,60,0.25)",
-      url: "https://www.melon.com",
-      svg: (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-          <ellipse cx="12" cy="13" rx="9" ry="8" fill="#00CD3C"/>
-          <path d="M12 5C12 5 7 7 6 13" stroke="#fff" strokeWidth="1.5" strokeLinecap="round"/>
-          <path d="M12 5 Q14 2 17 3" stroke="#00CD3C" strokeWidth="2" strokeLinecap="round" fill="none"/>
-          <path d="M12 4.5 Q13.5 1.5 17.5 2.5" stroke="#4a4a4a" strokeWidth="1.3" strokeLinecap="round" fill="none"/>
-          <text x="12" y="15.5" textAnchor="middle" fill="#fff" fontSize="7" fontWeight="bold" fontFamily="sans-serif">melon</text>
-        </svg>
-      )
-    },
-    {
-      name: "Spotify",
-      color: "#1DB954",
-      bg: "rgba(29,185,84,0.10)",
-      border: "rgba(29,185,84,0.25)",
-      url: "https://open.spotify.com",
-      svg: (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="#1DB954">
-          <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-        </svg>
-      )
-    },
-    {
-      name: "Apple Music",
-      color: "#FA243C",
-      bg: "rgba(250,36,60,0.10)",
-      border: "rgba(250,36,60,0.25)",
-      url: "https://music.apple.com",
-      svg: (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="#FA243C">
-          <path d="M23.994 6.124a9.23 9.23 0 0 0-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 0 0-1.877-.726 10.496 10.496 0 0 0-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026C4.786.07 4.043.15 3.34.428 2.004.958 1.04 1.88.475 3.208a5.494 5.494 0 0 0-.39 1.548c-.04.27-.066.543-.077.817v13.5c.016.297.04.595.09.89.196 1.164.715 2.14 1.582 2.955.672.628 1.47 1.01 2.353 1.206.41.09.83.128 1.25.147l.484.019H18.44c.303-.012.604-.036.904-.084 1.07-.176 2.003-.651 2.76-1.42.58-.592.975-1.31 1.2-2.11.1-.36.158-.727.188-1.098.012-.15.02-.298.026-.448l.001-.139V6.124zm-7.54 5.897c-.044.057-.094.107-.148.154l-4.957 4.127a.826.826 0 0 1-.536.193.831.831 0 0 1-.536-1.465l4.423-3.68-4.423-3.68a.831.831 0 0 1 1.072-1.272l4.957 4.127c.055.047.105.097.148.154.104.137.166.308.166.496 0 .188-.062.358-.166.496v-.65z"/>
-        </svg>
-      )
-    },
-    {
-      name: "YouTube Music",
-      color: "#FF0000",
-      bg: "rgba(255,0,0,0.10)",
-      border: "rgba(255,0,0,0.22)",
-      url: "https://music.youtube.com",
-      svg: (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-          <circle cx="12" cy="12" r="12" fill="#FF0000"/>
-          <circle cx="12" cy="12" r="4.5" fill="white"/>
-          <circle cx="12" cy="12" r="2" fill="#FF0000"/>
-          <polygon points="10.5,9.5 15.5,12 10.5,14.5" fill="white"/>
-        </svg>
-      )
-    },
-    {
-      name: "Genie",
-      color: "#00A2E0",
-      bg: "rgba(0,162,224,0.10)",
-      border: "rgba(0,162,224,0.25)",
-      url: "https://www.genie.co.kr",
-      svg: (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-          <circle cx="12" cy="12" r="11" fill="#00A2E0"/>
-          <text x="12" y="16" textAnchor="middle" fill="#fff" fontSize="9.5" fontWeight="bold" fontFamily="sans-serif">genie</text>
-        </svg>
-      )
-    },
-    {
-      name: "Bugs",
-      color: "#FF5500",
-      bg: "rgba(255,85,0,0.10)",
-      border: "rgba(255,85,0,0.25)",
-      url: "https://music.bugs.co.kr",
-      svg: (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-          <circle cx="12" cy="12" r="11" fill="#FF5500"/>
-          <text x="12" y="16" textAnchor="middle" fill="#fff" fontSize="9" fontWeight="bold" fontFamily="sans-serif">bugs</text>
-        </svg>
-      )
-    },
-  ];
-
   const Hero = (
     <G style={{textAlign:"center",position:"relative",overflow:"hidden",padding:"26px 22px"}}>
       <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.08) 0%,transparent 70%)",pointerEvents:"none"}}/>
-      <div style={{width:68,height:68,borderRadius:"50%",background:LIME,margin:"0 auto 16px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:30,boxShadow:`0 0 28px ${LIME}44`,animation:"fl 4s ease-in-out infinite", fontFamily: EMOJI_FONT}}>🪐</div>
-      <p style={{fontSize:11,color:LIME,fontWeight:700,margin:"0 0 6px",letterSpacing:"0.1em"}}>NIGHT SKY THEATER</p>
-      <h2 style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 6px",fontFamily:"'Noto Serif KR',serif"}}>밤하늘극장</h2>
-      <p style={{fontSize:12,color:muted,margin:"0 0 16px",lineHeight:1.7}}>@NightSkyTheater · 구독자 401명 · 유통 (주)와이지플러스</p>
-      <Hr my={4}/>
-      <p style={{fontSize:13,color:soft,lineHeight:1.95,margin:"14px 0 0",textAlign:"left"}}>
+      <div style={{
+        width:68,height:68,borderRadius:"50%",
+        background:LIME,margin:"0 auto 16px",
+        display:"flex",alignItems:"center",justifyContent:"center",
+        fontSize:30,boxShadow:`0 0 28px ${LIME}44`,
+        fontFamily:EMOJI_FONT
+      }}>🪐</div>
+
+      <p style={{fontSize:11,color:LIME,fontWeight:700,margin:"0 0 6px",letterSpacing:"0.1em"}}>
+        NIGHT SKY THEATER
+      </p>
+
+      <h2 style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 6px"}}>
+        밤하늘극장
+      </h2>
+
+      <p style={{fontSize:12,color:muted,lineHeight:1.7}}>
+        @NightSkyTheater · 구독자 401명 · 유통 (주)와이지플러스
+      </p>
+
+      <Hr my={10}/>
+
+      <p style={{fontSize:13,color:soft,lineHeight:1.9,textAlign:"left"}}>
         감정이 흐르는 무대, 별빛 같은 노래가 머무는 곳.<br/>
-        <strong style={{color:white}}>유우레이</strong>와 <strong style={{color:white}}>임보성</strong>이 함께하는 감성 인디 프로젝트입니다.<br/>
-        어둠 속에서도 빛나는 별처럼, 위로가 필요한 새벽에 당신 곁에 머물고 싶습니다.
+        <strong style={{color:white}}>유우레이</strong>와 <strong style={{color:white}}>임보성</strong>이 함께하는 감성 인디 프로젝트입니다.
       </p>
     </G>
   );
@@ -804,70 +724,79 @@ function AboutTab({isPC}) {
     <G>
       <SecHead title="아티스트"/>
       {[
-        {name:"유우레이",role:"보컬 · 작사",desc:"목소리로 감정의 결을 만드는 사람. 밤하늘극장의 감성적 언어를 담당한다.", emoji:"🎤"},
-        {name:"임보성",role:"프로듀서 · 작곡",desc:"사운드로 세계관을 구축하는 사람. 밤하늘극장의 음악적 방향을 이끈다.", emoji:"🎹"},
+        {
+          name:"유우레이",
+          role:"보컬 · 작사",
+          desc:"목소리로 감정의 결을 만드는 사람.",
+          emoji:"🎤"
+        },
+        {
+          name:"임보성",
+          role:"프로듀서 · 작곡",
+          desc:"사운드로 세계관을 구축하는 사람.",
+          emoji:"🎹"
+        }
       ].map((a,i)=>(
         <div key={i} style={{marginBottom:i===0?16:0}}>
           <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}>
-            <div style={{width:40,height:40,borderRadius:"50%",background:"rgba(184,255,0,0.1)",border:"1px solid rgba(184,255,0,0.22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0,fontFamily:EMOJI_FONT}}>{a.emoji}</div>
+            <div style={{
+              width:40,height:40,borderRadius:"50%",
+              background:"rgba(184,255,0,0.1)",
+              border:"1px solid rgba(184,255,0,0.22)",
+              display:"flex",alignItems:"center",justifyContent:"center",
+              fontSize:18,fontFamily:EMOJI_FONT
+            }}>{a.emoji}</div>
+
             <div>
               <p style={{margin:0,fontSize:14,fontWeight:800,color:white}}>{a.name}</p>
-              <p style={{margin:0,fontSize:10,color:LIME,opacity:0.75,fontWeight:600}}>{a.role}</p>
+              <p style={{margin:0,fontSize:10,color:LIME,opacity:0.75}}>{a.role}</p>
             </div>
           </div>
-          <p style={{fontSize:12,color:muted,lineHeight:1.75,margin:0}}>{a.desc}</p>
-          {i===0&&<Hr my={14}/>}
+
+          <p style={{fontSize:12,color:muted,lineHeight:1.7,margin:0}}>
+            {a.desc}
+          </p>
         </div>
       ))}
     </G>
   );
 
+  // 🎧 스트리밍 링크
   const Streaming = (
     <G>
-      <SecHead title="음원 스트리밍" sub="밤하늘극장 음악 바로 듣기"/>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(4, 1fr)",gap:10,marginTop:14}}>
-        {STREAMING.map((s, i) => (
-          
-            key={i}
-            href={s.url}
-            target="_blank"
-            rel="noopener noreferrer"
+      <SecHead title="스트리밍"/>
+      <div style={{display:"flex",gap:12,flexWrap:"wrap",marginTop:10}}>
+
+        {[
+          {name:"YouTube", color:"#ff3b3b"},
+          {name:"Spotify", color:"#1DB954"},
+          {name:"Apple Music", color:"#ff2d55"},
+          {name:"SoundCloud", color:"#ff8800"}
+        ].map((p,i)=>(
+          <div key={i}
             style={{
-              display:"flex",
-              flexDirection:"column",
-              alignItems:"center",
-              gap:7,
-              padding:"14px 8px 12px",
-              background:s.bg,
-              border:`1px solid ${s.border}`,
-              borderRadius:14,
-              textDecoration:"none",
-              transition:"all 0.2s",
-              cursor:"pointer",
-            }}
-            onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-3px)";e.currentTarget.style.boxShadow=`0 8px 20px ${s.color}22`;}}
-            onMouseLeave={e=>{e.currentTarget.style.transform="translateY(0)";e.currentTarget.style.boxShadow="none";}}
-          >
-            <div style={{
-              width:44,
-              height:44,
-              borderRadius:"50%",
-              background:"rgba(0,0,0,0.25)",
-              border:`1.5px solid ${s.border}`,
-              display:"flex",
-              alignItems:"center",
-              justifyContent:"center",
-              flexShrink:0,
+              width:44,height:44,borderRadius:"50%",
+              background:p.color+"22",
+              border:`1px solid ${p.color}55`,
+              display:"flex",alignItems:"center",justifyContent:"center",
+              color:p.color,
+              fontSize:10,
+              fontWeight:800,
+              cursor:"pointer"
             }}>
-              {s.svg}
-            </div>
-            <span style={{fontSize:10,color:soft,fontWeight:600,textAlign:"center",lineHeight:1.3,whiteSpace:"nowrap"}}>{s.name}</span>
-          </a>
+            {p.name[0]}
+          </div>
         ))}
+
       </div>
+
+      <p style={{fontSize:10,color:muted,marginTop:10}}>
+        클릭 시 각 플랫폼으로 이동 (추후 링크 연결 가능)
+      </p>
     </G>
   );
 
+  // ✅ 항상 1단
   return (
     <div style={{display:"flex",flexDirection:"column",gap:10}}>
       {Hero}
