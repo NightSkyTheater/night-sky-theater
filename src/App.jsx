@@ -512,7 +512,7 @@ function HomeTab({isPC}) {
       {track&&<>
         <p style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 6px",lineHeight:1.3,letterSpacing:"-0.3px"}}>{track.title}</p>
         <p style={{fontSize:12,color:muted,margin:"0 0 10px"}}>{track.album}</p>
-        {track.mood&&<p style={{fontSize:13,color:`${LIME}88`,margin:0,fontFamily:"'Noto Serif KR',serif",transform: "skewX(-6deg)",
+        {track.mood&&<p style={{fontSize:13,color:`${LIME}88`,margin:0,fontFamily:"'Noto Serif KR',serif",transform: "skewX(-12deg)",
 display: "inline-block",whiteSpace:"pre-line"}}>"{track.mood}"</p>}
       </>}
     </G>
