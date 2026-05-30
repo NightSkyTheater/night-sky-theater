@@ -361,7 +361,7 @@ function Stars() {
   );
 }
 
-const G = ({children,acc,pad="16px 18px",style={}}) => (
+const G = ({children,acc,pad="20px 18px 16px",style={}}) => (
   <div style={{background:acc?"rgba(184,255,0,0.07)":glass,backdropFilter:"blur(24px)",WebkitBackdropFilter:"blur(24px)",border:`1px solid ${acc?"rgba(184,255,0,0.2)":gb}`,borderRadius:16,padding:pad,...style}}>
     {children}
   </div>
@@ -534,7 +534,7 @@ display: "inline-block",whiteSpace:"pre-line"}}>"{track.mood}"</p>}
           <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 18px"}}>
             <div style={{width:56,flexShrink:0}}><Tag c={n.tagC}>{n.tag}</Tag></div>
             <span style={{width:44,flexShrink:0,fontSize:11,color:"rgba(220,210,255,0.75)",fontWeight:600}}>{n.date}</span>
-            <p style={{margin:0,fontSize:13,fontWeight:600,color:white,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1}}>{n.title}</p>
+            <p style={{margin:0,fontSize:13,fontWeight:500,color:white,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1}}>{n.title}</p>
           </div>
           {i<arr.length-1&&<Hr/>}
         </div>
@@ -548,7 +548,7 @@ const increase = currentSubs - prevSubs;
 const growth   = ((increase / prevSubs) * 100).toFixed(1);
   const SubSection = (
     <G>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
         <SecHead title="유튜브 채널 분석" sub="최근 7개월 기준"/>
         <div style={{textAlign:"right"}}>
           <p style={{fontSize:20,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>410</p>
