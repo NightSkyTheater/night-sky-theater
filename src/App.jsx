@@ -777,17 +777,33 @@ function MusicTab({isPC}) {
   );
 }
 
+// ── 방명록 (Firebase 버전) ─────────────────────────────
+
+import { useState, useEffect, useRef } from "react";
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  query,
+  orderBy,
+  onSnapshot,
+} from "firebase/firestore";
+import { db } from "./firebase";
+
 function timeAgo(date) {
   if (!date) return "";
+
   const now = new Date();
   const diff = Math.floor((now - date) / 1000);
+
   if (diff < 60) return "방금 전";
   if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
   if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
+
   return date.toLocaleDateString("ko-KR");
 }
 
-// 💡 export default 제거
 function GuestbookTab() {
   const [entries, setEntries] = useState([]);
   const [name, setName] = useState("");
@@ -795,11 +811,15 @@ function GuestbookTab() {
   const [msg, setMsg] = useState("");
   const [animId, setAnimId] = useState(null);
 
+  const nid = useRef(1);
+
+  // 🌍 실시간 데이터 (핵심: onSnapshot)
   useEffect(() => {
     const q = query(
       collection(db, "guestbook"),
       orderBy("createdAt", "desc")
     );
+
     const unsub = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((d) => ({
         id: d.id,
@@ -807,11 +827,14 @@ function GuestbookTab() {
       }));
       setEntries(data);
     });
+
     return () => unsub();
   }, []);
 
+  // ✍️ 글 작성 (애니메이션 포함)
   const submit = async () => {
     if (!name.trim() || !pw.trim() || !msg.trim()) return;
+
     const newEntry = {
       name: name.trim(),
       pw: pw.trim(),
@@ -823,17 +846,24 @@ function GuestbookTab() {
       ],
       createdAt: new Date(),
     };
+
     const docRef = await addDoc(collection(db, "guestbook"), newEntry);
+
+    // 🌠 생성 애니메이션 트리거
     setAnimId(docRef.id);
+
     setName("");
     setPw("");
     setMsg("");
+
     setTimeout(() => setAnimId(null), 1000);
   };
 
+  // 🗑 삭제
   const del = async (entry) => {
     const input = window.prompt("비밀번호를 입력하세요");
     if (!input) return;
+
     if (input === entry.pw) {
       await deleteDoc(doc(db, "guestbook", entry.id));
     } else {
@@ -842,12 +872,32 @@ function GuestbookTab() {
   };
 
   return (
-    <div style={{ position: "relative", minHeight: "85vh", color: "#fff", overflow: "hidden" }}>
-      <div style={{ padding: "16px", textAlign: "center", background: "rgba(255,255,255,0.05)", backdropFilter: "blur(10px)", borderRadius: "16px", margin: "10px" }}>
+    <div
+      style={{
+        position: "relative",
+        minHeight: "85vh",
+        color: "#fff",
+        overflow: "hidden",
+      }}
+    >
+      {/* 🌌 헤더 */}
+      <div
+        style={{
+          padding: "16px",
+          textAlign: "center",
+          background: "rgba(255,255,255,0.05)",
+          backdropFilter: "blur(10px)",
+          borderRadius: "16px",
+          margin: "10px",
+        }}
+      >
         <h2 style={{ margin: 0 }}>🌌 밤하늘 방명록</h2>
-        <p style={{ fontSize: "12px", opacity: 0.6 }}>당신의 한 줄이 별이 됩니다</p>
+        <p style={{ fontSize: "12px", opacity: 0.6 }}>
+          당신의 한 줄이 별이 됩니다
+        </p>
       </div>
 
+      {/* ⭐ 낙서 영역 */}
       <div style={{ position: "relative", minHeight: "60vh" }}>
         {entries.map((e) => (
           <div
@@ -860,13 +910,24 @@ function GuestbookTab() {
               maxWidth: "220px",
               padding: "10px",
               cursor: "pointer",
-              animation: animId === e.id ? "fallStar 1s ease-out" : "float 4s ease-in-out infinite",
+              animation:
+                animId === e.id
+                  ? "fallStar 1s ease-out"
+                  : "float 4s ease-in-out infinite",
               transition: "all 0.3s",
             }}
           >
-            <div style={{ fontSize: "13px", color: e.color || "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.8)", whiteSpace: "pre-line" }}>
+            <div
+              style={{
+                fontSize: "13px",
+                color: e.color || "#fff",
+                textShadow: "0 2px 6px rgba(0,0,0,0.8)",
+                whiteSpace: "pre-line",
+              }}
+            >
               {e.msg}
             </div>
+
             <div style={{ fontSize: "10px", opacity: 0.6 }}>
               {e.name} · {timeAgo(e.createdAt?.toDate?.() || e.createdAt)}
             </div>
@@ -874,32 +935,95 @@ function GuestbookTab() {
         ))}
       </div>
 
-      <div style={{ position: "fixed", bottom: "50px", left: "50%", transform: "translateX(-50%)", width: "90%", maxWidth: "500px", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(12px)", padding: "12px", borderRadius: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>
+      {/* ✍️ 입력 */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: "50px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "90%",
+          maxWidth: "500px",
+          background: "rgba(255,255,255,0.08)",
+          backdropFilter: "blur(12px)",
+          padding: "12px",
+          borderRadius: "16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+        }}
+      >
         <div style={{ display: "flex", gap: "6px" }}>
-          <input placeholder="이름" value={name} onChange={(e) => setName(e.target.value)} style={{ flex: 1 }} />
-          <input placeholder="비밀번호" type="password" value={pw} onChange={(e) => setPw(e.target.value)} style={{ flex: 1 }} />
+          <input
+            placeholder="이름"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            style={{ flex: 1 }}
+          />
+          <input
+            placeholder="비밀번호"
+            type="password"
+            value={pw}
+            onChange={(e) => setPw(e.target.value)}
+            style={{ flex: 1 }}
+          />
         </div>
-        <textarea placeholder="밤하늘에 남길 이야기..." value={msg} onChange={(e) => setMsg(e.target.value)} rows={2} />
+
+        <textarea
+          placeholder="밤하늘에 남길 이야기..."
+          value={msg}
+          onChange={(e) => setMsg(e.target.value)}
+          rows={2}
+        />
+
         <button onClick={submit}>🌠 남기기</button>
       </div>
 
+      {/* 🎨 애니메이션 */}
       <style>{`
         @keyframes float {
           0% { transform: translateY(0px); }
           50% { transform: translateY(-6px); }
           100% { transform: translateY(0px); }
         }
+
         @keyframes fallStar {
-          0% { transform: translateY(-40px) scale(0.5); opacity: 0; }
-          50% { opacity: 1; }
-          100% { transform: translateY(0px) scale(1); }
+          0% {
+            transform: translateY(-40px) scale(0.5);
+            opacity: 0;
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(0px) scale(1);
+          }
         }
-        input, textarea { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: white; padding: 8px; outline: none; }
-        button { background: white; color: black; border: none; padding: 8px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        input, textarea {
+          background: rgba(255,255,255,0.15);
+          border: 1px solid rgba(255,255,255,0.2);
+          border-radius: 8px;
+          color: white;
+          padding: 8px;
+          outline: none;
+        }
+
+        button {
+          background: white;
+          color: black;
+          border: none;
+          padding: 8px;
+          border-radius: 8px;
+          font-weight: bold;
+          cursor: pointer;
+        }
       `}</style>
     </div>
   );
 }
+
+export default GuestbookTab;
 
 // ── APP (메인 컴포넌트 하나만 단일 Export Default) ───────────────────
 export default function App() {
