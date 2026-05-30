@@ -1025,10 +1025,7 @@ useEffect(() => {
     <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)",color:white,fontFamily:"'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif",position:"relative"}}>
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-        <script
-  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"
-  async
-/>
+        
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
         @keyframes fl    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
         @keyframes pulse { 0%,100%{opacity:.15} 50%{opacity:1} }
