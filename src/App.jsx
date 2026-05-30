@@ -370,7 +370,7 @@ const G = ({children,acc,pad="16px 18px",style={}}) => (
 const Hr = ({my=0}) => <div style={{height:1,background:gb,margin:`${my}px 0`}}/>;
 
 const Tag = ({c=LIME,children}) => (
-  <span style={{fontSize:9,fontWeight:700,letterSpacing:"0.05em",padding:"2px 8px",borderRadius:20,color:c,background:`${c}18`,border:`1px solid ${c}38`,whiteSpace:"nowrap"}}>{children}</span>
+  <span style={{fontSize:9,fontWeight:700,letterSpacing:"0.05em",padding:"5px 10px",borderRadius:20,color:c,background:`${c}18`,border:`1px solid ${c}38`,whiteSpace:"nowrap"}}>{children}</span>
 );
 
 const SecHead = ({title,sub}) => (
@@ -729,13 +729,13 @@ function AboutTab({isPC}) {
       <div style={{padding:"10px 18px 16px",position:"relative"}}>
         <div style={{position:"absolute",left:30,top:14,bottom:14,width:1,background:`linear-gradient(to bottom,${ACCENT}55,transparent)`}}/>
         {TIMELINE.map((t,i)=>(
-          <div key={i} style={{display:"flex",gap:14,marginBottom:i<TIMELINE.length-1?20:0}}>
+          <div key={i} style={{display:"flex",gap:14,textAlign:"left",marginBottom:i<TIMELINE.length-1?20:0}}>
             <div style={{flexShrink:0,width:26,display:"flex",flexDirection:"column",alignItems:"center",zIndex:1,paddingTop:4}}>
               <div style={{width:10,height:10,borderRadius:"50%",background:t.tag==="예정"?"#f59e0b":ACCENT,border:`2px solid ${t.tag==="예정"?"#f59e0b":ACCENT}`,boxShadow:t.tag==="예정"?`0 0 8px #f59e0b88`:`0 0 6px ${ACCENT}55`}}/>
             </div>
             <div style={{flex:1}}>
-              <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:4,flexWrap:"wrap"}}>
-                <span style={{fontSize:10,color:ACCENT,fontWeight:700,opacity:0.75}}>{t.year}</span>
+              <div style={{display:"block",alignItems:"center",gap:7,marginBottom:4,flexWrap:"wrap"}}>
+                <span style={{fontSize:10,color:ACCENT,fontWeight:700,opacity:0.75,marginRight:10}}>{t.year}</span>
                 <Tag c={t.tagC}>{t.tag}</Tag>
               </div>
               <p style={{fontSize:12,color:soft,margin:0,lineHeight:1.7}}>{t.desc}</p>
