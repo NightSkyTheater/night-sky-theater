@@ -913,90 +913,90 @@ import { useState, useEffect, useRef } from "react";
 import {
   collection,
   addDoc,
-  getDocs,
   deleteDoc,
   doc,
-  orderBy,
   query,
+  orderBy,
+  onSnapshot,
 } from "firebase/firestore";
 import { db } from "./firebase";
 
-function GuestbookTab({ isPC }) {
+function timeAgo(date) {
+  if (!date) return "";
+
+  const now = new Date();
+  const diff = Math.floor((now - date) / 1000);
+
+  if (diff < 60) return "방금 전";
+  if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
+
+  return date.toLocaleDateString("ko-KR");
+}
+
+function GuestbookTab() {
   const [entries, setEntries] = useState([]);
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
-  const [done, setDone] = useState(false);
+  const [animId, setAnimId] = useState(null);
 
-  const nid = useRef(4);
+  const nid = useRef(1);
 
-  // ── 데이터 불러오기 ─────────────────────────────
-  const fetchEntries = async () => {
+  // 🌍 실시간 데이터 (핵심: onSnapshot)
+  useEffect(() => {
     const q = query(
       collection(db, "guestbook"),
       orderBy("createdAt", "desc")
     );
 
-    const snapshot = await getDocs(q);
+    const unsub = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+      }));
+      setEntries(data);
+    });
 
-    setEntries(
-      snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }))
-    );
-  };
-
-  // 최초 로딩
-  useEffect(() => {
-    fetchEntries();
+    return () => unsub();
   }, []);
 
-  const inputStyle = {
-    background: "rgba(255, 255, 255, 0.15)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
-    borderRadius: "8px",
-    color: "#ffffff",
-    padding: "8px 12px",
-    fontSize: "12px",
-    outline: "none",
-    fontFamily: "inherit",
-  };
-
-  // ── 글 작성 (Firebase 저장) ─────────────────────────────
+  // ✍️ 글 작성 (애니메이션 포함)
   const submit = async () => {
     if (!name.trim() || !pw.trim() || !msg.trim()) return;
 
-    await addDoc(collection(db, "guestbook"), {
+    const newEntry = {
       name: name.trim(),
       pw: pw.trim(),
       msg: msg.trim(),
-      time: new Date().toLocaleDateString("ko-KR"),
-      x: Math.floor(Math.random() * 65) + 10,
-      y: Math.floor(Math.random() * 55) + 5,
+      x: Math.random() * 70 + 10,
+      y: Math.random() * 60 + 10,
       color: ["#fff", "#ffe4e1", "#e0ffff", "#f0fff0", "#fffacd"][
         Math.floor(Math.random() * 5)
       ],
       createdAt: new Date(),
-    });
+    };
+
+    const docRef = await addDoc(collection(db, "guestbook"), newEntry);
+
+    // 🌠 생성 애니메이션 트리거
+    setAnimId(docRef.id);
 
     setName("");
     setPw("");
     setMsg("");
-    setDone(true);
-    setTimeout(() => setDone(false), 2000);
 
-    fetchEntries(); // 다시 불러오기
+    setTimeout(() => setAnimId(null), 1000);
   };
 
-  // ── 삭제 ─────────────────────────────
+  // 🗑 삭제
   const del = async (entry) => {
-    const v = window.prompt("비밀번호를 입력하세요");
+    const input = window.prompt("비밀번호를 입력하세요");
+    if (!input) return;
 
-    if (v === entry.pw) {
+    if (input === entry.pw) {
       await deleteDoc(doc(db, "guestbook", entry.id));
-      fetchEntries();
-    } else if (v !== null) {
+    } else {
       alert("비밀번호가 틀렸습니다.");
     }
   };
@@ -1006,46 +1006,33 @@ function GuestbookTab({ isPC }) {
       style={{
         position: "relative",
         minHeight: "85vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
         color: "#fff",
+        overflow: "hidden",
       }}
     >
-      {/* 헤더 */}
+      {/* 🌌 헤더 */}
       <div
         style={{
           padding: "16px",
-          background: "rgba(255, 255, 255, 0.03)",
-          backdropFilter: "blur(4px)",
-          WebkitBackdropFilter: "blur(4px)",
-          borderRadius: "16px",
-          border: "1px solid rgba(255, 255, 255, 0.05)",
           textAlign: "center",
-          zIndex: 2,
+          background: "rgba(255,255,255,0.05)",
+          backdropFilter: "blur(10px)",
+          borderRadius: "16px",
+          margin: "10px",
         }}
       >
-        <h2 style={{ margin: 0, fontSize: "16px", fontWeight: 600 }}>
-          밤하늘 낙서장
-        </h2>
-        <p style={{ fontSize: "12px", opacity: 0.6, margin: 0 }}>
-          밤하늘에 지워지지 않을 당신의 한 줄을 남겨주세요.
+        <h2 style={{ margin: 0 }}>🌌 밤하늘 방명록</h2>
+        <p style={{ fontSize: "12px", opacity: 0.6 }}>
+          당신의 한 줄이 별이 됩니다
         </p>
       </div>
 
-      {/* 낙서 영역 */}
-      <div
-        style={{
-          position: "relative",
-          flex: 1,
-          minHeight: "400px",
-          marginTop: "20px",
-          marginBottom: "180px",
-        }}
-      >
+      {/* ⭐ 낙서 영역 */}
+      <div style={{ position: "relative", minHeight: "60vh" }}>
         {entries.map((e) => (
           <div
             key={e.id}
+            onClick={() => del(e)}
             style={{
               position: "absolute",
               left: `${e.x}%`,
@@ -1053,101 +1040,113 @@ function GuestbookTab({ isPC }) {
               maxWidth: "220px",
               padding: "10px",
               cursor: "pointer",
-              animation: "floatAnimation 4s ease-in-out infinite",
-            }}
-            onClick={() => {
-              if (window.confirm("이 낙서를 삭제하시겠습니까?")) del(e);
+              animation:
+                animId === e.id
+                  ? "fallStar 1s ease-out"
+                  : "float 4s ease-in-out infinite",
+              transition: "all 0.3s",
             }}
           >
-            <p
+            <div
               style={{
-                margin: 0,
                 fontSize: "13px",
-                lineHeight: 1.5,
                 color: e.color || "#fff",
                 textShadow: "0 2px 6px rgba(0,0,0,0.8)",
                 whiteSpace: "pre-line",
               }}
             >
               {e.msg}
-            </p>
+            </div>
 
-            <div style={{ fontSize: "10px", opacity: 0.5, marginTop: "4px" }}>
-              by {e.name} · {e.time}
+            <div style={{ fontSize: "10px", opacity: 0.6 }}>
+              {e.name} · {timeAgo(e.createdAt?.toDate?.() || e.createdAt)}
             </div>
           </div>
         ))}
       </div>
 
-      {/* 입력창 */}
+      {/* ✍️ 입력 */}
       <div
         style={{
           position: "fixed",
-          bottom: "60px",
+          bottom: "50px",
           left: "50%",
           transform: "translateX(-50%)",
-          width: "calc(100% - 32px)",
+          width: "90%",
           maxWidth: "500px",
-          background: "rgba(255, 255, 255, 0.08)",
+          background: "rgba(255,255,255,0.08)",
           backdropFilter: "blur(12px)",
-          borderRadius: "20px",
-          border: "1px solid rgba(255, 255, 255, 0.15)",
-          padding: "14px",
-          zIndex: 10,
+          padding: "12px",
+          borderRadius: "16px",
           display: "flex",
           flexDirection: "column",
           gap: "8px",
         }}
       >
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div style={{ display: "flex", gap: "6px" }}>
           <input
+            placeholder="이름"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="이름"
-            style={{ ...inputStyle, width: "90px" }}
+            style={{ flex: 1 }}
           />
           <input
-            value={pw}
-            onChange={(e) => setPw(e.target.value)}
             placeholder="비밀번호"
             type="password"
-            style={{ ...inputStyle, flex: 1 }}
+            value={pw}
+            onChange={(e) => setPw(e.target.value)}
+            style={{ flex: 1 }}
           />
-          <button
-            onClick={submit}
-            style={{
-              padding: "0 16px",
-              borderRadius: "8px",
-              border: "none",
-              background: done ? "#baffc9" : "#fff",
-              color: "#000",
-              fontWeight: 700,
-              fontSize: "12px",
-            }}
-          >
-            {done ? "완료 ✨" : "남기기"}
-          </button>
         </div>
 
         <textarea
+          placeholder="밤하늘에 남길 이야기..."
           value={msg}
           onChange={(e) => setMsg(e.target.value)}
-          placeholder="밤하늘에 남길 이야기..."
           rows={2}
-          style={{
-            ...inputStyle,
-            width: "100%",
-            resize: "none",
-            background: "rgba(0,0,0,0.2)",
-          }}
         />
+
+        <button onClick={submit}>🌠 남기기</button>
       </div>
 
+      {/* 🎨 애니메이션 */}
       <style>{`
-        @keyframes floatAnimation {
+        @keyframes float {
           0% { transform: translateY(0px); }
           50% { transform: translateY(-6px); }
           100% { transform: translateY(0px); }
+        }
+
+        @keyframes fallStar {
+          0% {
+            transform: translateY(-40px) scale(0.5);
+            opacity: 0;
+          }
+          50% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(0px) scale(1);
+          }
+        }
+
+        input, textarea {
+          background: rgba(255,255,255,0.15);
+          border: 1px solid rgba(255,255,255,0.2);
+          border-radius: 8px;
+          color: white;
+          padding: 8px;
+          outline: none;
+        }
+
+        button {
+          background: white;
+          color: black;
+          border: none;
+          padding: 8px;
+          border-radius: 8px;
+          font-weight: bold;
+          cursor: pointer;
         }
       `}</style>
     </div>
