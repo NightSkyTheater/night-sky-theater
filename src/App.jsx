@@ -936,347 +936,226 @@ function MusicTab({isPC}) {
 // 기존 GuestbookTab 함수 전체를 이걸로 교체하세요
 // 상단에 아래 상수들도 추가해주세요 (이미 있으면 스킵)
  
-const ADMIN_PW = "nightsky";
- 
-const NAME_COLORS = [
-  "#B8FF00","#4f8ef7","#f87171","#a78bfa","#34d399",
-  "#fb923c","#f472b6","#60a5fa","#facc15","#2dd4bf"
+import React, { useState, useRef } from "react";
+
+// 가상의 초기 데이터 (위치 랜덤 배치를 위한 x, y 좌표값 추가)
+const INIT_GB = [
+  { id: 1, name: "레이니돌", msg: "신기한 기능이네요. :)", time: "2026. 05. 30", x: 15, y: 12, color: "#ffb3ba" },
+  { id: 2, name: "올드비", msg: "와우 정말 좋은 프로그램이네요.\n부담없이 쓸 수 있을 것 같아요.", time: "2026. 05. 30", x: 45, y: 25, color: "#baffc9" },
+  { id: 3, name: "얼리어답터", msg: "이거 재미있네요..! :) 저도 하나 달아볼까나?", time: "2026. 05. 30", x: 20, y: 50, color: "#bae1ff" },
 ];
-function nameColor(name) {
-  let h = 0;
-  for (let c of name) h = (h * 31 + c.charCodeAt(0)) % NAME_COLORS.length;
-  return NAME_COLORS[Math.abs(h)];
-}
- 
-const INIT_GB_NEW = [
-  {id:1,name:"새벽여행자",pw:"1234",msg:"우리들의 발라드 듣고 밤새 울었어요. 고맙습니다.",time:"05.25",likes:14,reply:"늦은 새벽에 함께해줘서 저도 고마워요 — 밤하늘극장"},
-  {id:2,name:"별빛수집가",pw:"1234",msg:"자발적으로 표류하는 우주비행사 진짜 제 얘기 같아요…",time:"05.24",likes:9,reply:""},
-  {id:3,name:"moonlight",pw:"1234",msg:"밤하늘극장 발견한 날이 올해 최고의 날이었어요",time:"05.23",likes:11,reply:"그 말이 저희한테도 최고의 댓글이에요 — 밤하늘극장"},
-];
- 
-function GuestbookTab({isPC}) {
-  const [entries, setEntries] = useState(INIT_GB_NEW);
-  const [loaded, setLoaded] = useState(false);
- 
-  // 입력
+
+export default function GuestbookTab({ isPC }) {
+  const [entries, setEntries] = useState(INIT_GB);
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState(false);
-  const [inputOpen, setInputOpen] = useState(false);
- 
-  // 수정
-  const [editId, setEditId] = useState(null);
-  const [editMsg, setEditMsg] = useState("");
-  const [editPw, setEditPw] = useState("");
-  const [editErr, setEditErr] = useState(false);
- 
-  // 답글
-  const [replyId, setReplyId] = useState(null);
-  const [replyMsg, setReplyMsg] = useState("");
-  const [replyPw, setReplyPw] = useState("");
-  const [replyErr, setReplyErr] = useState(false);
- 
-  const likedSet = useRef(new Set());
-  const nid = useRef(100);
- 
-  // storage 로드
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const r = await window.storage.get("gb_entries", true);
-        if (r?.value) { const p = JSON.parse(r.value); if (Array.isArray(p) && p.length) setEntries(p); }
-      } catch(_) {}
-      try {
-        const r = await window.storage.get("gb_liked", true);
-        if (r?.value) JSON.parse(r.value).forEach(id => likedSet.current.add(id));
-      } catch(_) {}
-      try {
-        const r = await window.storage.get("gb_nid", true);
-        if (r?.value) nid.current = parseInt(r.value);
-      } catch(_) {}
-      setLoaded(true);
-    };
-    load();
-  }, []);
- 
-  const saveAll = async (next) => {
-    try { await window.storage.set("gb_entries", JSON.stringify(next), true); } catch(_) {}
+
+  const nid = useRef(4);
+
+  // 공통 인풋 스타일
+  const inputStyle = {
+    background: "rgba(255, 255, 255, 0.15)",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    borderRadius: "8px",
+    color: "#ffffff",
+    padding: "8px 12px",
+    fontSize: "12px",
+    outline: "none",
+    fontFamily: "inherit",
   };
- 
-  const submit = async () => {
+
+  // 등록 핸들러
+  const submit = () => {
     if (!name.trim() || !pw.trim() || !msg.trim()) return;
-    const now = new Date();
-    const time = `${String(now.getMonth()+1).padStart(2,"0")}.${String(now.getDate()).padStart(2,"0")}`;
-    const entry = { id: nid.current++, name: name.trim(), pw: pw.trim(), msg: msg.trim(), time, likes: 0, reply: "" };
-    const next = [entry, ...entries];
-    setEntries(next);
-    await saveAll(next);
-    try { await window.storage.set("gb_nid", String(nid.current), true); } catch(_) {}
-    setName(""); setPw(""); setMsg("");
-    setInputOpen(false);
+
+    setEntries((p) => [
+      ...p,
+      {
+        id: nid.current++,
+        name: name.trim(),
+        pw: pw.trim(),
+        msg: msg.trim(),
+        time: new Date().toLocaleDateString("ko-KR").slice(0, -1),
+        // 새 글이 추가될 때 화면에 겹치지 않도록 랜덤한 위치 지정 (롤링페이퍼 감성)
+        x: Math.floor(Math.random() * 65) + 10, // 10% ~ 75% 사이
+        y: Math.floor(Math.random() * 55) + 5,  // 5% ~ 60% 사이
+        color: ["#fff", "#ffe4e1", "#e0ffff", "#f0fff0", "#fffacd"][Math.floor(Math.random() * 5)]
+      },
+    ]);
+
+    setName("");
+    setPw("");
+    setMsg("");
     setDone(true);
     setTimeout(() => setDone(false), 2000);
   };
- 
-  const like = async (id) => {
-    if (likedSet.current.has(id)) return;
-    likedSet.current.add(id);
-    const next = entries.map(e => e.id === id ? {...e, likes: e.likes + 1} : e);
-    setEntries(next); await saveAll(next);
-    try { await window.storage.set("gb_liked", JSON.stringify([...likedSet.current]), true); } catch(_) {}
-  };
- 
-  const subEdit = async (entry) => {
-    if (editPw !== entry.pw) { setEditErr(true); return; }
-    const next = entries.map(e => e.id === entry.id ? {...e, msg: editMsg} : e);
-    setEntries(next); await saveAll(next);
-    setEditId(null); setEditPw(""); setEditMsg(""); setEditErr(false);
-  };
- 
-  const del = async (entry) => {
+
+  // 삭제 핸들러 (심플 윈도우 프롬프트 대체)
+  const del = (entry) => {
     const v = window.prompt("비밀번호를 입력하세요");
-    if (v === entry.pw || v === ADMIN_PW) {
-      const next = entries.filter(e => e.id !== entry.id);
-      setEntries(next); await saveAll(next);
+    if (v === entry.pw) {
+      setEntries((p) => p.filter((e) => e.id !== entry.id));
+    } else if (v !== null) {
+      alert("비밀번호가 틀렸습니다.");
     }
   };
- 
-  const subReply = async (entry) => {
-    if (replyPw !== ADMIN_PW) { setReplyErr(true); return; }
-    const next = entries.map(e => e.id === entry.id ? {...e, reply: replyMsg} : e);
-    setEntries(next); await saveAll(next);
-    setReplyId(null); setReplyPw(""); setReplyMsg(""); setReplyErr(false);
-  };
- 
-  const IS = {
-    background:"rgba(255,255,255,0.07)",
-    border:"1px solid rgba(255,255,255,0.12)",
-    borderRadius:8,
-    color:white,
-    padding:"9px 12px",
-    fontSize:12,
-    outline:"none",
-    fontFamily:"inherit",
-    boxSizing:"border-box",
-    transition:"border-color 0.2s"
-  };
-  const fo = e => e.target.style.borderColor = "rgba(184,255,0,0.4)";
-  const bl = e => e.target.style.borderColor = "rgba(255,255,255,0.12)";
- 
+
   return (
-    <div style={{position:"relative",minHeight:"100%"}}>
- 
-      {/* ── 타이틀 섹션 ── */}
+    <div style={{ 
+      position: "relative", 
+      minHeight: "85vh", 
+      display: "flex", 
+      flexDirection: "column",
+      justifyContent: "space-between",
+      color: "#fff"
+    }}>
+
+      {/* 🌌 상단 타이틀 섹션 (얕은 투명 글라스) */}
       <div style={{
-        marginBottom:32,
-        background:"rgba(255,255,255,0.04)",
-        backdropFilter:"blur(16px)",
-        WebkitBackdropFilter:"blur(16px)",
-        border:"1px solid rgba(255,255,255,0.08)",
-        borderRadius:16,
-        padding:"20px 20px 16px",
+        padding: "16px",
+        background: "rgba(255, 255, 255, 0.03)",
+        backdropFilter: "blur(4px)",
+        WebkitBackdropFilter: "blur(4px)",
+        borderRadius: "16px",
+        border: "1px solid rgba(255, 255, 255, 0.05)",
+        textAlign: "center",
+        zIndex: 2
       }}>
-        <p style={{fontSize:10,color:LIME,fontWeight:700,letterSpacing:"0.12em",margin:"0 0 6px",opacity:0.8}}>NIGHT SKY GUESTBOOK</p>
-        <p style={{fontSize:18,fontWeight:900,color:white,margin:"0 0 6px",letterSpacing:"-0.3px"}}>밤하늘에 남겨주세요</p>
-        <p style={{fontSize:12,color:muted,margin:0,lineHeight:1.75}}>
-          이 밤하늘은 당신의 말들로 채워집니다.<br/>
-          어떤 감정이든, 어떤 말이든 괜찮아요.
+        <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#e0e0e0" }}>
+          밤하늘 낙서장
+        </h2>
+        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)", margin: 0 }}>
+          밤하늘에 지워지지 않을 당신의 한 줄을 남겨주세요.
         </p>
-        {done && (
-          <p style={{fontSize:11,color:LIME,margin:"10px 0 0",fontWeight:700,opacity:0.9}}>✓ 밤하늘에 새겨졌어요</p>
-        )}
       </div>
- 
-      {/* ── 메시지 목록 — 카드 없이 글씨만 ── */}
-      {!loaded ? (
-        <p style={{fontSize:12,color:muted,textAlign:"center",padding:"40px 0"}}>불러오는 중...</p>
-      ) : (
-        <div style={{
-          display:"flex",
-          flexDirection:"column",
-          gap:0,
-          // 하단 고정 입력창 높이만큼 패딩
-          paddingBottom: inputOpen ? 220 : 110
-        }}>
-          {entries.map((entry) => {
-            const nc = nameColor(entry.name);
-            const liked = likedSet.current.has(entry.id);
-            return (
-              <div key={entry.id} style={{
-                padding:"22px 4px 20px",
-                borderBottom:"1px solid rgba(255,255,255,0.05)",
-              }}>
-                {/* 닉네임 줄 */}
-                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
-                  <div style={{display:"flex",alignItems:"center",gap:8}}>
-                    <span style={{
-                      fontSize:13,fontWeight:800,color:nc,
-                      textShadow:`0 0 18px ${nc}55`
-                    }}>{entry.name}</span>
-                    <span style={{fontSize:10,color:"rgba(255,255,255,0.2)",fontFamily:"monospace"}}>{entry.time}</span>
-                  </div>
-                  <div style={{display:"flex",gap:10,alignItems:"center"}}>
-                    <button onClick={()=>{ setEditId(entry.id); setEditMsg(entry.msg); setEditPw(""); setEditErr(false); setReplyId(null); }} style={{fontSize:10,color:"rgba(255,255,255,0.2)",background:"none",border:"none",cursor:"pointer",padding:0,fontFamily:"inherit"}}>수정</button>
-                    <button onClick={()=>del(entry)} style={{fontSize:10,color:"rgba(255,80,80,0.3)",background:"none",border:"none",cursor:"pointer",padding:0,fontFamily:"inherit"}}>삭제</button>
-                    <button onClick={()=>{ setReplyId(entry.id); setReplyMsg(entry.reply||""); setReplyPw(""); setReplyErr(false); setEditId(null); }} style={{fontSize:10,color:"rgba(184,255,0,0.3)",background:"none",border:"none",cursor:"pointer",padding:0,fontFamily:"inherit"}}>답글</button>
-                  </div>
-                </div>
- 
-                {/* 본문 */}
-                {editId === entry.id ? (
-                  <div style={{marginBottom:10}}>
-                    <textarea value={editMsg} onChange={e=>setEditMsg(e.target.value)} maxLength={150} rows={2}
-                      onFocus={fo} onBlur={bl}
-                      style={{...IS,width:"100%",resize:"none",marginBottom:6}}/>
-                    <div style={{display:"flex",gap:6}}>
-                      <input value={editPw} onChange={e=>setEditPw(e.target.value)} placeholder="비밀번호 확인" type="password"
-                        onFocus={fo} onBlur={bl} style={{...IS,flex:1}}/>
-                      <button onClick={()=>subEdit(entry)} style={{background:"rgba(255,255,255,0.07)",border:"1px solid rgba(255,255,255,0.12)",color:soft,borderRadius:8,padding:"8px 12px",fontSize:11,cursor:"pointer",fontFamily:"inherit"}}>저장</button>
-                      <button onClick={()=>setEditId(null)} style={{background:"none",border:"1px solid rgba(255,255,255,0.08)",color:muted,borderRadius:8,padding:"8px 9px",fontSize:11,cursor:"pointer",fontFamily:"inherit"}}>취소</button>
-                    </div>
-                    {editErr && <p style={{fontSize:11,color:"#ff6666",margin:"4px 0 0"}}>비밀번호가 틀렸어요</p>}
-                  </div>
-                ) : (
-                  <p style={{
-                    fontSize:14,
-                    color:"rgba(220,210,255,0.82)",
-                    margin:"0 0 12px",
-                    lineHeight:1.85,
-                    letterSpacing:"0.01em",
-                    whiteSpace:"pre-wrap"
-                  }}>{entry.msg}</p>
-                )}
- 
-                {/* 관리자 답글 */}
-                {entry.reply && replyId !== entry.id && (
-                  <p style={{
-                    fontSize:12,
-                    color:`${LIME}88`,
-                    margin:"0 0 10px",
-                    lineHeight:1.75,
-                    paddingLeft:12,
-                    borderLeft:`2px solid ${LIME}30`,
-                  }}>
-                    <span style={{fontSize:10,color:LIME,fontWeight:700,marginRight:8,opacity:0.7}}>밤하늘극장</span>
-                    {entry.reply}
-                  </p>
-                )}
- 
-                {/* 관리자 답글 입력 */}
-                {replyId === entry.id && (
-                  <div style={{marginBottom:10,paddingLeft:12,borderLeft:`2px solid ${LIME}30`}}>
-                    <textarea value={replyMsg} onChange={e=>setReplyMsg(e.target.value)} maxLength={200} rows={2}
-                      placeholder="답글 입력..." onFocus={fo} onBlur={bl}
-                      style={{...IS,width:"100%",resize:"none",marginBottom:6}}/>
-                    <div style={{display:"flex",gap:6}}>
-                      <input value={replyPw} onChange={e=>setReplyPw(e.target.value)} placeholder="관리자 비밀번호" type="password"
-                        onFocus={fo} onBlur={bl} style={{...IS,flex:1}}/>
-                      <button onClick={()=>subReply(entry)} style={{background:`${LIME}18`,border:`1px solid ${LIME}40`,color:LIME,borderRadius:8,padding:"8px 12px",fontSize:11,cursor:"pointer",fontFamily:"inherit",fontWeight:700}}>등록</button>
-                      <button onClick={()=>setReplyId(null)} style={{background:"none",border:"1px solid rgba(255,255,255,0.08)",color:muted,borderRadius:8,padding:"8px 9px",fontSize:11,cursor:"pointer",fontFamily:"inherit"}}>취소</button>
-                    </div>
-                    {replyErr && <p style={{fontSize:11,color:"#ff6666",margin:"4px 0 0"}}>관리자 비밀번호가 틀렸어요</p>}
-                  </div>
-                )}
- 
-                {/* 좋아요 */}
-                <button
-                  onClick={() => like(entry.id)}
-                  style={{
-                    display:"flex",alignItems:"center",gap:5,
-                    background:"none",border:"none",
-                    cursor: liked ? "default" : "pointer",
-                    fontSize:12,
-                    color: liked ? "#ff6688" : "rgba(255,255,255,0.18)",
-                    fontFamily:"inherit",padding:0,
-                    transition:"color 0.2s"
-                  }}
-                >
-                  {liked ? "♥" : "♡"} <span style={{fontSize:11}}>{entry.likes}</span>
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      )}
- 
-      {/* ── 하단 고정 입력창 ── */}
-      <div style={{
-        position:"fixed",
-        bottom:48, // 탭바 높이
-        left:"50%",
-        transform:"translateX(-50%)",
-        width:"100%",
-        maxWidth: isPC ? 900 : 430,
-        zIndex:150,
-        background:"rgba(8,4,28,0.72)",
-        backdropFilter:"blur(24px)",
-        WebkitBackdropFilter:"blur(24px)",
-        borderTop:"1px solid rgba(255,255,255,0.08)",
-        padding: inputOpen ? "14px 16px 10px" : "10px 16px 10px",
-        transition:"padding 0.2s"
+
+      {/* 📌 밤하늘 메모보드 (글씨들이 자유롭게 배치되는 공간) */}
+      <div style={{ 
+        position: "relative", 
+        flex: 1, 
+        minHeight: "400px", 
+        marginTop: "20px",
+        marginBottom: "180px" // 하단 고정 인풋창 영역 확보
       }}>
-        {/* 입력 열렸을 때 */}
-        {inputOpen && (
-          <div style={{marginBottom:10}}>
-            <div style={{display:"flex",gap:8,marginBottom:8}}>
-              <input value={name} onChange={e=>setName(e.target.value)} onFocus={fo} onBlur={bl}
-                placeholder="닉네임" maxLength={12}
-                style={{...IS,width:86}}/>
-              <input value={pw} onChange={e=>setPw(e.target.value)} onFocus={fo} onBlur={bl}
-                placeholder="비밀번호" type="password" maxLength={20}
-                style={{...IS,flex:1}}/>
-            </div>
-            <textarea value={msg} onChange={e=>setMsg(e.target.value)} onFocus={fo} onBlur={bl}
-              placeholder="밤하늘에 남길 말을 적어주세요…" maxLength={150} rows={2}
-              style={{...IS,width:"100%",resize:"none",lineHeight:1.65}}/>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:6}}>
-              <span style={{fontSize:10,color:muted}}>{msg.length}/150</span>
+        {entries.map((e) => (
+          <div
+            key={e.id}
+            style={{
+              position: "absolute",
+              left: `${e.x}%`,
+              top: `${e.y}%`,
+              maxWidth: "220px",
+              padding: "10px",
+              cursor: "pointer",
+              animation: "floatAnimation 4s ease-in-out infinite",
+              transition: "transform 0.2s"
+            }}
+            onClick={() => {
+              if(window.confirm("이 낙서를 삭제하시겠습니까?")) del(e);
+            }}
+            title="클릭하여 삭제"
+          >
+            {/* 글씨 자체를 강조하고 테두리를 없앤 미니멀 포스트잇 느낌 */}
+            <p style={{
+              margin: 0,
+              fontSize: "13px",
+              lineHeight: "1.5",
+              color: e.color || "#fff",
+              textShadow: "0 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.2)",
+              whiteSpace: "pre-line",
+              fontFamily: "gothic"
+            }}>
+              {e.msg}
+            </p>
+            <div style={{ 
+              marginTop: "4px", 
+              fontSize: "10px", 
+              color: "rgba(255,255,255,0.4)",
+              display: "flex",
+              gap: "6px"
+            }}>
+              <span>by {e.name}</span>
+              <span>·</span>
+              <span>{e.time}</span>
             </div>
           </div>
-        )}
- 
-        {/* 버튼 줄 */}
-        <div style={{display:"flex",gap:8}}>
-          <button
-            onClick={() => setInputOpen(o => !o)}
+        ))}
+      </div>
+
+      {/* 📥 하단 고정형 입력창 (투명 흰색 글라스모피즘) */}
+      <div style={{
+        position: "fixed",
+        bottom: "60px", // 하단 탭 바로 위쪽에 위치하도록 설정 (실제 탭 높이에 맞게 조절 가능)
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "calc(100% - 32px)",
+        maxWidth: "500px",
+        background: "rgba(255, 255, 255, 0.08)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        borderRadius: "20px",
+        border: "1px solid rgba(255, 255, 255, 0.15)",
+        padding: "14px",
+        boxShadow: "0 -10px 30px rgba(0, 0, 0, 0.5)",
+        zIndex: 10,
+        display: "flex",
+        flexDirection: "column",
+        gap: "8px"
+      }}>
+        {/* 이름 / 비밀번호 한 줄 배치 */}
+        <div style={{ display: "flex", gap: "8px" }}>
+          <input 
+            value={name} 
+            onChange={e => setName(e.target.value)}
+            placeholder="이름"
+            style={{ ...inputStyle, width: "90px" }} 
+          />
+          <input 
+            value={pw} 
+            onChange={e => setPw(e.target.value)}
+            placeholder="비밀번호"
+            type="password"
+            style={{ ...inputStyle, flex: 1 }} 
+          />
+          <button 
+            onClick={submit}
             style={{
-              flex:1,
-              background:"rgba(255,255,255,0.05)",
-              border:"1px solid rgba(255,255,255,0.1)",
-              color: inputOpen ? muted : "rgba(220,210,255,0.5)",
-              borderRadius:10,
-              padding:"10px 0",
-              fontSize:12,
-              cursor:"pointer",
-              fontFamily:"inherit",
-              transition:"all 0.2s"
+              padding: "0 16px",
+              borderRadius: "8px",
+              border: "none",
+              background: done ? "#baffc9" : "#ffffff",
+              color: done ? "#121212" : "#121212",
+              fontWeight: "700",
+              fontSize: "12px",
+              cursor: "pointer",
+              transition: "all 0.2s"
             }}
           >
-            {inputOpen ? "닫기" : "✎  밤하늘에 남기기"}
+            {done ? "기록 완료 ✨" : "남기기"}
           </button>
-          {inputOpen && (
-            <button
-              onClick={submit}
-              style={{
-                flexShrink:0,
-                background:`${LIME}18`,
-                border:`1px solid ${LIME}40`,
-                color:LIME,
-                borderRadius:10,
-                padding:"10px 20px",
-                fontSize:12,
-                fontWeight:700,
-                cursor:"pointer",
-                fontFamily:"inherit",
-                transition:"all 0.2s"
-              }}
-            >
-              남기기
-            </button>
-          )}
         </div>
+
+        {/* 텍스트 입력창 */}
+        <textarea 
+          value={msg} 
+          onChange={e => setMsg(e.target.value)}
+          placeholder="밤하늘 극장에 남길 이야기를 적어주세요..."
+          rows={2}
+          style={{ ...inputStyle, width: "100%", resize: "none", background: "rgba(0,0,0,0.2)" }} 
+        />
       </div>
+
+      {/* 🪄 잔잔한 별 무빙을 위한 전역 스타일 애니메이션 추가 */}
+      <style>{`
+        @keyframes floatAnimation {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
+          100% { transform: translateY(0px); }
+        }
+      `}</style>
+
     </div>
   );
 }
