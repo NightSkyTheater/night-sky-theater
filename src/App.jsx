@@ -777,7 +777,7 @@ function MusicTab({isPC}) {
   );
 }
 
-// ── 방명록 (Firebase 버전) ─────────────────────────────
+// ── 방명록 (Firebase 기능 유지 + 새 UI 디자인 적용) ─────────────────────────────
 function timeAgo(date) {
   if (!date) return "";
   const targetDate = date instanceof Date ? date : (date.toDate ? date.toDate() : new Date(date));
@@ -796,7 +796,7 @@ function GuestbookTab() {
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
-  const [animId, setAnimId] = useState(null);
+  const [done, setDone] = useState(false); // ✨ 완료 피드백 UI용 상태 변경 적용
 
   useEffect(() => {
     const q = query(
@@ -818,12 +818,13 @@ function GuestbookTab() {
   const submit = async () => {
     if (!name.trim() || !pw.trim() || !msg.trim()) return;
 
+    // ✨ UI 가이드라인에 맞춘 랜덤 좌표 범위 조정
     const newEntry = {
       name: name.trim(),
       pw: pw.trim(),
       msg: msg.trim(),
-      x: Math.random() * 70 + 10,
-      y: Math.random() * 60 + 10,
+      x: Math.floor(Math.random() * 65) + 10,
+      y: Math.floor(Math.random() * 55) + 5,
       color: ["#fff", "#ffe4e1", "#e0ffff", "#f0fff0", "#fffacd"][
         Math.floor(Math.random() * 5)
       ],
@@ -831,18 +832,21 @@ function GuestbookTab() {
     };
 
     try {
-      const docRef = await addDoc(collection(db, "guestbook"), newEntry);
-      setAnimId(docRef.id);
+      await addDoc(collection(db, "guestbook"), newEntry);
       setName("");
       setPw("");
       setMsg("");
-      setTimeout(() => setAnimId(null), 1000);
+      setDone(true);
+      setTimeout(() => setDone(false), 2000);
     } catch (err) {
       console.error("Error adding document: ", err);
     }
   };
 
   const del = async (entry) => {
+    // ✨ UI 가이드라인의 "이 낙서를 삭제하시겠습니까?" 컨펌창 구조 결합
+    if (!window.confirm("이 낙서를 삭제하시겠습니까?")) return;
+    
     const input = window.prompt("비밀번호를 입력하세요");
     if (!input) return;
 
@@ -857,18 +861,58 @@ function GuestbookTab() {
     }
   };
 
+  const inputStyle = {
+    background: "rgba(255, 255, 255, 0.15)",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    borderRadius: "8px",
+    color: "#ffffff",
+    padding: "8px 12px",
+    fontSize: "12px",
+    outline: "none",
+    fontFamily: "inherit",
+  };
+
   return (
-    <div style={{ position: "relative", minHeight: "85vh", color: "#fff", overflow: "hidden" }}>
-      <div style={{ padding: "16px", textAlign: "center", background: "rgba(255,255,255,0.05)", backdropFilter: "blur(10px)", borderRadius: "16px", margin: "10px" }}>
-        <h2 style={{ margin: 0 }}>🌌 밤하늘 방명록</h2>
-        <p style={{ fontSize: "12px", opacity: 0.6 }}>당신의 한 줄이 별이 됩니다</p>
+    <div style={{ 
+      position: "relative", 
+      minHeight: "85vh", 
+      display: "flex", 
+      flexDirection: "column",
+      justifyContent: "space-between",
+      color: "#fff",
+      overflow: "hidden"
+    }}>
+
+      {/* 🌌 상단 타이틀 섹션 */}
+      <div style={{
+        padding: "16px",
+        background: "rgba(255, 255, 255, 0.03)",
+        backdropFilter: "blur(4px)",
+        WebkitBackdropFilter: "blur(4px)",
+        borderRadius: "16px",
+        border: "1px solid rgba(255, 255, 255, 0.05)",
+        textAlign: "center",
+        zIndex: 2
+      }}>
+        <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#e0e0e0" }}>
+          밤하늘 낙서장
+        </h2>
+        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)", margin: 0 }}>
+          밤하늘에 지워지지 않을 당신의 한 줄을 남겨주세요.
+        </p>
       </div>
 
-      <div style={{ position: "relative", minHeight: "60vh" }}>
+      {/* 📌 밤하늘 메모보드 */}
+      <div style={{ 
+        position: "relative", 
+        flex: 1, 
+        minHeight: "400px", 
+        marginTop: "20px",
+        marginBottom: "180px"
+      }}>
         {entries.map((e) => (
           <div
             key={e.id}
-            onClick={() => del(e)}
             style={{
               position: "absolute",
               left: `${e.x}%`,
@@ -876,58 +920,107 @@ function GuestbookTab() {
               maxWidth: "220px",
               padding: "10px",
               cursor: "pointer",
-              animation: animId === e.id ? "fallStar 1s ease-out" : "float 4s ease-in-out infinite",
-              transition: "all 0.3s",
+              animation: "floatAnimation 4s ease-in-out infinite",
+              transition: "transform 0.2s"
             }}
+            onClick={() => del(e)}
+            title="클릭하여 삭제"
           >
-            <div style={{ fontSize: "13px", color: e.color || "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.8)", whiteSpace: "pre-line" }}>
+            <p style={{
+              margin: 0,
+              fontSize: "13px",
+              lineHeight: "1.5",
+              color: e.color || "#fff",
+              textShadow: "0 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.2)",
+              whiteSpace: "pre-line",
+              fontFamily: "gothic"
+            }}>
               {e.msg}
-            </div>
-            <div style={{ fontSize: "10px", opacity: 0.6, marginTop: "4px" }}>
-              {e.name} · {timeAgo(e.createdAt)}
+            </p>
+            <div style={{ 
+              marginTop: "4px", 
+              fontSize: "10px", 
+              color: "rgba(255,255,255,0.4)",
+              display: "flex",
+              gap: "6px"
+            }}>
+              <span>by {e.name}</span>
+              <span>·</span>
+              <span>{timeAgo(e.createdAt)}</span>
             </div>
           </div>
         ))}
       </div>
 
-      <div style={{ position: "fixed", bottom: "75px", left: "50%", transform: "translateX(-50%)", width: "90%", maxWidth: "500px", background: "rgba(255,255,255,0.08)", backdropFilter: "blur(12px)", padding: "12px", borderRadius: "16px", display: "flex", flexDirection: "column", gap: "8px", zIndex: 10 }}>
-        <div style={{ display: "flex", gap: "6px" }}>
-          <input placeholder="이름" value={name} onChange={(e) => setName(e.target.value)} style={{ flex: 1 }} />
-          <input placeholder="비밀번호" type="password" value={pw} onChange={(e) => setPw(e.target.value)} style={{ flex: 1 }} />
+      {/* 📥 하단 고정형 입력창 */}
+      <div style={{
+        position: "fixed",
+        bottom: "60px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "calc(100% - 32px)",
+        maxWidth: "500px",
+        background: "rgba(255, 255, 255, 0.08)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        borderRadius: "20px",
+        border: "1px solid rgba(255, 255, 255, 0.15)",
+        padding: "14px",
+        boxShadow: "0 -10px 30px rgba(0, 0, 0, 0.5)",
+        zIndex: 10,
+        display: "flex",
+        flexDirection: "column",
+        gap: "8px"
+      }}>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <input 
+            value={name} 
+            onChange={e => setName(e.target.value)}
+            placeholder="이름"
+            style={{ ...inputStyle, width: "90px" }} 
+          />
+          <input 
+            value={pw} 
+            onChange={e => setPw(e.target.value)}
+            placeholder="비밀번호"
+            type="password"
+            style={{ ...inputStyle, flex: 1 }} 
+          />
+          <button 
+            onClick={submit}
+            style={{
+              padding: "0 16px",
+              borderRadius: "8px",
+              border: "none",
+              background: done ? "#baffc9" : "#ffffff",
+              color: "#121212",
+              fontWeight: "700",
+              fontSize: "12px",
+              cursor: "pointer",
+              transition: "all 0.2s"
+            }}
+          >
+            {done ? "기록 완료 ✨" : "남기기"}
+          </button>
         </div>
-        <textarea placeholder="밤하늘에 남길 이야기..." value={msg} onChange={(e) => setMsg(e.target.value)} rows={2} />
-        <button onClick={submit}>🌠 남기기</button>
+
+        <textarea 
+          value={msg} 
+          onChange={e => setMsg(e.target.value)}
+          placeholder="밤하늘 극장에 남길 이야기를 적어주세요..."
+          rows={2}
+          style={{ ...inputStyle, width: "100%", resize: "none", background: "rgba(0,0,0,0.2)" }} 
+        />
       </div>
 
       <style>{`
-        @keyframes float {
+        @keyframes floatAnimation {
           0% { transform: translateY(0px); }
           50% { transform: translateY(-6px); }
           100% { transform: translateY(0px); }
         }
-        @keyframes fallStar {
-          0% { transform: translateY(-40px) scale(0.5); opacity: 0; }
-          50% { opacity: 1; }
-          100% { transform: translateY(0px) scale(1); }
-        }
-        input, textarea {
-          background: rgba(255,255,255,0.15);
-          border: 1px solid rgba(255,255,255,0.2);
-          border-radius: 8px;
-          color: white;
-          padding: 8px;
-          outline: none;
-        }
-        button {
-          background: white;
-          color: black;
-          border: none;
-          padding: 8px;
-          border-radius: 8px;
-          font-weight: bold;
-          cursor: pointer;
-        }
       `}</style>
+
     </div>
   );
 }
