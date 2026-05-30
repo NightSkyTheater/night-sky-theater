@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const ACCENT = "#B8FF00";
 const LIME   = ACCENT;
@@ -107,7 +107,7 @@ const ALBUMS = [
   },
   {
     id: 7,
-    title: "不完全な踊り (불완전한 춤)",
+    title: "不完全な踊리 (불완전한 춤)",
     cover: "https://down.mixtape.so/NAS/img/4/6/a/8/46a838a2a7a75c0a0336cd1e51677f4f.png",
     year: "2026",
     color: "#1a1a08",
@@ -115,7 +115,7 @@ const ALBUMS = [
     tracks: [
       { n: 1, title: "今日が一番幼い日", mood: "今日が一番幼い日\n明日は私たちの描く夢" },
       { n: 2, title: "不完全な踊り", mood: "プラスマイナスのない世界\n天国と地獄 その中にいるじゃん" },
-      { n: 3, title: "音の出ない心", mood: "慣れた日々に溶けていくように\n私の手をすり抜けていった" },
+      { n: 3, title: "音の出ない心", mood: "慣れた日々に溶けていくように\n私の手をす리抜けていった" },
       { n: 4, title: "星影の叫び", mood: "星の間で君を呼ぶ\n静かに風が流れる" },
       { n: 5, title: "君のために", mood: "君のために生きてるんだよ\n君だからこうしてるんだよ" },
       { n: 6, title: "私、ドラゴンじゃないのに", mood: "白い息が出ちゃう\n私、ドラゴンじゃないのに" },
@@ -167,7 +167,7 @@ const ALBUMS = [
       { n: 3, title: "결과보단 과정을 봐줄래", mood: "결과보단 과정을 봐줄래\n우린 완성이 아닌 살아가기 위해 이곳에 온 거니까" },
       { n: 4, title: "그럼에도 불구하고", mood: "더 나은 내일만 바라보다\n잘 살려고만 했지, 행복하게 살려 하진 않았어" },
       { n: 5, title: "인생은 산과 계곡", mood: "오르막과 내리막 사이에서\n네가 지금 어디에 있든 삶을 위해 절대 포기하지 말기" },
-      { n: 6, title: "낮에도 별은 떠 있어", mood: "밤이 오면 별을 세어 보자\n오늘을 견딘 만큼 하나씩 떠 있을 거야" },
+      { n: 6, title: "낮에도 별은 떠 있어", mood: "낮에도 별은 떠 있어\n오늘을 견딘 만큼 하나씩 떠 있을 거야" },
       { n: 7, title: "불패의 여름", mood: "한겨울 속에서 나는 내 안의 여름을 봤어\n꺼지지 않던 작은 불빛이 나를 다시 부르고 있어" }
     ]
   },
@@ -196,7 +196,7 @@ const ALBUMS = [
     tracks: [
       { n: 1, title: "ただ風が好きだから", mood: "ただ風が好きだから\nもう少し歩くことにしたよ" },
       { n: 2, title: "ただやるだけさ", mood: "ただやるだけさ\nドラマチックな展開はないけれど" },
-      { n: 2, title: "ただ普通に生きたいんだ", mood: "ただ普通に生きたいんだ\n私の歩幅まで急かさないでよ" }
+      { n: 3, title: "ただ普通に生きたいんだ", mood: "ただ普通に生きたいんだ\n私の歩幅まで急かさないでよ" }
     ]
   },
   {
@@ -334,35 +334,13 @@ const PLATFORMS = [
   { name:"Apple Music", url:"music.apple.com/...", color:"#FA2D48", icon:"🍎" }
 ];
 
-const TIMELINE = [
-  {year:"2025.09", tag:"싱글",   tagC:LIME,      desc:"첫 싱글 [그대였죠] 발매. 밤하늘극장의 첫 목소리"},
-  {year:"2026.01", tag:"정규",   tagC:LIME,      desc:"[자발적으로 표류하는 우주비행사] 발매"},
-  {year:"2026.01", tag:"정규",   tagC:LIME,      desc:"[오늘이 가장 어렸던 날이야] 발매"},
-  {year:"2026.01", tag:"EP",   tagC:LIME,      desc:"[전우치] 발매"},
-  {year:"2026.01", tag:"정규",   tagC:LIME,      desc:"[사랑은 말이야] 발매"},
-  {year:"2026.02", tag:"정규",   tagC:LIME,      desc:"[이 봄은 다른 이름이 될까] 발매"},
-  {year:"2026.02", tag:"정규",   tagC:LIME,      desc:"[不完全な踊り (불완전한 춤)] 발매"},
-  {year:"2026.02", tag:"정규",   tagC:LIME,      desc:"[운명애] 발매"},
-  {year:"2026.02", tag:"EP",   tagC:LIME,      desc:"[사막 위의 잠수함] 발매"},
-  {year:"2026.03", tag:"정규",   tagC:LIME,      desc:"[나는 오늘 또 어떤 핑계를 대었는가] 발매"},
-  {year:"2026.03", tag:"EP",   tagC:LIME,      desc:"[죽어가는 모든 것들을 사랑해야지] 발매"},
-  {year:"2026.03", tag:"싱글",   tagC:LIME,      desc:"[ただ (그냥)] 발매"},
-  {year:"2026.03", tag:"구독",   tagC:"#ffcc44",      desc:"유튜브 구독자 300명 돌파."},
-  {year:"2026.04", tag:"싱글",   tagC:LIME,      desc:"[어느 새벽에 또 울었어] 발매"},
-  {year:"2026.04", tag:"정규",   tagC:LIME,      desc:"[엄마가 띄워줬던 나는 점점 가라앉고 있어] 발매"},
-  {year:"2026.04", tag:"정규",   tagC:LIME,      desc:"[아픈 청춘들아] 발매"},
-  {year:"2026.05", tag:"EP",   tagC:LIME,      desc:"[허수아비에게] 발매"},
-  {year:"2026.05", tag:"싱글",   tagC:LIME,      desc:"[SKIP] 발매"},
-  {year:"2026.05", tag:"싱글",   tagC:LIME,      desc:"[두려운 것 투성이야, 세상은] 발매"}
-];
-
+// 새로운 포스트잇 감성 롤링페이퍼를 위한 위치값 포함 초기 데이터
 const INIT_GB = [
-  {id:1,name:"새벽여행자",pw:"1234",msg:"우리들의 발라드 듣고 밤새 울었어요. 고맙습니다.",time:"05.25",likes:14,reply:"늦은 새벽에 함께해줘서 저도 고마워요 — 밤하늘극장"},
-  {id:2,name:"별빛수집가",pw:"1234",msg:"자발적으로 표류하는 우주비행사 진짜 제 얘기 같아요…",time:"05.24",likes:9,reply:""},
-  {id:3,name:"moonlight", pw:"1234",msg:"밤하늘극장 발견한 날이 올해 최고의 날이었어요",time:"05.23",likes:11,reply:"그 말이 저희한테도 최고의 댓글이에요 — 밤하늘극장"},
+  { id: 1, name: "레이니돌", pw: "1234", msg: "신기한 기능이네요. :)", time: "2026. 05. 30", x: 15, y: 12, color: "#ffb3ba" },
+  { id: 2, name: "올드비", pw: "1234", msg: "와우 정말 좋은 프로그램이네요.\n부담없이 쓸 수 있을 것 같아요.", time: "2026. 05. 30", x: 45, y: 25, color: "#baffc9" },
+  { id: 3, name: "얼리어답터", pw: "1234", msg: "이거 재미있네요..! :) 저도 하나 달아볼까나?", time: "2026. 05. 30", x: 20, y: 50, color: "#bae1ff" },
 ];
 
-// 이모지 전용 폰트스택
 const EMOJI_FONT = EMOJI_FONT_STACK;
 
 // ── PRIMITIVES ──────────────────────────────────────
@@ -618,7 +596,6 @@ const growth   = ((increase / prevSubs) * 100).toFixed(1);
     </G>
   );
 
-  // 해외 청취율 — 이모지 폰트 명시
   const Overseas = (
     <G>
       <SecHead title="해외 청취율" sub="5월 유튜브 기준"/>
@@ -775,7 +752,6 @@ function AboutTab({isPC}) {
     </G>
   );
 
-// 🎧 스트리밍 링크
 const Streaming = (
   <G>
     <SecHead title="링크" sub="Streaming & Social"/>
@@ -848,7 +824,6 @@ const Streaming = (
   </G>
 );
 
-  // ✅ 항상 1단
   return (
     <div style={{display:"flex",flexDirection:"column",gap:10}}>
       {Hero}
@@ -932,181 +907,212 @@ function MusicTab({isPC}) {
   );
 }
 
-// ── 방명록 완전 리뉴얼 ─────────────────────────────
-// 기존 GuestbookTab 함수 전체를 이걸로 교체하세요
-// 상단에 아래 상수들도 추가해주세요 (이미 있으면 스킵)
- 
-import { useState } from "react";
+// ── 방명록 (리뉴얼 완료) ─────────────────────────────
+function GuestbookTab({ isPC }) {
+  const [entries, setEntries] = useState(INIT_GB);
+  const [name, setName] = useState("");
+  const [pw, setPw] = useState("");
+  const [msg, setMsg] = useState("");
+  const [done, setDone] = useState(false);
 
-export default function NightSkyGuestbook() {
-  const [posts, setPosts] = useState([
-    { id: 1, text: "오늘 밤하늘 너무 예쁘다…" },
-    { id: 2, text: "여기 글 남기고 갑니다 ✨" },
-  ]);
+  const nid = useRef(4);
 
-  const [input, setInput] = useState("");
+  const inputStyle = {
+    background: "rgba(255, 255, 255, 0.15)",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    borderRadius: "8px",
+    color: "#ffffff",
+    padding: "8px 12px",
+    fontSize: "12px",
+    outline: "none",
+    fontFamily: "inherit",
+  };
 
-  const addPost = () => {
-    if (!input.trim()) return;
+  const submit = () => {
+    if (!name.trim() || !pw.trim() || !msg.trim()) return;
 
-    setPosts((prev) => [
-      ...prev,
+    setEntries((p) => [
+      ...p,
       {
-        id: Date.now(),
-        text: input,
+        id: nid.current++,
+        name: name.trim(),
+        pw: pw.trim(),
+        msg: msg.trim(),
+        time: new Date().toLocaleDateString("ko-KR").slice(0, -1),
+        x: Math.floor(Math.random() * 65) + 10,
+        y: Math.floor(Math.random() * 55) + 5,
+        color: ["#fff", "#ffe4e1", "#e0ffff", "#f0fff0", "#fffacd"][Math.floor(Math.random() * 5)]
       },
     ]);
 
-    setInput("");
+    setName("");
+    setPw("");
+    setMsg("");
+    setDone(true);
+    setTimeout(() => setDone(false), 2000);
+  };
+
+  const del = (entry) => {
+    const v = window.prompt("비밀번호를 입력하세요");
+    if (v === entry.pw) {
+      setEntries((p) => p.filter((e) => e.id !== entry.id));
+    } else if (v !== null) {
+      alert("비밀번호가 틀렸습니다.");
+    }
   };
 
   return (
-    <div style={styles.wrap}>
-      {/* 밤하늘 배경 */}
-      <div style={styles.sky} />
+    <div style={{ 
+      position: "relative", 
+      minHeight: "85vh", 
+      display: "flex", 
+      flexDirection: "column",
+      justifyContent: "space-between",
+      color: "#fff"
+    }}>
 
-      {/* 별 효과 레이어 */}
-      <div style={styles.stars} />
+      <div style={{
+        padding: "16px",
+        background: "rgba(255, 255, 255, 0.03)",
+        backdropFilter: "blur(4px)",
+        WebkitBackdropFilter: "blur(4px)",
+        borderRadius: "16px",
+        border: "1px solid rgba(255, 255, 255, 0.05)",
+        textAlign: "center",
+        zIndex: 2
+      }}>
+        <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#e0e0e0" }}>
+          밤하늘 낙서장
+        </h2>
+        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)", margin: 0 }}>
+          밤하늘에 지워지지 않을 당신의 한 줄을 남겨주세요.
+        </p>
+      </div>
 
-      {/* 메모 흐름 영역 */}
-      <div style={styles.feed}>
-        {posts.map((p, i) => (
+      <div style={{ 
+        position: "relative", 
+        flex: 1, 
+        minHeight: "400px", 
+        marginTop: "20px",
+        marginBottom: "180px"
+      }}>
+        {entries.map((e) => (
           <div
-            key={p.id}
+            key={e.id}
             style={{
-              ...styles.post,
-              opacity: 0.85 + (i % 3) * 0.05,
-              transform: `translateX(${(i % 2) * 10}px)`,
+              position: "absolute",
+              left: `${e.x}%`,
+              top: `${e.y}%`,
+              maxWidth: "220px",
+              padding: "10px",
+              cursor: "pointer",
+              animation: "floatAnimation 4s ease-in-out infinite",
+              transition: "transform 0.2s"
             }}
+            onClick={() => {
+              if(window.confirm("이 낙서를 삭제하시겠습니까?")) del(e);
+            }}
+            title="클릭하여 삭제"
           >
-            ✦ {p.text}
+            <p style={{
+              margin: 0,
+              fontSize: "13px",
+              lineHeight: "1.5",
+              color: e.color || "#fff",
+              textShadow: "0 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.2)",
+              whiteSpace: "pre-line",
+              fontFamily: "gothic"
+            }}>
+              {e.msg}
+            </p>
+            <div style={{ 
+              marginTop: "4px", 
+              fontSize: "10px", 
+              color: "rgba(255,255,255,0.4)",
+              display: "flex",
+              gap: "6px"
+            }}>
+              <span>by {e.name}</span>
+              <span>·</span>
+              <span>{e.time}</span>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* 하단 고정 UI (타이틀 + 입력창) */}
-      <div style={styles.bottomGlass}>
-        <div style={styles.title}>
-          🌌 밤하늘 방명록
-          <div style={styles.subtitle}>
-            이곳에 당신의 흔적을 남겨주세요
-          </div>
-        </div>
-
-        <div style={styles.inputRow}>
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="밤하늘에 글을 남겨보세요..."
-            style={styles.input}
+      <div style={{
+        position: "fixed",
+        bottom: "60px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "calc(100% - 32px)",
+        maxWidth: "500px",
+        background: "rgba(255, 255, 255, 0.08)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        borderRadius: "20px",
+        border: "1px solid rgba(255, 255, 255, 0.15)",
+        padding: "14px",
+        boxShadow: "0 -10px 30px rgba(0, 0, 0, 0.5)",
+        zIndex: 10,
+        display: "flex",
+        flexDirection: "column",
+        gap: "8px"
+      }}>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <input 
+            value={name} 
+            onChange={e => setName(e.target.value)}
+            placeholder="이름"
+            style={{ ...inputStyle, width: "90px" }} 
           />
-          <button onClick={addPost} style={styles.button}>
-            남기기
+          <input 
+            value={pw} 
+            onChange={e => setPw(e.target.value)}
+            placeholder="비밀번호"
+            type="password"
+            style={{ ...inputStyle, flex: 1 }} 
+          />
+          <button 
+            onClick={submit}
+            style={{
+              padding: "0 16px",
+              borderRadius: "8px",
+              border: "none",
+              background: done ? "#baffc9" : "#ffffff",
+              color: "#121212",
+              fontWeight: "700",
+              fontSize: "12px",
+              cursor: "pointer",
+              transition: "all 0.2s"
+            }}
+          >
+            {done ? "기록 완료 ✨" : "남기기"}
           </button>
         </div>
+
+        <textarea 
+          value={msg} 
+          onChange={e => setMsg(e.target.value)}
+          placeholder="밤하늘 극장에 남길 이야기를 적어주세요..."
+          rows={2}
+          style={{ ...inputStyle, width: "100%", resize: "none", background: "rgba(0,0,0,0.2)" }} 
+        />
       </div>
+
+      <style>{`
+        @keyframes floatAnimation {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
+          100% { transform: translateY(0px); }
+        }
+      `}</style>
+
     </div>
   );
 }
 
-const styles = {
-  wrap: {
-    position: "relative",
-    height: "100vh",
-    overflow: "hidden",
-    fontFamily: "sans-serif",
-    color: "white",
-  },
-
-  sky: {
-    position: "absolute",
-    inset: 0,
-    background:
-      "radial-gradient(circle at 20% 20%, #1a1a40, transparent 40%)," +
-      "radial-gradient(circle at 80% 30%, #2b1b4d, transparent 45%)," +
-      "radial-gradient(circle at 50% 80%, #0d1020, #05060f)",
-  },
-
-  stars: {
-    position: "absolute",
-    inset: 0,
-    backgroundImage:
-      "radial-gradient(white 1px, transparent 1px)",
-    backgroundSize: "3px 3px",
-    opacity: 0.15,
-  },
-
-  feed: {
-    position: "absolute",
-    top: 0,
-    bottom: 120,
-    left: 0,
-    right: 0,
-    padding: "60px 20px",
-    overflowY: "auto",
-    display: "flex",
-    flexDirection: "column",
-    gap: "18px",
-  },
-
-  post: {
-    fontSize: "16px",
-    letterSpacing: "0.5px",
-    color: "rgba(255,255,255,0.9)",
-    textShadow: "0 0 10px rgba(255,255,255,0.15)",
-  },
-
-  bottomGlass: {
-    position: "fixed",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: "14px 16px",
-    backdropFilter: "blur(14px)",
-    background: "rgba(255,255,255,0.08)",
-    borderTop: "1px solid rgba(255,255,255,0.12)",
-  },
-
-  title: {
-    fontSize: "14px",
-    marginBottom: "8px",
-    opacity: 0.9,
-  },
-
-  subtitle: {
-    fontSize: "11px",
-    opacity: 0.6,
-    marginTop: "2px",
-  },
-
-  inputRow: {
-    display: "flex",
-    gap: "8px",
-  },
-
-  input: {
-    flex: 1,
-    padding: "10px 12px",
-    borderRadius: "10px",
-    border: "none",
-    outline: "none",
-    background: "rgba(0,0,0,0.3)",
-    color: "white",
-  },
-
-  button: {
-    padding: "10px 14px",
-    borderRadius: "10px",
-    border: "none",
-    background: "#B8FF00",
-    color: "#000",
-    fontWeight: "bold",
-    cursor: "pointer",
-  },
-};
- 
-
-// ── APP ─────────────────────────────────────────────
+// ── APP (메인 컴포넌트 한 개만 Export) ───────────────────
 export default function App() {
   const [tab,setTab]=useState("홈");
   const [isPC,setIsPC]=useState(window.innerWidth>=768);
@@ -1116,12 +1122,14 @@ export default function App() {
     window.addEventListener("resize",fn);
     return ()=>window.removeEventListener("resize",fn);
   },[]);
-useEffect(() => {
-  if (document.querySelector('script[src*="chart.umd.js"]')) return;
-  const s = document.createElement("script");
-  s.src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";
-  document.head.appendChild(s);
-}, []);
+
+  useEffect(() => {
+    if (document.querySelector('script[src*="chart.umd.js"]')) return;
+    const s = document.createElement("script");
+    s.src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";
+    document.head.appendChild(s);
+  }, []);
+
   return (
     <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)",color:white,fontFamily:"'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif",position:"relative"}}>
       <style>{`
@@ -1144,7 +1152,7 @@ useEffect(() => {
       `}</style>
       <Stars/>
       <div style={{position:"relative",zIndex:1,maxWidth:isPC?900:430,margin:"0 auto",display:"flex",flexDirection:"column",minHeight:"100vh"}}>
-        <div style={{flex:1,padding:isPC?"20px 24px 90px":"12px 14px 76px",animation:"fin 0.3s ease both"}} key={tab}>
+        <div style={{flex:1,padding:isPC?"20px 24px 90px":"12px 14px 76px",animation:"fin 0.3s ease both"} } key={tab}>
           {tab==="홈"    &&<HomeTab     isPC={isPC}/>}
           {tab==="소개"  &&<AboutTab    isPC={isPC}/>}
           {tab==="음악"  &&<MusicTab    isPC={isPC}/>}
