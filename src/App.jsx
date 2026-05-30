@@ -461,13 +461,13 @@ function SubChart() {
               border: { display: false }
             },
             y: {
-              min: 220,
-              max: 430,
+              min: 100,
+              max: 440,
               grid: { color: "rgba(255,255,255,0.05)" },
               ticks: {
                 color: "rgba(220,210,255,0.30)",
                 font: { size: 9 },
-                stepSize: 60,
+                stepSize: 80,
                 callback: v => v + "명"
               },
               border: { display: false }
@@ -484,7 +484,7 @@ function SubChart() {
 
   return (
     <div style={{ width: "100%" }}>
-      <div style={{ position: "relative", width: "100%", height: 130 }}>
+      <div style={{ position: "relative", width: "100%", height: 160 }}>
         <canvas ref={canvasRef} role="img" aria-label="유튜브 채널 분석" />
       </div>
     </div>
