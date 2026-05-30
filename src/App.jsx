@@ -139,135 +139,88 @@ function BottomNav({tab,setTab}) {
 
 // ── 구독자 추이 미니 라인차트 (SVG) ─────────────────
 function SubChart() {
-  const W = 100;
-  const H = 52;
+  const canvasRef = useRef(null);
+  const chartRef  = useRef(null);
 
-  // 좌우 여백
-  const PX = 6;
-
-  const values = SUB_DATA.map(d => d.subs);
-
-  const maxS = Math.max(...values);
-  const minS = Math.min(...values);
-
-  // 그래프 출렁임 완화
-  const range = maxS - minS || 1;
-
-  const pts = SUB_DATA.map((d, i) => ({
-    x: PX + (i / (SUB_DATA.length - 1)) * (W - PX * 2),
-
-    y:
-      H -
-      ((d.subs - minS) / range) * (H - 14) -
-      6,
-
-    ...d
-  }));
-
-  const polyline = pts.map(p => `${p.x},${p.y}`).join(" ");
-
-  const area = `
-    ${PX},${H}
-    ${polyline}
-    ${W - PX},${H}
-  `;
-
-  const last = pts[pts.length - 1];
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    const loadChart = () => {
+      if (!window.Chart) { setTimeout(loadChart, 50); return; }
+      if (chartRef.current) chartRef.current.destroy();
+      const ctx = canvasRef.current.getContext("2d");
+      const grad = ctx.createLinearGradient(0, 0, 0, 130);
+      grad.addColorStop(0, "rgba(184,255,0,0.22)");
+      grad.addColorStop(1, "rgba(184,255,0,0.00)");
+      chartRef.current = new window.Chart(ctx, {
+        type: "line",
+        data: {
+          labels: SUB_DATA.map(d => d.month),
+          datasets: [{
+            data: SUB_DATA.map(d => d.subs),
+            borderColor: ACCENT,
+            borderWidth: 2,
+            tension: 0.45,
+            pointRadius: SUB_DATA.map((_, i) => i === SUB_DATA.length - 1 ? 5 : 3),
+            pointBackgroundColor: ACCENT,
+            pointBorderColor: ACCENT,
+            pointHoverRadius: 6,
+            fill: true,
+            backgroundColor: grad,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: "rgba(20,14,50,0.92)",
+              borderColor: "rgba(184,255,0,0.25)",
+              borderWidth: 1,
+              titleColor: "rgba(220,210,255,0.55)",
+              bodyColor: ACCENT,
+              bodyFont: { size: 13, weight: "700" },
+              displayColors: false,
+              callbacks: { label: ctx => ctx.parsed.y + "명" }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: "rgba(255,255,255,0.04)" },
+              ticks: {
+                color: "rgba(220,210,255,0.38)",
+                font: { size: 10, family: "monospace" },
+                maxRotation: 0,
+                autoSkip: false,
+              },
+              border: { display: false }
+            },
+            y: {
+              min: 220,
+              max: 430,
+              grid: { color: "rgba(255,255,255,0.05)" },
+              ticks: {
+                color: "rgba(220,210,255,0.30)",
+                font: { size: 9 },
+                stepSize: 60,
+                callback: v => v + "명"
+              },
+              border: { display: false }
+            }
+          },
+          interaction: { mode: "index", intersect: false },
+          animation: { duration: 800, easing: "easeInOutQuart" }
+        }
+      });
+    };
+    loadChart();
+    return () => { if (chartRef.current) chartRef.current.destroy(); };
+  }, []);
 
   return (
-    <div style={{ width: "100%", position: "relative" }}>
-      <svg
-        viewBox={`0 0 ${W} ${H}`}
-        preserveAspectRatio="none"
-        style={{
-          width: "100%",
-          height: 60,
-          display: "block",
-          overflow: "visible"
-        }}
-      >
-        <defs>
-          <linearGradient id="subGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop
-              offset="0%"
-              stopColor={ACCENT}
-              stopOpacity="0.22"
-            />
-            <stop
-              offset="100%"
-              stopColor={ACCENT}
-              stopOpacity="0"
-            />
-          </linearGradient>
-        </defs>
-
-        {/* 배경 가이드라인 */}
-        {[0, 1, 2].map(i => (
-          <line
-            key={i}
-            x1={PX}
-            x2={W - PX}
-            y1={10 + i * 14}
-            y2={10 + i * 14}
-            stroke="rgba(255,255,255,0.05)"
-            strokeWidth="0.5"
-          />
-        ))}
-
-        <polygon points={area} fill="url(#subGrad)" />
-
-        <polyline
-          points={polyline}
-          fill="none"
-          stroke={ACCENT}
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-
-        {pts.map((p, i) => (
-          <circle
-            key={i}
-            cx={p.x}
-            cy={p.y}
-            r={i === pts.length - 1 ? 2.8 : 1.8}
-            fill={ACCENT}
-          />
-        ))}
-
-        {/* 마지막 점 glow */}
-        <circle
-          cx={last.x}
-          cy={last.y}
-          r="5"
-          fill="none"
-          stroke={ACCENT}
-          strokeOpacity="0.35"
-          strokeWidth="1"
-        />
-      </svg>
-
-      {/* 월 라벨 */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: `0 ${PX}px`,
-          marginTop: 2
-        }}
-      >
-        {pts.map((p, i) => (
-          <span
-            key={i}
-            style={{
-              fontSize: 9,
-              color: muted,
-              fontFamily: "monospace"
-            }}
-          >
-            {p.month}
-          </span>
-        ))}
+    <div style={{ width: "100%" }}>
+      <div style={{ position: "relative", width: "100%", height: 130 }}>
+        <canvas ref={canvasRef} role="img" aria-label="밤하늘극장 유튜브 구독자 추이" />
       </div>
     </div>
   );
@@ -793,11 +746,20 @@ export default function App() {
     window.addEventListener("resize",fn);
     return ()=>window.removeEventListener("resize",fn);
   },[]);
-
+useEffect(() => {
+  if (document.querySelector('script[src*="chart.umd.js"]')) return;
+  const s = document.createElement("script");
+  s.src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";
+  document.head.appendChild(s);
+}, []);
   return (
     <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)",color:white,fontFamily:"'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif",position:"relative"}}>
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        <script
+  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"
+  async
+/>
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
         @keyframes fl    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
         @keyframes pulse { 0%,100%{opacity:.15} 50%{opacity:1} }
