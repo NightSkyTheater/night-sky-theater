@@ -109,7 +109,7 @@ const Tag = ({c=LIME,children}) => (
 );
 
 const SecHead = ({title,sub}) => (
-  <div style={{marginBottom:4}}>
+  <div style={{marginBottom:0}}>
     <p style={{fontSize:17,fontWeight:800,lineHeight:1,color:white,margin:0,letterSpacing:"-0.3px"}}>{title}</p>
     {sub&&<p style={{fontSize:10,color:muted,margin:"3px 0 0"}}>{sub}</p>}
   </div>
@@ -254,7 +254,7 @@ function HomeTab({isPC}) {
 
   const Notice = (
     <G pad="0">
-      <div style={{padding:"16px 18px 12px"}}><SecHead title="공지사항"/></div>
+      <div style={{padding:"20px 18px 12px"}}><SecHead title="공지사항"/></div>
       <Hr/>
       {[
         {tag:"발매",   tagC:LIME,      date:"05.28",title:"새 싱글 발매"},
@@ -321,7 +321,7 @@ const growth   = ((increase / prevSubs) * 100).toFixed(1);
 
   const Top10 = (
     <G pad="0">
-      <div style={{padding:"16px 18px 12px"}}><SecHead title="밤하늘극장 인기차트 TOP 10" sub="'26년 5월 기준"/></div>
+      <div style={{padding:"20px 18px 12px"}}><SecHead title="밤하늘극장 인기차트 TOP 10" sub="'26년 5월 기준"/></div>
       <Hr/>
       {CHART.map((t,i)=>(
         <div key={i}>
@@ -458,7 +458,7 @@ function AboutTab({isPC}) {
   );
   const Timeline = (
     <G pad="0">
-      <div style={{padding:"16px 18px 12px"}}><SecHead title="연혁"/></div>
+      <div style={{padding:"20px 18px 12px"}}><SecHead title="연혁"/></div>
       <Hr/>
       <div style={{padding:"10px 18px 16px",position:"relative"}}>
         <div style={{position:"absolute",left:30,top:14,bottom:14,width:1,background:`linear-gradient(to bottom,${ACCENT}55,transparent)`}}/>
