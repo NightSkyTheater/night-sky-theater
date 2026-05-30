@@ -139,44 +139,135 @@ function BottomNav({tab,setTab}) {
 
 // ── 구독자 추이 미니 라인차트 (SVG) ─────────────────
 function SubChart() {
-  const W = 100, H = 48;
-  const maxS = Math.max(...SUB_DATA.map(d=>d.subs));
-  const pts = SUB_DATA.map((d,i)=>({
-    x: (i/(SUB_DATA.length-1))*W,
-    y: H - (d.subs/maxS)*(H-6) - 2,
+  const W = 100;
+  const H = 52;
+
+  // 좌우 여백
+  const PX = 6;
+
+  const values = SUB_DATA.map(d => d.subs);
+
+  const maxS = Math.max(...values);
+  const minS = Math.min(...values);
+
+  // 그래프 출렁임 완화
+  const range = maxS - minS || 1;
+
+  const pts = SUB_DATA.map((d, i) => ({
+    x: PX + (i / (SUB_DATA.length - 1)) * (W - PX * 2),
+
+    y:
+      H -
+      ((d.subs - minS) / range) * (H - 14) -
+      6,
+
     ...d
   }));
-  const polyline = pts.map(p=>`${p.x},${p.y}`).join(" ");
-  const area = `0,${H} ${polyline} ${W},${H}`;
-  const last = pts[pts.length-1];
+
+  const polyline = pts.map(p => `${p.x},${p.y}`).join(" ");
+
+  const area = `
+    ${PX},${H}
+    ${polyline}
+    ${W - PX},${H}
+  `;
+
+  const last = pts[pts.length - 1];
 
   return (
-    <div style={{width:"100%",position:"relative"}}>
-      <svg viewBox={`0 0 ${W} ${H}`} style={{width:"100%",height:56,overflow:"visible",display:"block"}}>
+    <div style={{ width: "100%", position: "relative" }}>
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        preserveAspectRatio="none"
+        style={{
+          width: "100%",
+          height: 60,
+          display: "block",
+          overflow: "visible"
+        }}
+      >
         <defs>
           <linearGradient id="subGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={ACCENT} stopOpacity="0.18"/>
-            <stop offset="100%" stopColor={ACCENT} stopOpacity="0"/>
+            <stop
+              offset="0%"
+              stopColor={ACCENT}
+              stopOpacity="0.22"
+            />
+            <stop
+              offset="100%"
+              stopColor={ACCENT}
+              stopOpacity="0"
+            />
           </linearGradient>
         </defs>
-        <polygon points={area} fill="url(#subGrad)"/>
-        <polyline points={polyline} fill="none" stroke={ACCENT} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-        <circle cx={last.x} cy={last.y} r="2" fill={ACCENT}/>
-        <circle cx={last.x} cy={last.y} r="4" fill="none" stroke={ACCENT} strokeWidth="0.8" strokeOpacity="0.4"/>
+
+        {/* 배경 가이드라인 */}
+        {[0, 1, 2].map(i => (
+          <line
+            key={i}
+            x1={PX}
+            x2={W - PX}
+            y1={10 + i * 14}
+            y2={10 + i * 14}
+            stroke="rgba(255,255,255,0.05)"
+            strokeWidth="0.5"
+          />
+        ))}
+
+        <polygon points={area} fill="url(#subGrad)" />
+
+        <polyline
+          points={polyline}
+          fill="none"
+          stroke={ACCENT}
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+
+        {pts.map((p, i) => (
+          <circle
+            key={i}
+            cx={p.x}
+            cy={p.y}
+            r={i === pts.length - 1 ? 2.8 : 1.8}
+            fill={ACCENT}
+          />
+        ))}
+
+        {/* 마지막 점 glow */}
+        <circle
+          cx={last.x}
+          cy={last.y}
+          r="5"
+          fill="none"
+          stroke={ACCENT}
+          strokeOpacity="0.35"
+          strokeWidth="1"
+        />
       </svg>
-      <div style={{display:"flex",justifyContent:"space-between",marginTop:2}}>
-        {pts.map((p,i)=>(
-  <span
-    key={i}
-    style={{
-      fontSize:9,
-      color:muted,
-      fontFamily:"monospace"
-    }}
-  >
-    {p.month}
-  </span>
-))}
+
+      {/* 월 라벨 */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: `0 ${PX}px`,
+          marginTop: 2
+        }}
+      >
+        {pts.map((p, i) => (
+          <span
+            key={i}
+            style={{
+              fontSize: 9,
+              color: muted,
+              fontFamily: "monospace"
+            }}
+          >
+            {p.month}
+          </span>
+        ))}
       </div>
     </div>
   );
