@@ -402,7 +402,7 @@ function BottomNav({tab,setTab}) {
   );
 }
 
-// ── 구독자 추이 미니 라인차트 (SVG) ─────────────────
+// ── 유튜브 채널 분석 ─────────────────
 function SubChart() {
   const canvasRef = useRef(null);
   const chartRef  = useRef(null);
@@ -485,7 +485,7 @@ function SubChart() {
   return (
     <div style={{ width: "100%" }}>
       <div style={{ position: "relative", width: "100%", height: 130 }}>
-        <canvas ref={canvasRef} role="img" aria-label="밤하늘극장 유튜브 구독자 추이" />
+        <canvas ref={canvasRef} role="img" aria-label="유튜브 채널 분석" />
       </div>
     </div>
   );
@@ -661,7 +661,7 @@ const growth   = ((increase / prevSubs) * 100).toFixed(1);
     </span>
   )}
 </div>
-            <span style={{fontSize:12,color:muted,width:46,flexShrink:0}}>{o.name}</span>
+            <span style={{fontSize:12,color:muted,width:68,flexShrink:0}}>{o.name}</span>
             <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
               <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${ACCENT}cc,#4f8ef7)`,borderRadius:4}}/>
             </div>
