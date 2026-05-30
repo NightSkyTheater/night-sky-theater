@@ -776,11 +776,19 @@ function AboutTab({isPC}) {
   );
 
   // 🎧 스트리밍 링크
+// 🎧 스트리밍 링크
 const Streaming = (
   <G>
     <SecHead title="링크" sub="Streaming & Social"/>
 
-    <div style={{marginTop:12, display:"flex", flexDirection:"column", gap:10}}>
+    <div
+      style={{
+        marginTop:12,
+        display:"grid",
+        gridTemplateColumns: isPC ? "1fr 1fr" : "1fr",
+        gap:10
+      }}
+    >
 
       {PLATFORMS.map((p,i)=>(
         <a
@@ -813,7 +821,6 @@ const Streaming = (
           }}
         >
 
-          {/* LEFT */}
           <div style={{display:"flex",alignItems:"center",gap:12}}>
             <div style={{
               width:34,height:34,
@@ -838,7 +845,6 @@ const Streaming = (
             </div>
           </div>
 
-          {/* RIGHT */}
           <div style={{textAlign:"right"}}>
             <p style={{margin:0,fontSize:11,color:p.color,fontWeight:700}}>
               OPEN
