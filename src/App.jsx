@@ -548,7 +548,7 @@ const growth   = ((increase / prevSubs) * 100).toFixed(1);
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
         <SecHead title="유튜브 채널 분석" sub="최근 7개월 기준"/>
         <div style={{textAlign:"right"}}>
-          <p style={{fontSize:22,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>402</p>
+          <p style={{fontSize:22,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>410</p>
           <p style={{fontSize:9,color:muted,margin:"3px 0 0"}}>현재 구독자</p>
         </div>
       </div>
