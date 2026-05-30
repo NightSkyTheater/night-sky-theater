@@ -508,9 +508,9 @@ function HomeTab({isPC}) {
   const TodayPick = (
     <G acc style={{padding:"26px 20px",position:"relative",overflow:"hidden", textAlign:"center"}}>
       <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.1) 0%,transparent 70%)",pointerEvents:"none"}}/>
-      <p style={{fontSize:10,fontWeight:700,color:LIME,letterSpacing:"0.12em",margin:"0 0 18px",opacity:0.8}}>오늘의 밤하늘극장 추천곡</p>
+      <p style={{fontSize:10,fontWeight:600,color:LIME,letterSpacing:"0.12em",margin:"0 0 18px",opacity:0.8}}>Today's Pick</p>
       {track&&<>
-        <p style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 6px",lineHeight:1.3,letterSpacing:"-0.3px"}}>{track.title}</p>
+        <p style={{fontSize:22,fontWeight:700,color:white,margin:"0 0 6px",lineHeight:1.3,letterSpacing:"-0.3px"}}>{track.title}</p>
         <p style={{fontSize:12,color:muted,margin:"0 0 10px"}}>{track.album}</p>
         {track.mood&&<p style={{fontSize:13,color:`${LIME}88`,margin:0,fontFamily:"'Noto Serif KR',serif",transform: "skewX(-12deg)",
 display: "inline-block",whiteSpace:"pre-line"}}>"{track.mood}"</p>}
