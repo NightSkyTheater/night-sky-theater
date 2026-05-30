@@ -908,32 +908,25 @@ function MusicTab({isPC}) {
 }
 
 // ── 방명록 (리뉴얼 완료) ─────────────────────────────
-import React, { useState, useRef, useEffect } from "react";
+function GuestbookTab({ isPC }) {
+  const getInitialEntries = () => {
+    if (typeof window === "undefined") return INIT_GB;
 
-const INIT_GB = [
-  { id: 1, name: "레이니돌", msg: "신기한 기능이네요. :)", time: "2026. 05. 30", x: 15, y: 12, color: "#ffb3ba" },
-  { id: 2, name: "올드비", msg: "와우 정말 좋은 프로그램이네요.\n부담없이 쓸 수 있을 것 같아요.", time: "2026. 05. 30", x: 45, y: 25, color: "#baffc9" },
-  { id: 3, name: "얼리어답터", msg: "이거 재미있네요..! :) 저도 하나 달아볼까나?", time: "2026. 05. 30", x: 20, y: 50, color: "#bae1ff" },
-];
-
-export default function GuestbookTab({ isPC }) {
-  // 1. 초기값 설정 시 localStorage에 저장된 데이터가 있다면 불러오고, 없다면 INIT_GB를 사용합니다.
-  const [entries, setEntries] = useState(() => {
-    const saved = localStorage.getItem("night_sky_guestbook");
+    const saved = localStorage.getItem("guestbook");
     return saved ? JSON.parse(saved) : INIT_GB;
-  });
+  };
 
+  const [entries, setEntries] = useState(getInitialEntries);
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState(false);
 
-  // 2. id가 중복되지 않도록 기존 항목 중 가장 큰 id값 다음부터 시작하게 설정합니다.
-  const nid = useRef(entries.length > 0 ? Math.max(...entries.map(e => e.id)) + 1 : 4);
+  const nid = useRef(4);
 
-  // 3. entries 데이터가 바뀔 때마다 자동으로 브라우저(localStorage)에 저장합니다.
+  // ✅ 핵심: 변경될 때마다 저장
   useEffect(() => {
-    localStorage.setItem("night_sky_guestbook", JSON.stringify(entries));
+    localStorage.setItem("guestbook", JSON.stringify(entries));
   }, [entries]);
 
   const inputStyle = {
@@ -960,7 +953,9 @@ export default function GuestbookTab({ isPC }) {
         time: new Date().toLocaleDateString("ko-KR").slice(0, -1),
         x: Math.floor(Math.random() * 65) + 10,
         y: Math.floor(Math.random() * 55) + 5,
-        color: ["#fff", "#ffe4e1", "#e0ffff", "#f0fff0", "#fffacd"][Math.floor(Math.random() * 5)]
+        color: ["#fff", "#ffe4e1", "#e0ffff", "#f0fff0", "#fffacd"][
+          Math.floor(Math.random() * 5)
+        ],
       },
     ]);
 
@@ -981,42 +976,47 @@ export default function GuestbookTab({ isPC }) {
   };
 
   return (
-    <div style={{ 
-      position: "relative", 
-      minHeight: "85vh", 
-      display: "flex", 
-      flexDirection: "column",
-      justifyContent: "space-between",
-      color: "#fff"
-    }}>
-
-      {/* 🌌 상단 타이틀 섹션 */}
-      <div style={{
-        padding: "16px",
-        background: "rgba(255, 255, 255, 0.03)",
-        backdropFilter: "blur(4px)",
-        WebkitBackdropFilter: "blur(4px)",
-        borderRadius: "16px",
-        border: "1px solid rgba(255, 255, 255, 0.05)",
-        textAlign: "center",
-        zIndex: 2
-      }}>
-        <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#e0e0e0" }}>
+    <div
+      style={{
+        position: "relative",
+        minHeight: "85vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        color: "#fff",
+      }}
+    >
+      {/* 헤더 */}
+      <div
+        style={{
+          padding: "16px",
+          background: "rgba(255, 255, 255, 0.03)",
+          backdropFilter: "blur(4px)",
+          WebkitBackdropFilter: "blur(4px)",
+          borderRadius: "16px",
+          border: "1px solid rgba(255, 255, 255, 0.05)",
+          textAlign: "center",
+          zIndex: 2,
+        }}
+      >
+        <h2 style={{ margin: 0, fontSize: "16px", fontWeight: 600 }}>
           밤하늘 낙서장
         </h2>
-        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)", margin: 0 }}>
+        <p style={{ fontSize: "12px", opacity: 0.6, margin: 0 }}>
           밤하늘에 지워지지 않을 당신의 한 줄을 남겨주세요.
         </p>
       </div>
 
-      {/* 📌 밤하늘 메모보드 */}
-      <div style={{ 
-        position: "relative", 
-        flex: 1, 
-        minHeight: "400px", 
-        marginTop: "20px",
-        marginBottom: "180px"
-      }}>
+      {/* 낙서 영역 */}
+      <div
+        style={{
+          position: "relative",
+          flex: 1,
+          minHeight: "400px",
+          marginTop: "20px",
+          marginBottom: "180px",
+        }}
+      >
         {entries.map((e) => (
           <div
             key={e.id}
@@ -1028,97 +1028,92 @@ export default function GuestbookTab({ isPC }) {
               padding: "10px",
               cursor: "pointer",
               animation: "floatAnimation 4s ease-in-out infinite",
-              transition: "transform 0.2s"
             }}
             onClick={() => {
-              if(window.confirm("이 낙서를 삭제하시겠습니까?")) del(e);
+              if (window.confirm("이 낙서를 삭제하시겠습니까?")) del(e);
             }}
-            title="클릭하여 삭제"
           >
-            <p style={{
-              margin: 0,
-              fontSize: "13px",
-              lineHeight: "1.5",
-              color: e.color || "#fff",
-              textShadow: "0 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.2)",
-              whiteSpace: "pre-line",
-              fontFamily: "gothic"
-            }}>
+            <p
+              style={{
+                margin: 0,
+                fontSize: "13px",
+                lineHeight: 1.5,
+                color: e.color || "#fff",
+                textShadow: "0 2px 6px rgba(0,0,0,0.8)",
+                whiteSpace: "pre-line",
+              }}
+            >
               {e.msg}
             </p>
-            <div style={{ 
-              marginTop: "4px", 
-              fontSize: "10px", 
-              color: "rgba(255,255,255,0.4)",
-              display: "flex",
-              gap: "6px"
-            }}>
-              <span>by {e.name}</span>
-              <span>·</span>
-              <span>{e.time}</span>
+
+            <div style={{ fontSize: "10px", opacity: 0.5, marginTop: "4px" }}>
+              by {e.name} · {e.time}
             </div>
           </div>
         ))}
       </div>
 
-      {/* 📥 하단 고정형 입력창 */}
-      <div style={{
-        position: "fixed",
-        bottom: "60px",
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "calc(100% - 32px)",
-        maxWidth: "500px",
-        background: "rgba(255, 255, 255, 0.08)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-        borderRadius: "20px",
-        border: "1px solid rgba(255, 255, 255, 0.15)",
-        padding: "14px",
-        boxShadow: "0 -10px 30px rgba(0, 0, 0, 0.5)",
-        zIndex: 10,
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px"
-      }}>
+      {/* 입력창 */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: "60px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "calc(100% - 32px)",
+          maxWidth: "500px",
+          background: "rgba(255, 255, 255, 0.08)",
+          backdropFilter: "blur(12px)",
+          borderRadius: "20px",
+          border: "1px solid rgba(255, 255, 255, 0.15)",
+          padding: "14px",
+          zIndex: 10,
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px",
+        }}
+      >
         <div style={{ display: "flex", gap: "8px" }}>
-          <input 
-            value={name} 
-            onChange={e => setName(e.target.value)}
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             placeholder="이름"
-            style={{ ...inputStyle, width: "90px" }} 
+            style={{ ...inputStyle, width: "90px" }}
           />
-          <input 
-            value={pw} 
-            onChange={e => setPw(e.target.value)}
+          <input
+            value={pw}
+            onChange={(e) => setPw(e.target.value)}
             placeholder="비밀번호"
             type="password"
-            style={{ ...inputStyle, flex: 1 }} 
+            style={{ ...inputStyle, flex: 1 }}
           />
-          <button 
+          <button
             onClick={submit}
             style={{
               padding: "0 16px",
               borderRadius: "8px",
               border: "none",
-              background: done ? "#baffc9" : "#ffffff",
-              color: "#121212",
-              fontWeight: "700",
+              background: done ? "#baffc9" : "#fff",
+              color: "#000",
+              fontWeight: 700,
               fontSize: "12px",
-              cursor: "pointer",
-              transition: "all 0.2s"
             }}
           >
-            {done ? "기록 완료 ✨" : "남기기"}
+            {done ? "완료 ✨" : "남기기"}
           </button>
         </div>
 
-        <textarea 
-          value={msg} 
-          onChange={e => setMsg(e.target.value)}
-          placeholder="밤하늘 극장에 남길 이야기를 적어주세요..."
+        <textarea
+          value={msg}
+          onChange={(e) => setMsg(e.target.value)}
+          placeholder="밤하늘에 남길 이야기..."
           rows={2}
-          style={{ ...inputStyle, width: "100%", resize: "none", background: "rgba(0,0,0,0.2)" }} 
+          style={{
+            ...inputStyle,
+            width: "100%",
+            resize: "none",
+            background: "rgba(0,0,0,0.2)",
+          }}
         />
       </div>
 
@@ -1129,7 +1124,6 @@ export default function GuestbookTab({ isPC }) {
           100% { transform: translateY(0px); }
         }
       `}</style>
-
     </div>
   );
 }
