@@ -932,345 +932,174 @@ function MusicTab({isPC}) {
   );
 }
 
-function GuestbookTab({ isPC }) {
-  const [entries, setEntries] = useState(INIT_GB);
-  const [name, setName] = useState("");
-  const [pw, setPw] = useState("");
-  const [msg, setMsg] = useState("");
-  const [done, setDone] = useState(false);
+import { useState } from "react";
 
-  const [menuOpen, setMenuOpen] = useState(null);
-  const [editT, setEditT] = useState(null);
-  const [editPw, setEditPw] = useState("");
-  const [editMsg, setEditMsg] = useState("");
-  const [editErr, setEditErr] = useState(false);
+export default function NightSkyGuestbook() {
+  const [posts, setPosts] = useState([
+    { id: 1, text: "오늘 밤하늘 너무 예쁘다…" },
+    { id: 2, text: "여기 글 남기고 갑니다 ✨" },
+  ]);
 
-  const nid = useRef(4);
+  const [input, setInput] = useState("");
 
-  const IS = {
-    background: "rgba(255,255,255,0.05)",
-    border: `1px solid ${gb}`,
-    borderRadius: 12,
-    color: white,
-    padding: "10px 13px",
-    fontSize: 12,
-    outline: "none",
-    fontFamily: "inherit"
-  };
+  const addPost = () => {
+    if (!input.trim()) return;
 
-  const submit = () => {
-    if (!name.trim() || !pw.trim() || !msg.trim()) return;
-
-    setEntries(p => [
+    setPosts((prev) => [
+      ...prev,
       {
-        id: nid.current++,
-        name: name.trim(),
-        pw: pw.trim(),
-        msg: msg.trim(),
-        time: new Date().toLocaleDateString("ko-KR").slice(0, -1),
-        reply: ""
+        id: Date.now(),
+        text: input,
       },
-      ...p
     ]);
 
-    setName("");
-    setPw("");
-    setMsg("");
-    setDone(true);
-    setTimeout(() => setDone(false), 2000);
+    setInput("");
   };
 
-  const startEdit = (e) => {
-    setEditT(e.id);
-    setEditMsg(e.msg);
-    setEditPw("");
-    setEditErr(false);
-    setMenuOpen(null);
-  };
+  return (
+    <div style={styles.wrap}>
+      {/* 밤하늘 배경 */}
+      <div style={styles.sky} />
 
-  const saveEdit = (entry) => {
-    if (editPw !== entry.pw) {
-      setEditErr(true);
-      return;
-    }
+      {/* 별 효과 레이어 */}
+      <div style={styles.stars} />
 
-    setEntries(p =>
-      p.map(e =>
-        e.id === entry.id ? { ...e, msg: editMsg } : e
-      )
-    );
-
-    setEditT(null);
-    setEditPw("");
-    setEditMsg("");
-    setEditErr(false);
-  };
-
-  const del = (entry) => {
-    const v = window.prompt("비밀번호를 입력하세요");
-    if (v === entry.pw) {
-      setEntries(p => p.filter(e => e.id !== entry.id));
-    }
-  };
-
-  // 🌌 STAR STREAM UI
-  const StarStream = ({ entries }) => (
-    <div style={{ position: "relative", overflow: "hidden", padding: "10px 0" }}>
-
-      {/* background glow */}
-      <div style={{
-        position: "absolute",
-        inset: 0,
-        background:
-          "radial-gradient(circle at 30% 20%, rgba(184,255,0,0.06), transparent 40%)," +
-          "radial-gradient(circle at 70% 80%, rgba(91,79,245,0.06), transparent 45%)",
-        filter: "blur(22px)",
-        pointerEvents: "none"
-      }} />
-
-      <div style={{
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-        gap: 18,
-        padding: "10px 12px"
-      }}>
-        {entries.map((e, i) => (
+      {/* 메모 흐름 영역 */}
+      <div style={styles.feed}>
+        {posts.map((p, i) => (
           <div
-            key={e.id}
+            key={p.id}
             style={{
-              animation: `floatLog 6s ease-in-out infinite`,
-              animationDelay: `${i * 0.12}s`
+              ...styles.post,
+              opacity: 0.85 + (i % 3) * 0.05,
+              transform: `translateX(${(i % 2) * 10}px)`,
             }}
           >
-            <div style={{
-              display: "flex",
-              gap: 10,
-              alignItems: "flex-start",
-              borderLeft: "1px solid rgba(184,255,0,0.12)",
-              paddingLeft: 12
-            }}>
-
-              {/* star dot */}
-              <div style={{
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                background: "rgba(184,255,0,0.9)",
-                boxShadow: "0 0 12px rgba(184,255,0,0.6)",
-                marginTop: 6,
-                flexShrink: 0
-              }} />
-
-              <div style={{ flex: 1 }}>
-
-                {/* header */}
-                <div style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}>
-                  <span style={{
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: ACCENT
-                  }}>
-                    {e.name}
-                  </span>
-
-                  <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                    <span style={{
-                      fontSize: 10,
-                      color: "rgba(220,210,255,0.35)",
-                      fontFamily: "monospace"
-                    }}>
-                      {e.time}
-                    </span>
-
-                    <button
-                      onClick={() =>
-                        setMenuOpen(menuOpen === e.id ? null : e.id)
-                      }
-                      style={{
-                        background: "none",
-                        border: "none",
-                        color: "rgba(220,210,255,0.4)",
-                        cursor: "pointer"
-                      }}
-                    >
-                      ⋯
-                    </button>
-
-                    {menuOpen === e.id && (
-                      <div style={{
-                        position: "absolute",
-                        background: "rgba(10,10,20,0.95)",
-                        border: `1px solid ${gb}`,
-                        borderRadius: 10,
-                        overflow: "hidden",
-                        marginTop: 20,
-                        right: 20
-                      }}>
-                        <button onClick={() => startEdit(e)}
-                          style={{
-                            display: "block",
-                            padding: "8px 12px",
-                            background: "none",
-                            border: "none",
-                            color: soft,
-                            fontSize: 11,
-                            cursor: "pointer"
-                          }}>
-                          수정
-                        </button>
-
-                        <button onClick={() => del(e)}
-                          style={{
-                            display: "block",
-                            padding: "8px 12px",
-                            background: "none",
-                            border: "none",
-                            color: "#ff6666",
-                            fontSize: 11,
-                            cursor: "pointer"
-                          }}>
-                          삭제
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* message */}
-                {editT === e.id ? (
-                  <div style={{ marginTop: 8 }}>
-                    <textarea
-                      value={editMsg}
-                      onChange={ev => setEditMsg(ev.target.value)}
-                      rows={3}
-                      style={{ ...IS, width: "100%" }}
-                    />
-
-                    <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
-                      <input
-                        value={editPw}
-                        onChange={ev => setEditPw(ev.target.value)}
-                        placeholder="비밀번호"
-                        type="password"
-                        style={{ ...IS, flex: 1 }}
-                      />
-
-                      <button onClick={() => saveEdit(e)}
-                        style={{
-                          background: "rgba(255,255,255,0.06)",
-                          border: `1px solid ${gb}`,
-                          color: soft,
-                          borderRadius: 8,
-                          padding: "8px 12px",
-                          cursor: "pointer"
-                        }}>
-                        저장
-                      </button>
-                    </div>
-
-                    {editErr && (
-                      <p style={{ fontSize: 11, color: "#ff6666" }}>
-                        비밀번호가 틀렸습니다
-                      </p>
-                    )}
-                  </div>
-                ) : (
-                  <p style={{
-                    fontSize: 13,
-                    color: "rgba(220,210,255,0.75)",
-                    lineHeight: 1.7,
-                    margin: "4px 0 0",
-                    whiteSpace: "pre-line"
-                  }}>
-                    {e.msg}
-                  </p>
-                )}
-
-                {/* reply */}
-                {e.reply && (
-                  <div style={{
-                    marginTop: 6,
-                    paddingLeft: 8,
-                    borderLeft: "1px solid rgba(184,255,0,0.2)",
-                    fontSize: 11,
-                    color: "rgba(184,255,0,0.7)"
-                  }}>
-                    ✦ {e.reply}
-                  </div>
-                )}
-
-              </div>
-            </div>
+            ✦ {p.text}
           </div>
         ))}
       </div>
-    </div>
-  );
 
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-
-      {/* intro */}
-      <G acc>
-        <p style={{ fontSize: 13, color: soft, lineHeight: 1.8, margin: 0 }}>
-          이곳은 방명록이 아니라<br />
-          <span style={{ color: LIME }}>흐르는 감정의 별 로그</span>입니다.
-        </p>
-      </G>
-
-      {/* input */}
-      <G>
-        <SecHead title="별 기록 남기기" />
-
-        <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-          <input value={name} onChange={e => setName(e.target.value)}
-            placeholder="이름"
-            style={{ ...IS, width: 100 }} />
-
-          <input value={pw} onChange={e => setPw(e.target.value)}
-            placeholder="비밀번호"
-            type="password"
-            style={{ ...IS, flex: 1 }} />
+      {/* 하단 고정 UI (타이틀 + 입력창) */}
+      <div style={styles.bottomGlass}>
+        <div style={styles.title}>
+          🌌 밤하늘 방명록
+          <div style={styles.subtitle}>
+            이곳에 당신의 흔적을 남겨주세요
+          </div>
         </div>
 
-        <textarea value={msg} onChange={e => setMsg(e.target.value)}
-          placeholder="오늘의 감정을 별에 남겨주세요..."
-          rows={4}
-          style={{ ...IS, width: "100%", marginTop: 8, resize: "none" }} />
-
-        <button onClick={submit}
-          style={{
-            marginTop: 10,
-            padding: "8px 16px",
-            borderRadius: 10,
-            border: `1px solid ${gb}`,
-            background: done ? "rgba(184,255,0,0.15)" : "rgba(255,255,255,0.06)",
-            color: done ? LIME : soft,
-            fontWeight: 700,
-            cursor: "pointer"
-          }}>
-          {done ? "기록 완료 ✨" : "별에 기록"}
-        </button>
-      </G>
-
-      {/* stream */}
-      <G pad="0">
-        <div style={{ padding: "14px 18px" }}>
-          <SecHead title={`별 로그 — ${entries.length}`} />
+        <div style={styles.inputRow}>
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="밤하늘에 글을 남겨보세요..."
+            style={styles.input}
+          />
+          <button onClick={addPost} style={styles.button}>
+            남기기
+          </button>
         </div>
-
-        <Hr />
-
-        <StarStream entries={entries} />
-      </G>
+      </div>
     </div>
   );
 }
+
+const styles = {
+  wrap: {
+    position: "relative",
+    height: "100vh",
+    overflow: "hidden",
+    fontFamily: "sans-serif",
+    color: "white",
+  },
+
+  sky: {
+    position: "absolute",
+    inset: 0,
+    background:
+      "radial-gradient(circle at 20% 20%, #1a1a40, transparent 40%)," +
+      "radial-gradient(circle at 80% 30%, #2b1b4d, transparent 45%)," +
+      "radial-gradient(circle at 50% 80%, #0d1020, #05060f)",
+  },
+
+  stars: {
+    position: "absolute",
+    inset: 0,
+    backgroundImage:
+      "radial-gradient(white 1px, transparent 1px)",
+    backgroundSize: "3px 3px",
+    opacity: 0.15,
+  },
+
+  feed: {
+    position: "absolute",
+    top: 0,
+    bottom: 120,
+    left: 0,
+    right: 0,
+    padding: "60px 20px",
+    overflowY: "auto",
+    display: "flex",
+    flexDirection: "column",
+    gap: "18px",
+  },
+
+  post: {
+    fontSize: "16px",
+    letterSpacing: "0.5px",
+    color: "rgba(255,255,255,0.9)",
+    textShadow: "0 0 10px rgba(255,255,255,0.15)",
+  },
+
+  bottomGlass: {
+    position: "fixed",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: "14px 16px",
+    backdropFilter: "blur(14px)",
+    background: "rgba(255,255,255,0.08)",
+    borderTop: "1px solid rgba(255,255,255,0.12)",
+  },
+
+  title: {
+    fontSize: "14px",
+    marginBottom: "8px",
+    opacity: 0.9,
+  },
+
+  subtitle: {
+    fontSize: "11px",
+    opacity: 0.6,
+    marginTop: "2px",
+  },
+
+  inputRow: {
+    display: "flex",
+    gap: "8px",
+  },
+
+  input: {
+    flex: 1,
+    padding: "10px 12px",
+    borderRadius: "10px",
+    border: "none",
+    outline: "none",
+    background: "rgba(0,0,0,0.3)",
+    color: "white",
+  },
+
+  button: {
+    padding: "10px 14px",
+    borderRadius: "10px",
+    border: "none",
+    background: "#B8FF00",
+    color: "#000",
+    fontWeight: "bold",
+    cursor: "pointer",
+  },
+};
  
 
 // ── APP ─────────────────────────────────────────────
