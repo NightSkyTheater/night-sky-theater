@@ -322,13 +322,13 @@ const OVERSEAS = [
 ];
 
 const SUB_DATA = [
-  {month:"11월", subs:132},
   {month:"12월", subs:182},
-  {month:"1월",  subs:219},
+  {month:"1월", subs:219},
   {month:"2월",  subs:262},
   {month:"3월",  subs:300},
   {month:"4월",  subs:345},
   {month:"5월",  subs:410},
+  {month:"현재",  subs:433},
 ];
 
 const PLATFORMS = [
@@ -513,8 +513,8 @@ function HomeTab({isPC}) {
       <Hr/>
       {[
         {tag:"채널",   tagC:"#aaaaff", date:"04.25",title:"유튜브 구독자 400명 돌파"},
-        {tag:"정규",   tagC:"#ff8b94", date:"05.28",title:"'허수아비에게' 발매"},
-        {tag:"미니",   tagC:"#ffd3b6", date:"05.28",title:"'SKIP' 발매"},
+        {tag:"정규",   tagC:"#ff8b94", date:"05.04",title:"'허수아비에게' 발매"},
+        {tag:"미니",   tagC:"#ffd3b6", date:"05.16",title:"'SKIP' 발매"},
         {tag:"싱글",   tagC:"#a8e6cf", date:"05.28",title:"'두려운 것 투성이야, 세상은' 발매"},
         {tag:"예정",   tagC:"#ffcc44", date:"06.09",title:"'별 하나와 달 하나, 그리고 나의 마음' 발매 예정"},
       ].map((n,i,arr)=>(
