@@ -344,7 +344,20 @@ const PLATFORMS = [
   { name:"Spotify", url:"open.spotify.com/artist/...", color:"#1DB954", icon:"🟢" },
   { name:"Apple Music", url:"music.apple.com/...", color:"#FA2D48", icon:"🍎" }
 ];
-
+const KEYWORDS = [
+  "청춘",
+  "위로",
+  "사랑",
+  "성장",
+  "낭만",
+  "인생",
+  "별",
+  "밤하늘",
+  "희망",
+  "기억",
+  "꿈",
+  "여행",
+];
 function Stars() {
   const s = useRef(Array.from({length:100},(_,i)=>({id:i,x:Math.random()*100,y:Math.random()*100,r:Math.random()*1.4+0.2,o:Math.random()*0.4+0.08,d:Math.random()*5+2}))).current;
   return (
@@ -641,56 +654,37 @@ function AboutTab({isPC}) {
     </G>
   );
 
-  const Artists = (
-    <G>
-      <SecHead title="아티스트"/>
-      {[
-  {
-    name:"밤하늘극장",
-    role:"밴드 · 프로젝트",
-    desc:"사랑과 시간, 기억에 깃든 감정을 노래하는 가상 인디 밴드.",
-    image:"/images/nightskytheater.jpg"
-  },
-  {
-    name:"유우레이",
-    role:"보컬 · 솔로 아티스트",
-    desc:"밤하늘극장 소속의 가상 한·일 혼혈 여성 아티스트.",
-    image:"/images/yuurei.jpg"
-  }
-].map((a,i)=>(
-        <div key={a.name} style={{marginBottom:i===0?16:0}}>
-          <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}>
-            <div
-  style={{
-    width:48,
-    height:48,
-    borderRadius:"50%",
-    overflow:"hidden",
-    border:"1px solid rgba(184,255,0,0.22)",
-    boxShadow:"0 0 12px rgba(184,255,0,0.15)",
-    flexShrink:0
-  }}
->
-  <img
-    src={a.image}
-    alt={a.name}
-    style={{
-      width:"100%",
-      height:"100%",
-      objectFit:"cover"
-    }}
-  />
-</div>
-            <div>
-              <p style={{margin:0,fontSize:14,fontWeight:800,color:white}}>{a.name}</p>
-              <p style={{margin:0,fontSize:10,color:LIME,opacity:0.75}}>{a.role}</p>
-            </div>
-          </div>
-          <p style={{fontSize:12,color:muted,lineHeight:1.7,margin:0}}>{a.desc}</p>
-        </div>
+const Keywords = (
+  <G>
+    <SecHead title="음악 키워드" sub="Night Sky Theater" />
+
+    <div
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 8,
+        marginTop: 14,
+      }}
+    >
+      {KEYWORDS.map((k) => (
+        <Tag key={k}>#{k}</Tag>
       ))}
-    </G>
-  );
+    </div>
+
+    <p
+      style={{
+        fontSize: 12,
+        color: muted,
+        lineHeight: 1.8,
+        marginTop: 14,
+      }}
+    >
+      밤하늘극장은 청춘과 사랑, 성장과 위로를 노래합니다.
+      별과 밤하늘을 배경으로 삶의 아름다움과 슬픔,
+      그리고 희망을 담아내고 있습니다.
+    </p>
+  </G>
+);
 
   const Streaming = (
     <G>
@@ -728,14 +722,13 @@ function AboutTab({isPC}) {
     </G>
   );
 
-  return (
-    <div style={{display:"flex",flexDirection:"column",gap:10}}>
-      {Hero}
-      {Artists}
-      {Streaming}
-    </div>
-  );
-}
+return (
+  <div style={{display:"flex",flexDirection:"column",gap:10}}>
+    {Hero}
+    {Keywords}
+    {Streaming}
+  </div>
+);
 
 function MusicTab({isPC}) {
   const [selected,setSelected]=useState(null);
