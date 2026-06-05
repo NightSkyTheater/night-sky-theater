@@ -644,9 +644,9 @@ function AboutTab({isPC}) {
   밤하늘극장은 사랑과 시간, 그리고 기억에 깃든 감정을
   섬세하게 노래하는 가상 인디 밴드입니다.
   <br/><br/>
-  밤하늘극장 소속 아티스트인 <strong style={{color:white}}>유우레이</strong>는
-  가상의 한·일 혼혈 여성 솔로 아티스트로,
-  서로 다른 시선과 감정을 음악으로 풀어내고 있습니다.
+  밤하늘극장 소속 아티스트인 유우레이는
+가상의 한·일 혼혈 여성 솔로 아티스트로,
+사랑과 청춘, 삶의 감정을 자신만의 시선으로 노래하고 있습니다.
   <br/><br/>
   음원 검색 시에는 <strong style={{color:white}}>'밤하늘극장'</strong>으로
   검색해 주셔야 관련 음원과 작품들을 확인하실 수 있습니다.
@@ -666,9 +666,22 @@ const Keywords = (
         marginTop: 14,
       }}
     >
-      {KEYWORDS.map((k) => (
-        <Tag key={k}>#{k}</Tag>
-      ))}
+      {KEYWORDS.map((k)=>(
+  <span
+    key={k}
+    style={{
+      padding:"6px 12px",
+      borderRadius:999,
+      background:"rgba(184,255,0,0.08)",
+      border:"1px solid rgba(184,255,0,0.18)",
+      color:LIME,
+      fontSize:12,
+      fontWeight:700
+    }}
+  >
+    #{k}
+  </span>
+))}
     </div>
 
     <p
