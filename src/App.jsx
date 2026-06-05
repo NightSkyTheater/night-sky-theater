@@ -640,14 +640,14 @@ function AboutTab({isPC}) {
       <h2 style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 6px"}}>밤하늘극장</h2>
       <p style={{fontSize:12,color:muted,lineHeight:1.7}}>@NightSkyTheater</p>
       <Hr my={10}/>
-<p style={{fontSize:13,color:soft,lineHeight:1.9,textAlign:"left"}}>
+<p style={{fontSize:13,color:soft,lineHeight:1.9,textAlign:"center"}}>
 밤하늘극장은 사랑과 시간, 그리고 기억에 깃든 감정을
 섬세하게 노래하는 가상 인디 밴드입니다.
-
+<Br>
 소속 아티스트인 유우레이는 가상의 한·일 혼혈 여성
 솔로 아티스트로, 사랑과 청춘, 삶의 감정을 자신만의
 시선으로 노래하고 있습니다.
-
+<Br>
 음원 검색 시에는 '밤하늘극장'으로 검색해 주셔야
 관련 음원과 작품들을 확인하실 수 있습니다.
 </p>
@@ -656,14 +656,14 @@ function AboutTab({isPC}) {
 
 const Keywords = (
   <G>
-    <SecHead title="음악 키워드" sub="Night Sky Theater" />
-
+    <SecHead title="키워드"/>
     <div
       style={{
         display: "flex",
         flexWrap: "wrap",
         gap: 8,
         marginTop: 14,
+        textAlign: "center",
       }}
     >
       {KEYWORDS.map((k)=>(
@@ -683,19 +683,6 @@ const Keywords = (
   </span>
 ))}
     </div>
-
-    <p
-      style={{
-        fontSize: 12,
-        color: muted,
-        lineHeight: 1.8,
-        marginTop: 14,
-      }}
-    >
-      밤하늘극장은 청춘과 사랑, 성장과 위로를 노래합니다.
-      별과 밤하늘을 배경으로 삶의 아름다움과 슬픔,
-      그리고 희망을 담아내고 있습니다.
-    </p>
   </G>
 );
 
