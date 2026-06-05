@@ -344,20 +344,7 @@ const PLATFORMS = [
   { name:"Spotify", url:"open.spotify.com/artist/...", color:"#1DB954", icon:"🟢" },
   { name:"Apple Music", url:"music.apple.com/...", color:"#FA2D48", icon:"🍎" }
 ];
-const KEYWORDS = [
-  "청춘",
-  "위로",
-  "사랑",
-  "성장",
-  "낭만",
-  "인생",
-  "별",
-  "밤하늘",
-  "희망",
-  "기억",
-  "꿈",
-  "여행",
-];
+
 function Stars() {
   const s = useRef(Array.from({length:100},(_,i)=>({id:i,x:Math.random()*100,y:Math.random()*100,r:Math.random()*1.4+0.2,o:Math.random()*0.4+0.08,d:Math.random()*5+2}))).current;
   return (
@@ -809,41 +796,7 @@ function AboutTab({ isPC }) {
 </div>
   </G>
 );
-  const Keywords = (
-    <G>
-      <SecHead title="키워드" />
-
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 8,
-          marginTop: 14,
-          justifyContent: "center"
-        }}
-      >
-        {KEYWORDS.map((k) => (
-          <span
-            key={k}
-            style={{
-              padding: "7px 14px",
-              borderRadius: 999,
-              background: "rgba(255,255,255,0.03)",
-border: "1px solid rgba(255,255,255,0.06)",
-color: "rgba(255,255,255,0.65)",
-              fontSize: 12,
-              fontWeight: 700,
-              transition: "all .25s ease",
-              cursor: "default"
-            }}
-          >
-            #{k}
-          </span>
-        ))}
-      </div>
-    </G>
-  );
-
+ 
   const Streaming = (
     <G>
       <SecHead title="링크" sub="Streaming & Social" />
