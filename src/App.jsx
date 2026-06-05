@@ -898,7 +898,6 @@ function AboutTab({ isPC }) {
       }}
     >
       {Hero}
-      {Keywords}
       {Streaming}
     </div>
   );
