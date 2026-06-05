@@ -764,7 +764,7 @@ function AboutTab({ isPC }) {
         {" "}유우레이
       </span>
       는 가상의 <strong>한·일 혼혈 여성 솔로 아티스트</strong>
-      로, 사랑과 청춘, 삶의 감정을 자신만의 시선으로
+      로,<br />사랑과 청춘, 삶의 감정을 자신만의 시선으로
       노래하고 있습니다.
     </p>
   </div>
@@ -783,7 +783,7 @@ function AboutTab({ isPC }) {
         fontSize: 13,
         lineHeight: 1.8,
         color: white,
-        fontWeight: 600
+        fontWeight: 400
       }}
     >
       🔍 음원 검색 시에는
