@@ -311,14 +311,14 @@ const CHART = [
 ];
 
 const OVERSEAS = [
-  { flag: "https://flagcdn.com/in.svg", emoji: "🇮🇳", name: "인도", pct: 32 },
-  { flag: "https://flagcdn.com/jp.svg", emoji: "🇯🇵", name: "일본", pct: 14 },
-  { flag: "https://flagcdn.com/tw.svg", emoji: "🇹🇼", name: "대만", pct: 10 },
-  { flag: "https://flagcdn.com/us.svg", emoji: "🇺🇸", name: "미국", pct: 8 },
-  { flag: "https://flagcdn.com/ua.svg", emoji: "🇺🇦", name: "우크라이나", pct: 7 },
-  { flag: "https://flagcdn.com/id.svg", emoji: "🇮🇩", name: "인도네시아", pct: 5 },
-  { flag: "https://flagcdn.com/tr.svg", emoji: "🇹🇷", name: "튀르키예", pct: 5 },
-  { flag: null, emoji: "🌍", name: "기타", pct: 19 },
+  { flag: "https://flagcdn.com/in.svg", emoji: "🇮🇳", name: "인도", pct: 18.6 },
+  { flag: "https://flagcdn.com/jp.svg", emoji: "🇯🇵", name: "일본", pct: 7.5 },
+  { flag: "https://flagcdn.com/tw.svg", emoji: "🇹🇼", name: "대만", pct: 5.2 },
+  { flag: "https://flagcdn.com/us.svg", emoji: "🇺🇸", name: "미국", pct: 4.7 },
+  { flag: "https://flagcdn.com/ua.svg", emoji: "🇺🇦", name: "우크라이나", pct: 3.7 },
+  { flag: "https://flagcdn.com/tr.svg", emoji: "🇹🇷", name: "튀르키예", pct: 2.8 },
+  { flag: "https://flagcdn.com/id.svg", emoji: "🇮🇩", name: "인도네시아", pct: 2.8 },
+  { flag: null, emoji: "🌍", name: "기타", pct: 54.7 },
 ];
 
 const SUB_DATA = [
@@ -328,7 +328,7 @@ const SUB_DATA = [
   {month:"3월",  subs:300},
   {month:"4월",  subs:345},
   {month:"5월",  subs:410},
-  {month:"현재",  subs:433},
+  {month:"현재",  subs:461},
 ];
 
 const PLATFORMS = [
@@ -540,7 +540,7 @@ function HomeTab({isPC}) {
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
         <SecHead title="유튜브 채널 분석" sub="최근 7개월 기준"/>
         <div style={{textAlign:"right"}}>
-          <p style={{fontSize:20,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>433</p>
+          <p style={{fontSize:20,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>461</p>
           <p style={{fontSize:9,color:muted,margin:"3px 0 0"}}>현재 구독자</p>
         </div>
       </div>
