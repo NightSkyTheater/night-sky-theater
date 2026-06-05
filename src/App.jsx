@@ -627,10 +627,17 @@ function AboutTab({isPC}) {
       <h2 style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 6px"}}>밤하늘극장</h2>
       <p style={{fontSize:12,color:muted,lineHeight:1.7}}>@NightSkyTheater · 구독자 410명 · 유통 (주)와이지플러스</p>
       <Hr my={10}/>
-      <p style={{fontSize:13,color:soft,lineHeight:1.9,textAlign:"left"}}>
-        감정이 흐르는 무대, 별빛 같은 노래가 머무는 곳.<br/>
-        <strong style={{color:white}}>유우레이</strong>와 <strong style={{color:white}}>임보성</strong>이 함께하는 감성 인디 프로젝트입니다.
-      </p>
+<p style={{fontSize:13,color:soft,lineHeight:1.9,textAlign:"left"}}>
+  밤하늘극장은 사랑과 시간, 그리고 기억에 깃든 감정을
+  섬세하게 노래하는 가상 인디 밴드입니다.
+  <br/><br/>
+  밤하늘극장 소속 아티스트인 <strong style={{color:white}}>유우레이</strong>는
+  가상의 한·일 혼혈 여성 솔로 아티스트로,
+  서로 다른 시선과 감정을 음악으로 풀어내고 있습니다.
+  <br/><br/>
+  음원 검색 시에는 <strong style={{color:white}}>'밤하늘극장'</strong>으로
+  검색해 주셔야 관련 음원과 작품들을 확인하실 수 있습니다.
+</p>
     </G>
   );
 
@@ -638,12 +645,42 @@ function AboutTab({isPC}) {
     <G>
       <SecHead title="아티스트"/>
       {[
-        {name:"유우레이", role:"보컬 · 작사", desc:"목소리로 감정의 결을 만드는 사람.", emoji:"🎤"},
-        {name:"임보성", role:"프로듀서 · 작곡", desc:"사운드로 세계관을 구축하는 사람.", emoji:"🎹"}
-      ].map((a,i)=>(
+  {
+    name:"밤하늘극장",
+    role:"밴드 · 프로젝트",
+    desc:"사랑과 시간, 기억에 깃든 감정을 노래하는 가상 인디 밴드.",
+    image:"/images/nightskytheater.jpg"
+  },
+  {
+    name:"유우레이",
+    role:"보컬 · 솔로 아티스트",
+    desc:"밤하늘극장 소속의 가상 한·일 혼혈 여성 아티스트.",
+    image:"/images/yuurei.jpg"
+  }
+].map((a,i)=>(
         <div key={a.name} style={{marginBottom:i===0?16:0}}>
           <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}>
-            <div style={{width:40,height:40,borderRadius:"50%",background:"rgba(184,255,0,0.1)",border:"1px solid rgba(184,255,0,0.22)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,fontFamily:EMOJI_FONT}}>{a.emoji}</div>
+            <div
+  style={{
+    width:48,
+    height:48,
+    borderRadius:"50%",
+    overflow:"hidden",
+    border:"1px solid rgba(184,255,0,0.22)",
+    boxShadow:"0 0 12px rgba(184,255,0,0.15)",
+    flexShrink:0
+  }}
+>
+  <img
+    src={a.image}
+    alt={a.name}
+    style={{
+      width:"100%",
+      height:"100%",
+      objectFit:"cover"
+    }}
+  />
+</div>
             <div>
               <p style={{margin:0,fontSize:14,fontWeight:800,color:white}}>{a.name}</p>
               <p style={{margin:0,fontSize:10,color:LIME,opacity:0.75}}>{a.role}</p>
