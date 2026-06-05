@@ -385,7 +385,21 @@ const SecHead = ({title,sub}) => (
     {sub&&<p style={{fontSize:10,color:muted,margin:"3px 0 0"}}>{sub}</p>}
   </div>
 );
-
+const Tag = ({ children }) => (
+  <span
+    style={{
+      padding: "6px 12px",
+      borderRadius: 999,
+      background: "rgba(255,255,255,.05)",
+      border: "1px solid rgba(255,255,255,.08)",
+      color: white,
+      fontSize: 11,
+      fontWeight: 700
+    }}
+  >
+    {children}
+  </span>
+);
 const NAV_ITEMS = [
   {id:"홈",    svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>},
   {id:"소개",  svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>},
@@ -631,105 +645,275 @@ function HomeTab({isPC}) {
   return <div style={{display:"flex",flexDirection:"column",gap:10,textAlign:"left"}}>{TodayPick}{Notice}{Top10}{SubSection}{Overseas}</div>;
 }
 
-function AboutTab({isPC}) {
+function AboutTab({ isPC }) {
   const Hero = (
-    <G style={{textAlign:"center",position:"relative",overflow:"hidden",padding:"26px 22px"}}>
-      <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.08) 0%,transparent 70%)",pointerEvents:"none"}}/>
-      <div style={{width:68,height:68,borderRadius:"50%",background:LIME,margin:"0 auto 16px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:30,boxShadow:`0 0 28px ${LIME}44`,fontFamily:EMOJI_FONT}}>🪐</div>
-      <p style={{fontSize:11,color:LIME,fontWeight:700,margin:"0 0 6px",letterSpacing:"0.1em"}}>NIGHT SKY THEATER</p>
-      <h2 style={{fontSize:22,fontWeight:900,color:white,margin:"0 0 6px"}}>밤하늘극장</h2>
-      <p style={{fontSize:12,color:muted,lineHeight:1.7}}>@NightSkyTheater</p>
-      <Hr my={10}/>
-<p style={{fontSize:13,color:soft,lineHeight:1.9,textAlign:"center"}}>
-밤하늘극장은 사랑과 시간, 그리고 기억에 깃든 감정을
-섬세하게 노래하는 가상 인디 밴드입니다.
-<br/>
-소속 아티스트인 유우레이는 가상의 한·일 혼혈 여성
-솔로 아티스트로, 사랑과 청춘, 삶의 감정을 자신만의
-시선으로 노래하고 있습니다.
-<br/>
-음원 검색 시에는 '밤하늘극장'으로 검색해 주셔야
-관련 음원과 작품들을 확인하실 수 있습니다.
-</p>
+    <G
+      style={{
+        textAlign: "center",
+        position: "relative",
+        overflow: "hidden",
+        padding: "34px 22px"
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(circle at 50% 0%, rgba(184,255,0,.10), transparent 70%)",
+          pointerEvents: "none"
+        }}
+      />
+
+      <div
+        style={{
+          width: 90,
+          height: 90,
+          borderRadius: "50%",
+          margin: "0 auto 18px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: 42,
+          background:
+            "radial-gradient(circle at 30% 30%, rgba(184,255,0,.25), rgba(91,79,245,.15))",
+          border: "1px solid rgba(184,255,0,.18)",
+          boxShadow:
+            "0 0 40px rgba(184,255,0,.18), 0 0 80px rgba(91,79,245,.12)",
+          animation: "floatHero 4s ease-in-out infinite",
+          fontFamily: EMOJI_FONT
+        }}
+      >
+        🪐
+      </div>
+
+      <p
+        style={{
+          fontSize: 11,
+          color: LIME,
+          fontWeight: 700,
+          margin: "0 0 6px",
+          letterSpacing: "0.12em"
+        }}
+      >
+        NIGHT SKY THEATER
+      </p>
+
+      <h2
+        style={{
+          fontSize: 26,
+          fontWeight: 900,
+          color: white,
+          margin: "0 0 6px"
+        }}
+      >
+        밤하늘극장
+      </h2>
+
+      <p
+        style={{
+          fontSize: 12,
+          color: muted,
+          margin: "0 0 14px"
+        }}
+      >
+        @NightSkyTheater
+      </p>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: 8,
+          flexWrap: "wrap",
+          marginBottom: 14
+        }}
+      >
+        <Tag>INDIE BAND</Tag>
+        <Tag>AI MUSIC</Tag>
+        <Tag>K-INDIE</Tag>
+      </div>
+
+      <Hr my={10} />
+
+      <p
+        style={{
+          fontSize: 13,
+          color: soft,
+          lineHeight: 1.9,
+          textAlign: "center",
+          margin: 0
+        }}
+      >
+        밤하늘극장은 사랑과 시간, 그리고 기억에 깃든 감정을
+        섬세하게 노래하는 가상 인디 밴드입니다.
+        <br />
+        소속 아티스트인 유우레이는 가상의 한·일 혼혈 여성
+        솔로 아티스트로, 사랑과 청춘, 삶의 감정을 자신만의
+        시선으로 노래하고 있습니다.
+        <br />
+        음원 검색 시에는 '밤하늘극장'으로 검색해 주셔야
+        관련 음원과 작품들을 확인하실 수 있습니다.
+      </p>
     </G>
   );
 
-const Keywords = (
-  <G>
-    <SecHead title="키워드"/>
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: 8,
-        marginTop: 14,
-        textAlign: "center",
-      }}
-    >
-      {KEYWORDS.map((k)=>(
-  <span
-    key={k}
-    style={{
-      padding:"6px 12px",
-      borderRadius:999,
-      background:"rgba(184,255,0,0.08)",
-      border:"1px solid rgba(184,255,0,0.18)",
-      color:LIME,
-      fontSize:12,
-      fontWeight:700
-    }}
-  >
-    #{k}
-  </span>
-))}
-    </div>
-  </G>
-);
+  const Keywords = (
+    <G>
+      <SecHead title="키워드" />
+
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 8,
+          marginTop: 14,
+          justifyContent: "center"
+        }}
+      >
+        {KEYWORDS.map((k) => (
+          <span
+            key={k}
+            style={{
+              padding: "7px 14px",
+              borderRadius: 999,
+              background: "rgba(184,255,0,0.08)",
+              border: "1px solid rgba(184,255,0,0.18)",
+              color: LIME,
+              fontSize: 12,
+              fontWeight: 700,
+              transition: "all .25s ease",
+              cursor: "default"
+            }}
+          >
+            #{k}
+          </span>
+        ))}
+      </div>
+    </G>
+  );
 
   const Streaming = (
     <G>
-      <SecHead title="링크" sub="Streaming & Social"/>
-      <div style={{marginTop:12, display:"grid", gridTemplateColumns: isPC ? "1fr 1fr" : "1fr", gap:10}}>
-        {PLATFORMS.map((p)=>(
+      <SecHead title="링크" sub="Streaming & Social" />
+
+      <div
+        style={{
+          marginTop: 12,
+          display: "grid",
+          gridTemplateColumns: isPC ? "1fr 1fr" : "1fr",
+          gap: 10
+        }}
+      >
+        {PLATFORMS.map((p) => (
           <a
             key={p.name}
             href={"https://" + p.url}
             target="_blank"
             rel="noreferrer"
-            style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"12px 14px",borderRadius:14,background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.06)",textDecoration:"none",transition:"all 0.2s ease",position:"relative",overflow:"hidden"}}
-            onMouseEnter={e=>{
-              e.currentTarget.style.transform="translateX(4px)";
-              e.currentTarget.style.borderColor=p.color+"66";
-              e.currentTarget.style.background=p.color+"10";
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "12px 14px",
+              borderRadius: 16,
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.06)",
+              textDecoration: "none",
+              transition: "all .2s ease",
+              position: "relative",
+              overflow: "hidden"
             }}
-            onMouseLeave={e=>{
-              e.currentTarget.style.transform="translateX(0)";
-              e.currentTarget.style.borderColor="rgba(255,255,255,0.06)";
-              e.currentTarget.style.background="rgba(255,255,255,0.04)";
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateX(4px)";
+              e.currentTarget.style.borderColor = p.color + "66";
+              e.currentTarget.style.background = p.color + "10";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateX(0)";
+              e.currentTarget.style.borderColor =
+                "rgba(255,255,255,0.06)";
+              e.currentTarget.style.background =
+                "rgba(255,255,255,0.04)";
             }}
           >
-            <div style={{display:"flex",alignItems:"center",gap:12}}>
-              <div style={{width:34,height:34,borderRadius:10,background:p.color+"22",border:`1px solid ${p.color}55`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: 3,
+                background: p.color
+              }}
+            />
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12
+              }}
+            >
+              <div
+                style={{
+                  width: 34,
+                  height: 34,
+                  borderRadius: 10,
+                  background: p.color + "22",
+                  border: `1px solid ${p.color}55`,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 16
+                }}
+              >
                 {p.icon}
               </div>
-              <div>
-                <p style={{margin:0,fontSize:13,fontWeight:800,color:white}}>{p.name}</p>
-              </div>
+
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 13,
+                  fontWeight: 800,
+                  color: white
+                }}
+              >
+                {p.name}
+              </p>
             </div>
+
+            <span
+              style={{
+                color: "rgba(255,255,255,.4)",
+                fontSize: 14,
+                fontWeight: 700
+              }}
+            >
+              →
+            </span>
           </a>
         ))}
       </div>
     </G>
   );
 
-return (
-  <div style={{display:"flex",flexDirection:"column",gap:10}}>
-    {Hero}
-    {Keywords}
-    {Streaming}
-  </div>
-);
-} 
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 14,
+        maxWidth: isPC ? 760 : "100%",
+        margin: "0 auto"
+      }}
+    >
+      {Hero}
+      {Keywords}
+      {Streaming}
+    </div>
+  );
+}
 
 function MusicTab({isPC}) {
   const [selected,setSelected]=useState(null);

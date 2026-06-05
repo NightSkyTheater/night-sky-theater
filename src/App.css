@@ -94,7 +94,14 @@
     text-align: center;
   }
 }
-
+@keyframes floatHero {
+  0%,100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
 #docs {
   border-right: 1px solid var(--border);
 
