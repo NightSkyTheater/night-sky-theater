@@ -385,7 +385,7 @@ const SecHead = ({title,sub}) => (
     {sub&&<p style={{fontSize:10,color:muted,margin:"3px 0 0"}}>{sub}</p>}
   </div>
 );
-const Tag = ({ children }) => (
+const PillTag = ({ children }) => (
   <span
     style={{
       padding: "6px 12px",
@@ -729,7 +729,7 @@ function AboutTab({ isPC }) {
           marginBottom: 14
         }}
       >
-        <Tag>INDIE BAND</Tag>
+        <PillTag>INDIE BAND</PillTag>
         <Tag>AI MUSIC</Tag>
         <Tag>K-INDIE</Tag>
       </div>
@@ -1243,10 +1243,15 @@ function GuestbookTab() {
 // ── APP (메인 컴포넌트 단일 Export Default) ───────────────────
 export default function App() {
   const [tab, setTab] = useState("홈");
-  const [isPC, setIsPC] = useState(window.innerWidth >= 768);
+  const [isPC, setIsPC] = useState(false);
 
   useEffect(() => {
-    const fn = () => setIsPC(window.innerWidth >= 768);
+    const fn = () => {
+      setIsPC(window.innerWidth >= 768);
+    };
+
+    fn(); // 최초 실행
+
     window.addEventListener("resize", fn);
     return () => window.removeEventListener("resize", fn);
   }, []);
