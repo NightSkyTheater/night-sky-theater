@@ -701,9 +701,10 @@ function AboutTab({ isPC }) {
 
       <h2
         style={{
-          fontSize: 26,
+          fontSize: 30,
           fontWeight: 900,
           color: white,
+          letterSpacing: "-0.04em"
           margin: "0 0 6px"
         }}
       >
@@ -720,43 +721,92 @@ function AboutTab({ isPC }) {
         @NightSkyTheater
       </p>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: 8,
-          flexWrap: "wrap",
-          marginBottom: 14
-        }}
-      >
-        <PillTag>INDIE BAND</PillTag>
-        <Tag>AI MUSIC</Tag>
-        <Tag>K-INDIE</Tag>
-      </div>
+<Hr my={14} />
 
-      <Hr my={10} />
+<div
+  style={{
+    marginTop: 18,
+    display: "flex",
+    flexDirection: "column",
+    gap: 14,
+    textAlign: "left"
+  }}
+>
+  <div
+    style={{
+      padding: "14px 16px",
+      borderRadius: 14,
+      background: "rgba(255,255,255,0.04)",
+      border: "1px solid rgba(255,255,255,0.06)"
+    }}
+  >
+    <p
+      style={{
+        margin: 0,
+        fontSize: 13,
+        lineHeight: 1.9,
+        color: soft
+      }}
+    >
+      <span style={{ color: ACCENT, fontWeight: 800 }}>
+        밤하늘극장
+      </span>
+      은 사랑과 시간, 그리고 기억에 깃든 감정을 섬세하게
+      노래하는 <strong>가상 인디 밴드</strong>입니다.
+    </p>
+  </div>
 
-      <p
-        style={{
-          fontSize: 13,
-          color: soft,
-          lineHeight: 1.9,
-          textAlign: "center",
-          margin: 0
-        }}
-      >
-        밤하늘극장은 사랑과 시간, 그리고 기억에 깃든 감정을
-        섬세하게 노래하는 가상 인디 밴드입니다.
-        <br />
-        소속 아티스트인 유우레이는 가상의 한·일 혼혈 여성
-        솔로 아티스트로, 사랑과 청춘, 삶의 감정을 자신만의
-        시선으로 노래하고 있습니다.
-        <br />
-        음원 검색 시에는 '밤하늘극장'으로 검색해 주셔야
-        관련 음원과 작품들을 확인하실 수 있습니다.
-      </p>
-    </G>
-  );
+  <div
+    style={{
+      padding: "14px 16px",
+      borderRadius: 14,
+      background: "rgba(255,255,255,0.04)",
+      border: "1px solid rgba(255,255,255,0.06)"
+    }}
+  >
+    <p
+      style={{
+        margin: 0,
+        fontSize: 13,
+        lineHeight: 1.9,
+        color: soft
+      }}
+    >
+      소속 아티스트인
+      <span style={{ color: "#8ab4ff", fontWeight: 800 }}>
+        {" "}유우레이
+      </span>
+      는 가상의 <strong>한·일 혼혈 여성 솔로 아티스트</strong>
+      로, 사랑과 청춘, 삶의 감정을 자신만의 시선으로
+      노래하고 있습니다.
+    </p>
+  </div>
+
+  <div
+    style={{
+      padding: "14px 16px",
+      borderRadius: 14,
+      background: "rgba(184,255,0,0.06)",
+      border: "1px solid rgba(184,255,0,0.15)"
+    }}
+  >
+    <p
+      style={{
+        margin: 0,
+        fontSize: 13,
+        lineHeight: 1.8,
+        color: white,
+        fontWeight: 600
+      }}
+    >
+      🔍 음원 검색 시에는
+      <span style={{ color: ACCENT }}>
+        {" "}‘밤하늘극장’
+      </span>
+      으로 검색해 주셔야 관련 음원과 작품들을 확인하실 수 있습니다.
+    </p>
+  </div>
+</div>
 
   const Keywords = (
     <G>
@@ -777,9 +827,9 @@ function AboutTab({ isPC }) {
             style={{
               padding: "7px 14px",
               borderRadius: 999,
-              background: "rgba(184,255,0,0.08)",
-              border: "1px solid rgba(184,255,0,0.18)",
-              color: LIME,
+              background: "rgba(255,255,255,0.03)",
+border: "1px solid rgba(255,255,255,0.06)",
+color: "rgba(255,255,255,0.65)",
               fontSize: 12,
               fontWeight: 700,
               transition: "all .25s ease",
@@ -852,24 +902,9 @@ function AboutTab({ isPC }) {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 12
+                gap: 0
               }}
             >
-              <div
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: 10,
-                  background: p.color + "22",
-                  border: `1px solid ${p.color}55`,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 16
-                }}
-              >
-                {p.icon}
-              </div>
 
               <p
                 style={{
