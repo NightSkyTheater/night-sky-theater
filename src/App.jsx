@@ -562,7 +562,7 @@ function HomeTab({isPC}) {
 
   const Top10 = (
     <G pad="0">
-      <div style={{padding:"20px 18px 12px"}}><SecHead title="밤하늘극장 인기차트 TOP 10" sub="'26년 5월 기준"/></div>
+      <div style={{padding:"20px 18px 12px"}}><SecHead title="밤하늘극장 인기차트" sub="'26년 5월 스트리밍 기준"/></div>
       <Hr/>
       {CHART.map((t,i)=>(
         <div key={t.title}>
