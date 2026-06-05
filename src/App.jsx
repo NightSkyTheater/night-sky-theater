@@ -742,6 +742,7 @@ return (
     {Streaming}
   </div>
 );
+} 
 
 function MusicTab({isPC}) {
   const [selected,setSelected]=useState(null);
