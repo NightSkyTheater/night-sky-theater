@@ -704,7 +704,7 @@ function AboutTab({ isPC }) {
           fontSize: 30,
           fontWeight: 900,
           color: white,
-          letterSpacing: "-0.04em"
+          letterSpacing: "-0.04em",
           margin: "0 0 6px"
         }}
       >
@@ -807,7 +807,8 @@ function AboutTab({ isPC }) {
     </p>
   </div>
 </div>
-
+  </G>
+);
   const Keywords = (
     <G>
       <SecHead title="키워드" />
