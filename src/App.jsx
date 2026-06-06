@@ -332,17 +332,17 @@ const SUB_DATA = [
 ];
 
 const PLATFORMS = [
-  { name:"Instagram", url:"instagram.com/happy__in", color:"#E1306C", icon:"📷" },
-  { name:"Facebook", url:"facebook.com/Happyin0", color:"#1877F2", icon:"📘" },
-  { name:"TikTok", url:"tiktok.com/@nightsky_theater", color:"#111", icon:"🎵" },
-  { name:"Melon", url:"melon.com/artist/...", color:"#00D564", icon:"🎧" },
-  { name:"Genie Music", url:"genie.co.kr/...", color:"#3DA5FF", icon:"🎧" },
-  { name:"FLO", url:"music-flo.com/...", color:"#7C4DFF", icon:"🎵" },
-  { name:"VIBE", url:"vibe.naver.com/...", color:"#00C73C", icon:"🎶" },
-  { name:"Bugs", url:"music.bugs.co.kr/...", color:"#FF3B30", icon:"🎧" },
-  { name:"YouTube Music", url:"music.youtube.com/...", color:"#FF0000", icon:"▶" },
-  { name:"Spotify", url:"open.spotify.com/artist/...", color:"#1DB954", icon:"🟢" },
-  { name:"Apple Music", url:"music.apple.com/...", color:"#FA2D48", icon:"🍎" }
+  { name:"Instagram", url:"instagram.com/happy__in", color:"#E1306C" },
+  { name:"Facebook", url:"facebook.com/Happyin0", color:"#1877F2" },
+  { name:"TikTok", url:"tiktok.com/@nightsky_theater", color:"#111111"},
+  { name:"Melon", url:"melon.com/artist/...", color:"#00D564"},
+  { name:"Genie Music", url:"genie.co.kr/...", color:"#3DA5FF" },
+  { name:"FLO", url:"music-flo.com/...", color:"#7C4DFF"},
+  { name:"VIBE", url:"vibe.naver.com/...", color:"#00C73C"},
+  { name:"Bugs", url:"music.bugs.co.kr/...", color:"#FF3B30" },
+  { name:"YouTube Music", url:"music.youtube.com/...", color:"#FF0000" },
+  { name:"Spotify", url:"open.spotify.com/artist/...", color:"#1DB954" },
+  { name:"Apple Music", url:"music.apple.com/...", color:"#FA2D48" }
 ];
 
 function Stars() {
@@ -372,21 +372,7 @@ const SecHead = ({title,sub}) => (
     {sub&&<p style={{fontSize:10,color:muted,margin:"3px 0 0"}}>{sub}</p>}
   </div>
 );
-const PillTag = ({ children }) => (
-  <span
-    style={{
-      padding: "6px 12px",
-      borderRadius: 999,
-      background: "rgba(255,255,255,.05)",
-      border: "1px solid rgba(255,255,255,.08)",
-      color: white,
-      fontSize: 11,
-      fontWeight: 700
-    }}
-  >
-    {children}
-  </span>
-);
+
 const NAV_ITEMS = [
   {id:"홈",    svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>},
   {id:"소개",  svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>},
@@ -1256,8 +1242,6 @@ export default function App() {
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
-        @keyframes fl    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
-        @keyframes pulse { 0%,100%{opacity:.15} 50%{opacity:1} }
         @keyframes fin   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
         * { box-sizing:border-box; }
         body { font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif; text-align:left; margin:0; }
