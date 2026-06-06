@@ -805,7 +805,7 @@ function AboutTab({ isPC }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              padding: "12px 14px",
+              padding: "12px 30px",
               borderRadius: 16,
               background: "rgba(255,255,255,0.04)",
               border: "1px solid rgba(255,255,255,0.06)",
@@ -833,7 +833,7 @@ function AboutTab({ isPC }) {
                 left: 0,
                 top: 0,
                 bottom: 0,
-                width: 3,
+                width: 5,
                 background: p.color
               }}
             />
