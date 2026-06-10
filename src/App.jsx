@@ -537,7 +537,7 @@ const refreshPick = () => {
         {tag:"미니",   tagC:"#ffd3b6", date:"05.16",title:"'SKIP' 발매"},
         {tag:"싱글",   tagC:"#a8e6cf", date:"05.28",title:"'두려운 것 투성이야, 세상은' 발매"},
         {tag:"정규",   tagC:"#ff8b94", date:"06.09",title:"'별 하나와 달 하나, 그리고 나의 마음' 발매"},
-        {tag:"예정",   tagC:"#ffcc44", date:"06.19",title:"'불행마저 사랑하게 만들까 봐' 발매 예정"}
+        {tag:"예정",   tagC:"#ffcc44", date:"06.19",title:"'불행마저 사랑하게 만들까 봐' 싱글 발매예정"}
       ].map((n,i,arr)=>(
         <div key={n.title + n.date}>
           <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 18px"}}>
@@ -1002,7 +1002,7 @@ function GuestbookTab() {
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState(false); // ✨ 완료 피드백 UI용 상태 변경 적용
-
+const isMobile = window.innerWidth < 768;
   useEffect(() => {
     const q = query(
       collection(db, "guestbook"),
@@ -1177,7 +1177,13 @@ function GuestbookTab() {
         flexDirection: "column",
         gap: "8px"
       }}>
-        <div style={{ display: "flex", gap: "8px" }}>
+        <div
+  style={{
+    display: "flex",
+    gap: "8px",
+    flexDirection: isMobile ? "column" : "row"
+  }}
+>
           <input 
             value={name} 
             onChange={e => setName(e.target.value)}
@@ -1191,10 +1197,12 @@ function GuestbookTab() {
             type="password"
             style={{ ...inputStyle, flex: 1 }} 
           />
-          <button 
-            onClick={submit}
-            style={{
-              padding: "0 16px",
+          <button
+  onClick={submit}
+  style={{
+    width: isMobile ? "100%" : "auto",
+    height: "42px",
+    padding: "0 16px",
               borderRadius: "8px",
               border: "none",
               background: done ? "#baffc9" : "#ffffff",
