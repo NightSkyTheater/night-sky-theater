@@ -335,14 +335,14 @@ const PLATFORMS = [
   { name:"Instagram", url:"instagram.com/happy__in", color:"#E1306C" },
   { name:"Facebook", url:"facebook.com/Happyin0", color:"#1877F2" },
   { name:"TikTok", url:"tiktok.com/@nightsky_theater", color:"#111111"},
-  { name:"Melon", url:"melon.com/artist/...", color:"#00D564"},
-  { name:"Genie Music", url:"genie.co.kr/...", color:"#3DA5FF" },
-  { name:"FLO", url:"music-flo.com/...", color:"#7C4DFF"},
-  { name:"VIBE", url:"vibe.naver.com/...", color:"#00C73C"},
-  { name:"Bugs", url:"music.bugs.co.kr/...", color:"#FF3B30" },
-  { name:"YouTube Music", url:"music.youtube.com/...", color:"#FF0000" },
-  { name:"Spotify", url:"open.spotify.com/artist/...", color:"#1DB954" },
-  { name:"Apple Music", url:"music.apple.com/...", color:"#FA2D48" }
+  { name:"Melon", url:"melon.com/artist/timeline.htm?artistId=4565131", color:"#00D564"},
+  { name:"Genie Music", url:"genie.co.kr/detail/artistInfo?xxnm=83039013", color:"#3DA5FF" },
+  { name:"FLO", url:"music-flo.com/detail/artist/412503816/track?sortType=POPULARITY", color:"#7C4DFF"},
+  { name:"VIBE", url:"vibe.naver.com/artist/10046198", color:"#00C73C"},
+  { name:"Bugs", url:"music.bugs.co.kr/artist/14382832", color:"#FF3B30" },
+  { name:"YouTube Music", url:"music.youtube.com/channel/UCGCMDvnVgg508GYghgeT3vw", color:"#FF0000" },
+  { name:"Spotify", url:"open.spotify.com/artist/3QiNf9Qb6lJukt8ljMcZuR", color:"#1DB954" },
+  { name:"Apple Music", url:"music.apple.com/kr/artist/%EB%B0%A4%ED%95%98%EB%8A%98%EA%B7%B9%EC%9E%A5/1838608388", color:"#FA2D48" }
 ];
 
 function Stars() {
@@ -485,12 +485,16 @@ function SubChart() {
 function HomeTab({isPC}) {
   const [track,setTrack]=useState(null);
 
-  useEffect(()=>{
-    const seed=new Date().toDateString(); let h=0;
-    for(let c of seed) h=(h*31+c.charCodeAt(0))%ALL_TRACKS.length;
-    setTrack(ALL_TRACKS[Math.abs(h)]);
-  },[]);
-
+useEffect(() => {
+  setTrack(
+    ALL_TRACKS[Math.floor(Math.random() * ALL_TRACKS.length)]
+  );
+}, []);
+const refreshPick = () => {
+  setTrack(
+    ALL_TRACKS[Math.floor(Math.random() * ALL_TRACKS.length)]
+  );
+};
   const rankColor = r => r===1?ACCENT:r===2?"rgba(91,79,245,0.65)":r===3?"rgba(91,79,245,0.4)":muted;
   const trendColor = t => t==="up"?"#f87171":t==="down"?"#4f8ef7":t==="new"?ACCENT:muted;
   const trendLabel = t => t==="up"?"▲":t==="down"?"▼":t==="new"?"N":"—";
@@ -638,27 +642,22 @@ function AboutTab({ isPC }) {
         }}
       />
 
-      <div
-        style={{
-          width: 90,
-          height: 90,
-          borderRadius: "50%",
-          margin: "0 auto 18px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: 42,
-          background:
-            "radial-gradient(circle at 30% 30%, rgba(184,255,0,.25), rgba(91,79,245,.15))",
-          border: "1px solid rgba(184,255,0,.18)",
-          boxShadow:
-            "0 0 40px rgba(184,255,0,.18), 0 0 80px rgba(91,79,245,.12)",
-          animation: "floatHero 4s ease-in-out infinite",
-          fontFamily: EMOJI_FONT
-        }}
-      >
-        🪐
-      </div>
+<img
+  src="https://yt3.googleusercontent.com/GcJswGDJvAePBqoBSXrr3J5UCFX-IW3zmjyioyEGsltfXr5nX63rB51QQWZXNV5sl0IclJK5=s160-c-k-c0x00ffffff-no-rj"
+  alt="밤하늘극장"
+  style={{
+    width:90,
+    height:90,
+    borderRadius:"50%",
+    objectFit:"cover",
+    margin:"0 auto 18px",
+    display:"block",
+    border:"1px solid rgba(184,255,0,.18)",
+    boxShadow:
+      "0 0 40px rgba(184,255,0,.18), 0 0 80px rgba(91,79,245,.12)",
+    animation:"floatHero 4s ease-in-out infinite"
+  }}
+/>
 
       <p
         style={{
