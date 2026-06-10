@@ -470,7 +470,7 @@ function SubChart() {
             },
             y: {
               min: 100,
-              max: 550,
+              max: 500,
               grid: { color: "rgba(255,255,255,0.05)" },
               ticks: {
                 color: "rgba(220,210,255,0.30)",
