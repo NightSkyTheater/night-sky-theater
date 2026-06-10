@@ -292,22 +292,39 @@ const ALBUMS = [
     tracks: [
       { n: 1, title: "두려운 것 투성이야, 세상은", mood: "두려운 것 투성이야, 세상은\n사랑도 미래도 영원은 없대" }
     ]
+  },
+    {
+    id: 19,
+    title: "별 하나와 달 하나, 그리고 나의 마음",
+    cover: "https://down.mixtape.so/NAS/img/e/1/5/3/e15380e4bc1f50857f0c320e174604b0.jpg",
+    year: "2026",
+    color: "#10101a",
+    desc: "외로운 존재들이 서로를 만나 하나의 우주가 되어가는 순간.",
+    tracks: [
+      { n: 1, title: "별 하나와 달 하나, 그리고 나의 마음", mood: "인생의 절반도 채 오지 않았는데\n여기서 멈추기엔 우린 너무 아깝잖아" },
+      { n: 2, title: "세상이 나를 망쳤어", mood: "나의 다정함은 나약함이 되었고\n나의 사색은 시간 낭비가 되었지" },
+      { n: 3, title: "텅 빈 알맹이", mood: "한 걸음 떼는 게 죽기보다 무섭겠지만\n그 공포 너머에만 네가 살 곳이 있어" },
+      { n: 4, title: "두렵고 우울해, 힘들다 오늘도", mood: "다들 그렇게 살아간대, 부서질 것 같은 마음을\n겨우 다독이며 아픈 마음 감춘 채로" },
+      { n: 5, title: "정을 주지 않게 노력하고 있어", mood: "서툰 나의 다정함은 결국 나를 먼저 태우고\n떠나가는 뒷모습엔 딱히 아무 의미도 없더라" },
+      { n: 6, title: "웃으면 슬퍼지고 울면 기뻐지는 밤", mood: "밤하늘 별들도 빛나려\n수많은 어둠을 견뎌냈을 거야" },
+      { n: 7, title: "행복하지 않아도 되니 힘든 일만 없게 해주세요", mood: "난 이제 행복을 바라지 않아요\n그건 너무 먼 이야기라는 걸 충분히 알았으니까요" }
+    ]
   }
 ];
 
 const ALL_TRACKS = ALBUMS.flatMap(a => a.tracks.map(t => ({...t, album:a.title})));
 
 const CHART = [
-  {rank:1, title:"우리들의 발라드",                    trend:null},
-  {rank:2, title:"말하지 않은 것들의 무게",             trend:"up"},
-  {rank:3, title:"꽃이 피든 말든",                     trend:"new"},
-  {rank:4, title:"내 소중한 마음은 비밀이야",           trend:null},
-  {rank:5, title:"자발적으로 표류하는 우주비행사",      trend:"up"},
-  {rank:6, title:"운외창천 (雲外蒼天)",                 trend:"down"},
-  {rank:7, title:"운명애",                    trend:"down"},
-  {rank:8, title:"나는 오늘 또 어떤 핑계를 대었는가",  trend:"new"},
-  {rank:9, title:"출근하기 싫은데 알람은 또 맞춰놨어", trend:"down"},
-  {rank:10,title:"죽어가는 모든 것들을 사랑해야지",  trend:"new"},
+  {rank:1, title:"우리들의 발라드",                trend:null},
+  {rank:2,title:"죽어가는 모든 것들을 사랑해야지",  trend:"up"},
+  {rank:3, title:"나는 오늘 또 어떤 핑계를 대었는가",  trend:"up"},
+  {rank:4, title:"결과보단 과정을 봐줄래",            trend:"new"},
+  {rank:5, title:"가짜의 삶",  trend:"new"},
+  {rank:6, title:"말하지 않은 것들의 무게",             trend:"down"},
+  {rank:7, title:"자발적으로 표류하는 우주비행사",      trend:"up"},
+  {rank:8, title:"꽃이 피든 말든",                     trend:"down"},
+  {rank:9, title:"꿈은 없고요, 돈은 많고 싶네요",           trend:"new"},
+  {rank:10, title:"내 소중한 마음은 비밀이야",                 trend:null},
 ];
 
 const OVERSEAS = [
@@ -328,7 +345,7 @@ const SUB_DATA = [
   {month:"3월",  subs:300},
   {month:"4월",  subs:345},
   {month:"5월",  subs:410},
-  {month:"현재",  subs:461},
+  {month:"현재",  subs:492},
 ];
 
 const PLATFORMS = [
@@ -453,7 +470,7 @@ function SubChart() {
             },
             y: {
               min: 100,
-              max: 500,
+              max: 550,
               grid: { color: "rgba(255,255,255,0.05)" },
               ticks: {
                 color: "rgba(220,210,255,0.30)",
@@ -502,7 +519,7 @@ const refreshPick = () => {
   const TodayPick = (
     <G acc style={{padding:"26px 20px",position:"relative",overflow:"hidden", textAlign:"center"}}>
       <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.1) 0%,transparent 70%)",pointerEvents:"none"}}/>
-      <p style={{fontSize:10,fontWeight:600,color:LIME,letterSpacing:"0.12em",margin:"0 0 18px",opacity:0.8}}>Today's Pick</p>
+      <p style={{fontSize:10,fontWeight:600,color:LIME,letterSpacing:"0.12em",margin:"0 0 18px",opacity:0.8}}>밤하늘극장 추천곡</p>
       {track&&<>
         <p style={{fontSize:22,fontWeight:700,color:white,margin:"0 0 6px",lineHeight:1.3,letterSpacing:"-0.3px"}}>{track.title}</p>
         <p style={{fontSize:12,color:muted,margin:"0 0 10px"}}>{track.album}</p>
@@ -517,10 +534,10 @@ const refreshPick = () => {
       <Hr/>
       {[
         {tag:"채널",   tagC:"#aaaaff", date:"04.25",title:"유튜브 구독자 400명 돌파"},
-        {tag:"정규",   tagC:"#ff8b94", date:"05.04",title:"'허수아비에게' 발매"},
         {tag:"미니",   tagC:"#ffd3b6", date:"05.16",title:"'SKIP' 발매"},
         {tag:"싱글",   tagC:"#a8e6cf", date:"05.28",title:"'두려운 것 투성이야, 세상은' 발매"},
-        {tag:"예정",   tagC:"#ffcc44", date:"06.09",title:"'별 하나와 달 하나, 그리고 나의 마음' 발매 예정"},
+        {tag:"정규",   tagC:"#ff8b94", date:"06.09",title:"'별 하나와 달 하나, 그리고 나의 마음' 발매"},
+        {tag:"싱글",   tagC:"#a8e6cf", date:"06.19",title:"'불행마저 사랑하게 만들까 봐' 발매 예정"}
       ].map((n,i,arr)=>(
         <div key={n.title + n.date}>
           <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 18px"}}>
@@ -544,7 +561,7 @@ const refreshPick = () => {
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
         <SecHead title="유튜브 채널 분석" sub="최근 7개월 기준"/>
         <div style={{textAlign:"right"}}>
-          <p style={{fontSize:20,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>461</p>
+          <p style={{fontSize:20,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>492</p>
           <p style={{fontSize:9,color:muted,margin:"3px 0 0"}}>현재 구독자</p>
         </div>
       </div>
