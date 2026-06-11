@@ -1127,54 +1127,85 @@ const isMobile = window.innerWidth < 768;
       </div>
 
       {/* 📌 밤하늘 메모보드 */}
-      <div style={{ 
-        position: "relative", 
-        flex: 1, 
-        minHeight: "400px", 
-        marginTop: "20px",
-        marginBottom: "180px"
-      }}>
-        {entries.map((e) => (
-          <div
-            key={e.id}
-            style={{
-              position: "absolute",
-              left: `${e.x}%`,
-              top: `${e.y}%`,
-              maxWidth: "220px",
-              padding: "10px",
-              cursor: "pointer",
-              animation: "floatAnimation 4s ease-in-out infinite",
-              transition: "transform 0.2s"
-            }}
-            onClick={() => del(e)}
-            title="클릭하여 삭제"
-          >
-            <p style={{
-              margin: 0,
-              fontSize: "13px",
-              lineHeight: "1.5",
-              color: e.color || "#fff",
-              textShadow: "0 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.2)",
-              whiteSpace: "pre-line",
-              fontFamily: "gothic"
-            }}>
-              {e.msg}
-            </p>
-            <div style={{ 
-              marginTop: "4px", 
-              fontSize: "10px", 
-              color: "rgba(255,255,255,0.4)",
-              display: "flex",
-              gap: "6px"
-            }}>
-              <span>by {e.name}</span>
-              <span>·</span>
-              <span>{timeAgo(e.createdAt)}</span>
-            </div>
-          </div>
-        ))}
+<div
+  style={{
+    flex: 1,
+    marginTop: "20px",
+    marginBottom: "180px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+    overflowY: "auto",
+    padding: "10px 4px",
+  }}
+>
+  {entries.map((e, idx) => (
+    <div
+      key={e.id}
+      onClick={() => del(e)}
+      title="클릭하여 삭제"
+      style={{
+        alignSelf: idx % 2 === 0 ? "flex-start" : "flex-end",
+        maxWidth: "85%",
+
+        padding: "12px 14px",
+
+        borderRadius: "18px",
+
+        background: "rgba(255,255,255,0.05)",
+
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
+
+        border: "1px solid rgba(255,255,255,0.08)",
+
+        cursor: "pointer",
+
+        animation: "floatAnimation 5s ease-in-out infinite",
+
+        transform:
+          idx % 3 === 0
+            ? "rotate(-2deg)"
+            : idx % 3 === 1
+            ? "rotate(2deg)"
+            : "rotate(0deg)",
+
+        boxShadow: "0 8px 20px rgba(0,0,0,0.2)",
+      }}
+    >
+      <p
+        style={{
+          margin: 0,
+          fontSize: "13px",
+          lineHeight: "1.6",
+
+          color: e.color || "#fff",
+
+          whiteSpace: "pre-wrap",
+          wordBreak: "break-word",
+
+          textShadow: "0 0 8px rgba(255,255,255,0.15)",
+        }}
+      >
+        {e.msg}
+      </p>
+
+      <div
+        style={{
+          marginTop: "8px",
+          fontSize: "11px",
+          color: "rgba(255,255,255,0.45)",
+          display: "flex",
+          gap: "6px",
+        }}
+      >
+        <span>✦ {e.name}</span>
+        <span>·</span>
+        <span>{timeAgo(e.createdAt)}</span>
       </div>
+    </div>
+  ))}
+</div>
 
       {/* 📥 하단 고정형 입력창 */}
       <div style={{
