@@ -345,7 +345,7 @@ const SUB_DATA = [
   {month:"3월",  subs:300},
   {month:"4월",  subs:345},
   {month:"5월",  subs:410},
-  {month:"현재",  subs:500},
+  {month:"현재",  subs:502},
 ];
 
 const PLATFORMS = [
@@ -561,7 +561,7 @@ const refreshPick = () => {
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
         <SecHead title="유튜브 채널 분석" sub="최근 7개월 기준"/>
         <div style={{textAlign:"right"}}>
-          <p style={{fontSize:20,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>500</p>
+          <p style={{fontSize:20,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>502</p>
           <p style={{fontSize:9,color:muted,margin:"3px 0 0"}}>현재 구독자</p>
         </div>
       </div>
