@@ -345,7 +345,7 @@ const SUB_DATA = [
   {month:"3월",  subs:300},
   {month:"4월",  subs:345},
   {month:"5월",  subs:410},
-  {month:"현재",  subs:492},
+  {month:"현재",  subs:500},
 ];
 
 const PLATFORMS = [
@@ -470,7 +470,7 @@ function SubChart() {
             },
             y: {
               min: 100,
-              max: 500,
+              max: 550,
               grid: { color: "rgba(255,255,255,0.05)" },
               ticks: {
                 color: "rgba(220,210,255,0.30)",
@@ -533,10 +533,10 @@ const refreshPick = () => {
       <div style={{padding:"20px 18px 12px"}}><SecHead title="공지사항"/></div>
       <Hr/>
       {[
-        {tag:"채널",   tagC:"#aaaaff", date:"04.25",title:"유튜브 구독자 400명 돌파"},
         {tag:"미니",   tagC:"#ffd3b6", date:"05.16",title:"'SKIP' 발매"},
         {tag:"싱글",   tagC:"#a8e6cf", date:"05.28",title:"'두려운 것 투성이야, 세상은' 발매"},
         {tag:"정규",   tagC:"#ff8b94", date:"06.09",title:"'별 하나와 달 하나, 그리고 나의 마음' 발매"},
+        {tag:"채널",   tagC:"#aaaaff", date:"06.11",title:"유튜브 구독자 500명 돌파"},
         {tag:"예정",   tagC:"#ffcc44", date:"06.19",title:"'불행마저 사랑하게 만들까 봐' 싱글 발매예정"}
       ].map((n,i,arr)=>(
         <div key={n.title + n.date}>
@@ -561,7 +561,7 @@ const refreshPick = () => {
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
         <SecHead title="유튜브 채널 분석" sub="최근 7개월 기준"/>
         <div style={{textAlign:"right"}}>
-          <p style={{fontSize:20,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>492</p>
+          <p style={{fontSize:20,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>500</p>
           <p style={{fontSize:9,color:muted,margin:"3px 0 0"}}>현재 구독자</p>
         </div>
       </div>
