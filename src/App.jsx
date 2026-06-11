@@ -1030,9 +1030,28 @@ const isMobile = window.innerWidth < 768;
       msg: msg.trim(),
       x: Math.floor(Math.random() * 65) + 10,
       y: Math.floor(Math.random() * 55) + 5,
-      color: ["#fff", "#ffe4e1", "#e0ffff", "#f0fff0", "#fffacd"][
-        Math.floor(Math.random() * 5)
-      ],
+      color: [
+  "#FFFFFF",
+  "#F8FAFC",
+  "#F1F5F9",
+  "#E0F2FE",
+  "#BAE6FD",
+  "#CFFAFE",
+  "#CCFBF1",
+  "#D1FAE5",
+  "#DCFCE7",
+  "#ECFCCB",
+  "#FEF9C3",
+  "#FEF3C7",
+  "#FDE68A",
+  "#FCE7F3",
+  "#FBCFE8",
+  "#E9D5FF",
+  "#DDD6FE",
+  "#C4B5FD",
+  "#BFDBFE",
+  "#B8FF00"
+][Math.floor(Math.random() * 20)],
       createdAt: new Date(),
     };
 
