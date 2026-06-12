@@ -1377,7 +1377,7 @@ export default function App() {
     flex: 1,
     padding:
       tab === "방명록"
-        ? (isPC ? "20px 24px 0" : "12px 14px 140px")
+        ? (isPC ? "20px 24px 0" : "12px 14px 0")
         : (isPC ? "20px 24px 90px" : "12px 14px 140px"),
     animation: "fin 0.3s ease both"
   }}
