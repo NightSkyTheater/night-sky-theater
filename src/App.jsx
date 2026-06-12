@@ -531,6 +531,10 @@ useEffect(() => {
   }
 
   fetchSubs();
+
+  const interval = setInterval(fetchSubs, 600000); // 10분마다 갱신
+
+  return () => clearInterval(interval);
 }, []);
   const [track,setTrack]=useState(null);
 
