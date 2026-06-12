@@ -1014,19 +1014,22 @@ function GuestbookTab() {
   const [done, setDone] = useState(false); // ✨ 완료 피드백 UI용 상태 변경 적용
 const isMobile = window.innerWidth < 768;
   useEffect(() => {
-    const q = query(
-      collection(db, "guestbook"),
-      orderBy("createdAt", "desc")
-    );
+  const q = query(
+    collection(db, "guestbook"),
+    orderBy("createdAt", "desc")
+  );
 
-    const unsub = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map((d) => ({
-  id: d.id,
-  ...d.data()
-}));
+  const unsub = onSnapshot(q, (snapshot) => {
+    const data = snapshot.docs.map((d) => ({
+      id: d.id,
+      ...d.data(),
+    }));
 
-    return () => unsub();
-  }, []);
+    setEntries(data);
+  });
+
+  return () => unsub();
+}, []);
 
   const submit = async () => {
     if (!name.trim() || !pw.trim() || !msg.trim()) return;
