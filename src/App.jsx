@@ -703,7 +703,7 @@ const PatchBadge = (
       background: "rgba(184,255,0,0.08)",
       border: "1px solid rgba(184,255,0,0.2)",
       borderRadius: 20,
-      padding: "8px 12px",
+      padding: "8px 20px",
       justifyContent: "space-between",
       cursor: "pointer",
       fontFamily: "inherit",
