@@ -1037,8 +1037,7 @@ function MusicTab({isPC}) {
     </div>
   );
 }
-// ── 방명록 (Firebase 기능 유지 + 포스트잇 감성 UI + CSS Columns 반응형) ─────────────────────────────
-// ── 방명록 (Firebase 기능 유지 + 포스트잇 감성 UI + 세로 스크롤 Flex형) ─────────────────────────────
+// ── 방명록 (Firebase 기능 유지 + 투명 유리 파스텔 UI + 세로 스크롤 Flex형) ─────────────────────────────
 function timeAgo(date) {
   if (!date) return "";
   const targetDate =
@@ -1085,6 +1084,7 @@ function GuestbookTab() {
       name: name.trim(),
       pw: pw.trim(),
       msg: msg.trim(),
+      // 🎨 은은한 유리 느낌에 어울리는 부드러운 파스텔톤 컬러칩으로 유지
       color: [
         "#FFFFFF", "#F8FAFC", "#F1F5F9", "#E0F2FE", "#BAE6FD",
         "#CFFAFE", "#CCFBF1", "#D1FAE5", "#DCFCE7", "#ECFCCB",
@@ -1148,9 +1148,9 @@ function GuestbookTab() {
       {/* 🌌 타이틀 */}
       <div style={{
         padding: "16px",
-        background: "rgba(255, 255, 255, 0.03)",
-        backdropFilter: "blur(4px)",
-        WebkitBackdropFilter: "blur(4px)",
+        background: "rgba(255, 255, 255, 0.02)",
+        backdropFilter: "blur(8px)",
+        WebkitBackdropFilter: "blur(8px)",
         borderRadius: "16px",
         border: "1px solid rgba(255, 255, 255, 0.05)",
         textAlign: "center",
@@ -1165,31 +1165,30 @@ function GuestbookTab() {
         </p>
       </div>
 
-      {/* 📌 포스트잇 감성 자유형 보드 (가로 배치 후 아래로 스크롤) */}
+      {/* 📌 포스트잇 감성 자유형 보드 */}
       <div
         style={{
           flex: 1,
           padding: "20px 20px 180px 20px",
-          overflowY: "auto",      // 👈 세로 스크롤 활성화
+          overflowY: "auto",
           display: "flex",
-          flexDirection: "row",   // 👈 세로 열(Column)들을 가로로 먼저 배치
-          gap: "14px",            // 👈 열과 열 사이 간격
+          flexDirection: "row",
+          gap: "16px",
           alignItems: "flex-start"
         }}
       >
-        {/* 모바일/데스크톱 모두 안정적인 2줄 지그재그 배치 구조 */}
         {[0, 1, 2].map((colIndex) => (
           <div 
             key={colIndex} 
             style={{ 
               flex: 1, 
               display: "flex", 
-              flexDirection: "column", // 👈 이 안의 카드들은 무조건 아래로만 쌓임
-              gap: "14px"              // 👈 카드와 카드 사이 세로 간격
+              flexDirection: "column", 
+              gap: "16px"
             }}
           >
             {entries
-              .filter((_, idx) => idx % 3 === colIndex) // 지그재그 분배 법칙
+              .filter((_, idx) => idx % 3 === colIndex)
               .map((e) => {
                 const baseColor = e.color || "#fff";
 
@@ -1199,24 +1198,28 @@ function GuestbookTab() {
                     onClick={() => del(e)}
                     style={{
                       width: "100%",
-                      minHeight: "100px",
-                      padding: "18px 30px 12px 30px",
-                      borderRadius: "14px",
+                      minHeight: "90px",
+                      padding: "16px 20px 14px 20px",
+                      borderRadius: "16px",
                       cursor: "pointer",
 
-                      background: `linear-gradient(to bottom, ${baseColor}33, ${baseColor}1a),
-                        repeating-linear-gradient(transparent, transparent 21px, rgba(255,255,255,0.05) 21px, rgba(255,255,255,0.05) 22px)`,
+                      // ✨ 변경 1: 메모장 줄눈 패턴 완전 제거 + 파스텔빛 반투명 그라데이션 적용
+                      background: `linear-gradient(135deg, ${baseColor}15, ${baseColor}05)`,
 
-                      border: `1px solid ${baseColor}44`,
-                      borderLeft: `4px solid ${baseColor}aa`,
+                      // ✨ 변경 2: 왼쪽 포인트 라인을 은은하게 녹여내고, 전체를 투명한 유리 테두리로 감싸기
+                      border: "1px solid rgba(255, 255, 255, 0.08)",
+                      borderLeft: `4px solid ${baseColor}88`, 
 
-                      backdropFilter: "blur(12px)",
-                      WebkitBackdropFilter: "blur(12px)",
+                      // ✨ 변경 3: 뒤의 배경이 보케(Blur)처럼 부드럽게 퍼지는 고급스러운 투명 유리 효과
+                      backdropFilter: "blur(14px)",
+                      WebkitBackdropFilter: "blur(14px)",
 
-                      boxShadow:
-                        "0 10px 25px rgba(0,0,0,0.25), inset 0 0 10px rgba(255,255,255,0.05)",
+                      // ✨ 변경 4: 입체감을 주던 무거운 그림자 대신 은은하고 몽환적인 글로우 네온 그림자
+                      boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.2), 
+                                  inset 0 0 1px 1px rgba(255, 255, 255, 0.05)`,
+                      
                       textAlign: "left",
-                      transition: "transform 0.2s ease",
+                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
                     }}
                   >
                     <p
@@ -1226,6 +1229,8 @@ function GuestbookTab() {
                         lineHeight: "22px",
                         whiteSpace: "pre-wrap",
                         wordBreak: "break-word",
+                        color: "rgba(255, 255, 255, 0.95)", // 글씨 가독성 확보
+                        textShadow: "0 1px 2px rgba(0,0,0,0.4)"
                       }}
                     >
                       {e.msg}
@@ -1233,16 +1238,17 @@ function GuestbookTab() {
 
                     <div
                       style={{
-                        marginTop: "12px",
+                        marginTop: "14px",
                         paddingTop: "8px",
-                        borderTop: "1px solid rgba(255,255,255,0.1)",
+                        borderTop: "1px solid rgba(255,255,255,0.06)",
                         fontSize: "11px",
                         display: "flex",
                         justifyContent: "space-between",
-                        opacity: 0.7,
+                        opacity: 0.6,
                       }}
                     >
-                      <span style={{ color: baseColor, fontWeight: 600 }}>
+                      {/* 고유 컬러로 은은하게 빛나는 시그니처 이름 표시 */}
+                      <span style={{ color: baseColor, fontWeight: 600, textShadow: `0 0 8px ${baseColor}44` }}>
                         ✦ {e.name}
                       </span>
                       <span>{timeAgo(e.createdAt)}</span>
@@ -1264,9 +1270,9 @@ function GuestbookTab() {
           maxWidth: "720px",
           margin: "0 auto",
           padding: "16px",
-          background: "rgba(18,18,18,0.85)",
-          backdropFilter: "blur(25px)",
-          borderTop: "1px solid rgba(255,255,255,0.1)",
+          background: "rgba(18,18,18,0.75)", // 조금 더 투명하게 조절
+          backdropFilter: "blur(30px)",
+          borderTop: "1px solid rgba(255,255,255,0.08)",
           borderRadius: "32px 32px 0 0",
           display: "flex",
           flexDirection: "column",
@@ -1297,7 +1303,7 @@ function GuestbookTab() {
               borderRadius: "12px",
               border: "none",
               fontWeight: "700",
-              background: done ? "#B8FF00" : "#fff",
+              background: done ? "#B8FF00" : "rgba(255,255,255,0.9)",
               color: "#111",
               cursor: "pointer",
             }}
