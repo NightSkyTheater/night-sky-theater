@@ -41,7 +41,7 @@ function PatchModal({ onClose, saveOnClose = true }) {
         {/* 헤더 */}
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: 30 }}>
           <div>
-            <p style={{ fontSize: 10, color: "#B8FF00", letterSpacing: "0.15em", margin: "0 0 4px", fontWeight: 700, textAlign: "left" }}>
+            <p style={{ fontSize: 10, color: "#B8FF00", letterSpacing: "0.15em", margin: "0 0 4px", fontWeight: 700 }}>
               PATCH NOTE
             </p>
             <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>업데이트 히스토리</h3>
@@ -128,11 +128,11 @@ function PatchModal({ onClose, saveOnClose = true }) {
 }
 
 // ── 패치 버전 관리 (다음 패치 때 PATCH_VERSION만 바꾸면 팝업 재등장) ──
-const PATCH_VERSION = "v1.1.1";
+const PATCH_VERSION = "v 1.1";
 
 const PATCH_HISTORY = [
   {
-    version: "v1.1.1",
+    version: "v 1.1",
     date: "2026.06.13",
     isLatest: true,
     logs: [
@@ -704,8 +704,8 @@ const PatchBadge = (
       border: "1px solid rgba(184,255,0,0.2)",
       borderRadius: 20,
       padding: "8px 12px",
+      justifyContent: "space-between",
       cursor: "pointer",
-      justifySelf: "center",
       fontFamily: "inherit",
       marginBottom: 4,
     }}
@@ -844,12 +844,12 @@ const growth = ((increase / prevSubs) * 100).toFixed(1);
 
   if (isPC) {
     return (
-      <div style={{display:"flex",flexDirection:"column",gap:14}}>{PatchBadge}
+      
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,textAlign:"left",alignItems:"start"}}>
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>{TodayPick}{Top10}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>{PatchBadge}{TodayPick}{Top10}</div>
         <div style={{display:"flex",flexDirection:"column",gap:14}}>{Notice}{SubSection}{Overseas}</div>
       </div>
-      </div>
+
     );
   }
   return <div style={{display:"flex",flexDirection:"column",gap:10,textAlign:"left"}}>{PatchBadge}{TodayPick}{Notice}{Top10}{SubSection}{Overseas}</div>;
