@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import.meta.env;
 // 🌍 Firebase 관련 임포트 최상단 통합
 import {
   collection,
@@ -510,6 +511,27 @@ function SubChart() {
 }
 
 function HomeTab({isPC}) {
+  const [liveSubs, setLiveSubs] = useState(502);
+
+useEffect(() => {
+  async function fetchSubs() {
+    try {
+      const res = await fetch(
+        `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCGCMDvnVgg508GYghgeT3vw&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`
+      );
+
+      const data = await res.json();
+
+      if (data.items?.[0]) {
+        setLiveSubs(Number(data.items[0].statistics.subscriberCount));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  fetchSubs();
+}, []);
   const [track,setTrack]=useState(null);
 
 useEffect(() => {
@@ -571,7 +593,9 @@ const refreshPick = () => {
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
         <SecHead title="유튜브 채널 분석" sub="최근 7개월 기준"/>
         <div style={{textAlign:"right"}}>
-          <p style={{fontSize:20,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>502</p>
+          <p style={{fontSize:20,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>
+  {liveSubs}
+</p>
           <p style={{fontSize:9,color:muted,margin:"3px 0 0"}}>현재 구독자</p>
         </div>
       </div>
