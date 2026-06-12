@@ -1010,7 +1010,7 @@ function GuestbookTab() {
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState(false); // ✨ 완료 피드백 UI용 상태 변경 적용
   const isMobile = window.innerWidth < 768;
 
   useEffect(() => {
@@ -1078,27 +1078,26 @@ function GuestbookTab() {
     }
   };
 
-  // ✨ 입력창 인풋 스타일 고도화
-  const inputStyle = {
-    background: "rgba(0, 0, 0, 0.25)",
-    border: "1px solid rgba(255, 255, 255, 0.12)",
-    borderRadius: "10px",
-    color: "#ffffff",
-    padding: "10px 14px",
-    fontSize: "13px",
-    outline: "none",
-    fontFamily: "inherit",
-    transition: "all 0.2s ease",
-  };
+const inputStyle = {
+  background: "rgba(255,255,255,.05)",
+  border: "1px solid rgba(255,255,255,.08)",
+  borderRadius: "14px",
+  color: "#fff",
+  padding: "10px 14px",
+  fontSize: "12px",
+  outline: "none",
+  fontFamily: "inherit",
+  transition: "0.2s",
+};
 
   return (
     <div style={{ 
       position: "relative", 
-      height: "calc(100vh - 64px)",
+     height: "calc(100vh - 64px)",
       display: "flex", 
       flexDirection: "column",
       color: "#fff",
-      overflow: "hidden"
+      overflow: "hidden" // 💡 전체 탭에 스크롤이 생기는 것을 원천 차단
     }}>
 
       {/* 🌌 상단 타이틀 섹션 */}
@@ -1111,7 +1110,7 @@ function GuestbookTab() {
         border: "1px solid rgba(255, 255, 255, 0.05)",
         textAlign: "center",
         zIndex: 2,
-        flexShrink: 0
+        flexShrink: 0 // 💡 타이틀 크기 고정
       }}>
         <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#B8FF00" }}>
           밤하늘 낙서장
@@ -1121,17 +1120,17 @@ function GuestbookTab() {
         </p>
       </div>
 
-      {/* 📌 밤하늘 메모보드 */}
+      {/* 📌 밤하늘 메모보드 (이 영역 내부에서만 스크롤 발생) */}
       <div
         style={{
-          flex: 1,
+          flex: 1, // 💡 남은 공간을 전부 차지
           marginTop: "16px",
-          marginBottom: "160px", // 💡 입력창 높이가 살짝 커져서 마진도 조금 확보
           display: "flex",
           flexDirection: "column",
           gap: "16px",
-          overflowY: "auto",
+          overflowY: "auto", // 💡 메모가 많아지면 이 영역만 스크롤 됨
           padding: "10px 4px",
+          // 스크롤바 숨기기 (선택 사항, 깔끔한 UI용)
           msOverflowStyle: "none",
           scrollbarWidth: "none",
         }}
@@ -1188,40 +1187,42 @@ function GuestbookTab() {
         ))}
       </div>
 
-      {/* 📥 하단 고정형 입력창 (새 디자인 적용 ✨) */}
-      <div style={{
-        position: "absolute",
-        bottom: "20px",       
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "calc(100% - 32px)",
-        maxWidth: "480px",
-        // 🌌 더 깊은 우주 느낌을 주도록 어두운 톤의 그라데이션+블러 조합
-        background: "linear-gradient(135deg, rgba(20, 20, 35, 0.65), rgba(10, 10, 20, 0.85))",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        borderRadius: "24px",
-        // 💫 은은한 네온 블루/보라빛 테두리와 글로우 효과
-        border: "1px solid rgba(255, 255, 255, 0.15)",
-        boxShadow: "0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(184, 255, 0, 0.05)",
-        padding: "16px",
-        zIndex: 10,
-        display: "flex",
-        flexDirection: "column",
-        gap: "10px",
-        boxSizing: "border-box"
-      }}>
-        
-        {/* 상단: 이름 / 비밀번호 */}
+      {/* 📥 하단 입력창 */}
+<div
+  style={{
+    position: "absolute",
+    bottom: "20px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: "calc(100% - 24px)",
+    maxWidth: "520px",
+
+    background: "rgba(18,18,18,0.7)",
+    backdropFilter: "blur(20px)",
+    WebkitBackdropFilter: "blur(20px)",
+
+    border: "1px solid rgba(255,255,255,0.08)",
+    borderRadius: "24px",
+
+    padding: "16px",
+    boxSizing: "border-box",
+
+    boxShadow:
+      "0 8px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.05)",
+
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px",
+
+    zIndex: 10
+  }}
+>
         <div style={{ display: "flex", gap: "8px" }}>
           <input
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder="이름"
-            maxLength={10}
-            style={{ ...inputStyle, width: "100px" }}
-            onFocus={(e) => e.target.style.borderColor = "rgba(255,255,255,0.4)"}
-            onBlur={(e) => e.target.style.borderColor = "rgba(255,255,255,0.12)"}
+            style={{ ...inputStyle, width: "90px" }}
           />
 
           <input
@@ -1230,64 +1231,54 @@ function GuestbookTab() {
             placeholder="비밀번호"
             type="password"
             style={{ ...inputStyle, flex: 1 }}
-            onFocus={(e) => e.target.style.borderColor = "rgba(255,255,255,0.4)"}
-            onBlur={(e) => e.target.style.borderColor = "rgba(255,255,255,0.12)"}
-          />
-        </div>
-
-        {/* 하단: 내용 입력창 + 내부에 버튼 배치하여 공간 효율 극대화 */}
-        <div style={{ position: "relative", display: "flex", alignItems: "flex-end" }}>
-          <textarea
-            value={msg}
-            onChange={e => setMsg(e.target.value)}
-            placeholder="당신의 한 줄이 별이 됩니다..."
-            rows={2}
-            style={{
-              ...inputStyle,
-              width: "100%",
-              paddingRight: "85px", // 버튼이 들어갈 공간 확보
-              resize: "none",
-              lineHeight: "1.5",
-              boxSizing: "border-box",
-            }}
-            onFocus={(e) => e.target.style.borderColor = "rgba(184, 255, 0, 0.4)"}
-            onBlur={(e) => e.target.style.borderColor = "rgba(255, 255, 255, 0.12)"}
           />
 
-          {/* 전송 버튼을 텍스트 영역 우측 하단 내부로 쏙 넣었습니다. */}
           <button
             onClick={submit}
             style={{
-              position: "absolute",
-              right: "8px",
-              bottom: "8px",
-              padding: "8px 14px",
-              borderRadius: "10px",
-              border: "none",
-              // 타이틀의 네온그린(#B8FF00) 컬러 무드를 이어받아 매칭
-              background: done ? "#B8FF00" : "rgba(255, 255, 255, 0.9)",
-              color: "#0a0a14",
-              fontWeight: "700",
-              fontSize: "12px",
-              cursor: "pointer",
-              transition: "all 0.2s ease",
-              boxShadow: done ? "0 0 12px rgba(184, 255, 0, 0.5)" : "none",
-            }}
+  padding: "0 18px",
+  border: "none",
+  borderRadius: "12px",
+
+  background: done
+    ? "#B8FF00"
+    : "linear-gradient(135deg,#ffffff,#e8e8e8)",
+
+  color: "#111",
+  fontSize: "12px",
+  fontWeight: "700",
+
+  cursor: "pointer",
+
+  boxShadow: "0 4px 15px rgba(255,255,255,.15)",
+
+  transition: "all .2s ease"
+}}
           >
-            {done ? "성공! ✨" : "남기기"}
+            {done ? "기록 완료 ✨" : "남기기"}
           </button>
         </div>
+
+        <textarea
+          value={msg}
+          onChange={e => setMsg(e.target.value)}
+          placeholder="당신의 한 줄이 별이 됩니다"
+          rows={2}
+          style={{
+            ...inputStyle,
+            width: "100%",
+            resize: "none",
+            background: "rgba(0,0,0,0.2)",
+            boxSizing: "border-box"
+          }}
+        />
       </div>
 
       <style>{`
         @keyframes floatAnimation {
-          0% { transform: translateY(0px); }
+          0% { transform: translateY(0px) ${"rotate(0deg)"}; } /* 기존 rotate 덮어쓰기 방지를 위해 분리하는 게 좋으나 원본 유지 */
           50% { transform: translateY(-6px); }
           100% { transform: translateY(0px); }
-        }
-        /* 인풋창 placeholder 색상 최적화 */
-        input::placeholder, textarea::placeholder {
-          color: rgba(255, 255, 255, 0.35) !important;
         }
       `}</style>
 
@@ -1334,7 +1325,17 @@ export default function App() {
       `}</style>
       <Stars />
       <div style={{ position: "relative", zIndex: 1, maxWidth: isPC ? 900 : 430, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-        <div style={{ flex: 1, padding: isPC ? "20px 24px 90px" : "12px 14px 140px", animation: "fin 0.3s ease both" }} key={tab}>
+        <div
+  style={{
+    flex: 1,
+    padding:
+      tab === "방명록"
+        ? (isPC ? "20px 24px 0" : "12px 14px 140px")
+        : (isPC ? "20px 24px 90px" : "12px 14px 140px"),
+    animation: "fin 0.3s ease both"
+  }}
+  key={tab}
+>
           {tab === "홈" && <HomeTab isPC={isPC} />}
           {tab === "소개" && <AboutTab isPC={isPC} />}
           {tab === "음악" && <MusicTab isPC={isPC} />}
