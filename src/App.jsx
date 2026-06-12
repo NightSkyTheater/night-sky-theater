@@ -991,7 +991,7 @@ function MusicTab({isPC}) {
     </div>
   );
 }
-// ── 방명록 (Firebase 기능 유지 + 하단 100% 바 UI 적용) ─────────────────────────────
+// ── 방명록 (Firebase 기능 유지 + 브라우저 화면 밀착 고정 UI) ─────────────────────────────
 function timeAgo(date) {
   if (!date) return "";
   const targetDate = date instanceof Date ? date : (date.toDate ? date.toDate() : new Date(date));
@@ -1011,7 +1011,6 @@ function GuestbookTab() {
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState(false);
-  const isMobile = window.innerWidth < 768;
 
   useEffect(() => {
     const q = query(
@@ -1091,11 +1090,10 @@ function GuestbookTab() {
   return (
     <div style={{ 
       position: "relative", 
-      height: "85vh", // 부모 높이 고정
+      height: "85vh", // 상위 탭 높이 유지
       display: "flex", 
       flexDirection: "column",
       color: "#fff",
-      overflow: "hidden" // 전체 스크롤 방지
     }}>
 
       {/* 🌌 상단 타이틀 섹션 */}
@@ -1123,12 +1121,12 @@ function GuestbookTab() {
         style={{
           flex: 1,
           marginTop: "16px",
-          marginBottom: "135px", // 💡 하단 바 높이만큼 정확하게 띄워 가려짐 방지
+          marginBottom: "140px", // 💡 입력창 높이만큼 공간을 확보하여 메모 가려짐 방지
           display: "flex",
           flexDirection: "column",
           gap: "16px",
           overflowY: "auto",
-          padding: "10px 16px", // 좌우 패딩을 주어 메모가 벽에 딱 붙지 않게 조절
+          padding: "10px 16px",
           msOverflowStyle: "none",
           scrollbarWidth: "none",
         }}
@@ -1187,70 +1185,80 @@ function GuestbookTab() {
 
       {/* 📥 하단 고정형 와이드 바(Bar) 입력창 */}
       <div style={{
-        position: "absolute",
-        bottom: "0",              // 💡 바닥에 딱 붙임
-        left: "0",                // 💡 좌측 끝에서 시작
-        width: "100%",            // 💡 가로폭 100% 꽉 채움
-        background: "rgba(20, 20, 25, 0.6)", // 💡 글자가 겹쳐 보이지 않도록 어두운 배경 투명도 최적화
+        position: "fixed",         // 💡 부모의 85vh와 패딩 제약을 깨고 브라우저 화면 기준 배치
+        bottom: "0",               // 💡 모니터/모바일 화면 맨 아래 밀착
+        left: "0",                 // 💡 화면 왼쪽 끝 밀착
+        width: "100vw",            // 💡 부모 너비가 아닌 뷰포트(화면) 가로 전체 100% 강제
+        background: "rgba(15, 15, 20, 0.75)", // 스크롤 시 글자 비침을 막기 위해 어두운 톤 강화
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        borderRadius: "20px 20px 0 0", // 💡 상단 모서리만 둥글게 깎아서 '바' 형태 강조
-        borderTop: "1px solid rgba(255,255,255,0.15)", // 상단 경계선만 강조
+        borderRadius: "20px 20px 0 0",
+        borderTop: "1px solid rgba(255,255,255,0.15)",
         padding: "16px",
-        boxShadow: "0 -10px 30px rgba(0,0,0,0.5)",
-        zIndex: 10,
+        boxShadow: "0 -10px 30px rgba(0,0,0,0.6)",
+        zIndex: 9999,              // 💡 그 어떤 다른 요소보다 무조건 최상단에 노출
         display: "flex",
         flexDirection: "column",
         gap: "8px",
-        boxSizing: "border-box" // padding이 가로폭에 영향을 주지 않도록 잠금
+        boxSizing: "border-box"
       }}>
-        <div style={{ display: "flex", gap: "8px" }}>
-          <input
-            value={name}
-            onChange={e => setName(e.target.value)}
-            placeholder="이름"
-            style={{ ...inputStyle, width: "90px" }}
-          />
+        {/* 모바일이나 넓은 화면에서 입력 폼이 지나치게 늘어지는걸 방지하기 위해 내부에 중앙 정렬 맥스폭 컨테이너 배치 */}
+        <div style={{
+          width: "100%",
+          maxWidth: "600px",      // 적당히 보기 좋은 가로폭 한계 지정
+          margin: "0 auto",        // 가로 중앙 배치
+          display: "flex",
+          flexDirection: "column",
+          gap: "8px"
+        }}>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <input
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="이름"
+              style={{ ...inputStyle, width: "90px" }}
+            />
 
-          <input
-            value={pw}
-            onChange={e => setPw(e.target.value)}
-            placeholder="비밀번호"
-            type="password"
-            style={{ ...inputStyle, flex: 1 }}
-          />
+            <input
+              value={pw}
+              onChange={e => setPw(e.target.value)}
+              placeholder="비밀번호"
+              type="password"
+              style={{ ...inputStyle, flex: 1 }}
+            />
 
-          <button
-            onClick={submit}
+            <button
+              onClick={submit}
+              style={{
+                padding: "0 16px",
+                borderRadius: "8px",
+                border: "none",
+                background: done ? "#baffc9" : "#ffffff",
+                color: "#121212",
+                fontWeight: "700",
+                fontSize: "12px",
+                cursor: "pointer",
+                transition: "all 0.2s"
+              }}
+            >
+              {done ? "기록 완료 ✨" : "남기기"}
+            </button>
+          </div>
+
+          <textarea
+            value={msg}
+            onChange={e => setMsg(e.target.value)}
+            placeholder="당신의 한 줄이 별이 됩니다"
+            rows={2}
             style={{
-              padding: "0 16px",
-              borderRadius: "8px",
-              border: "none",
-              background: done ? "#baffc9" : "#ffffff",
-              color: "#121212",
-              fontWeight: "700",
-              fontSize: "12px",
-              cursor: "pointer",
-              transition: "all 0.2s"
+              ...inputStyle,
+              width: "100%",
+              resize: "none",
+              background: "rgba(0,0,0,0.3)",
+              boxSizing: "border-box"
             }}
-          >
-            {done ? "기록 완료 ✨" : "남기기"}
-          </button>
+          />
         </div>
-
-        <textarea
-          value={msg}
-          onChange={e => setMsg(e.target.value)}
-          placeholder="당신의 한 줄이 별이 됩니다"
-          rows={2}
-          style={{
-            ...inputStyle,
-            width: "100%",
-            resize: "none",
-            background: "rgba(0,0,0,0.2)",
-            boxSizing: "border-box"
-          }}
-        />
       </div>
 
       <style>{`
