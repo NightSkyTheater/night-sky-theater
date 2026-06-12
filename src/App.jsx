@@ -578,7 +578,7 @@ function PatchButton({ openPatch }) {
 // ==========================================
 // 2. 완벽하게 복구된 HomeTab 컴포넌트입니다.
 // ==========================================
-function HomeTab({ isPC, openPatch }) {
+function HomeTab({ isPC, openPatch, isChartLoaded }) {
   const [liveSubs, setLiveSubs] = useState(null);
   const [track, setTrack] = useState(null);
 
@@ -742,16 +742,53 @@ const growth = ((increase / prevSubs) * 100).toFixed(1);
       </div>
     </G>
   );
+if (isPC) {
+  return (
+    <>
+      <PatchButton openPatch={openPatch} />
 
-  if (isPC) {
-    return (
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,textAlign:"left",alignItems:"start"}}>
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>{TodayPick}{Top10}</div>
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>{Notice}{SubSection}{Overseas}</div>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 14,
+          textAlign: "left",
+          alignItems: "start"
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {TodayPick}
+          {Top10}
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {Notice}
+          {SubSection}
+          {Overseas}
+        </div>
       </div>
-    );
-  }
-  return <div style={{display:"flex",flexDirection:"column",gap:10,textAlign:"left"}}>{TodayPick}{Notice}{Top10}{SubSection}{Overseas}</div>;
+    </>
+  );
+}
+
+return (
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      gap: 10,
+      textAlign: "left"
+    }}
+  >
+    <PatchButton openPatch={openPatch} />
+
+    {TodayPick}
+    {Notice}
+    {Top10}
+    {SubSection}
+    {Overseas}
+  </div>
+);
 }
 
 function AboutTab({ isPC, openPatch }) {
