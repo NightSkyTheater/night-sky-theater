@@ -372,7 +372,17 @@ function Stars() {
 }
 
 const G = ({children,acc,pad="20px 18px 16px",style={}}) => (
-  <div style={{background:acc?"rgba(184,255,0,0.07)":glass,backdropFilter:"blur(24px)",WebkitBackdropFilter:"blur(24px)",border:`1px solid ${acc?"rgba(184,255,0,0.2)":gb}`,borderRadius:16,padding:pad,...style}}>
+  <div
+  style={{
+    background: acc ? "rgba(184,255,0,0.07)" : glass,
+    backdropFilter: "blur(24px)",
+    WebkitBackdropFilter: "blur(24px)",
+    border: `1px solid ${acc ? "rgba(184,255,0,0.2)" : gb}`,
+    borderRadius: 16,
+    padding: pad,
+    ...style
+  }}
+>
     {children}
   </div>
 );
@@ -1011,11 +1021,9 @@ const isMobile = window.innerWidth < 768;
 
     const unsub = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((d) => ({
-        id: d.id,
-        ...d.data(),
-      }));
-      setEntries(data);
-    });
+  id: d.id,
+  ...d.data()
+}));
 
     return () => unsub();
   }, []);
@@ -1265,12 +1273,12 @@ const isMobile = window.innerWidth < 768;
     onChange={e => setMsg(e.target.value)}
     placeholder="당신의 한 줄이 별이 됩니다"
     rows={2}
-    style={{
-      ...inputStyle,
-      width: "100%",
-      resize: "none",
-      background: "rgba(0,0,0,0.2)"
-    }}
+   style={{
+  ...inputStyle,
+  width: "100%",
+  resize: "none",
+  background: "rgba(0,0,0,0.2)",
+}}
   />
 </div>
 
