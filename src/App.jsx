@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import.meta.env;
-// 🌍 Firebase 관련 임포트 최상단 통합
+
+// 🌍 Firebase 관련 임포트 최상단 통합 (updateDoc, increment 추가 완료!)
 import {
   collection,
   addDoc,
@@ -9,6 +10,8 @@ import {
   query,
   orderBy,
   onSnapshot,
+  updateDoc,
+  increment,
 } from "firebase/firestore";
 import { db } from "./firebase";
 
