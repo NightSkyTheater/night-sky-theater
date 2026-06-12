@@ -1058,22 +1058,27 @@ function GuestbookTab() {
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 모바일 화면 감지 (열 개수 조절용)
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
-    const q = query(
-      collection(db, "guestbook"),
-      orderBy("createdAt", "desc")
-    );
-
+    const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"));
     const unsub = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((d) => ({
         id: d.id,
         ...d.data(),
       }));
-
       setEntries(data);
     });
-
     return () => unsub();
   }, []);
 
@@ -1084,7 +1089,6 @@ function GuestbookTab() {
       name: name.trim(),
       pw: pw.trim(),
       msg: msg.trim(),
-      // 🎨 은은한 유리 느낌에 어울리는 부드러운 파스텔톤 컬러칩으로 유지
       color: [
         "#FFFFFF", "#F8FAFC", "#F1F5F9", "#E0F2FE", "#BAE6FD",
         "#CFFAFE", "#CCFBF1", "#D1FAE5", "#DCFCE7", "#ECFCCB",
@@ -1108,7 +1112,6 @@ function GuestbookTab() {
 
   const del = async (entry) => {
     if (!window.confirm("이 낙서를 삭제하시겠습니까?")) return;
-
     const input = window.prompt("비밀번호를 입력하세요");
     if (!input) return;
 
@@ -1128,21 +1131,28 @@ function GuestbookTab() {
     border: "1px solid rgba(255,255,255,.1)",
     borderRadius: "14px",
     color: "#fff",
-    padding: "10px 14px",
-    fontSize: "12px",
+    padding: "12px 14px", // 모바일 터치 영역 확장을 위해 약간 키움
+    fontSize: "14px",     // ⚠️ iOS 사파리 인풋 포커스 시 화면 줌 방지를 위해 최소 14px~16px 권장
     outline: "none",
     fontFamily: "inherit",
+    WebkitAppearance: "none", // iOS 기본 쉐도우 제거
   };
+
+  // 모바일이면 1열, PC면 3열 분할
+  const columnCount = isMobile ? 1 : 3;
+  const cols = Array.from({ length: columnCount }, (_, i) => i);
 
   return (
     <div
       style={{
-        position: "relative",
-        height: "calc(100vh - 64px)",
         display: "flex",
         flexDirection: "column",
+        height: "100dvh", // dvh로 설정하여 모바일 주소창/하단바 유동성 방어
         color: "#fff",
         overflow: "hidden",
+        maxWidth: "720px",
+        margin: "0 auto",
+        width: "100%",
       }}
     >
       {/* 🌌 타이틀 */}
@@ -1151,10 +1161,8 @@ function GuestbookTab() {
         background: "rgba(255, 255, 255, 0.02)",
         backdropFilter: "blur(8px)",
         WebkitBackdropFilter: "blur(8px)",
-        borderRadius: "16px",
-        border: "1px solid rgba(255, 255, 255, 0.05)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
         textAlign: "center",
-        zIndex: 2,
         flexShrink: 0
       }}>
         <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#B8FF00" }}>
@@ -1165,89 +1173,72 @@ function GuestbookTab() {
         </p>
       </div>
 
-      {/* 📌 포스트잇 감성 자유형 보드 */}
+      {/* 📌 포스트잇 감성 보드 (스크롤 영역 고정) */}
       <div
         style={{
           flex: 1,
-          padding: "20px 20px 180px 20px",
+          padding: "16px",
           overflowY: "auto",
+          WebkitOverflowScrolling: "touch", // iOS 부드러운 스크롤
           display: "flex",
           flexDirection: "row",
-          gap: "16px",
+          gap: "12px",
           alignItems: "flex-start"
         }}
       >
-        {[0, 1, 2].map((colIndex) => (
+        {cols.map((colIndex) => (
           <div 
             key={colIndex} 
             style={{ 
               flex: 1, 
               display: "flex", 
               flexDirection: "column", 
-              gap: "16px"
+              gap: "12px"
             }}
           >
             {entries
-              .filter((_, idx) => idx % 3 === colIndex)
+              .filter((_, idx) => idx % columnCount === colIndex)
               .map((e) => {
                 const baseColor = e.color || "#fff";
-
                 return (
                   <div
                     key={e.id}
                     onClick={() => del(e)}
                     style={{
                       width: "100%",
-                      minHeight: "90px",
-                      padding: "16px 20px 14px 20px",
+                      minHeight: "80px",
+                      padding: "16px",
                       borderRadius: "16px",
                       cursor: "pointer",
-
-                      // ✨ 변경 1: 메모장 줄눈 패턴 완전 제거 + 파스텔빛 반투명 그라데이션 적용
                       background: `linear-gradient(135deg, ${baseColor}15, ${baseColor}05)`,
-
-                      // ✨ 변경 2: 왼쪽 포인트 라인을 은은하게 녹여내고, 전체를 투명한 유리 테두리로 감싸기
                       border: "1px solid rgba(255, 255, 255, 0.08)",
                       borderLeft: `4px solid ${baseColor}88`, 
-
-                      // ✨ 변경 3: 뒤의 배경이 보케(Blur)처럼 부드럽게 퍼지는 고급스러운 투명 유리 효과
                       backdropFilter: "blur(14px)",
                       WebkitBackdropFilter: "blur(14px)",
-
-                      // ✨ 변경 4: 입체감을 주던 무거운 그림자 대신 은은하고 몽환적인 글로우 네온 그림자
-                      boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.2), 
-                                  inset 0 0 1px 1px rgba(255, 255, 255, 0.05)`,
-                      
+                      boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.2), inset 0 0 1px 1px rgba(255, 255, 255, 0.05)`,
                       textAlign: "left",
-                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
                     }}
                   >
-                    <p
-                      style={{
-                        margin: 0,
-                        fontSize: "14px",
-                        lineHeight: "22px",
-                        whiteSpace: "pre-wrap",
-                        wordBreak: "break-word",
-                        color: "rgba(255, 255, 255, 0.95)", // 글씨 가독성 확보
-                        textShadow: "0 1px 2px rgba(0,0,0,0.4)"
-                      }}
-                    >
+                    <p style={{
+                      margin: 0,
+                      fontSize: "14px",
+                      lineHeight: "22px",
+                      whiteSpace: "pre-wrap",
+                      wordBreak: "break-word",
+                      color: "rgba(255, 255, 255, 0.95)",
+                      textShadow: "0 1px 2px rgba(0,0,0,0.4)"
+                    }}>
                       {e.msg}
                     </p>
-
-                    <div
-                      style={{
-                        marginTop: "14px",
-                        paddingTop: "8px",
-                        borderTop: "1px solid rgba(255,255,255,0.06)",
-                        fontSize: "11px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        opacity: 0.6,
-                      }}
-                    >
-                      {/* 고유 컬러로 은은하게 빛나는 시그니처 이름 표시 */}
+                    <div style={{
+                      marginTop: "12px",
+                      paddingTop: "8px",
+                      borderTop: "1px solid rgba(255,255,255,0.06)",
+                      fontSize: "11px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      opacity: 0.6,
+                    }}>
                       <span style={{ color: baseColor, fontWeight: 600, textShadow: `0 0 8px ${baseColor}44` }}>
                         ✦ {e.name}
                       </span>
@@ -1260,24 +1251,20 @@ function GuestbookTab() {
         ))}
       </div>
 
-      {/* 📥 입력창 */}
+      {/* 📥 입력창 (하단 고정 배치) */}
       <div
         style={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          maxWidth: "720px",
-          margin: "0 auto",
-          padding: "16px",
-          background: "rgba(18,18,18,0.75)", // 조금 더 투명하게 조절
-          backdropFilter: "blur(30px)",
+          padding: "16px pb-safe", // 모바일 하단 노치 대응 (필요시 환경에 맞춰 조정)
+          background: "rgba(18, 18, 18, 0.85)", 
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
           borderTop: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: "32px 32px 0 0",
+          borderRadius: "24px 24px 0 0",
           display: "flex",
           flexDirection: "column",
-          gap: "10px",
-          zIndex: 10
+          gap: "8px",
+          flexShrink: 0, // 고정 영역이 찌그러지지 않도록 보호
+          boxShadow: "0 -10px 30px rgba(0,0,0,0.5)"
         }}
       >
         <div style={{ display: "flex", gap: "8px" }}>
@@ -1285,9 +1272,8 @@ function GuestbookTab() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="이름"
-            style={{ ...inputStyle, width: "80px" }}
+            style={{ ...inputStyle, width: "90px" }}
           />
-
           <input
             value={pw}
             onChange={(e) => setPw(e.target.value)}
@@ -1295,7 +1281,6 @@ function GuestbookTab() {
             type="password"
             style={{ ...inputStyle, flex: 1 }}
           />
-
           <button
             onClick={submit}
             style={{
@@ -1303,25 +1288,26 @@ function GuestbookTab() {
               borderRadius: "12px",
               border: "none",
               fontWeight: "700",
+              fontSize: "13px",
               background: done ? "#B8FF00" : "rgba(255,255,255,0.9)",
               color: "#111",
               cursor: "pointer",
+              transition: "background 0.2s",
             }}
           >
-            {done ? "완료 ✨" : "기록"}
+            {done ? "기록완료 ✨" : "남기기"}
           </button>
         </div>
-
         <textarea
           value={msg}
           onChange={(e) => setMsg(e.target.value)}
-          placeholder="마음을 남겨주세요..."
-          rows={2}
+          placeholder="당신의 한 줄이 별이 됩니다."
+          rows={isMobile ? 1 : 2} // 모바일 화면 확보를 위해 입력줄 축소
           style={{
             ...inputStyle,
             width: "100%",
             resize: "none",
-            fontSize: "13px",
+            fontSize: "14px",
           }}
         />
       </div>
