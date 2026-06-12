@@ -522,8 +522,9 @@ chartRef.current = new window.Chart(ctx, {
 
 function HomeTab({ isPC, openPatch }) {
   const [liveSubs, setLiveSubs] = useState(null);
-const PatchButton = (
-  <G
+function PatchButton({ openPatch }) {
+  return (
+    <G
     style={{
       display: "flex",
       justifyContent: "space-between",
@@ -744,7 +745,7 @@ const growth = ((increase / prevSubs) * 100).toFixed(1);
   return <div style={{display:"flex",flexDirection:"column",gap:10,textAlign:"left"}}>{TodayPick}{Notice}{Top10}{SubSection}{Overseas}</div>;
 }
 
-function AboutTab({ isPC }) {
+function AboutTab({ isPC, openPatch }) {
   const Hero = (
     <G
       style={{
@@ -1524,20 +1525,24 @@ export default function App() {
   isPC={isPC}
   openPatch={() => setShowPatch(true)}
 />}
-          {tab === "소개" && <AboutTab isPC={isPC} />}
+          {tab === "소개" && (
+  <AboutTab
+    isPC={isPC}
+    openPatch={() => setShowPatch(true)}
+  />
+)}
           {tab === "음악" && <MusicTab isPC={isPC} />}
           {tab === "방명록" && <GuestbookTab />}
         </div>
         <BottomNav tab={tab} setTab={setTab} />
       </div>
-    </div>
     {showPatch && (
-  <PatchModal
-    onClose={() => {
-      localStorage.setItem("patch_version", PATCH_VERSION);
-      setShowPatch(false);
-    }}
-  />
-)}
-  );
-}
+      <PatchModal
+        onClose={() => {
+          localStorage.setItem("patch_version", PATCH_VERSION);
+          setShowPatch(false);
+        }}
+      />
+    )}
+  </div>
+);
