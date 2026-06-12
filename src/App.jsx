@@ -519,7 +519,9 @@ chartRef.current = new window.Chart(ctx, {
     </div>
   );
 }
-// 1. PatchButton을 HomeTab '바깥'으로 분리합니다.
+// ==========================================
+// 1. PatchButton을 독립된 컴포넌트로 선언합니다.
+// ==========================================
 function PatchButton({ openPatch }) {
   return (
     <G
@@ -527,7 +529,8 @@ function PatchButton({ openPatch }) {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "12px 16px"
+        padding: "12px 16px",
+        marginBottom: "14px" // 레이아웃 간격 확보
       }}
     >
       <div>
@@ -570,12 +573,14 @@ function PatchButton({ openPatch }) {
       </button>
     </G>
   );
-} // 👈 PatchButton 함수가 여기서 깔끔하게 끝납니다.
+}
 
-// 2. 이제 완전히 독립된 깨끗한 구조의 HomeTab 컴포넌트입니다.
+// ==========================================
+// 2. 완벽하게 복구된 HomeTab 컴포넌트입니다.
+// ==========================================
 function HomeTab({ isPC, openPatch }) {
   const [liveSubs, setLiveSubs] = useState(null);
-  const [track, setTrack] = useState(null); // useState들은 항상 함수 최상단에 모아둡니다.
+  const [track, setTrack] = useState(null);
 
   useEffect(() => {
     async function fetchSubs() {
@@ -595,9 +600,7 @@ function HomeTab({ isPC, openPatch }) {
     }
 
     fetchSubs();
-
     const interval = setInterval(fetchSubs, 600000); // 10분마다 갱신
-
     return () => clearInterval(interval);
   }, []);
 
@@ -628,6 +631,7 @@ function HomeTab({ isPC, openPatch }) {
       </>}
     </G>
   );
+
   const Notice = (
     <G pad="0">
       <div style={{padding:"20px 18px 12px"}}><SecHead title="공지사항"/></div>
