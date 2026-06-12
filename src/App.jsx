@@ -782,10 +782,11 @@ const growth = ((increase / prevSubs) * 100).toFixed(1);
 
   if (isPC) {
     return (
+      <div style={{display:"flex",flexDirection:"column",gap:14}}>{PatchBadge}
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,textAlign:"left",alignItems:"start"}}>
-         <div style={{display:"flex",flexDirection:"column",gap:14}}>{PatchBadge}</div>
         <div style={{display:"flex",flexDirection:"column",gap:14}}>{TodayPick}{Top10}</div>
         <div style={{display:"flex",flexDirection:"column",gap:14}}>{Notice}{SubSection}{Overseas}</div>
+      </div>
       </div>
     );
   }
