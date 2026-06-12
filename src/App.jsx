@@ -1037,9 +1037,7 @@ function MusicTab({isPC}) {
     </div>
   );
 }
-// ── 방명록 (밤하늘 + 투명 파스텔 메모 UI) ─────────────────────────────
-import React, { useState, useEffect } from "react";
-// 필요한 Firebase 내보내기(db, query, collection, orderBy, onSnapshot, addDoc, deleteDoc, doc 등)가 상위에 있다고 가정합니다.
+// ── 방명록 (Firebase 기능 유지 + 포스트잇 감성 UI 적용) ─────────────────────────────
 function timeAgo(date) {
   if (!date) return "";
   const targetDate = date instanceof Date ? date : (date.toDate ? date.toDate() : new Date(date));
@@ -1053,36 +1051,34 @@ function timeAgo(date) {
   return targetDate.toLocaleDateString("ko-KR");
 }
 
-export default function GuestbookTab() {
+function GuestbookTab() {
   const [entries, setEntries] = useState([]);
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState(false); 
+  const isMobile = window.innerWidth < 768;
 
   useEffect(() => {
-    const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"));
+    const q = query(
+      collection(db, "guestbook"),
+      orderBy("createdAt", "desc")
+    );
+
     const unsub = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((d) => ({
         id: d.id,
         ...d.data(),
       }));
+
       setEntries(data);
     });
+
     return () => unsub();
   }, []);
 
   const submit = async () => {
     if (!name.trim() || !pw.trim() || !msg.trim()) return;
-
-    // 밤하늘과 어울리는 감성적인 파스텔톤 테마 컬러칩 (HEX -> 투명도 처리는 인라인에서 진행)
-    const pastelColors = [
-      "#FFFFFF", "#E0F2FE", "#BAE6FD", "#CFFAFE", "#CCFBF1", 
-      "#D1FAE5", "#DCFCE7", "#ECFCCB", "#FEF9C3", "#FEF3C7", 
-      "#FDE68A", "#FCE7F3", "#FBCFE8", "#E9D5FF", "#DDD6FE", 
-      "#C4B5FD", "#BFDBFE", "#B8FF00"
-    ];
-    const randomColor = pastelColors[Math.floor(Math.random() * pastelColors.length)];
 
     const newEntry = {
       name: name.trim(),
@@ -1090,7 +1086,12 @@ export default function GuestbookTab() {
       msg: msg.trim(),
       x: Math.floor(Math.random() * 65) + 10,
       y: Math.floor(Math.random() * 55) + 5,
-      color: randomColor, 
+      color: [
+        "#FFFFFF", "#F8FAFC", "#F1F5F9", "#E0F2FE", "#BAE6FD",
+        "#CFFAFE", "#CCFBF1", "#D1FAE5", "#DCFCE7", "#ECFCCB",
+        "#FEF9C3", "#FEF3C7", "#FDE68A", "#FCE7F3", "#FBCFE8",
+        "#E9D5FF", "#DDD6FE", "#C4B5FD", "#BFDBFE", "#B8FF00"
+      ][Math.floor(Math.random() * 20)],
       createdAt: new Date(),
     };
 
@@ -1108,6 +1109,7 @@ export default function GuestbookTab() {
 
   const del = async (entry) => {
     if (!window.confirm("이 낙서를 삭제하시겠습니까?")) return;
+    
     const input = window.prompt("비밀번호를 입력하세요");
     if (!input) return;
 
@@ -1123,15 +1125,15 @@ export default function GuestbookTab() {
   };
 
   const inputStyle = {
-    background: "rgba(255,255,255,.04)",
-    border: "1px solid rgba(255,255,255,.08)",
-    borderRadius: "12px",
+    background: "rgba(255,255,255,.05)",
+    border: "1px solid rgba(255,255,255,.1)",
+    borderRadius: "14px",
     color: "#fff",
     padding: "10px 14px",
     fontSize: "12px",
     outline: "none",
     fontFamily: "inherit",
-    transition: "all 0.2s",
+    transition: "0.2s",
   };
 
   return (
@@ -1146,49 +1148,37 @@ export default function GuestbookTab() {
 
       {/* 🌌 상단 타이틀 섹션 */}
       <div style={{
-        padding: "16px",
-        background: "rgba(255, 255, 255, 0.02)",
-        backdropFilter: "blur(8px)",
-        WebkitBackdropFilter: "blur(8px)",
-        borderRadius: "16px",
-        border: "1px solid rgba(255, 255, 255, 0.05)",
+        padding: "20px 16px",
+        background: "linear-gradient(to bottom, rgba(18,18,18,0.4), transparent)",
         textAlign: "center",
         zIndex: 2,
-        flexShrink: 0,
-        margin: "10px 10px 0 10px"
+        flexShrink: 0
       }}>
-        <h2 style={{ margin: "0 0 4px 0", fontSize: "15px", fontWeight: 600, color: "#B8FF00", letterSpacing: "-0.5px" }}>
+        <h2 style={{ margin: "0 0 6px 0", fontSize: "18px", fontWeight: 700, color: "#fff", textShadow: "0 0 10px rgba(184,255,0,0.5)" }}>
           밤하늘 낙서장
         </h2>
-        <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.5)", margin: 0 }}>
-          밤하늘에 은은하게 반짝이는 당신의 조각을 붙여주세요.
+        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)", margin: 0, letterSpacing: "-0.2px" }}>
+          밤하늘에 지워지지 않을 당신의 포스트잇을 남겨주세요.
         </p>
       </div>
 
-      {/* 📌 밤하늘 메모보드 (포스트잇 리스트 영역) */}
+      {/* 📌 밤하늘 메모보드 (포스트잇 리스트) */}
       <div
         style={{
           flex: 1,
-          marginTop: "12px",
-          padding: "16px 12px 180px 12px",
+          marginTop: "10px",
+          padding: "10px 20px 180px 20px",
           display: "flex",
           flexDirection: "column",
-          gap: "20px",
+          gap: "24px",
           overflowY: "auto",
           msOverflowStyle: "none",
           scrollbarWidth: "none",
         }}
       >
         {entries.map((e, idx) => {
-          // 기지정된 컬러셋을 활용해 투명한 파스텔 배경 및 라인 색상 추출
+          // 투명도가 적용된 파스텔톤 생성을 위한 처리
           const baseColor = e.color || "#FFFFFF";
-          const postItBg = `${baseColor}0A`; // 4%~10% 정도의 극도의 투명감
-          const postItBorder = `${baseColor}25`; // 은은한 라인 느낌을 위한 15% 투명도
-          const postItLine = `${baseColor}80`; // 포스트잇 강조선 (50% 투명도)
-          
-          // 인덱스별 고유 회전각 설정 (애니메이션 내부에서 변수로 활용)
-          const initialRotate = idx % 3 === 0 ? "-3deg" : idx % 3 === 1 ? "2deg" : "-1deg";
-
           return (
             <div
               key={e.id}
@@ -1196,69 +1186,64 @@ export default function GuestbookTab() {
               title="클릭하여 삭제"
               style={{
                 alignSelf: idx % 2 === 0 ? "flex-start" : "flex-end",
-                maxWidth: "80%",
+                width: "auto",
                 minWidth: "160px",
+                maxWidth: "240px",
+                padding: "20px 16px 12px 16px",
+                borderRadius: "2px 2px 2px 15px", // 종이 느낌의 비대칭 라운딩
                 position: "relative",
-                padding: "16px 16px 12px 16px",
-                borderRadius: "4px 16px 16px 16px", // 포스트잇의 비대칭 느낌 재현
-                
-                // 투명 파스텔 룩앤필 핵심
-                background: `linear-gradient(135deg, ${postItBg}, rgba(255,255,255,0.02))`,
+                // 배경: 부드러운 파스텔 투명도 + 노트 줄무늬(Line)
+                background: `linear-gradient(to bottom, ${baseColor}33, ${baseColor}1a), 
+                             repeating-linear-gradient(transparent, transparent 21px, rgba(255,255,255,0.05) 21px, rgba(255,255,255,0.05) 22px)`,
+                backgroundSize: "100%, 100% 22px",
                 backdropFilter: "blur(12px)",
                 WebkitBackdropFilter: "blur(12px)",
-                border: `1px solid ${postItBorder}`,
-                
+                border: `1px solid ${baseColor}44`,
+                borderLeft: `4px solid ${baseColor}aa`, // 포스트잇 강조 라인
                 cursor: "pointer",
-                boxShadow: `0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1)`,
-                
-                // CSS 변수를 주입하여 애니메이션과 회전각 충돌 방지
-                "--init-rotate": initialRotate,
-                animation: "floatPostIt 6s ease-in-out infinite",
-                animationDelay: `${idx * 0.4}s`,
-                transition: "transform 0.3s ease, border-color 0.3s",
+                animation: "floatAnimation 6s ease-in-out infinite",
+                animationDelay: `${idx * 0.2}s`,
+                transform: `rotate(${idx % 2 === 0 ? -1.5 : 1.5}deg)`,
+                boxShadow: `0 10px 25px -5px rgba(0,0,0,0.3), inset 0 0 10px ${baseColor}11`,
               }}
-              onMouseEnter={(e) => e.currentTarget.style.borderColor = postItLine}
-              onMouseLeave={(e) => e.currentTarget.style.borderColor = postItBorder}
             >
-              {/* 🔖 포스트잇 상단/좌측 감성 라인 (접착 구역 표현) */}
+              {/* 포스트잇 상단 테이프 효과 */}
               <div style={{
                 position: "absolute",
-                top: 0,
-                left: "16px",
-                right: "16px",
-                height: "3px",
-                background: postItLine,
-                borderRadius: "0 0 2px 2px",
-                opacity: 0.7,
-                boxShadow: `0 0 8px ${baseColor}`
+                top: "-10px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "40px",
+                height: "15px",
+                background: "rgba(255,255,255,0.15)",
+                backdropFilter: "blur(2px)",
+                border: "1px solid rgba(255,255,255,0.1)",
               }} />
 
-              {/* 본문 메시지 */}
               <p style={{
-                margin: "4px 0 12px 0",
-                fontSize: "13px",
-                lineHeight: "1.6",
-                color: "#F8FAFC",
+                margin: 0,
+                fontSize: "14px",
+                lineHeight: "22px", // 줄무늬 간격과 맞춤
+                color: "#fff",
                 whiteSpace: "pre-wrap",
                 wordBreak: "break-word",
-                letterSpacing: "-0.2px"
+                fontWeight: "500",
+                textShadow: "0 1px 2px rgba(0,0,0,0.2)",
               }}>
                 {e.msg}
               </p>
 
-              {/* 하단 메타 정보 */}
               <div style={{
-                fontSize: "10.5px",
-                color: "rgba(255,255,255,0.4)",
+                marginTop: "12px",
+                paddingTop: "8px",
+                fontSize: "11px",
+                color: "rgba(255,255,255,0.5)",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                borderTop: "1px solid rgba(255,255,255,0.05)",
-                paddingTop: "8px",
+                borderTop: "1px solid rgba(255,255,255,0.1)",
               }}>
-                <span style={{ color: baseColor, fontWeight: 500, opacity: 0.9 }}>
-                  ✦ {e.name}
-                </span>
+                <span style={{ fontWeight: "600", color: baseColor }}>✦ {e.name}</span>
                 <span>{timeAgo(e.createdAt)}</span>
               </div>
             </div>
@@ -1266,50 +1251,36 @@ export default function GuestbookTab() {
         })}
       </div>
 
-      {/* 📥 하단 입력창 (유리 모프 스타일 일치화) */}
-      <div style={{
-        position: "fixed",
-        bottom: "0",
-        left: 0,
-        right: 0,
-        width: "100%",
-        maxWidth: "600px",
-        margin: "0 auto",
-        padding: "14px 14px calc(14px + env(safe-area-inset-bottom))",
-        background: "rgba(15, 15, 20, 0.75)",
-        backdropFilter: "blur(24px)",
-        WebkitBackdropFilter: "blur(24px)",
-        borderTop: "1px solid rgba(255,255,255,0.08)",
-        borderRadius: "24px 24px 0 0",
-        boxSizing: "border-box",
-        boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
-        display: "flex",
-        flexDirection: "column",
-        gap: "10px",
-        zIndex: 10
-      }}>
-        <textarea
-          value={msg}
-          onChange={e => setMsg(e.target.value)}
-          placeholder="밤하늘에 투명한 기억 하나를 붙여보세요..."
-          rows={2}
-          style={{
-            ...inputStyle,
-            width: "100%",
-            resize: "none",
-            background: "rgba(0,0,0,0.25)",
-            boxSizing: "border-box",
-            fontSize: "12.5px",
-            lineHeight: "1.5"
-          }}
-        />
-
-        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+      {/* 📥 하단 입력창 */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: "0",
+          left: 0,
+          right: 0,
+          width: "100%",
+          maxWidth: "720px",
+          margin: "0 auto",
+          padding: "16px 16px calc(20px + env(safe-area-inset-bottom))",
+          background: "rgba(18,18,18,0.85)",
+          backdropFilter: "blur(25px)",
+          WebkitBackdropFilter: "blur(25px)",
+          borderTop: "1px solid rgba(255,255,255,0.1)",
+          borderRadius: "32px 32px 0 0",
+          boxSizing: "border-box",
+          boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
+          zIndex: 10
+        }}
+      >
+        <div style={{ display: "flex", gap: "8px" }}>
           <input
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder="이름"
-            style={{ ...inputStyle, width: "85px" }}
+            style={{ ...inputStyle, width: "80px" }}
           />
 
           <input
@@ -1323,32 +1294,47 @@ export default function GuestbookTab() {
           <button
             onClick={submit}
             style={{
-              padding: "0 16px",
-              height: "36px",
+              padding: "0 20px",
               border: "none",
-              borderRadius: "10px",
-              background: done ? "#B8FF00" : "linear-gradient(135deg, #ffffff, #e2e8f0)",
-              color: "#0f172a",
+              borderRadius: "14px",
+              background: done ? "#B8FF00" : "rgba(255,255,255,0.9)",
+              color: "#111",
               fontSize: "12px",
               fontWeight: "700",
               cursor: "pointer",
-              boxShadow: done ? "0 0 15px rgba(184,255,0,0.4)" : "0 4px 12px rgba(255,255,255,0.1)",
-              transition: "all .2s ease",
-              whiteSpace: "nowrap"
+              transition: "all .3s cubic-bezier(0.4, 0, 0.2, 1)",
+              transform: done ? "scale(1.05)" : "scale(1)",
+              boxShadow: done ? "0 0 20px rgba(184,255,0,0.4)" : "none"
             }}
           >
-            {done ? "붙이기 완료 ✨" : "기록하기"}
+            {done ? "기록 완료 ✨" : "기록하기"}
           </button>
         </div>
+
+        <textarea
+          value={msg}
+          onChange={e => setMsg(e.target.value)}
+          placeholder="밤하늘에 당신의 마음을 붙여주세요..."
+          rows={2}
+          style={{
+            ...inputStyle,
+            width: "100%",
+            resize: "none",
+            background: "rgba(255,255,255,0.03)",
+            boxSizing: "border-box",
+            fontSize: "13px"
+          }}
+        />
       </div>
 
-      {/* 🔮 애니메이션 주입 */}
       <style>{`
-        @keyframes floatPostIt {
-          0% { transform: translateY(0px) rotate(var(--init-rotate)); }
-          50% { transform: translateY(-8px) rotate(var(--init-rotate)); }
-          100% { transform: translateY(0px) rotate(var(--init-rotate)); }
+        @keyframes floatAnimation {
+          0% { transform: translateY(0px) rotate(-1.5deg); }
+          50% { transform: translateY(-8px) rotate(0deg); }
+          100% { transform: translateY(0px) rotate(-1.5deg); }
         }
+        /* 스크롤바 숨기기 브라우저별 처리 */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
       `}</style>
 
     </div>
@@ -1379,7 +1365,7 @@ export default function App() {
   }, []);
 
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)", color: white, fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}>
+    <div style={{ minHeight: "100vh", background: "linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)", color: "#fff", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}>
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
