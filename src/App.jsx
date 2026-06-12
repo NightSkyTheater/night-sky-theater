@@ -342,11 +342,10 @@ const OVERSEAS = [
 const SUB_DATA = [
   {month:"12월", subs:182},
   {month:"1월", subs:219},
-  {month:"2월",  subs:262},
-  {month:"3월",  subs:300},
-  {month:"4월",  subs:345},
-  {month:"5월",  subs:410},
-  {month:"현재",  subs:502},
+  {month:"2월", subs:262},
+  {month:"3월", subs:300},
+  {month:"4월", subs:345},
+  {month:"5월", subs:410},
 ];
 
 const PLATFORMS = [
@@ -422,7 +421,7 @@ function BottomNav({tab,setTab}) {
   );
 }
 
-function SubChart() {
+function SubChart({ liveSubs }) {
   const canvasRef = useRef(null);
   const chartRef  = useRef(null);
 
@@ -438,13 +437,26 @@ function SubChart() {
       chartRef.current = new window.Chart(ctx, {
         type: "line",
         data: {
-          labels: SUB_DATA.map(d => d.month),
-          datasets: [{
-            data: SUB_DATA.map(d => d.subs),
+          const chartData = [
+  ...SUB_DATA,
+  {
+    month: "현재",
+    subs: liveSubs
+  }
+];
+
+chartRef.current = new window.Chart(ctx, {
+  type: "line",
+  data: {
+    labels: chartData.map(d => d.month),
+    datasets: [{
+      data: chartData.map(d => d.subs),
             borderColor: ACCENT,
             borderWidth: 2,
             tension: 0.45,
-            pointRadius: SUB_DATA.map((_, i) => i === SUB_DATA.length - 1 ? 5 : 3),
+            pointRadius: chartData.map((_, i) =>
+  i === chartData.length - 1 ? 5 : 3
+),
             pointBackgroundColor: ACCENT,
             pointBorderColor: ACCENT,
             pointHoverRadius: 6,
@@ -481,7 +493,7 @@ function SubChart() {
             },
             y: {
               min: 100,
-              max: 550,
+              max: 600,
               grid: { color: "rgba(255,255,255,0.05)" },
               ticks: {
                 color: "rgba(220,210,255,0.30)",
@@ -603,7 +615,7 @@ const refreshPick = () => {
           <p style={{fontSize:9,color:muted,margin:"3px 0 0"}}>현재 구독자</p>
         </div>
       </div>
-      <SubChart/>
+      <SubChart liveSubs={liveSubs}/>
       <div style={{display:"flex",justifyContent:"space-around",marginTop:14}}>
         {[
           {label:"최근 30일 증가",val:`+${increase}`},
