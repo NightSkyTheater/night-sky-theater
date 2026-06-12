@@ -1131,7 +1131,7 @@ const isMobile = window.innerWidth < 768;
   style={{
     flex: 1,
     marginTop: "20px",
-    marginBottom: "180px",
+    marginBottom: "180px", // 입력창 높이만큼 공간 확보
     display: "flex",
     flexDirection: "column",
     gap: "16px",
@@ -1207,74 +1207,73 @@ const isMobile = window.innerWidth < 768;
   ))}
 </div>
 
-      {/* 📥 하단 고정형 입력창 */}
-      <div style={{
-        position: "fixed",
-        bottom: "60px",
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "calc(100% - 32px)",
-        maxWidth: "500px",
-        background: "rgba(255, 255, 255, 0.08)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-        borderRadius: "20px",
-        border: "1px solid rgba(255, 255, 255, 0.15)",
-        padding: "14px",
-        boxShadow: "0 -10px 30px rgba(0, 0, 0, 0.5)",
-        zIndex: 10,
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px"
-      }}>
-        <div
-  style={{
-    display: "flex",
-    gap: "8px",
-    flexDirection: isMobile ? "column" : "row"
-  }}
->
-          <input 
-            value={name} 
-            onChange={e => setName(e.target.value)}
-            placeholder="이름"
-            style={{ ...inputStyle, width: "90px" }} 
-          />
-          <input 
-            value={pw} 
-            onChange={e => setPw(e.target.value)}
-            placeholder="비밀번호"
-            type="password"
-            style={{ ...inputStyle, flex: 1 }} 
-          />
-          <button
-  onClick={submit}
-  style={{
-    width: isMobile ? "100%" : "auto",
-    height: "42px",
-    padding: "0 16px",
-              borderRadius: "8px",
-              border: "none",
-              background: done ? "#baffc9" : "#ffffff",
-              color: "#121212",
-              fontWeight: "700",
-              fontSize: "12px",
-              cursor: "pointer",
-              transition: "all 0.2s"
-            }}
-          >
-            {done ? "기록 완료 ✨" : "남기기"}
-          </button>
-        </div>
+   {/* 📥 하단 고정형 입력창 */}
+<div style={{
+  position: "fixed",
+  bottom: "60px",
+  left: "50%",
+  transform: "translateX(-50%)",
+  width: "calc(100% - 32px)",
+  maxWidth: "500px",
+  background: "rgba(255,255,255,0.08)",
+  backdropFilter: "blur(12px)",
+  WebkitBackdropFilter: "blur(12px)",
+  borderRadius: "20px",
+  border: "1px solid rgba(255,255,255,0.15)",
+  padding: "14px",
+  boxShadow: "0 -10px 30px rgba(0,0,0,0.5)",
+  zIndex: 10,
+  display: "flex",
+  flexDirection: "column",
+  gap: "8px"
+}}>
+  <div style={{ display: "flex", gap: "8px" }}>
+    <input
+      value={name}
+      onChange={e => setName(e.target.value)}
+      placeholder="이름"
+      style={{ ...inputStyle, width: "90px" }}
+    />
 
-        <textarea 
-          value={msg} 
-          onChange={e => setMsg(e.target.value)}
-          placeholder="당신의 한 줄이 별이 됩니다"
-          rows={2}
-          style={{ ...inputStyle, width: "100%", resize: "none", background: "rgba(0,0,0,0.2)" }} 
-        />
-      </div>
+    <input
+      value={pw}
+      onChange={e => setPw(e.target.value)}
+      placeholder="비밀번호"
+      type="password"
+      style={{ ...inputStyle, flex: 1 }}
+    />
+
+    <button
+      onClick={submit}
+      style={{
+        padding: "0 16px",
+        borderRadius: "8px",
+        border: "none",
+        background: done ? "#baffc9" : "#ffffff",
+        color: "#121212",
+        fontWeight: "700",
+        fontSize: "12px",
+        cursor: "pointer",
+        transition: "all 0.2s"
+      }}
+    >
+      {done ? "기록 완료 ✨" : "남기기"}
+    </button>
+  </div>
+
+  <textarea
+    value={msg}
+    onChange={e => setMsg(e.target.value)}
+    placeholder="당신의 한 줄이 별이 됩니다"
+    rows={2}
+    style={{
+      ...inputStyle,
+      width: "100%",
+      resize: "none",
+      background: "rgba(0,0,0,0.2)"
+    }}
+  />
+</div>
 
       <style>{`
         @keyframes floatAnimation {
