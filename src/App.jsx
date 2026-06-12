@@ -1056,10 +1056,15 @@ function GuestbookTab() {
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
-  const [done, setDone] = useState(false); // ✨ 완료 피드백 UI용 상태 변경 적용
-  const isMobile = window.innerWidth < 768;
+  const [done, setDone] = useState(false);
+  
+  // 📱 모바일 여부를 판단하는 윈도우 크기 상태 관리
+  const [isMobile, setIsMobile] = useState(typeof window !== "undefined" ? window.innerWidth < 768 : false);
 
   useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    
     const q = query(
       collection(db, "guestbook"),
       orderBy("createdAt", "desc")
@@ -1070,11 +1075,13 @@ function GuestbookTab() {
         id: d.id,
         ...d.data(),
       }));
-
       setEntries(data);
     });
 
-    return () => unsub();
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      unsub();
+    };
   }, []);
 
   const submit = async () => {
@@ -1088,7 +1095,7 @@ function GuestbookTab() {
       y: Math.floor(Math.random() * 55) + 5,
       color: [
         "#FFFFFF", "#F8FAFC", "#F1F5F9", "#E0F2FE", "#BAE6FD",
-        "#CFFAFE", "#CCFBF1", "#D1FAE5", "#DCFCE7", "#ECFCCB",
+        "#" + "CFFAFE", "#CCFBF1", "#D1FAE5", "#DCFCE7", "#ECFCCB",
         "#FEF9C3", "#FEF3C7", "#FDE68A", "#FCE7F3", "#FBCFE8",
         "#E9D5FF", "#DDD6FE", "#C4B5FD", "#BFDBFE", "#B8FF00"
       ][Math.floor(Math.random() * 20)],
@@ -1124,26 +1131,26 @@ function GuestbookTab() {
     }
   };
 
-const inputStyle = {
-  background: "rgba(255,255,255,.05)",
-  border: "1px solid rgba(255,255,255,.08)",
-  borderRadius: "14px",
-  color: "#fff",
-  padding: "10px 14px",
-  fontSize: "12px",
-  outline: "none",
-  fontFamily: "inherit",
-  transition: "0.2s",
-};
+  const inputStyle = {
+    background: "rgba(255,255,255,.05)",
+    border: "1px solid rgba(255,255,255,.08)",
+    borderRadius: "14px",
+    color: "#fff",
+    padding: "10px 14px",
+    fontSize: "12px",
+    outline: "none",
+    fontFamily: "inherit",
+    transition: "0.2s",
+  };
 
   return (
     <div style={{ 
       position: "relative", 
-     height: "calc(100vh - 64px)",
+      height: "calc(100vh - 64px)",
       display: "flex", 
       flexDirection: "column",
       color: "#fff",
-      overflow: "hidden" // 💡 전체 탭에 스크롤이 생기는 것을 원천 차단
+      overflow: "hidden"
     }}>
 
       {/* 🌌 상단 타이틀 섹션 */}
@@ -1156,7 +1163,7 @@ const inputStyle = {
         border: "1px solid rgba(255, 255, 255, 0.05)",
         textAlign: "center",
         zIndex: 2,
-        flexShrink: 0 // 💡 타이틀 크기 고정
+        flexShrink: 0
       }}>
         <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#B8FF00" }}>
           밤하늘 낙서장
@@ -1166,18 +1173,18 @@ const inputStyle = {
         </p>
       </div>
 
-      {/* 📌 밤하늘 메모보드 (이 영역 내부에서만 스크롤 발생) */}
+      {/* 📌 밤하늘 메모보드 (하단 입력창 높이를 고려해 여백 동적 조절) */}
       <div
         style={{
-          flex: 1, // 💡 남은 공간을 전부 차지
+          flex: 1,
           marginTop: "16px",
-          paddingBottom: "160px",
+          // 💡 모바일일 때는 입력창이 위아래로 배치되어 더 높으므로 하단 여백을 넓혀서 가려짐 방지
+          marginBottom: isMobile ? "210px" : "150px",
           display: "flex",
           flexDirection: "column",
           gap: "16px",
-          overflowY: "auto", // 💡 메모가 많아지면 이 영역만 스크롤 됨
+          overflowY: "auto",
           padding: "10px 4px",
-          // 스크롤바 숨기기 (선택 사항, 깔끔한 UI용)
           msOverflowStyle: "none",
           scrollbarWidth: "none",
         }}
@@ -1234,43 +1241,52 @@ const inputStyle = {
         ))}
       </div>
 
-      {/* 📥 하단 입력창 */}
-<div
-  style={{
-  position: "fixed",
-  bottom: "0",
-  left: 0,
-  right: 0,
+      {/* 📥 하단 입력창 (모바일 반응형 완벽 대응) */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "16px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          // 💡 양옆 여백을 주기 위해 calc 사용 (모바일 화면 밖 탈출 차단)
+          width: "calc(100% - 32px)", 
+          maxWidth: "720px",
 
-  width: "100%",
-  maxWidth: "720px",
-  margin: "0 auto",
+          background: "rgba(18,18,18,0.85)", // 모바일 가독성을 위해 살짝 더 어둡게 수정
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
 
-  padding: "12px 12px calc(12px + env(safe-area-inset-bottom))",
+          border: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: "24px",
 
-  background: "rgba(18,18,18,0.7)",
-  backdropFilter: "blur(20px)",
-  WebkitBackdropFilter: "blur(20px)",
+          padding: "16px",
+          boxSizing: "border-box",
 
-  borderTop: "1px solid rgba(255,255,255,0.08)",
-  borderRadius: "24px 24px 0 0",
+          boxShadow:
+            "0 8px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.05)",
 
-  boxSizing: "border-box",
-  boxShadow: "0 -8px 40px rgba(0,0,0,.45)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
 
-  display: "flex",
-  flexDirection: "column",
-  gap: "12px",
-
-  zIndex: 10
-}}
->
-        <div style={{ display: "flex", gap: "8px" }}>
+          zIndex: 10
+        }}
+      >
+        {/* 이름, 비밀번호, 남기기 버튼 라인 */}
+        <div style={{ 
+          display: "flex", 
+          gap: "8px",
+          flexWrap: isMobile ? "wrap" : "nowrap" // 💡 모바일에서 버튼이 찌그러지지 않게 줄바꿈 허용
+        }}>
           <input
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder="이름"
-            style={{ ...inputStyle, width: "90px" }}
+            style={{ 
+              ...inputStyle, 
+              flex: isMobile ? "1 1 calc(50% - 4px)" : "initial", // 모바일에선 반반 차지
+              width: isMobile ? "auto" : "90px" 
+            }}
           />
 
           <input
@@ -1278,35 +1294,39 @@ const inputStyle = {
             onChange={e => setPw(e.target.value)}
             placeholder="비밀번호"
             type="password"
-            style={{ ...inputStyle, flex: 1 }}
+            style={{ 
+              ...inputStyle, 
+              flex: isMobile ? "1 1 calc(50% - 4px)" : 1 
+            }}
           />
 
           <button
             onClick={submit}
             style={{
-  padding: "0 18px",
-  border: "none",
-  borderRadius: "12px",
+              padding: "0 18px",
+              height: isMobile ? "40px" : "auto", // 모바일에서 터치하기 편한 높이 확보
+              width: isMobile ? "100%" : "auto", // 모바일은 한 줄 전체 차지
+              border: "none",
+              borderRadius: "12px",
 
-  background: done
-    ? "#B8FF00"
-    : "linear-gradient(135deg,#ffffff,#e8e8e8)",
+              background: done
+                ? "#B8FF00"
+                : "linear-gradient(135deg,#ffffff,#e8e8e8)",
 
-  color: "#111",
-  fontSize: "12px",
-  fontWeight: "700",
+              color: "#111",
+              fontSize: "12px",
+              fontWeight: "700",
 
-  cursor: "pointer",
-
-  boxShadow: "0 4px 15px rgba(255,255,255,.15)",
-
-  transition: "all .2s ease"
-}}
+              cursor: "pointer",
+              boxShadow: "0 4px 15px rgba(255,255,255,.15)",
+              transition: "all .2s ease"
+            }}
           >
             {done ? "기록 완료 ✨" : "남기기"}
           </button>
         </div>
 
+        {/* 메시지 입력창 */}
         <textarea
           value={msg}
           onChange={e => setMsg(e.target.value)}
@@ -1324,7 +1344,7 @@ const inputStyle = {
 
       <style>{`
         @keyframes floatAnimation {
-          0% { transform: translateY(0px) ${"rotate(0deg)"}; } /* 기존 rotate 덮어쓰기 방지를 위해 분리하는 게 좋으나 원본 유지 */
+          0% { transform: translateY(0px); }
           50% { transform: translateY(-6px); }
           100% { transform: translateY(0px); }
         }
