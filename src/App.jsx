@@ -1010,7 +1010,7 @@ function AboutTab({ isPC, openPatch }) {
       margin: "0 auto"
     }}
   >
-    {PatchButton}
+    <PatchButton openPatch={openPatch} />
     {Hero}
     {Streaming}
   </div>
