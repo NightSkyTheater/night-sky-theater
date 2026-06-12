@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import.meta.env;
-
-// 🌍 Firebase 관련 임포트 최상단 통합 (updateDoc, increment 추가 완료!)
+// 🌍 Firebase 관련 임포트 최상단 통합
 import {
   collection,
   addDoc,
@@ -10,8 +9,6 @@ import {
   query,
   orderBy,
   onSnapshot,
-  updateDoc,
-  increment,
 } from "firebase/firestore";
 import { db } from "./firebase";
 
@@ -1040,6 +1037,7 @@ function MusicTab({isPC}) {
     </div>
   );
 }
+// ── 방명록 (Firebase 기능 유지 + 투명 유리 파스텔 UI + 세로 스크롤 Flex형) ─────────────────────────────
 function timeAgo(date) {
   if (!date) return "";
   const targetDate =
@@ -1101,7 +1099,6 @@ function GuestbookTab() {
       name: name.trim(),
       pw: pw.trim(),
       msg: msg.trim(),
-      likes: 0, // 💖 좋아요 기본값 0 추가
       color: [
         "#FFFFFF", "#F8FAFC", "#F1F5F9", "#E0F2FE", "#BAE6FD",
         "#CFFAFE", "#CCFBF1", "#D1FAE5", "#DCFCE7", "#ECFCCB",
@@ -1140,19 +1137,6 @@ function GuestbookTab() {
       }
     } else {
       alert("비밀번호가 틀렸습니다.");
-    }
-  };
-
-  // 💖 좋아요 카운트 증가 함수
-  const handleLike = async (id) => {
-    try {
-      const docRef = doc(db, "guestbook", id);
-      // Firebase increment 함수를 사용하여 원자적으로(Atomically) 값을 1 올립니다.
-      await updateDoc(docRef, {
-        likes: increment(1)
-      });
-    } catch (err) {
-      console.error("좋아요 실패:", err);
     }
   };
 
@@ -1256,10 +1240,10 @@ function GuestbookTab() {
                   <div
                     key={e.id}
                     style={{
-                      position: "relative", // ✕ 버튼 절대 배치를 위해 필요
+                      position: "relative", // ✕ 버튼 절대 배치를 위해 고정
                       width: "100%",
                       minHeight: "90px",
-                      padding: "28px 16px 12px 16px", // 상단 여백을 넓혀 ✕ 버튼과 겹침 방지
+                      padding: "28px 16px 12px 16px", // 상단 여백 확보
                       borderRadius: "20px",
                       background: `linear-gradient(135deg, ${baseColor}15, ${baseColor}05)`,
                       border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -1269,7 +1253,7 @@ function GuestbookTab() {
                       textAlign: "left",
                     }}
                   >
-                    {/* ✕ 삭제 버튼 추가 */}
+                    {/* ✕ 삭제 버튼 (깔끔한 인터랙션 적용) */}
                     <button
                       onClick={() => del(e)}
                       style={{
@@ -1313,40 +1297,14 @@ function GuestbookTab() {
                         fontSize: "11px",
                         display: "flex",
                         justifyContent: "space-between",
-                        alignItems: "center", // 하트 버튼 정렬 맞춤
+                        alignItems: "center",
                         opacity: 0.7,
                       }}
                     >
                       <span style={{ color: baseColor, fontWeight: 600, textShadow: `0 0 8px ${baseColor}44` }}>
                         ✦ {e.name}
                       </span>
-                      
-                      {/* 하단 우측 영역: 시간 및 좋아요 버튼 */}
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <span>{timeAgo(e.createdAt)}</span>
-                        
-                        {/* 💖 좋아요 버튼 추가 */}
-                        <button
-                          onClick={() => handleLike(e.id)}
-                          style={{
-                            background: "rgba(255, 255, 255, 0.05)",
-                            border: "1px solid rgba(255,255,255,0.08)",
-                            borderRadius: "10px",
-                            padding: "3px 6px",
-                            color: "#ff6b6b",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "3px",
-                            fontSize: "10px",
-                            transition: "transform 0.1s ease",
-                          }}
-                          onMouseDown={(e) => e.currentTarget.style.transform = "scale(0.9)"}
-                          onMouseUp={(e) => e.currentTarget.style.transform = "scale(1)"}
-                        >
-                          ❤️ {e.likes || 0}
-                        </button>
-                      </div>
+                      <span>{timeAgo(e.createdAt)}</span>
                     </div>
                   </div>
                 );
