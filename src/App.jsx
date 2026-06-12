@@ -39,7 +39,7 @@ function PatchModal({ onClose, saveOnClose = true }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* 헤더 */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: 30 }}>
           <div>
             <p style={{ fontSize: 10, color: "#B8FF00", letterSpacing: "0.15em", margin: "0 0 4px", fontWeight: 700, textAlign: "left" }}>
               PATCH NOTE
