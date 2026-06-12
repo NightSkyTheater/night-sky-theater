@@ -14,7 +14,7 @@ import { db } from "./firebase";
 
 
 
-function PatchModal({ onClose }) {
+function PatchModal({ onClose, saveOnClose = true }) {
   return (
     <div
       style={{
@@ -57,11 +57,11 @@ function PatchModal({ onClose }) {
           • 전체 레이아웃 반응형 개선<br/>
         </div>
 
-        <button
-          onClick={() => {
-            localStorage.setItem("patch_0613_seen", "true");
-            onClose();
-          }}
+<button
+    onClick={() => {
+      if (saveOnClose) localStorage.setItem("patch_0613_seen", "true");
+      onClose();
+    }}
           style={{
             marginTop: 16,
             width: "100%",
@@ -590,7 +590,7 @@ chartRef.current = new window.Chart(ctx, {
   );
 }
 
-function HomeTab({isPC}) {
+function HomeTab({isPC, onOpenPatch}) {
   const [liveSubs, setLiveSubs] = useState(null);
 
 useEffect(() => {
@@ -631,6 +631,31 @@ const refreshPick = () => {
   const rankColor = r => r===1?ACCENT:r===2?"rgba(91,79,245,0.65)":r===3?"rgba(91,79,245,0.4)":muted;
   const trendColor = t => t==="up"?"#f87171":t==="down"?"#4f8ef7":t==="new"?ACCENT:muted;
   const trendLabel = t => t==="up"?"▲":t==="down"?"▼":t==="new"?"N":"—";
+
+const PatchBadge = (
+  <button
+    onClick={onOpenPatch}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: 6,
+      background: "rgba(184,255,0,0.08)",
+      border: "1px solid rgba(184,255,0,0.2)",
+      borderRadius: 20,
+      padding: "6px 12px",
+      cursor: "pointer",
+      fontFamily: "inherit",
+      marginBottom: 4,
+    }}
+  >
+    <span style={{ fontSize: 9, color: ACCENT, fontWeight: 700, letterSpacing: "0.1em" }}>
+      🔔 PATCH NOTE
+    </span>
+    <span style={{ fontSize: 10, color: "rgba(220,210,255,0.6)" }}>
+      2026.06.13 업데이트 보기 →
+    </span>
+  </button>
+);
 
   const TodayPick = (
     <G acc style={{padding:"26px 20px",position:"relative",overflow:"hidden", textAlign:"center"}}>
@@ -758,12 +783,13 @@ const growth = ((increase / prevSubs) * 100).toFixed(1);
   if (isPC) {
     return (
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,textAlign:"left",alignItems:"start"}}>
+         <div style={{display:"flex",flexDirection:"column",gap:14}}>{PatchBadge}</div>
         <div style={{display:"flex",flexDirection:"column",gap:14}}>{TodayPick}{Top10}</div>
         <div style={{display:"flex",flexDirection:"column",gap:14}}>{Notice}{SubSection}{Overseas}</div>
       </div>
     );
   }
-  return <div style={{display:"flex",flexDirection:"column",gap:10,textAlign:"left"}}>{TodayPick}{Notice}{Top10}{SubSection}{Overseas}</div>;
+  return <div style={{display:"flex",flexDirection:"column",gap:10,textAlign:"left"}}>{PatchBadge}{TodayPick}{Notice}{Top10}{SubSection}{Overseas}</div>;
 }
 
 function AboutTab({ isPC }) {
@@ -1526,15 +1552,7 @@ useEffect(() => {
         strong { font-weight:800 }
       `}</style>
       <Stars />
-      {showPatch && (
-
-  <PatchModal
-
-    onClose={() => setShowPatch(false)}
-
-  />
-
-)}
+      {showPatch && <PatchModal onClose={() => setShowPatch(false)} />}
       <div style={{ position: "relative", zIndex: 1, maxWidth: isPC ? 900 : 430, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <div
   style={{
@@ -1547,7 +1565,7 @@ useEffect(() => {
   }}
   key={tab}
 >
-          {tab === "홈" && <HomeTab isPC={isPC} />}
+          {tab === "홈" && <HomeTab isPC={isPC} onOpenPatch={() => setShowPatch(true)} />}
           {tab === "소개" && <AboutTab isPC={isPC} />}
           {tab === "음악" && <MusicTab isPC={isPC} />}
           {tab === "방명록" && <GuestbookTab />}
