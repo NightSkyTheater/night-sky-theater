@@ -1125,6 +1125,7 @@ const inputStyle = {
         style={{
           flex: 1, // 💡 남은 공간을 전부 차지
           marginTop: "16px",
+          marginbottom:"166px",
           display: "flex",
           flexDirection: "column",
           gap: "16px",
@@ -1194,8 +1195,8 @@ const inputStyle = {
     bottom: "20px",
     left: "50%",
     transform: "translateX(-50%)",
-    width: "calc(100% - 24px)",
-    maxWidth: "520px",
+    width: "100%",
+    maxWidth: "720px",
 
     background: "rgba(18,18,18,0.7)",
     backdropFilter: "blur(20px)",
