@@ -1464,38 +1464,53 @@ function GuestbookTab() {
 export default function App() {
   const [tab, setTab] = useState("홈");
   const [isPC, setIsPC] = useState(false);
-  
   const [showPatch, setShowPatch] = useState(false);
+  const [isChartLoaded, setIsChartLoaded] = useState(false); // 👈 [추가] 2번 문제 해결용 상태
 
+  // 1. 패치 노트 모달 노출 여부 체크
   useEffect(() => {
-  const savedVersion = localStorage.getItem("patch_version");
+    const savedVersion = localStorage.getItem("patch_version");
+    if (savedVersion !== PATCH_VERSION) {
+      setShowPatch(true);
+    }
+  }, []);
 
-  if (savedVersion !== PATCH_VERSION) {
-    setShowPatch(true);
-  }
-}, []);
-
-
+  // 2. 반응형 웹 (PC 환경 체크)
   useEffect(() => {
-    const fn = () => {
+    const handleResize = () => {
       setIsPC(window.innerWidth >= 768);
     };
 
-    fn(); // 최초 실행
-
-    window.addEventListener("resize", fn);
-    return () => window.removeEventListener("resize", fn);
+    handleResize(); // 최초 실행
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // 3. 외부 Chart.js 안전하게 로드하기
   useEffect(() => {
-    if (document.querySelector('script[src*="chart.umd.js"]')) return;
-    const s = document.createElement("script");
-    s.src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";
-    document.head.appendChild(s);
+    if (window.Chart || document.querySelector('script[src*="chart.umd.js"]')) {
+      setIsChartLoaded(true);
+      return;
+    }
+    
+    const script = document.createElement("script");
+    script.src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";
+    script.async = true;
+    script.onload = () => setIsChartLoaded(true); // 👈 로드 완료 시 상태 변경
+    document.head.appendChild(script);
   }, []);
 
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)", color: "#fff", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}>
+    <div 
+      style={{ 
+        minHeight: "100vh", 
+        background: "linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)", 
+        color: "#fff", 
+        fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", 
+        position: "relative" 
+      }}
+    >
+      {/* 글로벌 스타일 (가능하면 전역 CSS 파일로 이동하는 것을 추천합니다) */}
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
@@ -1508,42 +1523,48 @@ export default function App() {
         ::-webkit-scrollbar-thumb { background:rgba(184,255,0,0.16);border-radius:3px }
         strong { font-weight:800 }
       `}</style>
+
       <Stars />
-      <div style={{ position: "relative", zIndex: 1, maxWidth: isPC ? 900 : 430, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+
+      <div 
+        style={{ 
+          position: "relative", 
+          zIndex: 1, 
+          maxWidth: isPC ? 900 : 430, 
+          margin: "0 auto", 
+          display: "flex", 
+          flexDirection: "column", 
+          minHeight: "100vh" 
+        }}
+      >
         <div
-  style={{
-    flex: 1,
-    padding:
-      tab === "방명록"
-        ? (isPC ? "20px 24px 0" : "12px 14px 0")
-        : (isPC ? "20px 24px 90px" : "12px 14px 140px"),
-    animation: "fin 0.3s ease both"
-  }}
-  key={tab}
->
-          {tab === "홈" && <HomeTab
-  isPC={isPC}
-  openPatch={() => setShowPatch(true)}
-/>}
-          {tab === "소개" && (
-  <AboutTab
-    isPC={isPC}
-    openPatch={() => setShowPatch(true)}
-  />
-)}
+          style={{
+            flex: 1,
+            padding: tab === "방명록"
+              ? (isPC ? "20px 24px 0" : "12px 14px 0")
+              : (isPC ? "20px 24px 90px" : "12px 14px 140px"),
+            animation: "fin 0.3s ease both"
+          }}
+          key={tab}
+        >
+          {/* 차트가 필요한 탭이 있다면 isChartLoaded를 prop으로 내려주어 안전하게 렌더링되도록 제어할 수 있습니다. */}
+          {tab === "홈" && <HomeTab isPC={isPC} openPatch={() => setShowPatch(true)} isChartLoaded={isChartLoaded} />}
+          {tab === "소개" && <AboutTab isPC={isPC} openPatch={() => setShowPatch(true)} />}
           {tab === "음악" && <MusicTab isPC={isPC} />}
           {tab === "방명록" && <GuestbookTab />}
         </div>
+        
         <BottomNav tab={tab} setTab={setTab} />
       </div>
-    {showPatch && (
-      <PatchModal
-        onClose={() => {
-          localStorage.setItem("patch_version", PATCH_VERSION);
-          setShowPatch(false);
-        }}
-      />
-    )}
-  </div>
-);
+
+      {showPatch && (
+        <PatchModal
+          onClose={() => {
+            localStorage.setItem("patch_version", PATCH_VERSION);
+            setShowPatch(false);
+          }}
+        />
+      )}
+    </div>
+  );
 }
