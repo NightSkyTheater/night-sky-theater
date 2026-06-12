@@ -1037,10 +1037,11 @@ function MusicTab({isPC}) {
     </div>
   );
 }
-// ── 방명록 (Firebase 기능 유지 + 포스트잇 감성 UI 적용) ─────────────────────────────
+// ── 방명록 (Firebase 기능 유지 + 포스트잇 감성 UI + GRID 반응형) ─────────────────────────────
 function timeAgo(date) {
   if (!date) return "";
-  const targetDate = date instanceof Date ? date : (date.toDate ? date.toDate() : new Date(date));
+  const targetDate =
+    date instanceof Date ? date : (date.toDate ? date.toDate() : new Date(date));
   const now = new Date();
   const diff = Math.floor((now - targetDate) / 1000);
 
@@ -1056,8 +1057,7 @@ function GuestbookTab() {
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
-  const [done, setDone] = useState(false); 
-  const isMobile = window.innerWidth < 768;
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
     const q = query(
@@ -1084,8 +1084,6 @@ function GuestbookTab() {
       name: name.trim(),
       pw: pw.trim(),
       msg: msg.trim(),
-      x: Math.floor(Math.random() * 65) + 10,
-      y: Math.floor(Math.random() * 55) + 5,
       color: [
         "#FFFFFF", "#F8FAFC", "#F1F5F9", "#E0F2FE", "#BAE6FD",
         "#CFFAFE", "#CCFBF1", "#D1FAE5", "#DCFCE7", "#ECFCCB",
@@ -1103,13 +1101,13 @@ function GuestbookTab() {
       setDone(true);
       setTimeout(() => setDone(false), 2000);
     } catch (err) {
-      console.error("Error adding document: ", err);
+      console.error(err);
     }
   };
 
   const del = async (entry) => {
     if (!window.confirm("이 낙서를 삭제하시겠습니까?")) return;
-    
+
     const input = window.prompt("비밀번호를 입력하세요");
     if (!input) return;
 
@@ -1117,7 +1115,7 @@ function GuestbookTab() {
       try {
         await deleteDoc(doc(db, "guestbook", entry.id));
       } catch (err) {
-        console.error("Error deleting document: ", err);
+        console.error(err);
       }
     } else {
       alert("비밀번호가 틀렸습니다.");
@@ -1133,117 +1131,104 @@ function GuestbookTab() {
     fontSize: "12px",
     outline: "none",
     fontFamily: "inherit",
-    transition: "0.2s",
   };
 
   return (
-    <div style={{ 
-      position: "relative", 
-      height: "calc(100vh - 64px)",
-      display: "flex", 
-      flexDirection: "column",
-      color: "#fff",
-      overflow: "hidden"
-    }}>
-
-      {/* 🌌 상단 타이틀 섹션 */}
-      <div style={{
-        padding: "20px 16px",
-        background: "linear-gradient(to bottom, rgba(18,18,18,0.4), transparent)",
-        textAlign: "center",
-        zIndex: 2,
-        flexShrink: 0
-      }}>
-        <h2 style={{ margin: "0 0 6px 0", fontSize: "18px", fontWeight: 700, color: "#fff", textShadow: "0 0 10px rgba(184,255,0,0.5)" }}>
-          밤하늘 낙서장
-        </h2>
-        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)", margin: 0, letterSpacing: "-0.2px" }}>
-          밤하늘에 지워지지 않을 당신의 포스트잇을 남겨주세요.
+    <div
+      style={{
+        position: "relative",
+        height: "calc(100vh - 64px)",
+        display: "flex",
+        flexDirection: "column",
+        color: "#fff",
+        overflow: "hidden",
+      }}
+    >
+      {/* 🌌 타이틀 */}
+      <div
+        style={{
+          padding: "20px 16px",
+          textAlign: "center",
+          flexShrink: 0,
+          background:
+            "linear-gradient(to bottom, rgba(18,18,18,0.4), transparent)",
+        }}
+      >
+        <h2 style={{ margin: 0, fontSize: "18px" }}>밤하늘 낙서장</h2>
+        <p style={{ fontSize: "12px", opacity: 0.6, marginTop: 6 }}>
+          당신의 마음을 포스트잇처럼 남겨주세요
         </p>
       </div>
 
-      {/* 📌 밤하늘 메모보드 (포스트잇 리스트) */}
+      {/* 📌 GRID 메모 보드 */}
       <div
         style={{
           flex: 1,
-          marginTop: "10px",
           padding: "10px 20px 180px 20px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "24px",
+
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+          gap: "16px",
+
           overflowY: "auto",
-          msOverflowStyle: "none",
-          scrollbarWidth: "none",
+          alignContent: "start",
         }}
       >
-        {entries.map((e, idx) => {
-          // 투명도가 적용된 파스텔톤 생성을 위한 처리
-          const baseColor = e.color || "#FFFFFF";
+        {entries.map((e) => {
+          const baseColor = e.color || "#fff";
+
           return (
             <div
               key={e.id}
               onClick={() => del(e)}
-              title="클릭하여 삭제"
               style={{
-                alignSelf: idx % 2 === 0 ? "flex-start" : "flex-end",
-                width: "auto",
-                minWidth: "160px",
-                maxWidth: "240px",
-                padding: "20px 16px 12px 16px",
-                borderRadius: "2px 2px 2px 15px", // 종이 느낌의 비대칭 라운딩
-                position: "relative",
-                // 배경: 부드러운 파스텔 투명도 + 노트 줄무늬(Line)
-                background: `linear-gradient(to bottom, ${baseColor}33, ${baseColor}1a), 
-                             repeating-linear-gradient(transparent, transparent 21px, rgba(255,255,255,0.05) 21px, rgba(255,255,255,0.05) 22px)`,
-                backgroundSize: "100%, 100% 22px",
+                width: "100%",
+                minHeight: "140px",
+                padding: "18px 14px 12px 14px",
+                borderRadius: "14px",
+                cursor: "pointer",
+
+                background: `linear-gradient(to bottom, ${baseColor}33, ${baseColor}1a),
+                  repeating-linear-gradient(transparent, transparent 21px, rgba(255,255,255,0.05) 21px, rgba(255,255,255,0.05) 22px)`,
+
+                border: `1px solid ${baseColor}44`,
+                borderLeft: `4px solid ${baseColor}aa`,
+
                 backdropFilter: "blur(12px)",
                 WebkitBackdropFilter: "blur(12px)",
-                border: `1px solid ${baseColor}44`,
-                borderLeft: `4px solid ${baseColor}aa`, // 포스트잇 강조 라인
-                cursor: "pointer",
-                animation: "floatAnimation 6s ease-in-out infinite",
-                animationDelay: `${idx * 0.2}s`,
-                transform: `rotate(${idx % 2 === 0 ? -1.5 : 1.5}deg)`,
-                boxShadow: `0 10px 25px -5px rgba(0,0,0,0.3), inset 0 0 10px ${baseColor}11`,
+
+                boxShadow:
+                  "0 10px 25px rgba(0,0,0,0.25), inset 0 0 10px rgba(255,255,255,0.05)",
+
+                transition: "transform 0.2s ease",
               }}
             >
-              {/* 포스트잇 상단 테이프 효과 */}
-              <div style={{
-                position: "absolute",
-                top: "-10px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                width: "40px",
-                height: "15px",
-                background: "rgba(255,255,255,0.15)",
-                backdropFilter: "blur(2px)",
-                border: "1px solid rgba(255,255,255,0.1)",
-              }} />
-
-              <p style={{
-                margin: 0,
-                fontSize: "14px",
-                lineHeight: "22px", // 줄무늬 간격과 맞춤
-                color: "#fff",
-                whiteSpace: "pre-wrap",
-                wordBreak: "break-word",
-                fontWeight: "500",
-                textShadow: "0 1px 2px rgba(0,0,0,0.2)",
-              }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "14px",
+                  lineHeight: "22px",
+                  whiteSpace: "pre-wrap",
+                  wordBreak: "break-word",
+                }}
+              >
                 {e.msg}
               </p>
 
-              <div style={{
-                marginTop: "12px",
-                paddingTop: "8px",
-                fontSize: "11px",
-                color: "rgba(255,255,255,0.5)",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                borderTop: "1px solid rgba(255,255,255,0.1)",
-              }}>
-                <span style={{ fontWeight: "600", color: baseColor }}>✦ {e.name}</span>
+              <div
+                style={{
+                  marginTop: "12px",
+                  paddingTop: "8px",
+                  borderTop: "1px solid rgba(255,255,255,0.1)",
+                  fontSize: "11px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  opacity: 0.7,
+                }}
+              >
+                <span style={{ color: baseColor, fontWeight: 600 }}>
+                  ✦ {e.name}
+                </span>
                 <span>{timeAgo(e.createdAt)}</span>
               </div>
             </div>
@@ -1251,41 +1236,36 @@ function GuestbookTab() {
         })}
       </div>
 
-      {/* 📥 하단 입력창 */}
+      {/* 📥 입력창 */}
       <div
         style={{
           position: "fixed",
-          bottom: "0",
+          bottom: 0,
           left: 0,
           right: 0,
-          width: "100%",
           maxWidth: "720px",
           margin: "0 auto",
-          padding: "16px 16px calc(20px + env(safe-area-inset-bottom))",
+          padding: "16px",
           background: "rgba(18,18,18,0.85)",
           backdropFilter: "blur(25px)",
-          WebkitBackdropFilter: "blur(25px)",
           borderTop: "1px solid rgba(255,255,255,0.1)",
           borderRadius: "32px 32px 0 0",
-          boxSizing: "border-box",
-          boxShadow: "0 -10px 40px rgba(0,0,0,0.5)",
           display: "flex",
           flexDirection: "column",
-          gap: "12px",
-          zIndex: 10
+          gap: "10px",
         }}
       >
         <div style={{ display: "flex", gap: "8px" }}>
           <input
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
             placeholder="이름"
             style={{ ...inputStyle, width: "80px" }}
           />
 
           <input
             value={pw}
-            onChange={e => setPw(e.target.value)}
+            onChange={(e) => setPw(e.target.value)}
             placeholder="비밀번호"
             type="password"
             style={{ ...inputStyle, flex: 1 }}
@@ -1294,53 +1274,35 @@ function GuestbookTab() {
           <button
             onClick={submit}
             style={{
-              padding: "0 20px",
+              padding: "0 16px",
+              borderRadius: "12px",
               border: "none",
-              borderRadius: "14px",
-              background: done ? "#B8FF00" : "rgba(255,255,255,0.9)",
-              color: "#111",
-              fontSize: "12px",
               fontWeight: "700",
+              background: done ? "#B8FF00" : "#fff",
+              color: "#111",
               cursor: "pointer",
-              transition: "all .3s cubic-bezier(0.4, 0, 0.2, 1)",
-              transform: done ? "scale(1.05)" : "scale(1)",
-              boxShadow: done ? "0 0 20px rgba(184,255,0,0.4)" : "none"
             }}
           >
-            {done ? "기록 완료 ✨" : "기록하기"}
+            {done ? "완료 ✨" : "기록"}
           </button>
         </div>
 
         <textarea
           value={msg}
-          onChange={e => setMsg(e.target.value)}
-          placeholder="밤하늘에 당신의 마음을 붙여주세요..."
+          onChange={(e) => setMsg(e.target.value)}
+          placeholder="마음을 남겨주세요..."
           rows={2}
           style={{
             ...inputStyle,
             width: "100%",
             resize: "none",
-            background: "rgba(255,255,255,0.03)",
-            boxSizing: "border-box",
-            fontSize: "13px"
+            fontSize: "13px",
           }}
         />
       </div>
-
-      <style>{`
-        @keyframes floatAnimation {
-          0% { transform: translateY(0px) rotate(-1.5deg); }
-          50% { transform: translateY(-8px) rotate(0deg); }
-          100% { transform: translateY(0px) rotate(-1.5deg); }
-        }
-        /* 스크롤바 숨기기 브라우저별 처리 */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-      `}</style>
-
     </div>
   );
 }
-
 // ── APP (메인 컴포넌트 단일 Export Default) ───────────────────
 export default function App() {
   const [tab, setTab] = useState("홈");
