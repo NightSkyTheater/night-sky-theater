@@ -1178,7 +1178,7 @@ function GuestbookTab() {
         }}
       >
         {/* 모바일/데스크톱 모두 안정적인 2줄 지그재그 배치 구조 */}
-        {[0, 1].map((colIndex) => (
+        {[0, 1, 2].map((colIndex) => (
           <div 
             key={colIndex} 
             style={{ 
@@ -1189,7 +1189,7 @@ function GuestbookTab() {
             }}
           >
             {entries
-              .filter((_, idx) => idx % 2 === colIndex) // 지그재그 분배 법칙
+              .filter((_, idx) => idx % 3 === colIndex) // 지그재그 분배 법칙
               .map((e) => {
                 const baseColor = e.color || "#fff";
 
@@ -1200,7 +1200,7 @@ function GuestbookTab() {
                     style={{
                       width: "100%",
                       minHeight: "100px",
-                      padding: "18px 14px 12px 14px",
+                      padding: "18px 30px 12px 30px",
                       borderRadius: "14px",
                       cursor: "pointer",
 
@@ -1215,7 +1215,7 @@ function GuestbookTab() {
 
                       boxShadow:
                         "0 10px 25px rgba(0,0,0,0.25), inset 0 0 10px rgba(255,255,255,0.05)",
-
+                      textAlign: "left",
                       transition: "transform 0.2s ease",
                     }}
                   >
