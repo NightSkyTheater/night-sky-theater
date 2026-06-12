@@ -991,6 +991,8 @@ function MusicTab({isPC}) {
     </div>
   );
 }
+
+
 // ── 방명록 (Firebase 기능 유지 + 하단 100% 바 UI 적용) ─────────────────────────────
 function timeAgo(date) {
   if (!date) return "";
@@ -1091,7 +1093,7 @@ function GuestbookTab() {
   return (
     <div style={{ 
       position: "relative", 
-      height: "100%"
+      height: "100%",
       display: "flex", 
       flexDirection: "column",
       color: "#fff",
