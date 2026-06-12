@@ -1145,35 +1145,55 @@ function GuestbookTab() {
       }}
     >
       {/* 🌌 타이틀 */}
-      <div
-        style={{
-          padding: "20px 16px",
-          textAlign: "center",
-          flexShrink: 0,
-          background:
-            "linear-gradient(to bottom, rgba(18,18,18,0.4), transparent)",
-        }}
-      >
-        <h2 style={{ margin: 0, fontSize: "18px" }}>밤하늘 낙서장</h2>
-        <p style={{ fontSize: "12px", opacity: 0.6, marginTop: 6 }}>
-          당신의 마음을 포스트잇처럼 남겨주세요
+
+      <div style={{
+
+        padding: "16px",
+
+        background: "rgba(255, 255, 255, 0.03)",
+
+        backdropFilter: "blur(4px)",
+
+        WebkitBackdropFilter: "blur(4px)",
+
+        borderRadius: "16px",
+
+        border: "1px solid rgba(255, 255, 255, 0.05)",
+
+        textAlign: "center",
+
+        zIndex: 2,
+
+        flexShrink: 0 // 💡 타이틀 크기 고정
+
+      }}>
+
+        <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#B8FF00" }}>
+
+          밤하늘 낙서장
+
+        </h2>
+
+        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)", margin: 0 }}>
+
+          밤하늘에 지워지지 않을 당신의 한 줄을 남겨주세요.
+
         </p>
+
       </div>
 
       {/* 📌 GRID 메모 보드 */}
-      <div
-        style={{
-          flex: 1,
-          padding: "10px 20px 180px 20px",
+<div
+  style={{
+    flex: 1,
+    padding: "10px 20px 180px 20px",
 
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-          gap: "16px",
+    columnCount: 3,
+    columnGap: "16px",
 
-          overflowY: "auto",
-          alignContent: "start",
-        }}
-      >
+    overflowY: "auto",
+  }}
+>
         {entries.map((e) => {
           const baseColor = e.color || "#fff";
 
@@ -1183,6 +1203,9 @@ function GuestbookTab() {
               onClick={() => del(e)}
               style={{
                 width: "100%",
+                display: "inline-block",
+marginBottom: "16px",
+breakInside: "avoid",
                 minHeight: "140px",
                 padding: "18px 14px 12px 14px",
                 borderRadius: "14px",
