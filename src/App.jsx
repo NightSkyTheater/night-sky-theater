@@ -434,11 +434,11 @@ function SubChart({ liveSubs }) {
       const grad = ctx.createLinearGradient(0, 0, 0, 130);
       grad.addColorStop(0, "rgba(184,255,0,0.22)");
       grad.addColorStop(1, "rgba(184,255,0,0.00)");
-      const chartData = [
+const chartData = [
   ...SUB_DATA,
   {
     month: "현재",
-    subs: liveSubs
+    subs: liveSubs ?? SUB_DATA[SUB_DATA.length - 1].subs
   }
 ];
 
@@ -495,7 +495,7 @@ chartRef.current = new window.Chart(ctx, {
               ticks: {
                 color: "rgba(220,210,255,0.30)",
                 font: { size: 9 },
-                stepSize: 80,
+                stepSize: 100,
                 callback: v => v + "명"
               },
               border: { display: false }
@@ -520,7 +520,7 @@ chartRef.current = new window.Chart(ctx, {
 }
 
 function HomeTab({isPC}) {
-  const [liveSubs, setLiveSubs] = useState(502);
+  const [liveSubs, setLiveSubs] = useState(null);
 
 useEffect(() => {
   async function fetchSubs() {
@@ -596,18 +596,27 @@ const refreshPick = () => {
     </G>
   );
 
-  const currentSubs = SUB_DATA[SUB_DATA.length - 1].subs;
-  const prevSubs    = SUB_DATA[SUB_DATA.length - 2].subs;
-  const increase = currentSubs - prevSubs;
-  const growth   = ((increase / prevSubs) * 100).toFixed(1);
+const currentSubs = liveSubs ?? SUB_DATA[SUB_DATA.length - 1].subs;
+const prevSubs = SUB_DATA[SUB_DATA.length - 1].subs;
+
+const increase = currentSubs - prevSubs;
+const growth = ((increase / prevSubs) * 100).toFixed(1);
 
   const SubSection = (
     <G>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
         <SecHead title="유튜브 채널 분석" sub="최근 7개월 기준"/>
         <div style={{textAlign:"right"}}>
-          <p style={{fontSize:20,fontWeight:900,color:ACCENT,margin:0,lineHeight:1}}>
-  {liveSubs}
+          <p
+  style={{
+    fontSize:20,
+    fontWeight:900,
+    color:ACCENT,
+    margin:0,
+    lineHeight:1
+  }}
+>
+  {liveSubs ?? "..."}
 </p>
           <p style={{fontSize:9,color:muted,margin:"3px 0 0"}}>현재 구독자</p>
         </div>
