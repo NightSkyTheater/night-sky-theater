@@ -1038,6 +1038,7 @@ function MusicTab({isPC}) {
   );
 }
 // ── 방명록 (Firebase 기능 유지 + 포스트잇 감성 UI + CSS Columns 반응형) ─────────────────────────────
+// ── 방명록 (Firebase 기능 유지 + 포스트잇 감성 UI + 세로 스크롤 Flex형) ─────────────────────────────
 function timeAgo(date) {
   if (!date) return "";
   const targetDate =
@@ -1164,80 +1165,93 @@ function GuestbookTab() {
         </p>
       </div>
 
-      {/* 📌 포스트잇 감성 자유형 보드 (CSS Columns 적용) */}
+      {/* 📌 포스트잇 감성 자유형 보드 (가로 배치 후 아래로 스크롤) */}
       <div
         style={{
           flex: 1,
           padding: "20px 20px 180px 20px",
-          columnWidth: "160px",      // 👈 화면 크기에 맞춰 카드가 배치될 최소 너비
-          columnGap: "14px",         // 👈 카드 사이의 가로 간격
-          overflowY: "auto",
+          overflowY: "auto",      // 👈 세로 스크롤 활성화
+          display: "flex",
+          flexDirection: "row",   // 👈 세로 열(Column)들을 가로로 먼저 배치
+          gap: "14px",            // 👈 열과 열 사이 간격
+          alignItems: "flex-start"
         }}
       >
-        {entries.map((e) => {
-          const baseColor = e.color || "#fff";
+        {/* 모바일/데스크톱 모두 안정적인 2줄 지그재그 배치 구조 */}
+        {[0, 1].map((colIndex) => (
+          <div 
+            key={colIndex} 
+            style={{ 
+              flex: 1, 
+              display: "flex", 
+              flexDirection: "column", // 👈 이 안의 카드들은 무조건 아래로만 쌓임
+              gap: "14px"              // 👈 카드와 카드 사이 세로 간격
+            }}
+          >
+            {entries
+              .filter((_, idx) => idx % 2 === colIndex) // 지그재그 분배 법칙
+              .map((e) => {
+                const baseColor = e.color || "#fff";
 
-          return (
-            <div
-              key={e.id}
-              onClick={() => del(e)}
-              style={{
-                display: "inline-block", // 👈 다단 레이아웃에서 카드가 쪼개지지 않도록 필수!
-                width: "100%",           // 👈 단 너비에 꽉 차게 설정
-                marginBottom: "14px",    // 👈 카드 사이의 세로 간격
-                breakInside: "avoid",    // 👈 웹킷 외 브라우저 방어 코드 (카드 끊김 방지)
-                
-                minHeight: "100px",      // 👈 짧은 글을 위해 최소 높이를 살짝 낮춤
-                padding: "18px 14px 12px 14px",
-                borderRadius: "14px",
-                cursor: "pointer",
+                return (
+                  <div
+                    key={e.id}
+                    onClick={() => del(e)}
+                    style={{
+                      width: "100%",
+                      minHeight: "100px",
+                      padding: "18px 14px 12px 14px",
+                      borderRadius: "14px",
+                      cursor: "pointer",
 
-                background: `linear-gradient(to bottom, ${baseColor}33, ${baseColor}1a),
-                  repeating-linear-gradient(transparent, transparent 21px, rgba(255,255,255,0.05) 21px, rgba(255,255,255,0.05) 22px)`,
+                      background: `linear-gradient(to bottom, ${baseColor}33, ${baseColor}1a),
+                        repeating-linear-gradient(transparent, transparent 21px, rgba(255,255,255,0.05) 21px, rgba(255,255,255,0.05) 22px)`,
 
-                border: `1px solid ${baseColor}44`,
-                borderLeft: `4px solid ${baseColor}aa`,
+                      border: `1px solid ${baseColor}44`,
+                      borderLeft: `4px solid ${baseColor}aa`,
 
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
+                      backdropFilter: "blur(12px)",
+                      WebkitBackdropFilter: "blur(12px)",
 
-                boxShadow:
-                  "0 10px 25px rgba(0,0,0,0.25), inset 0 0 10px rgba(255,255,255,0.05)",
+                      boxShadow:
+                        "0 10px 25px rgba(0,0,0,0.25), inset 0 0 10px rgba(255,255,255,0.05)",
 
-                transition: "transform 0.2s ease",
-              }}
-            >
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "14px",
-                  lineHeight: "22px",
-                  whiteSpace: "pre-wrap",
-                  wordBreak: "break-word",
-                }}
-              >
-                {e.msg}
-              </p>
+                      transition: "transform 0.2s ease",
+                    }}
+                  >
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: "14px",
+                        lineHeight: "22px",
+                        whiteSpace: "pre-wrap",
+                        wordBreak: "break-word",
+                      }}
+                    >
+                      {e.msg}
+                    </p>
 
-              <div
-                style={{
-                  marginTop: "12px",
-                  paddingTop: "8px",
-                  borderTop: "1px solid rgba(255,255,255,0.1)",
-                  fontSize: "11px",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  opacity: 0.7,
-                }}
-              >
-                <span style={{ color: baseColor, fontWeight: 600 }}>
-                  ✦ {e.name}
-                </span>
-                <span>{timeAgo(e.createdAt)}</span>
-              </div>
-            </div>
-          );
-        })}
+                    <div
+                      style={{
+                        marginTop: "12px",
+                        paddingTop: "8px",
+                        borderTop: "1px solid rgba(255,255,255,0.1)",
+                        fontSize: "11px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        opacity: 0.7,
+                      }}
+                    >
+                      <span style={{ color: baseColor, fontWeight: 600 }}>
+                        ✦ {e.name}
+                      </span>
+                      <span>{timeAgo(e.createdAt)}</span>
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        ))}
       </div>
 
       {/* 📥 입력창 */}
