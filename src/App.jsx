@@ -774,23 +774,74 @@ const growth = ((increase / prevSubs) * 100).toFixed(1);
     </G>
   );
 
-  if (isPC) {
-    return (
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,textAlign:"left",alignItems:"start"}}>
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>{TodayPick}{Top10}</div>
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>{Notice}{SubSection}{Overseas}</div>
+const TopBar = (
+  <div style={{
+    display:"flex",
+    justifyContent:"space-between",
+    alignItems:"center",
+    marginBottom:14
+  }}>
+    <div>
+      <p style={{margin:0,fontSize:14,fontWeight:800,color:white}}>
+        HOME
+      </p>
+      <p style={{margin:0,fontSize:10,color:muted}}>
+        Night Sky Theater Dashboard
+      </p>
+    </div>
+
+    <button
+      onClick={() => setPatchOpen(true)}
+      style={{
+        fontSize: 10,
+        padding: "6px 10px",
+        borderRadius: 999,
+        border: "1px solid rgba(184,255,0,0.25)",
+        background: "rgba(184,255,0,0.08)",
+        color: "#B8FF00",
+        cursor: "pointer",
+        fontWeight: 700,
+        zIndex: 9999
+      }}
+    >
+      PATCH NOTE
+    </button>
+  </div>
+);
+if (isPC) {
+  return (
+    <div style={{
+      display:"flex",
+      flexDirection:"column",
+      gap:14,
+      textAlign:"left"
+    }}>
+      {TopBar}
+
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>
+          {TodayPick}{Top10}
+        </div>
+
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>
+          {Notice}{SubSection}{Overseas}
+        </div>
       </div>
-    );
-  }
-  return <div style={{display:"flex",flexDirection:"column",gap:10}}>
-  {PatchButton}
-  {TodayPick}
-  {Notice}
-  {Top10}
-  {SubSection}
-  {Overseas}
-</div>;
+    </div>
+  );
 }
+
+return (
+  <div style={{display:"flex",flexDirection:"column",gap:10}}>
+    {TopBar}
+    {TodayPick}
+    {Notice}
+    {Top10}
+    {SubSection}
+    {Overseas}
+  </div>
+);
+
 
 function AboutTab({ isPC }) {
   const Hero = (
