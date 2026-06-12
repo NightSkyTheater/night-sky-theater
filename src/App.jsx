@@ -12,14 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 
-const [showPatch, setShowPatch] = useState(false);
-useEffect(() => {
-  const seen = localStorage.getItem("patch_0613_seen");
 
-  if (!seen) {
-    setShowPatch(true);
-  }
-}, []);
 
 function PatchModal({ onClose }) {
   return (
@@ -88,11 +81,7 @@ function PatchModal({ onClose }) {
   );
 }
 
-{showPatch && (
-  <PatchModal
-    onClose={() => setShowPatch(false)}
-  />
-)}
+
 
 const ACCENT = "#B8FF00";
 const LIME   = ACCENT;
@@ -1495,6 +1484,14 @@ function GuestbookTab() {
 export default function App() {
   const [tab, setTab] = useState("홈");
   const [isPC, setIsPC] = useState(false);
+const [showPatch, setShowPatch] = useState(false);
+useEffect(() => {
+  const seen = localStorage.getItem("patch_0613_seen");
+
+  if (!seen) {
+    setShowPatch(true);
+  }
+}, []);
 
   useEffect(() => {
     const fn = () => {
@@ -1529,6 +1526,15 @@ export default function App() {
         strong { font-weight:800 }
       `}</style>
       <Stars />
+      {showPatch && (
+
+  <PatchModal
+
+    onClose={() => setShowPatch(false)}
+
+  />
+
+)}
       <div style={{ position: "relative", zIndex: 1, maxWidth: isPC ? 900 : 430, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <div
   style={{
