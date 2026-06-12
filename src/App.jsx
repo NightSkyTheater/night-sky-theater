@@ -1252,8 +1252,8 @@ function GuestbookTab() {
                     style={{
                       width: "100%",
                       minHeight: "90px",
-                      padding: "14px 16px 12px 16px", // 패딩 미세 조정으로 가로폭 확보
-                      borderRadius: "16px",
+                      padding: "24px 20px 14px 20px", // 패딩 미세 조정으로 가로폭 확보
+                      borderRadius: "20px",
                       cursor: "pointer",
                       background: `linear-gradient(135deg, ${baseColor}15, ${baseColor}05)`,
                       border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -1268,9 +1268,9 @@ function GuestbookTab() {
                       style={{
                         margin: 0,
                         fontSize: "13px", // 모바일 가독성을 위해 14px -> 13px 조정
-                        lineHeight: "20px",
+                        lineHeight: "22px",
                         whiteSpace: "pre-wrap",
-                        wordBreak: "break-word",
+                        wordBreak: "keep-all",
                         color: "rgba(255, 255, 255, 0.95)", 
                         textShadow: "0 1px 2px rgba(0,0,0,0.4)"
                       }}
@@ -1332,7 +1332,7 @@ function GuestbookTab() {
               padding: "20px",
               display: "flex",
               flexDirection: "column",
-              gap: "12px",
+              gap: "20px",
             }}
             onClick={(e) => e.stopPropagation()}
           >
