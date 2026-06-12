@@ -434,10 +434,7 @@ function SubChart({ liveSubs }) {
       const grad = ctx.createLinearGradient(0, 0, 0, 130);
       grad.addColorStop(0, "rgba(184,255,0,0.22)");
       grad.addColorStop(1, "rgba(184,255,0,0.00)");
-      chartRef.current = new window.Chart(ctx, {
-        type: "line",
-        data: {
-          const chartData = [
+      const chartData = [
   ...SUB_DATA,
   {
     month: "현재",
@@ -451,19 +448,19 @@ chartRef.current = new window.Chart(ctx, {
     labels: chartData.map(d => d.month),
     datasets: [{
       data: chartData.map(d => d.subs),
-            borderColor: ACCENT,
-            borderWidth: 2,
-            tension: 0.45,
-            pointRadius: chartData.map((_, i) =>
-  i === chartData.length - 1 ? 5 : 3
-),
-            pointBackgroundColor: ACCENT,
-            pointBorderColor: ACCENT,
-            pointHoverRadius: 6,
-            fill: true,
-            backgroundColor: grad,
-          }]
-        },
+      borderColor: ACCENT,
+      borderWidth: 2,
+      tension: 0.45,
+      pointRadius: chartData.map((_, i) =>
+        i === chartData.length - 1 ? 5 : 3
+      ),
+      pointBackgroundColor: ACCENT,
+      pointBorderColor: ACCENT,
+      pointHoverRadius: 6,
+      fill: true,
+      backgroundColor: grad,
+    }]
+  },
         options: {
           responsive: true,
           maintainAspectRatio: false,
