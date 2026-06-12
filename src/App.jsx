@@ -991,7 +991,7 @@ function MusicTab({isPC}) {
     </div>
   );
 }
-// ── 방명록 (Firebase 기능 유지 + 새 UI 디자인 적용) ─────────────────────────────
+// ── 방명록 (Firebase 기능 유지 + 하단 100% 바 UI 적용) ─────────────────────────────
 function timeAgo(date) {
   if (!date) return "";
   const targetDate = date instanceof Date ? date : (date.toDate ? date.toDate() : new Date(date));
@@ -1010,7 +1010,7 @@ function GuestbookTab() {
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
-  const [done, setDone] = useState(false); // ✨ 완료 피드백 UI용 상태 변경 적용
+  const [done, setDone] = useState(false);
   const isMobile = window.innerWidth < 768;
 
   useEffect(() => {
@@ -1024,7 +1024,6 @@ function GuestbookTab() {
         id: d.id,
         ...d.data(),
       }));
-
       setEntries(data);
     });
 
@@ -1092,11 +1091,11 @@ function GuestbookTab() {
   return (
     <div style={{ 
       position: "relative", 
-      height: "85vh", // 💡 기존 minHeight에서 고정 height로 변경하여 삐져나가지 않게 제한
+      height: "85vh", // 부모 높이 고정
       display: "flex", 
       flexDirection: "column",
       color: "#fff",
-      overflow: "hidden" // 💡 전체 탭에 스크롤이 생기는 것을 원천 차단
+      overflow: "hidden" // 전체 스크롤 방지
     }}>
 
       {/* 🌌 상단 타이틀 섹션 */}
@@ -1109,7 +1108,7 @@ function GuestbookTab() {
         border: "1px solid rgba(255, 255, 255, 0.05)",
         textAlign: "center",
         zIndex: 2,
-        flexShrink: 0 // 💡 타이틀 크기 고정
+        flexShrink: 0
       }}>
         <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#B8FF00" }}>
           밤하늘 낙서장
@@ -1119,18 +1118,17 @@ function GuestbookTab() {
         </p>
       </div>
 
-      {/* 📌 밤하늘 메모보드 (이 영역 내부에서만 스크롤 발생) */}
+      {/* 📌 밤하늘 메모보드 (내부 스크롤 영역) */}
       <div
         style={{
-          flex: 1, // 💡 남은 공간을 전부 차지
+          flex: 1,
           marginTop: "16px",
-          marginBottom: "140px", // 💡 입력창 높이(약 120px)만큼 띄워서 아이템이 가려지지 않게 함
+          marginBottom: "135px", // 💡 하단 바 높이만큼 정확하게 띄워 가려짐 방지
           display: "flex",
           flexDirection: "column",
           gap: "16px",
-          overflowY: "auto", // 💡 메모가 많아지면 이 영역만 스크롤 됨
-          padding: "10px 4px",
-          // 스크롤바 숨기기 (선택 사항, 깔끔한 UI용)
+          overflowY: "auto",
+          padding: "10px 16px", // 좌우 패딩을 주어 메모가 벽에 딱 붙지 않게 조절
           msOverflowStyle: "none",
           scrollbarWidth: "none",
         }}
@@ -1187,26 +1185,24 @@ function GuestbookTab() {
         ))}
       </div>
 
-      {/* 📥 하단 고정형 입력창 */}
+      {/* 📥 하단 고정형 와이드 바(Bar) 입력창 */}
       <div style={{
-        position: "absolute", // 💡 최상위 부모(GuestbookTab) 내부에 고정하기 위해 absolute로 변경
-        bottom: "16px",       // 💡 부모 바닥면에서 살짝 띄움
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "calc(100% - 32px)",
-        maxWidth: "500px",
-        background: "rgba(255,255,255,0.08)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-        borderRadius: "20px",
-        border: "1px solid rgba(255,255,255,0.15)",
-        padding: "14px",
+        position: "absolute",
+        bottom: "0",              // 💡 바닥에 딱 붙임
+        left: "0",                // 💡 좌측 끝에서 시작
+        width: "100%",            // 💡 가로폭 100% 꽉 채움
+        background: "rgba(20, 20, 25, 0.6)", // 💡 글자가 겹쳐 보이지 않도록 어두운 배경 투명도 최적화
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        borderRadius: "20px 20px 0 0", // 💡 상단 모서리만 둥글게 깎아서 '바' 형태 강조
+        borderTop: "1px solid rgba(255,255,255,0.15)", // 상단 경계선만 강조
+        padding: "16px",
         boxShadow: "0 -10px 30px rgba(0,0,0,0.5)",
         zIndex: 10,
         display: "flex",
         flexDirection: "column",
         gap: "8px",
-        boxSizing: "border-box"
+        boxSizing: "border-box" // padding이 가로폭에 영향을 주지 않도록 잠금
       }}>
         <div style={{ display: "flex", gap: "8px" }}>
           <input
@@ -1259,7 +1255,7 @@ function GuestbookTab() {
 
       <style>{`
         @keyframes floatAnimation {
-          0% { transform: translateY(0px) ${"rotate(0deg)"}; } /* 기존 rotate 덮어쓰기 방지를 위해 분리하는 게 좋으나 원본 유지 */
+          0% { transform: translateY(0px); }
           50% { transform: translateY(-6px); }
           100% { transform: translateY(0px); }
         }
