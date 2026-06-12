@@ -1038,7 +1038,6 @@ function MusicTab({isPC}) {
   );
 }
 // ── 방명록 (Firebase 기능 유지 + 투명 유리 파스텔 UI + 세로 스크롤 Flex형) ─────────────────────────────
-// ── 방명록 (Firebase 기능 유지 + 투명 유리 파스텔 UI + 세로 스크롤 Flex형) ─────────────────────────────
 function timeAgo(date) {
   if (!date) return "";
   const targetDate =
@@ -1304,7 +1303,7 @@ function GuestbookTab() {
           <div
             style={{
               width: "100%",
-              maxWidth: "360px",
+              maxWidth: "340px",
               background: "rgba(18,18,18,0.75)",
               backdropFilter: "blur(30px)",
               border: "1px solid rgba(255,255,255,0.08)",
@@ -1312,11 +1311,11 @@ function GuestbookTab() {
               padding: "20px",
               display: "flex",
               flexDirection: "column",
-              gap: "10px",
+              gap: "12px", // 세로 간격을 깔끔하게 조정
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2px" }}>
               <span style={{ fontSize: "13px", fontWeight: 600, color: "#B8FF00" }}>낙서 남기기</span>
               <button 
                 onClick={() => setIsOpen(false)}
@@ -1326,43 +1325,29 @@ function GuestbookTab() {
               </button>
             </div>
 
-            <div style={{ display: "flex", gap: "8px" }}>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="이름"
-                style={{ ...inputStyle, width: "80px" }}
-              />
+            {/* 1줄: 닉네임 입력 (가로 꽉 차게) */}
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="이름"
+              style={{ ...inputStyle, width: "100%" }}
+            />
 
-              <input
-                value={pw}
-                onChange={(e) => setPw(e.target.value)}
-                placeholder="비밀번호"
-                type="password"
-                style={{ ...inputStyle, flex: 1 }}
-              />
+            {/* 2줄: 비밀번호 입력 (가로 꽉 차게) */}
+            <input
+              value={pw}
+              onChange={(e) => setPw(e.target.value)}
+              placeholder="비밀번호"
+              type="password"
+              style={{ ...inputStyle, width: "100%" }}
+            />
 
-              <button
-                onClick={submit}
-                style={{
-                  padding: "0 16px",
-                  borderRadius: "12px",
-                  border: "none",
-                  fontWeight: "700",
-                  background: done ? "#B8FF00" : "rgba(255,255,255,0.9)",
-                  color: "#111",
-                  cursor: "pointer",
-                }}
-              >
-                {done ? "기록완료 ✨" : "남기기"}
-              </button>
-            </div>
-
+            {/* 3줄: 내용 입력 */}
             <textarea
               value={msg}
               onChange={(e) => setMsg(e.target.value)}
               placeholder="당신의 한 줄이 별이 됩니다."
-              rows={3}
+              rows={4}
               style={{
                 ...inputStyle,
                 width: "100%",
@@ -1370,6 +1355,24 @@ function GuestbookTab() {
                 fontSize: "13px",
               }}
             />
+
+            {/* 4줄: 남기기 버튼 */}
+            <button
+              onClick={submit}
+              style={{
+                width: "100%",
+                padding: "12px 0",
+                borderRadius: "12px",
+                border: "none",
+                fontWeight: "700",
+                background: done ? "#B8FF00" : "rgba(255,255,255,0.9)",
+                color: "#111",
+                cursor: "pointer",
+                fontSize: "13px",
+              }}
+            >
+              {done ? "기록완료 ✨" : "남기기"}
+            </button>
           </div>
         </div>
       )}
