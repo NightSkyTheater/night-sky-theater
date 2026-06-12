@@ -517,7 +517,7 @@ useEffect(() => {
   async function fetchSubs() {
     try {
       const res = await fetch(
-        `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCGCMDvnVgg508GYghgeT3vw&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`
+        `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`
       );
 
       const data = await res.json();
