@@ -1037,7 +1037,7 @@ function MusicTab({isPC}) {
     </div>
   );
 }
-// ── 방명록 (포스트잇 그리드 UI) ─────────────────────────────
+import React, { useState, useEffect } from "react";
 
 function timeAgo(date) {
   if (!date) return "";
@@ -1052,6 +1052,7 @@ function timeAgo(date) {
   return targetDate.toLocaleDateString("ko-KR");
 }
 
+// 🎨 새 UI 포스트잇 컬러 에셋
 const POSTIT_COLORS = [
   { bg: "#FEF9C3", text: "#7a6a00" },
   { bg: "#DCFCE7", text: "#166534" },
@@ -1064,6 +1065,7 @@ const POSTIT_COLORS = [
   { bg: "#FFE4E6", text: "#9f1239" },
 ];
 
+// 📐 포스트잇 불규칙 회전 효과
 const ROTATES = [
   "rotate(-2deg)",
   "rotate(1.5deg)",
@@ -1079,15 +1081,14 @@ function GuestbookTab() {
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState(false);
-
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== "undefined" ? window.innerWidth < 768 : false
-  );
+  
+  // 📱 모바일 여부를 판단하는 윈도우 크기 상태 관리
+  const [isMobile, setIsMobile] = useState(typeof window !== "undefined" ? window.innerWidth < 768 : false);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
-
+    
     const q = query(
       collection(db, "guestbook"),
       orderBy("createdAt", "desc")
@@ -1110,6 +1111,7 @@ function GuestbookTab() {
   const submit = async () => {
     if (!name.trim() || !pw.trim() || !msg.trim()) return;
 
+    // Firebase에 저장할 때 새 UI에 맞게 0 ~ 컬러배열 길이 사이의 인덱스 숫자를 랜덤 저장합니다.
     const newEntry = {
       name: name.trim(),
       pw: pw.trim(),
@@ -1132,11 +1134,12 @@ function GuestbookTab() {
 
   const del = async (entry) => {
     if (!window.confirm("이 낙서를 삭제하시겠습니까?")) return;
-
+    
     const input = window.prompt("비밀번호를 입력하세요");
     if (!input) return;
 
-    if (input === entry.pw || input === "bam2026!") {
+    // 🔒 요청하신 대로 마스터 비밀번호를 무시하고 원래 작성자가 입력한 비번과만 대조합니다.
+    if (input === entry.pw) {
       try {
         await deleteDoc(doc(db, "guestbook", entry.id));
       } catch (err) {
@@ -1160,52 +1163,36 @@ function GuestbookTab() {
   };
 
   return (
-    <div
-      style={{
-        position: "relative",
-        height: "calc(100vh - 64px)",
-        display: "flex",
-        flexDirection: "column",
-        color: "#fff",
-        overflow: "hidden",
-      }}
-    >
-      {/* 🌌 상단 타이틀 */}
-      <div
-        style={{
-          padding: "16px",
-          background: "rgba(255, 255, 255, 0.03)",
-          backdropFilter: "blur(4px)",
-          WebkitBackdropFilter: "blur(4px)",
-          borderRadius: "16px",
-          border: "1px solid rgba(255, 255, 255, 0.05)",
-          textAlign: "center",
-          zIndex: 2,
-          flexShrink: 0,
-        }}
-      >
-        <h2
-          style={{
-            margin: "0 0 4px 0",
-            fontSize: "16px",
-            fontWeight: 600,
-            color: "#B8FF00",
-          }}
-        >
+    <div style={{ 
+      position: "relative", 
+      height: "calc(100vh - 64px)",
+      display: "flex", 
+      flexDirection: "column",
+      color: "#fff",
+      overflow: "hidden"
+    }}>
+
+      {/* 🌌 상단 타이틀 섹션 */}
+      <div style={{
+        padding: "16px",
+        background: "rgba(255, 255, 255, 0.03)",
+        backdropFilter: "blur(4px)",
+        WebkitBackdropFilter: "blur(4px)",
+        borderRadius: "16px",
+        border: "1px solid rgba(255, 255, 255, 0.05)",
+        textAlign: "center",
+        zIndex: 2,
+        flexShrink: 0
+      }}>
+        <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#B8FF00" }}>
           밤하늘 낙서장
         </h2>
-        <p
-          style={{
-            fontSize: "12px",
-            color: "rgba(255,255,255,0.6)",
-            margin: 0,
-          }}
-        >
+        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)", margin: 0 }}>
           밤하늘에 지워지지 않을 당신의 한 줄을 남겨주세요.
         </p>
       </div>
 
-      {/* 📌 포스트잇 그리드 */}
+      {/* 📌 포스트잇 그리드 보드 */}
       <div
         style={{
           flex: 1,
@@ -1222,7 +1209,8 @@ function GuestbookTab() {
         }}
       >
         {entries.map((e, idx) => {
-          const c = POSTIT_COLORS[(e.color ?? idx) % POSTIT_COLORS.length];
+          const colorIndex = typeof e.color === 'number' ? e.color : idx;
+          const c = POSTIT_COLORS[colorIndex % POSTIT_COLORS.length];
           const rot = ROTATES[idx % ROTATES.length];
 
           return (
@@ -1244,7 +1232,7 @@ function GuestbookTab() {
                 position: "relative",
               }}
             >
-              {/* 핀 */}
+              {/* 포스트잇 상단 고정 핀 */}
               <div
                 style={{
                   position: "absolute",
@@ -1260,7 +1248,7 @@ function GuestbookTab() {
 
               <p
                 style={{
-                  margin: 0,
+                  margin: "4px 0 0 0",
                   fontSize: "12px",
                   lineHeight: "1.55",
                   color: c.text,
@@ -1298,7 +1286,7 @@ function GuestbookTab() {
           bottom: "16px",
           left: "50%",
           transform: "translateX(-50%)",
-          width: "calc(100% - 32px)",
+          width: "calc(100% - 32px)", 
           maxWidth: "720px",
           background: "rgba(18,18,18,0.85)",
           backdropFilter: "blur(20px)",
@@ -1307,40 +1295,37 @@ function GuestbookTab() {
           borderRadius: "24px",
           padding: "16px",
           boxSizing: "border-box",
-          boxShadow:
-            "0 8px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.05)",
+          boxShadow: "0 8px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.05)",
           display: "flex",
           flexDirection: "column",
           gap: "12px",
-          zIndex: 10,
+          zIndex: 10
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            gap: "8px",
-            flexWrap: isMobile ? "wrap" : "nowrap",
-          }}
-        >
+        <div style={{ 
+          display: "flex", 
+          gap: "8px",
+          flexWrap: isMobile ? "wrap" : "nowrap"
+        }}>
           <input
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={e => setName(e.target.value)}
             placeholder="이름"
-            style={{
-              ...inputStyle,
+            style={{ 
+              ...inputStyle, 
               flex: isMobile ? "1 1 calc(50% - 4px)" : "initial",
-              width: isMobile ? "auto" : "90px",
+              width: isMobile ? "auto" : "90px" 
             }}
           />
 
           <input
             value={pw}
-            onChange={(e) => setPw(e.target.value)}
+            onChange={e => setPw(e.target.value)}
             placeholder="비밀번호"
             type="password"
-            style={{
-              ...inputStyle,
-              flex: isMobile ? "1 1 calc(50% - 4px)" : 1,
+            style={{ 
+              ...inputStyle, 
+              flex: isMobile ? "1 1 calc(50% - 4px)" : 1 
             }}
           />
 
@@ -1360,7 +1345,7 @@ function GuestbookTab() {
               fontWeight: "700",
               cursor: "pointer",
               boxShadow: "0 4px 15px rgba(255,255,255,.15)",
-              transition: "all .2s ease",
+              transition: "all .2s ease"
             }}
           >
             {done ? "기록 완료 ✨" : "남기기"}
@@ -1369,7 +1354,7 @@ function GuestbookTab() {
 
         <textarea
           value={msg}
-          onChange={(e) => setMsg(e.target.value)}
+          onChange={e => setMsg(e.target.value)}
           placeholder="당신의 한 줄이 별이 됩니다"
           rows={2}
           style={{
@@ -1377,7 +1362,7 @@ function GuestbookTab() {
             width: "100%",
             resize: "none",
             background: "rgba(0,0,0,0.2)",
-            boxSizing: "border-box",
+            boxSizing: "border-box"
           }}
         />
       </div>
