@@ -519,94 +519,100 @@ chartRef.current = new window.Chart(ctx, {
     </div>
   );
 }
-
-function HomeTab({ isPC, openPatch }) {
-  const [liveSubs, setLiveSubs] = useState(null);
+// 1. PatchButton을 HomeTab '바깥'으로 분리합니다.
 function PatchButton({ openPatch }) {
   return (
     <G
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      padding: "12px 16px"
-    }}
-  >
-    <div>
-      <p
-        style={{
-          margin: 0,
-          color: white,
-          fontSize: 14,
-          fontWeight: 700
-        }}
-      >
-        NIGHT SKY THEATER
-      </p>
-
-      <p
-        style={{
-          margin: "2px 0 0",
-          color: muted,
-          fontSize: 11
-        }}
-      >
-        공식 홈페이지
-      </p>
-    </div>
-
-    <button
-      onClick={openPatch}
       style={{
-        border: "none",
-        background: "rgba(184,255,0,0.08)",
-        color: ACCENT,
-        padding: "8px 12px",
-        borderRadius: 999,
-        fontSize: 11,
-        fontWeight: 700,
-        cursor: "pointer"
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "12px 16px"
       }}
     >
-      📢 패치노트
-    </button>
-  </G>
-);
-useEffect(() => {
-  async function fetchSubs() {
-    try {
-      const res = await fetch(
-        `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`
-      );
+      <div>
+        <p
+          style={{
+            margin: 0,
+            color: white,
+            fontSize: 14,
+            fontWeight: 700
+          }}
+        >
+          NIGHT SKY THEATER
+        </p>
 
-      const data = await res.json();
+        <p
+          style={{
+            margin: "2px 0 0",
+            color: muted,
+            fontSize: 11
+          }}
+        >
+          공식 홈페이지
+        </p>
+      </div>
 
-      if (data.items?.[0]) {
-        setLiveSubs(Number(data.items[0].statistics.subscriberCount));
+      <button
+        onClick={openPatch}
+        style={{
+          border: "none",
+          background: "rgba(184,255,0,0.08)",
+          color: ACCENT,
+          padding: "8px 12px",
+          borderRadius: 999,
+          fontSize: 11,
+          fontWeight: 700,
+          cursor: "pointer"
+        }}
+      >
+        📢 패치노트
+      </button>
+    </G>
+  );
+} // 👈 PatchButton 함수가 여기서 깔끔하게 끝납니다.
+
+// 2. 이제 완전히 독립된 깨끗한 구조의 HomeTab 컴포넌트입니다.
+function HomeTab({ isPC, openPatch }) {
+  const [liveSubs, setLiveSubs] = useState(null);
+  const [track, setTrack] = useState(null); // useState들은 항상 함수 최상단에 모아둡니다.
+
+  useEffect(() => {
+    async function fetchSubs() {
+      try {
+        const res = await fetch(
+          `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`
+        );
+
+        const data = await res.json();
+
+        if (data.items?.[0]) {
+          setLiveSubs(Number(data.items[0].statistics.subscriberCount));
+        }
+      } catch (err) {
+        console.error(err);
       }
-    } catch (err) {
-      console.error(err);
     }
-  }
 
-  fetchSubs();
+    fetchSubs();
 
-  const interval = setInterval(fetchSubs, 600000); // 10분마다 갱신
+    const interval = setInterval(fetchSubs, 600000); // 10분마다 갱신
 
-  return () => clearInterval(interval);
-}, []);
-  const [track,setTrack]=useState(null);
+    return () => clearInterval(interval);
+  }, []);
 
-useEffect(() => {
-  setTrack(
-    ALL_TRACKS[Math.floor(Math.random() * ALL_TRACKS.length)]
-  );
-}, []);
-const refreshPick = () => {
-  setTrack(
-    ALL_TRACKS[Math.floor(Math.random() * ALL_TRACKS.length)]
-  );
-};
+  useEffect(() => {
+    setTrack(
+      ALL_TRACKS[Math.floor(Math.random() * ALL_TRACKS.length)]
+    );
+  }, []);
+
+  const refreshPick = () => {
+    setTrack(
+      ALL_TRACKS[Math.floor(Math.random() * ALL_TRACKS.length)]
+    );
+  };
+
   const rankColor = r => r===1?ACCENT:r===2?"rgba(91,79,245,0.65)":r===3?"rgba(91,79,245,0.4)":muted;
   const trendColor = t => t==="up"?"#f87171":t==="down"?"#4f8ef7":t==="new"?ACCENT:muted;
   const trendLabel = t => t==="up"?"▲":t==="down"?"▼":t==="new"?"N":"—";
@@ -622,7 +628,6 @@ const refreshPick = () => {
       </>}
     </G>
   );
-
   const Notice = (
     <G pad="0">
       <div style={{padding:"20px 18px 12px"}}><SecHead title="공지사항"/></div>
