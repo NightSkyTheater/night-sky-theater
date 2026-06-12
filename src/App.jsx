@@ -1037,7 +1037,7 @@ function MusicTab({isPC}) {
     </div>
   );
 }
-// ── 방명록 (Firebase 기능 유지 + 포스트잇 감성 UI + GRID 반응형) ─────────────────────────────
+// ── 방명록 (Firebase 기능 유지 + 포스트잇 감성 UI + CSS Columns 반응형) ─────────────────────────────
 function timeAgo(date) {
   if (!date) return "";
   const targetDate =
@@ -1145,55 +1145,35 @@ function GuestbookTab() {
       }}
     >
       {/* 🌌 타이틀 */}
-
       <div style={{
-
         padding: "16px",
-
         background: "rgba(255, 255, 255, 0.03)",
-
         backdropFilter: "blur(4px)",
-
         WebkitBackdropFilter: "blur(4px)",
-
         borderRadius: "16px",
-
         border: "1px solid rgba(255, 255, 255, 0.05)",
-
         textAlign: "center",
-
         zIndex: 2,
-
-        flexShrink: 0 // 💡 타이틀 크기 고정
-
+        flexShrink: 0
       }}>
-
         <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#B8FF00" }}>
-
           밤하늘 낙서장
-
         </h2>
-
         <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)", margin: 0 }}>
-
           밤하늘에 지워지지 않을 당신의 한 줄을 남겨주세요.
-
         </p>
-
       </div>
 
-      {/* 📌 GRID 메모 보드 */}
-<div
-  style={{
-    flex: 1,
-    padding: "10px 20px 180px 20px",
-
-    columnCount: 3,
-    columnGap: "16px",
-
-    overflowY: "auto",
-  }}
->
+      {/* 📌 포스트잇 감성 자유형 보드 (CSS Columns 적용) */}
+      <div
+        style={{
+          flex: 1,
+          padding: "20px 20px 180px 20px",
+          columnWidth: "160px",      // 👈 화면 크기에 맞춰 카드가 배치될 최소 너비
+          columnGap: "14px",         // 👈 카드 사이의 가로 간격
+          overflowY: "auto",
+        }}
+      >
         {entries.map((e) => {
           const baseColor = e.color || "#fff";
 
@@ -1202,11 +1182,12 @@ function GuestbookTab() {
               key={e.id}
               onClick={() => del(e)}
               style={{
-                width: "100%",
-                display: "inline-block",
-marginBottom: "16px",
-breakInside: "avoid",
-                minHeight: "140px",
+                display: "inline-block", // 👈 다단 레이아웃에서 카드가 쪼개지지 않도록 필수!
+                width: "100%",           // 👈 단 너비에 꽉 차게 설정
+                marginBottom: "14px",    // 👈 카드 사이의 세로 간격
+                breakInside: "avoid",    // 👈 웹킷 외 브라우저 방어 코드 (카드 끊김 방지)
+                
+                minHeight: "100px",      // 👈 짧은 글을 위해 최소 높이를 살짝 낮춤
                 padding: "18px 14px 12px 14px",
                 borderRadius: "14px",
                 cursor: "pointer",
@@ -1276,6 +1257,7 @@ breakInside: "avoid",
           display: "flex",
           flexDirection: "column",
           gap: "10px",
+          zIndex: 10
         }}
       >
         <div style={{ display: "flex", gap: "8px" }}>
@@ -1326,6 +1308,7 @@ breakInside: "avoid",
     </div>
   );
 }
+
 // ── APP (메인 컴포넌트 단일 Export Default) ───────────────────
 export default function App() {
   const [tab, setTab] = useState("홈");
