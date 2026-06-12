@@ -1257,7 +1257,6 @@ function GuestbookTab() {
                       cursor: "pointer",
                       background: `linear-gradient(135deg, ${baseColor}15, ${baseColor}05)`,
                       border: "1px solid rgba(255, 255, 255, 0.08)",
-                      borderLeft: `4px solid ${baseColor}88`, 
                       backdropFilter: "blur(14px)",
                       WebkitBackdropFilter: "blur(14px)",
                       boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.2), inset 0 0 1px 1px rgba(255, 255, 255, 0.05)`,
@@ -1326,7 +1325,7 @@ function GuestbookTab() {
             style={{
               width: "100%",
               maxWidth: "340px",
-              background: "rgba(18,18,18,0.75)",
+              background: "rgba(18,18,18,0.9)",
               backdropFilter: "blur(30px)",
               border: "1px solid rgba(255,255,255,0.08)",
               borderRadius: "24px",
