@@ -12,6 +12,88 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 
+const [showPatch, setShowPatch] = useState(false);
+useEffect(() => {
+  const seen = localStorage.getItem("patch_0613_seen");
+
+  if (!seen) {
+    setShowPatch(true);
+  }
+}, []);
+
+function PatchModal({ onClose }) {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.6)",
+        backdropFilter: "blur(14px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 9999,
+        padding: 20
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          width: "100%",
+          maxWidth: 420,
+          background: "rgba(20,16,40,0.92)",
+          border: "1px solid rgba(184,255,0,0.15)",
+          borderRadius: 18,
+          padding: 18,
+          color: "#fff",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.5)"
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <p style={{ fontSize: 11, color: "#B8FF00", letterSpacing: "0.15em", margin: 0 }}>
+          PATCH NOTE
+        </p>
+
+        <h3 style={{ margin: "6px 0 14px", fontSize: 18 }}>
+          2026.06.13 업데이트
+        </h3>
+
+        <div style={{ fontSize: 13, lineHeight: 1.7, color: "rgba(255,255,255,0.85)" }}>
+          • 방명록 게시판 UI 수정<br/>
+          • 카드 디자인 개선 (유리/글래스 효과 강화)<br/>
+          • 전체 레이아웃 반응형 개선<br/>
+        </div>
+
+        <button
+          onClick={() => {
+            localStorage.setItem("patch_0613_seen", "true");
+            onClose();
+          }}
+          style={{
+            marginTop: 16,
+            width: "100%",
+            padding: "10px",
+            borderRadius: 12,
+            border: "none",
+            background: "#B8FF00",
+            color: "#111",
+            fontWeight: 800,
+            cursor: "pointer"
+          }}
+        >
+          확인
+        </button>
+      </div>
+    </div>
+  );
+}
+
+{showPatch && (
+  <PatchModal
+    onClose={() => setShowPatch(false)}
+  />
+)}
+
 const ACCENT = "#B8FF00";
 const LIME   = ACCENT;
 const glass  = "rgba(30,20,60,0.72)";
