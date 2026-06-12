@@ -1059,8 +1059,25 @@ function GuestbookTab() {
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  
+  // 📱 모바일/PC 반응형 열(Column) 개수 상태 추가 (기본 3열)
+  const [cols, setCols] = useState(3);
 
   useEffect(() => {
+    // 화면 크기에 따라 열 개수 조절하는 함수
+    const handleResize = () => {
+      if (window.innerWidth <= 768) { // 768px 이하일 때 (모바일/태블릿)
+        setCols(2);
+      } else {
+        setCols(3);
+      }
+    };
+
+    // 초기 실행 및 이벤트 리스너 등록
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    // Firebase 데이터 구독
     const q = query(
       collection(db, "guestbook"),
       orderBy("createdAt", "desc")
@@ -1075,7 +1092,10 @@ function GuestbookTab() {
       setEntries(data);
     });
 
-    return () => unsub();
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      unsub();
+    };
   }, []);
 
   const submit = async () => {
@@ -1196,30 +1216,32 @@ function GuestbookTab() {
         </button>
       </div>
 
-      {/* 📌 포스트잇 감성 자유형 보드 */}
+      {/* 📌 포스트잇 감성 자유형 보드 (반응형 2열/3열 변화) */}
       <div
         style={{
           flex: 1,
-          padding: "20px 20px 20px 20px",
+          padding: "20px",
           overflowY: "auto",
           display: "flex",
           flexDirection: "row",
-          gap: "16px",
+          gap: "12px", // 모바일 대응을 위해 간격을 약간 최적화(16px -> 12px)
           alignItems: "flex-start"
         }}
       >
-        {[0, 1, 2].map((colIndex) => (
+        {/* cols 변수만큼 배열을 동적으로 생성하여 렌더링 [0, 1, 2] 혹은 [0, 1] */}
+        {Array.from({ length: cols }).map((_, colIndex) => (
           <div 
             key={colIndex} 
             style={{ 
               flex: 1, 
               display: "flex", 
               flexDirection: "column", 
-              gap: "16px"
+              gap: "12px"
             }}
           >
             {entries
-              .filter((_, idx) => idx % 3 === colIndex)
+              // 핵심 수정: index를 전체 열 개수(cols)로 나누어 알맞게 분배합니다.
+              .filter((_, idx) => idx % cols === colIndex)
               .map((e) => {
                 const baseColor = e.color || "#fff";
 
@@ -1230,7 +1252,7 @@ function GuestbookTab() {
                     style={{
                       width: "100%",
                       minHeight: "90px",
-                      padding: "16px 20px 14px 20px",
+                      padding: "14px 16px 12px 16px", // 패딩 미세 조정으로 가로폭 확보
                       borderRadius: "16px",
                       cursor: "pointer",
                       background: `linear-gradient(135deg, ${baseColor}15, ${baseColor}05)`,
@@ -1246,8 +1268,8 @@ function GuestbookTab() {
                     <p
                       style={{
                         margin: 0,
-                        fontSize: "14px",
-                        lineHeight: "22px",
+                        fontSize: "13px", // 모바일 가독성을 위해 14px -> 13px 조정
+                        lineHeight: "20px",
                         whiteSpace: "pre-wrap",
                         wordBreak: "break-word",
                         color: "rgba(255, 255, 255, 0.95)", 
@@ -1259,7 +1281,7 @@ function GuestbookTab() {
 
                     <div
                       style={{
-                        marginTop: "14px",
+                        marginTop: "12px",
                         paddingTop: "8px",
                         borderTop: "1px solid rgba(255,255,255,0.06)",
                         fontSize: "11px",
@@ -1311,7 +1333,7 @@ function GuestbookTab() {
               padding: "20px",
               display: "flex",
               flexDirection: "column",
-              gap: "12px", // 세로 간격을 깔끔하게 조정
+              gap: "12px",
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -1325,7 +1347,6 @@ function GuestbookTab() {
               </button>
             </div>
 
-            {/* 1줄: 닉네임 입력 (가로 꽉 차게) */}
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -1333,7 +1354,6 @@ function GuestbookTab() {
               style={{ ...inputStyle, width: "100%" }}
             />
 
-            {/* 2줄: 비밀번호 입력 (가로 꽉 차게) */}
             <input
               value={pw}
               onChange={(e) => setPw(e.target.value)}
@@ -1342,7 +1362,6 @@ function GuestbookTab() {
               style={{ ...inputStyle, width: "100%" }}
             />
 
-            {/* 3줄: 내용 입력 */}
             <textarea
               value={msg}
               onChange={(e) => setMsg(e.target.value)}
@@ -1356,7 +1375,6 @@ function GuestbookTab() {
               }}
             />
 
-            {/* 4줄: 남기기 버튼 */}
             <button
               onClick={submit}
               style={{
