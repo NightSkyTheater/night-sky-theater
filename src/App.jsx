@@ -508,7 +508,7 @@ chartRef.current = new window.Chart(ctx, {
     };
     loadChart();
     return () => { if (chartRef.current) chartRef.current.destroy(); };
-  }, []);
+  }, [liveSubs]);
 
   return (
     <div style={{ width: "100%" }}>
