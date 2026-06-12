@@ -1217,7 +1217,7 @@ function GuestbookTab() {
           overflowY: "auto",
           display: "flex",
           flexDirection: "row",
-          gap: "12px",
+          gap: "20px",
           alignItems: "flex-start"
         }}
       >
@@ -1228,7 +1228,7 @@ function GuestbookTab() {
               flex: 1, 
               display: "flex", 
               flexDirection: "column", 
-              gap: "12px"
+              gap: "20px"
             }}
           >
             {entries
@@ -1243,7 +1243,7 @@ function GuestbookTab() {
                       position: "relative", // ✕ 버튼 절대 배치를 위해 고정
                       width: "100%",
                       minHeight: "90px",
-                      padding: "28px 16px 12px 16px", // 상단 여백 확보
+                      padding: "28px 24px 20px 24px", // 상단 여백 확보
                       borderRadius: "20px",
                       background: `linear-gradient(135deg, ${baseColor}15, ${baseColor}05)`,
                       border: "1px solid rgba(255, 255, 255, 0.08)",
