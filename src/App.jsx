@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-const PATCH_VERSION = "1.0.0";
 import.meta.env;
 // 🌍 Firebase 관련 임포트 최상단 통합
 import {
@@ -12,6 +11,77 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db } from "./firebase";
+
+
+
+function PatchModal({ onClose }) {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.6)",
+        backdropFilter: "blur(14px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 9999,
+        padding: 20
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          width: "100%",
+          maxWidth: 420,
+          background: "rgba(20,16,40,0.92)",
+          border: "1px solid rgba(184,255,0,0.15)",
+          borderRadius: 18,
+          padding: 18,
+          color: "#fff",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.5)"
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <p style={{ fontSize: 11, color: "#B8FF00", letterSpacing: "0.15em", margin: 0 }}>
+          PATCH NOTE
+        </p>
+
+        <h3 style={{ margin: "6px 0 14px", fontSize: 18 }}>
+          2026.06.13 업데이트
+        </h3>
+
+        <div style={{ fontSize: 13, lineHeight: 1.7, color: "rgba(255,255,255,0.85)" }}>
+          • 방명록 게시판 UI 수정<br/>
+          • 카드 디자인 개선 (유리/글래스 효과 강화)<br/>
+          • 전체 레이아웃 반응형 개선<br/>
+        </div>
+
+        <button
+          onClick={() => {
+            localStorage.setItem("patch_0613_seen", "true");
+            onClose();
+          }}
+          style={{
+            marginTop: 16,
+            width: "100%",
+            padding: "10px",
+            borderRadius: 12,
+            border: "none",
+            background: "#B8FF00",
+            color: "#111",
+            fontWeight: 800,
+            cursor: "pointer"
+          }}
+        >
+          확인
+        </button>
+      </div>
+    </div>
+  );
+}
+
+
 
 const ACCENT = "#B8FF00";
 const LIME   = ACCENT;
@@ -519,103 +589,45 @@ chartRef.current = new window.Chart(ctx, {
     </div>
   );
 }
-// ==========================================
-// 1. PatchButton을 독립된 컴포넌트로 선언합니다.
-// ==========================================
-function PatchButton({ openPatch }) {
-  return (
-    <G
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "12px 16px",
-        marginBottom: "14px" // 레이아웃 간격 확보
-      }}
-    >
-      <div>
-        <p
-          style={{
-            margin: 0,
-            color: white,
-            fontSize: 14,
-            fontWeight: 700
-          }}
-        >
-          NIGHT SKY THEATER
-        </p>
 
-        <p
-          style={{
-            margin: "2px 0 0",
-            color: muted,
-            fontSize: 11
-          }}
-        >
-          공식 홈페이지
-        </p>
-      </div>
-
-      <button
-        onClick={openPatch}
-        style={{
-          border: "none",
-          background: "rgba(184,255,0,0.08)",
-          color: ACCENT,
-          padding: "8px 12px",
-          borderRadius: 999,
-          fontSize: 11,
-          fontWeight: 700,
-          cursor: "pointer"
-        }}
-      >
-        📢 패치노트
-      </button>
-    </G>
-  );
-}
-
-// ==========================================
-// 2. 완벽하게 복구된 HomeTab 컴포넌트입니다.
-// ==========================================
-function HomeTab({ isPC, openPatch, isChartLoaded }) {
+function HomeTab({isPC}) {
   const [liveSubs, setLiveSubs] = useState(null);
-  const [track, setTrack] = useState(null);
 
-  useEffect(() => {
-    async function fetchSubs() {
-      try {
-        const res = await fetch(
-          `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`
-        );
+useEffect(() => {
+  async function fetchSubs() {
+    try {
+      const res = await fetch(
+        `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`
+      );
 
-        const data = await res.json();
+      const data = await res.json();
 
-        if (data.items?.[0]) {
-          setLiveSubs(Number(data.items[0].statistics.subscriberCount));
-        }
-      } catch (err) {
-        console.error(err);
+      if (data.items?.[0]) {
+        setLiveSubs(Number(data.items[0].statistics.subscriberCount));
       }
+    } catch (err) {
+      console.error(err);
     }
+  }
 
-    fetchSubs();
-    const interval = setInterval(fetchSubs, 600000); // 10분마다 갱신
-    return () => clearInterval(interval);
-  }, []);
+  fetchSubs();
 
-  useEffect(() => {
-    setTrack(
-      ALL_TRACKS[Math.floor(Math.random() * ALL_TRACKS.length)]
-    );
-  }, []);
+  const interval = setInterval(fetchSubs, 600000); // 10분마다 갱신
 
-  const refreshPick = () => {
-    setTrack(
-      ALL_TRACKS[Math.floor(Math.random() * ALL_TRACKS.length)]
-    );
-  };
+  return () => clearInterval(interval);
+}, []);
+  const [track,setTrack]=useState(null);
 
+useEffect(() => {
+  setTrack(
+    ALL_TRACKS[Math.floor(Math.random() * ALL_TRACKS.length)]
+  );
+}, []);
+const refreshPick = () => {
+  setTrack(
+    ALL_TRACKS[Math.floor(Math.random() * ALL_TRACKS.length)]
+  );
+};
   const rankColor = r => r===1?ACCENT:r===2?"rgba(91,79,245,0.65)":r===3?"rgba(91,79,245,0.4)":muted;
   const trendColor = t => t==="up"?"#f87171":t==="down"?"#4f8ef7":t==="new"?ACCENT:muted;
   const trendLabel = t => t==="up"?"▲":t==="down"?"▼":t==="new"?"N":"—";
@@ -742,56 +754,19 @@ const growth = ((increase / prevSubs) * 100).toFixed(1);
       </div>
     </G>
   );
-if (isPC) {
-  return (
-    <>
-      <PatchButton openPatch={openPatch} />
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 14,
-          textAlign: "left",
-          alignItems: "start"
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          {TodayPick}
-          {Top10}
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          {Notice}
-          {SubSection}
-          {Overseas}
-        </div>
+  if (isPC) {
+    return (
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,textAlign:"left",alignItems:"start"}}>
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>{TodayPick}{Top10}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>{Notice}{SubSection}{Overseas}</div>
       </div>
-    </>
-  );
+    );
+  }
+  return <div style={{display:"flex",flexDirection:"column",gap:10,textAlign:"left"}}>{TodayPick}{Notice}{Top10}{SubSection}{Overseas}</div>;
 }
 
-return (
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: 10,
-      textAlign: "left"
-    }}
-  >
-    <PatchButton openPatch={openPatch} />
-
-    {TodayPick}
-    {Notice}
-    {Top10}
-    {SubSection}
-    {Overseas}
-  </div>
-);
-}
-
-function AboutTab({ isPC, openPatch }) {
+function AboutTab({ isPC }) {
   const Hero = (
     <G
       style={{
@@ -1042,20 +1017,19 @@ function AboutTab({ isPC, openPatch }) {
   );
 
   return (
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: 14,
-      maxWidth: isPC ? 760 : "100%",
-      margin: "0 auto"
-    }}
-  >
-    <PatchButton openPatch={openPatch} />
-    {Hero}
-    {Streaming}
-  </div>
-);
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 14,
+        maxWidth: isPC ? 760 : "100%",
+        margin: "0 auto"
+      }}
+    >
+      {Hero}
+      {Streaming}
+    </div>
+  );
 }
 
 function MusicTab({isPC}) {
@@ -1510,53 +1484,35 @@ function GuestbookTab() {
 export default function App() {
   const [tab, setTab] = useState("홈");
   const [isPC, setIsPC] = useState(false);
-  const [showPatch, setShowPatch] = useState(false);
-  const [isChartLoaded, setIsChartLoaded] = useState(false); // 👈 [추가] 2번 문제 해결용 상태
+const [showPatch, setShowPatch] = useState(false);
+useEffect(() => {
+  const seen = localStorage.getItem("patch_0613_seen");
 
-  // 1. 패치 노트 모달 노출 여부 체크
-  useEffect(() => {
-    const savedVersion = localStorage.getItem("patch_version");
-    if (savedVersion !== PATCH_VERSION) {
-      setShowPatch(true);
-    }
-  }, []);
+  if (!seen) {
+    setShowPatch(true);
+  }
+}, []);
 
-  // 2. 반응형 웹 (PC 환경 체크)
   useEffect(() => {
-    const handleResize = () => {
+    const fn = () => {
       setIsPC(window.innerWidth >= 768);
     };
 
-    handleResize(); // 최초 실행
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    fn(); // 최초 실행
+
+    window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
   }, []);
 
-  // 3. 외부 Chart.js 안전하게 로드하기
   useEffect(() => {
-    if (window.Chart || document.querySelector('script[src*="chart.umd.js"]')) {
-      setIsChartLoaded(true);
-      return;
-    }
-    
-    const script = document.createElement("script");
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";
-    script.async = true;
-    script.onload = () => setIsChartLoaded(true); // 👈 로드 완료 시 상태 변경
-    document.head.appendChild(script);
+    if (document.querySelector('script[src*="chart.umd.js"]')) return;
+    const s = document.createElement("script");
+    s.src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";
+    document.head.appendChild(s);
   }, []);
 
   return (
-    <div 
-      style={{ 
-        minHeight: "100vh", 
-        background: "linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)", 
-        color: "#fff", 
-        fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", 
-        position: "relative" 
-      }}
-    >
-      {/* 글로벌 스타일 (가능하면 전역 CSS 파일로 이동하는 것을 추천합니다) */}
+    <div style={{ minHeight: "100vh", background: "linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)", color: "#fff", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}>
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
@@ -1569,48 +1525,35 @@ export default function App() {
         ::-webkit-scrollbar-thumb { background:rgba(184,255,0,0.16);border-radius:3px }
         strong { font-weight:800 }
       `}</style>
-
       <Stars />
+      {showPatch && (
 
-      <div 
-        style={{ 
-          position: "relative", 
-          zIndex: 1, 
-          maxWidth: isPC ? 900 : 430, 
-          margin: "0 auto", 
-          display: "flex", 
-          flexDirection: "column", 
-          minHeight: "100vh" 
-        }}
-      >
+  <PatchModal
+
+    onClose={() => setShowPatch(false)}
+
+  />
+
+)}
+      <div style={{ position: "relative", zIndex: 1, maxWidth: isPC ? 900 : 430, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <div
-          style={{
-            flex: 1,
-            padding: tab === "방명록"
-              ? (isPC ? "20px 24px 0" : "12px 14px 0")
-              : (isPC ? "20px 24px 90px" : "12px 14px 140px"),
-            animation: "fin 0.3s ease both"
-          }}
-          key={tab}
-        >
-          {/* 차트가 필요한 탭이 있다면 isChartLoaded를 prop으로 내려주어 안전하게 렌더링되도록 제어할 수 있습니다. */}
-          {tab === "홈" && <HomeTab isPC={isPC} openPatch={() => setShowPatch(true)} isChartLoaded={isChartLoaded} />}
-          {tab === "소개" && <AboutTab isPC={isPC} openPatch={() => setShowPatch(true)} />}
+  style={{
+    flex: 1,
+    padding:
+      tab === "방명록"
+        ? (isPC ? "20px 24px 0" : "12px 14px 0")
+        : (isPC ? "20px 24px 90px" : "12px 14px 140px"),
+    animation: "fin 0.3s ease both"
+  }}
+  key={tab}
+>
+          {tab === "홈" && <HomeTab isPC={isPC} />}
+          {tab === "소개" && <AboutTab isPC={isPC} />}
           {tab === "음악" && <MusicTab isPC={isPC} />}
           {tab === "방명록" && <GuestbookTab />}
         </div>
-        
         <BottomNav tab={tab} setTab={setTab} />
       </div>
-
-      {showPatch && (
-        <PatchModal
-          onClose={() => {
-            localStorage.setItem("patch_version", PATCH_VERSION);
-            setShowPatch(false);
-          }}
-        />
-      )}
     </div>
   );
 }
