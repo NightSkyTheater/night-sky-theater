@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import.meta.env;
 // 🌍 Firebase 관련 임포트 최상단 통합
 import {
   collection,
@@ -590,7 +589,7 @@ chartRef.current = new window.Chart(ctx, {
   );
 }
 
-function HomeTab({isPC}) {
+function HomeTab({ isPC, setPatchOpen }) {
   const [liveSubs, setLiveSubs] = useState(null);
 
 useEffect(() => {
@@ -643,6 +642,26 @@ const refreshPick = () => {
       </>}
     </G>
   );
+
+  const PatchButton = (
+  <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}>
+    <button
+      onClick={() => setPatchOpen(true)}
+      style={{
+        fontSize: 11,
+        padding: "6px 10px",
+        borderRadius: 999,
+        border: "1px solid rgba(184,255,0,0.25)",
+        background: "rgba(184,255,0,0.08)",
+        color: "#B8FF00",
+        cursor: "pointer",
+        fontWeight: 700
+      }}
+    >
+      PATCH NOTE
+    </button>
+  </div>
+);
 
   const Notice = (
     <G pad="0">
@@ -763,7 +782,14 @@ const growth = ((increase / prevSubs) * 100).toFixed(1);
       </div>
     );
   }
-  return <div style={{display:"flex",flexDirection:"column",gap:10,textAlign:"left"}}>{TodayPick}{Notice}{Top10}{SubSection}{Overseas}</div>;
+  return <div style={{display:"flex",flexDirection:"column",gap:10}}>
+  {PatchButton}
+  {TodayPick}
+  {Notice}
+  {Top10}
+  {SubSection}
+  {Overseas}
+</div>;
 }
 
 function AboutTab({ isPC }) {
@@ -1484,14 +1510,20 @@ function GuestbookTab() {
 export default function App() {
   const [tab, setTab] = useState("홈");
   const [isPC, setIsPC] = useState(false);
-const [showPatch, setShowPatch] = useState(false);
-useEffect(() => {
-  const seen = localStorage.getItem("patch_0613_seen");
 
-  if (!seen) {
-    setShowPatch(true);
-  }
-}, []);
+  const [showPatch, setShowPatch] = useState(false);
+  const [patchOpen, setPatchOpen] = useState(false);
+
+  const closeAutoPatch = () => setShowPatch(false);
+  const closeManualPatch = () => setPatchOpen(false);
+
+  useEffect(() => {
+    const seen = localStorage.getItem("patch_0613_seen");
+
+    if (!seen) {
+      setShowPatch(true);
+    }
+  }, []);
 
   useEffect(() => {
     const fn = () => {
@@ -1526,14 +1558,17 @@ useEffect(() => {
         strong { font-weight:800 }
       `}</style>
       <Stars />
-      {showPatch && (
-
+{showPatch && (
   <PatchModal
-
-    onClose={() => setShowPatch(false)}
-
+    onClose={() => {
+      localStorage.setItem("patch_0613_seen", "true");
+      closeAutoPatch();
+    }}
   />
+)}
 
+{patchOpen && (
+  <PatchModal onClose={closeManualPatch} />
 )}
       <div style={{ position: "relative", zIndex: 1, maxWidth: isPC ? 900 : 430, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <div
@@ -1547,7 +1582,12 @@ useEffect(() => {
   }}
   key={tab}
 >
-          {tab === "홈" && <HomeTab isPC={isPC} />}
+          {tab === "홈" && (
+  <HomeTab
+    isPC={isPC}
+    setPatchOpen={setPatchOpen}
+  />
+)}
           {tab === "소개" && <AboutTab isPC={isPC} />}
           {tab === "음악" && <MusicTab isPC={isPC} />}
           {tab === "방명록" && <GuestbookTab />}
