@@ -18,60 +18,116 @@ function PatchModal({ onClose, saveOnClose = true }) {
   return (
     <div
       style={{
-        position: "fixed",
-        inset: 0,
+        position: "fixed", inset: 0,
         background: "rgba(0,0,0,0.6)",
         backdropFilter: "blur(14px)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 9999,
-        padding: 20
+        display: "flex", alignItems: "center", justifyContent: "center",
+        zIndex: 9999, padding: 20
       }}
       onClick={onClose}
     >
       <div
         style={{
-          width: "100%",
-          maxWidth: 420,
-          background: "rgba(20,16,40,0.92)",
+          width: "100%", maxWidth: 420,
+          background: "rgba(20,16,40,0.95)",
           border: "1px solid rgba(184,255,0,0.15)",
-          borderRadius: 18,
-          padding: 18,
+          borderRadius: 18, padding: 22,
           color: "#fff",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.5)"
+          boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+          maxHeight: "80vh", overflowY: "auto"
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <p style={{ fontSize: 11, color: "#B8FF00", letterSpacing: "0.15em", margin: 0 }}>
-          PATCH NOTE
-        </p>
-
-        <h3 style={{ margin: "6px 0 14px", fontSize: 18 }}>
-          2026.06.13 업데이트
-        </h3>
-
-        <div style={{ fontSize: 13, lineHeight: 1.7, color: "rgba(255,255,255,0.85)" }}>
-          • 방명록 게시판 UI 수정<br/>
-          • 카드 디자인 개선 (유리/글래스 효과 강화)<br/>
-          • 전체 레이아웃 반응형 개선<br/>
+        {/* 헤더 */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
+          <div>
+            <p style={{ fontSize: 10, color: "#B8FF00", letterSpacing: "0.15em", margin: "0 0 4px", fontWeight: 700 }}>
+              PATCH NOTE
+            </p>
+            <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>업데이트 히스토리</h3>
+          </div>
+          <span style={{
+            fontSize: 10, fontWeight: 700,
+            background: "rgba(184,255,0,0.12)",
+            border: "1px solid rgba(184,255,0,0.25)",
+            color: "#B8FF00", borderRadius: 20,
+            padding: "4px 10px", letterSpacing: "0.05em",
+            whiteSpace: "nowrap", flexShrink: 0, marginLeft: 10
+          }}>
+            {PATCH_VERSION}
+          </span>
         </div>
 
-<button
-    onClick={() => {
-      if (saveOnClose) localStorage.setItem("patch_0613_seen", "true");
-      onClose();
-    }}
+        {/* 타임라인 */}
+        <div style={{ position: "relative", paddingLeft: 20 }}>
+          {/* 세로선 */}
+          <div style={{
+            position: "absolute", left: 6, top: 8, bottom: 8,
+            width: 1, background: "rgba(184,255,0,0.15)"
+          }} />
+
+          {PATCH_HISTORY.map((patch, i) => (
+            <div key={patch.version} style={{ position: "relative", marginBottom: i < PATCH_HISTORY.length - 1 ? 22 : 0 }}>
+              {/* 타임라인 점 */}
+              <div style={{
+                position: "absolute", left: -17, top: 5,
+                width: 8, height: 8, borderRadius: "50%",
+                background: patch.isLatest ? "#B8FF00" : "rgba(184,255,0,0.3)",
+                boxShadow: patch.isLatest ? "0 0 8px rgba(184,255,0,0.6)" : "none"
+              }} />
+
+              {/* 버전 + 날짜 */}
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: patch.isLatest ? "#B8FF00" : "rgba(184,255,0,0.5)" }}>
+                  {patch.version}
+                </span>
+                <span style={{ fontSize: 10, color: "rgba(220,210,255,0.4)" }}>
+                  {patch.date}
+                </span>
+                {patch.isLatest && (
+                  <span style={{
+                    fontSize: 8, fontWeight: 700,
+                    background: "rgba(184,255,0,0.15)",
+                    color: "#B8FF00", borderRadius: 10,
+                    padding: "2px 7px", letterSpacing: "0.05em"
+                  }}>
+                    LATEST
+                  </span>
+                )}
+              </div>
+
+              {/* 로그 목록 */}
+              <div style={{
+                background: patch.isLatest ? "rgba(184,255,0,0.05)" : "rgba(255,255,255,0.02)",
+                border: `1px solid ${patch.isLatest ? "rgba(184,255,0,0.12)" : "rgba(255,255,255,0.05)"}`,
+                borderRadius: 12, padding: "10px 14px",
+                display: "flex", flexDirection: "column", gap: 6
+              }}>
+                {patch.logs.map((log, j) => (
+                  <div key={j} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                    <span style={{ color: "#B8FF00", opacity: patch.isLatest ? 0.7 : 0.3, flexShrink: 0, marginTop: 1 }}>•</span>
+                    <span style={{ fontSize: 12, lineHeight: 1.6, color: patch.isLatest ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.4)" }}>
+                      {log}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* 확인 버튼 */}
+        <button
+          onClick={() => {
+            if (saveOnClose) localStorage.setItem("patch_seen", PATCH_VERSION);
+            onClose();
+          }}
           style={{
-            marginTop: 16,
-            width: "100%",
-            padding: "10px",
-            borderRadius: 12,
-            border: "none",
-            background: "#B8FF00",
-            color: "#111",
-            fontWeight: 800,
-            cursor: "pointer"
+            marginTop: 20, width: "100%", padding: "11px",
+            borderRadius: 12, border: "none",
+            background: "#B8FF00", color: "#111",
+            fontWeight: 800, cursor: "pointer", fontSize: 13,
+            fontFamily: "inherit"
           }}
         >
           확인
@@ -81,7 +137,22 @@ function PatchModal({ onClose, saveOnClose = true }) {
   );
 }
 
+// ── 패치 버전 관리 (다음 패치 때 PATCH_VERSION만 바꾸면 팝업 재등장) ──
+const PATCH_VERSION = "v1.2.0613";
 
+const PATCH_HISTORY = [
+  {
+    version: "v1.2.0613",
+    date: "2026.06.13",
+    isLatest: true,
+    logs: [
+      "방명록 게시판 UI 수정",
+      "카드 디자인 개선 (유리/글래스 효과 강화)",
+      "전체 레이아웃 반응형 개선",
+    ]
+  },
+  // 다음 패치 때: 이 위에 새 항목 추가, 기존 항목 isLatest: false 로 변경
+];
 
 const ACCENT = "#B8FF00";
 const LIME   = ACCENT;
@@ -651,9 +722,9 @@ const PatchBadge = (
     <span style={{ fontSize: 9, color: ACCENT, fontWeight: 700, letterSpacing: "0.1em" }}>
       🔔 PATCH NOTE
     </span>
-    <span style={{ fontSize: 10, color: "rgba(220,210,255,0.6)" }}>
-      2026.06.13 업데이트 보기 →
-    </span>
+<span style={{ fontSize: 10, color: "rgba(220,210,255,0.6)" }}>
+  {PATCH_VERSION} 업데이트 보기 →
+</span>
   </button>
 );
 
@@ -1513,11 +1584,9 @@ export default function App() {
   const [isPC, setIsPC] = useState(false);
 const [showPatch, setShowPatch] = useState(false);
 useEffect(() => {
-  const seen = localStorage.getItem("patch_0613_seen");
+  const seen = localStorage.getItem("patch_seen");
 
-  if (!seen) {
-    setShowPatch(true);
-  }
+  if (seen !== PATCH_VERSION) setShowPatch(true);
 }, []);
 
   useEffect(() => {
