@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+const PATCH_VERSION = "1.0.0";
 import.meta.env;
 // 🌍 Firebase 관련 임포트 최상단 통합
 import {
@@ -11,77 +12,6 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db } from "./firebase";
-
-
-
-function PatchModal({ onClose }) {
-  return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "rgba(0,0,0,0.6)",
-        backdropFilter: "blur(14px)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 9999,
-        padding: 20
-      }}
-      onClick={onClose}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: 420,
-          background: "rgba(20,16,40,0.92)",
-          border: "1px solid rgba(184,255,0,0.15)",
-          borderRadius: 18,
-          padding: 18,
-          color: "#fff",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.5)"
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <p style={{ fontSize: 11, color: "#B8FF00", letterSpacing: "0.15em", margin: 0 }}>
-          PATCH NOTE
-        </p>
-
-        <h3 style={{ margin: "6px 0 14px", fontSize: 18 }}>
-          2026.06.13 업데이트
-        </h3>
-
-        <div style={{ fontSize: 13, lineHeight: 1.7, color: "rgba(255,255,255,0.85)" }}>
-          • 방명록 게시판 UI 수정<br/>
-          • 카드 디자인 개선 (유리/글래스 효과 강화)<br/>
-          • 전체 레이아웃 반응형 개선<br/>
-        </div>
-
-        <button
-          onClick={() => {
-            localStorage.setItem("patch_0613_seen", "true");
-            onClose();
-          }}
-          style={{
-            marginTop: 16,
-            width: "100%",
-            padding: "10px",
-            borderRadius: 12,
-            border: "none",
-            background: "#B8FF00",
-            color: "#111",
-            fontWeight: 800,
-            cursor: "pointer"
-          }}
-        >
-          확인
-        </button>
-      </div>
-    </div>
-  );
-}
-
-
 
 const ACCENT = "#B8FF00";
 const LIME   = ACCENT;
@@ -590,9 +520,57 @@ chartRef.current = new window.Chart(ctx, {
   );
 }
 
-function HomeTab({isPC}) {
+function HomeTab({ isPC, openPatch }) {
   const [liveSubs, setLiveSubs] = useState(null);
+const PatchButton = (
+  <G
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: "12px 16px"
+    }}
+  >
+    <div>
+      <p
+        style={{
+          margin: 0,
+          color: white,
+          fontSize: 14,
+          fontWeight: 700
+        }}
+      >
+        NIGHT SKY THEATER
+      </p>
 
+      <p
+        style={{
+          margin: "2px 0 0",
+          color: muted,
+          fontSize: 11
+        }}
+      >
+        공식 홈페이지
+      </p>
+    </div>
+
+    <button
+      onClick={openPatch}
+      style={{
+        border: "none",
+        background: "rgba(184,255,0,0.08)",
+        color: ACCENT,
+        padding: "8px 12px",
+        borderRadius: 999,
+        fontSize: 11,
+        fontWeight: 700,
+        cursor: "pointer"
+      }}
+    >
+      📢 패치노트
+    </button>
+  </G>
+);
 useEffect(() => {
   async function fetchSubs() {
     try {
@@ -1017,19 +995,20 @@ function AboutTab({ isPC }) {
   );
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 14,
-        maxWidth: isPC ? 760 : "100%",
-        margin: "0 auto"
-      }}
-    >
-      {Hero}
-      {Streaming}
-    </div>
-  );
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      gap: 14,
+      maxWidth: isPC ? 760 : "100%",
+      margin: "0 auto"
+    }}
+  >
+    {PatchButton}
+    {Hero}
+    {Streaming}
+  </div>
+);
 }
 
 function MusicTab({isPC}) {
@@ -1484,14 +1463,17 @@ function GuestbookTab() {
 export default function App() {
   const [tab, setTab] = useState("홈");
   const [isPC, setIsPC] = useState(false);
-const [showPatch, setShowPatch] = useState(false);
-useEffect(() => {
-  const seen = localStorage.getItem("patch_0613_seen");
+  
+  const [showPatch, setShowPatch] = useState(false);
 
-  if (!seen) {
+  useEffect(() => {
+  const savedVersion = localStorage.getItem("patch_version");
+
+  if (savedVersion !== PATCH_VERSION) {
     setShowPatch(true);
   }
 }, []);
+
 
   useEffect(() => {
     const fn = () => {
@@ -1526,15 +1508,6 @@ useEffect(() => {
         strong { font-weight:800 }
       `}</style>
       <Stars />
-      {showPatch && (
-
-  <PatchModal
-
-    onClose={() => setShowPatch(false)}
-
-  />
-
-)}
       <div style={{ position: "relative", zIndex: 1, maxWidth: isPC ? 900 : 430, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <div
   style={{
@@ -1547,7 +1520,10 @@ useEffect(() => {
   }}
   key={tab}
 >
-          {tab === "홈" && <HomeTab isPC={isPC} />}
+          {tab === "홈" && <HomeTab
+  isPC={isPC}
+  openPatch={() => setShowPatch(true)}
+/>}
           {tab === "소개" && <AboutTab isPC={isPC} />}
           {tab === "음악" && <MusicTab isPC={isPC} />}
           {tab === "방명록" && <GuestbookTab />}
@@ -1555,5 +1531,13 @@ useEffect(() => {
         <BottomNav tab={tab} setTab={setTab} />
       </div>
     </div>
+    {showPatch && (
+  <PatchModal
+    onClose={() => {
+      localStorage.setItem("patch_version", PATCH_VERSION);
+      setShowPatch(false);
+    }}
+  />
+)}
   );
 }
