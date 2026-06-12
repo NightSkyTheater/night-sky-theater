@@ -1037,7 +1037,6 @@ function MusicTab({isPC}) {
     </div>
   );
 }
-// ── 방명록 (Firebase 기능 유지 + 투명 유리 파스텔 UI + 세로 스크롤 Flex형) ─────────────────────────────
 function timeAgo(date) {
   if (!date) return "";
   const targetDate =
@@ -1059,25 +1058,20 @@ function GuestbookTab() {
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  
-  // 📱 모바일/PC 반응형 열(Column) 개수 상태 추가 (기본 3열)
   const [cols, setCols] = useState(3);
 
   useEffect(() => {
-    // 화면 크기에 따라 열 개수 조절하는 함수
     const handleResize = () => {
-      if (window.innerWidth <= 768) { // 768px 이하일 때 (모바일/태블릿)
+      if (window.innerWidth <= 768) {
         setCols(2);
       } else {
         setCols(3);
       }
     };
 
-    // 초기 실행 및 이벤트 리스너 등록
     handleResize();
     window.addEventListener("resize", handleResize);
 
-    // Firebase 데이터 구독
     const q = query(
       collection(db, "guestbook"),
       orderBy("createdAt", "desc")
@@ -1088,7 +1082,6 @@ function GuestbookTab() {
         id: d.id,
         ...d.data(),
       }));
-
       setEntries(data);
     });
 
@@ -1105,6 +1098,7 @@ function GuestbookTab() {
       name: name.trim(),
       pw: pw.trim(),
       msg: msg.trim(),
+      likes: 0, // 💖 좋아요 기본값 0 추가
       color: [
         "#FFFFFF", "#F8FAFC", "#F1F5F9", "#E0F2FE", "#BAE6FD",
         "#CFFAFE", "#CCFBF1", "#D1FAE5", "#DCFCE7", "#ECFCCB",
@@ -1143,6 +1137,19 @@ function GuestbookTab() {
       }
     } else {
       alert("비밀번호가 틀렸습니다.");
+    }
+  };
+
+  // 💖 좋아요 카운트 증가 함수
+  const handleLike = async (id) => {
+    try {
+      const docRef = doc(db, "guestbook", id);
+      // Firebase increment 함수를 사용하여 원자적으로(Atomically) 값을 1 올립니다.
+      await updateDoc(docRef, {
+        likes: increment(1)
+      });
+    } catch (err) {
+      console.error("좋아요 실패:", err);
     }
   };
 
@@ -1191,7 +1198,6 @@ function GuestbookTab() {
           </p>
         </div>
 
-        {/* ➕ 상단 고정 동그란 글쓰기 버튼 (CTA) */}
         <button
           onClick={() => setIsOpen(true)}
           style={{
@@ -1216,7 +1222,7 @@ function GuestbookTab() {
         </button>
       </div>
 
-      {/* 📌 포스트잇 감성 자유형 보드 (반응형 2열/3열 변화) */}
+      {/* 📌 포스트잇 감성 자유형 보드 */}
       <div
         style={{
           flex: 1,
@@ -1224,11 +1230,10 @@ function GuestbookTab() {
           overflowY: "auto",
           display: "flex",
           flexDirection: "row",
-          gap: "12px", // 모바일 대응을 위해 간격을 약간 최적화(16px -> 12px)
+          gap: "12px",
           alignItems: "flex-start"
         }}
       >
-        {/* cols 변수만큼 배열을 동적으로 생성하여 렌더링 [0, 1, 2] 혹은 [0, 1] */}
         {Array.from({ length: cols }).map((_, colIndex) => (
           <div 
             key={colIndex} 
@@ -1240,7 +1245,6 @@ function GuestbookTab() {
             }}
           >
             {entries
-              // 핵심 수정: index를 전체 열 개수(cols)로 나누어 알맞게 분배합니다.
               .filter((_, idx) => idx % cols === colIndex)
               .map((e) => {
                 const baseColor = e.color || "#fff";
@@ -1248,27 +1252,47 @@ function GuestbookTab() {
                 return (
                   <div
                     key={e.id}
-                    onClick={() => del(e)}
                     style={{
+                      position: "relative", // ✕ 버튼 절대 배치를 위해 필요
                       width: "100%",
                       minHeight: "90px",
-                      padding: "24px 20px 14px 20px", // 패딩 미세 조정으로 가로폭 확보
+                      padding: "28px 16px 12px 16px", // 상단 여백을 넓혀 ✕ 버튼과 겹침 방지
                       borderRadius: "20px",
-                      cursor: "pointer",
                       background: `linear-gradient(135deg, ${baseColor}15, ${baseColor}05)`,
                       border: "1px solid rgba(255, 255, 255, 0.08)",
                       backdropFilter: "blur(14px)",
                       WebkitBackdropFilter: "blur(14px)",
                       boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.2), inset 0 0 1px 1px rgba(255, 255, 255, 0.05)`,
                       textAlign: "left",
-                      transition: "transform 0.2s ease, box-shadow 0.2s ease",
                     }}
                   >
+                    {/* ✕ 삭제 버튼 추가 */}
+                    <button
+                      onClick={() => del(e)}
+                      style={{
+                        position: "absolute",
+                        top: "10px",
+                        right: "12px",
+                        background: "none",
+                        border: "none",
+                        color: "rgba(255, 255, 255, 0.3)",
+                        cursor: "pointer",
+                        fontSize: "12px",
+                        padding: "4px",
+                        transition: "color 0.2s",
+                      }}
+                      onMouseEnter={(e) => e.target.style.color = "#ff4d4d"}
+                      onMouseLeave={(e) => e.target.style.color = "rgba(255, 255, 255, 0.3)"}
+                    >
+                      ✕
+                    </button>
+
                     <p
                       style={{
                         margin: 0,
-                        fontSize: "13px", // 모바일 가독성을 위해 14px -> 13px 조정
+                        fontSize: "13px",
                         lineHeight: "22px",
+                        fontWeight: 300,
                         whiteSpace: "pre-wrap",
                         wordBreak: "keep-all",
                         color: "rgba(255, 255, 255, 0.95)", 
@@ -1286,13 +1310,40 @@ function GuestbookTab() {
                         fontSize: "11px",
                         display: "flex",
                         justifyContent: "space-between",
-                        opacity: 0.6,
+                        alignItems: "center", // 하트 버튼 정렬 맞춤
+                        opacity: 0.7,
                       }}
                     >
                       <span style={{ color: baseColor, fontWeight: 600, textShadow: `0 0 8px ${baseColor}44` }}>
                         ✦ {e.name}
                       </span>
-                      <span>{timeAgo(e.createdAt)}</span>
+                      
+                      {/* 하단 우측 영역: 시간 및 좋아요 버튼 */}
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <span>{timeAgo(e.createdAt)}</span>
+                        
+                        {/* 💖 좋아요 버튼 추가 */}
+                        <button
+                          onClick={() => handleLike(e.id)}
+                          style={{
+                            background: "rgba(255, 255, 255, 0.05)",
+                            border: "1px solid rgba(255,255,255,0.08)",
+                            borderRadius: "10px",
+                            padding: "3px 6px",
+                            color: "#ff6b6b",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "3px",
+                            fontSize: "10px",
+                            transition: "transform 0.1s ease",
+                          }}
+                          onMouseDown={(e) => e.currentTarget.style.transform = "scale(0.9)"}
+                          onMouseUp={(e) => e.currentTarget.style.transform = "scale(1)"}
+                        >
+                          ❤️ {e.likes || 0}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );
