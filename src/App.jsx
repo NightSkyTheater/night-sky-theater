@@ -1171,7 +1171,7 @@ const inputStyle = {
         style={{
           flex: 1, // 💡 남은 공간을 전부 차지
           marginTop: "16px",
-          marginBottom: "166px",
+          paddingBottom: "160px",
           display: "flex",
           flexDirection: "column",
           gap: "16px",
@@ -1237,32 +1237,33 @@ const inputStyle = {
       {/* 📥 하단 입력창 */}
 <div
   style={{
-    position: "absolute",
-    bottom: "20px",
-    left: "50%",
-    transform: "translateX(-50%)",
-    width: "100%",
-    maxWidth: "720px",
+  position: "fixed",
+  bottom: "0",
+  left: 0,
+  right: 0,
 
-    background: "rgba(18,18,18,0.7)",
-    backdropFilter: "blur(20px)",
-    WebkitBackdropFilter: "blur(20px)",
+  width: "100%",
+  maxWidth: "720px",
+  margin: "0 auto",
 
-    border: "1px solid rgba(255,255,255,0.08)",
-    borderRadius: "24px",
+  padding: "12px 12px calc(12px + env(safe-area-inset-bottom))",
 
-    padding: "16px",
-    boxSizing: "border-box",
+  background: "rgba(18,18,18,0.7)",
+  backdropFilter: "blur(20px)",
+  WebkitBackdropFilter: "blur(20px)",
 
-    boxShadow:
-      "0 8px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.05)",
+  borderTop: "1px solid rgba(255,255,255,0.08)",
+  borderRadius: "24px 24px 0 0",
 
-    display: "flex",
-    flexDirection: "column",
-    gap: "12px",
+  boxSizing: "border-box",
+  boxShadow: "0 -8px 40px rgba(0,0,0,.45)",
 
-    zIndex: 10
-  }}
+  display: "flex",
+  flexDirection: "column",
+  gap: "12px",
+
+  zIndex: 10
+}}
 >
         <div style={{ display: "flex", gap: "8px" }}>
           <input
