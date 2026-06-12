@@ -41,21 +41,11 @@ function PatchModal({ onClose, saveOnClose = true }) {
         {/* 헤더 */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 18 }}>
           <div>
-            <p style={{ fontSize: 10, color: "#B8FF00", letterSpacing: "0.15em", margin: "0 0 4px", fontWeight: 700 }}>
+            <p style={{ fontSize: 10, color: "#B8FF00", letterSpacing: "0.15em", margin: "0 0 4px", fontWeight: 700, textAlign: "left" }}>
               PATCH NOTE
             </p>
             <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>업데이트 히스토리</h3>
           </div>
-          <span style={{
-            fontSize: 10, fontWeight: 700,
-            background: "rgba(184,255,0,0.12)",
-            border: "1px solid rgba(184,255,0,0.25)",
-            color: "#B8FF00", borderRadius: 20,
-            padding: "4px 10px", letterSpacing: "0.05em",
-            whiteSpace: "nowrap", flexShrink: 0, marginLeft: 10
-          }}>
-            {PATCH_VERSION}
-          </span>
         </div>
 
         {/* 타임라인 */}
@@ -104,7 +94,7 @@ function PatchModal({ onClose, saveOnClose = true }) {
                 display: "flex", flexDirection: "column", gap: 6
               }}>
                 {patch.logs.map((log, j) => (
-                  <div key={j} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                  <div key={j} style={{ display: "flex", alignItems: "center", gap: 8 }}>
                     <span style={{ color: "#B8FF00", opacity: patch.isLatest ? 0.7 : 0.3, flexShrink: 0, marginTop: 1 }}>•</span>
                     <span style={{ fontSize: 12, lineHeight: 1.6, color: patch.isLatest ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.4)" }}>
                       {log}
@@ -138,11 +128,11 @@ function PatchModal({ onClose, saveOnClose = true }) {
 }
 
 // ── 패치 버전 관리 (다음 패치 때 PATCH_VERSION만 바꾸면 팝업 재등장) ──
-const PATCH_VERSION = "v1.2.0613";
+const PATCH_VERSION = "v1.1.1";
 
 const PATCH_HISTORY = [
   {
-    version: "v1.2.0613",
+    version: "v1.1.1",
     date: "2026.06.13",
     isLatest: true,
     logs: [
