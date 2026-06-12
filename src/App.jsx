@@ -1038,6 +1038,8 @@ function MusicTab({isPC}) {
   );
 }
 // ── 방명록 (밤하늘 + 투명 파스텔 메모 UI) ─────────────────────────────
+import React, { useState, useEffect } from "react";
+// 필요한 Firebase 내보내기(db, query, collection, orderBy, onSnapshot, addDoc, deleteDoc, doc 등)가 상위에 있다고 가정합니다.
 function timeAgo(date) {
   if (!date) return "";
   const targetDate = date instanceof Date ? date : (date.toDate ? date.toDate() : new Date(date));
