@@ -991,8 +991,6 @@ function MusicTab({isPC}) {
     </div>
   );
 }
-
-
 // ── 방명록 (Firebase 기능 유지 + 하단 100% 바 UI 적용) ─────────────────────────────
 function timeAgo(date) {
   if (!date) return "";
@@ -1093,7 +1091,7 @@ function GuestbookTab() {
   return (
     <div style={{ 
       position: "relative", 
-      height: "100%",
+      height: "85vh", // 부모 높이 고정
       display: "flex", 
       flexDirection: "column",
       color: "#fff",
@@ -1123,16 +1121,17 @@ function GuestbookTab() {
       {/* 📌 밤하늘 메모보드 (내부 스크롤 영역) */}
       <div
         style={{
-  flex: 1,
-  marginTop: "16px",
-  paddingBottom: "170px",
-  overflowY: "auto",
-  display: "flex",
-  flexDirection: "column",
-  gap: "16px",
-  paddingLeft: "16px",
-  paddingRight: "16px"
-}}
+          flex: 1,
+          marginTop: "16px",
+          marginBottom: "135px", // 💡 하단 바 높이만큼 정확하게 띄워 가려짐 방지
+          display: "flex",
+          flexDirection: "column",
+          gap: "16px",
+          overflowY: "auto",
+          padding: "10px 16px", // 좌우 패딩을 주어 메모가 벽에 딱 붙지 않게 조절
+          msOverflowStyle: "none",
+          scrollbarWidth: "none",
+        }}
       >
         {entries.map((e, idx) => (
           <div
@@ -1186,28 +1185,25 @@ function GuestbookTab() {
         ))}
       </div>
 
-      {/* 📥 하단 고정 바 */}
-<div
-  style={{
-    position: "fixed",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    width: "100%",
-    background: "rgba(20,20,25,0.75)",
-    backdropFilter: "blur(20px)",
-    WebkitBackdropFilter: "blur(20px)",
-    borderTop: "1px solid rgba(255,255,255,0.15)",
-    borderRadius: "20px 20px 0 0",
-    padding: "16px",
-    boxShadow: "0 -10px 30px rgba(0,0,0,0.5)",
-    zIndex: 1000,
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px",
-    boxSizing: "border-box",
-  }}
->
+      {/* 📥 하단 고정형 와이드 바(Bar) 입력창 */}
+      <div style={{
+        position: "absolute",
+        bottom: "0",              // 💡 바닥에 딱 붙임
+        left: "0",                // 💡 좌측 끝에서 시작
+        width: "100%",            // 💡 가로폭 100% 꽉 채움
+        background: "rgba(20, 20, 25, 0.6)", // 💡 글자가 겹쳐 보이지 않도록 어두운 배경 투명도 최적화
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        borderRadius: "20px 20px 0 0", // 💡 상단 모서리만 둥글게 깎아서 '바' 형태 강조
+        borderTop: "1px solid rgba(255,255,255,0.15)", // 상단 경계선만 강조
+        padding: "16px",
+        boxShadow: "0 -10px 30px rgba(0,0,0,0.5)",
+        zIndex: 10,
+        display: "flex",
+        flexDirection: "column",
+        gap: "8px",
+        boxSizing: "border-box" // padding이 가로폭에 영향을 주지 않도록 잠금
+      }}>
         <div style={{ display: "flex", gap: "8px" }}>
           <input
             value={name}
