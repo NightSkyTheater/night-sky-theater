@@ -442,6 +442,17 @@ const ALBUMS = [
       { n: 6, title: "웃으면 슬퍼지고 울면 기뻐지는 밤", mood: "밤하늘 별들도 빛나려\n수많은 어둠을 견뎌냈을 거야" },
       { n: 7, title: "행복하지 않아도 되니 힘든 일만 없게 해주세요", mood: "난 이제 행복을 바라지 않아요\n그건 너무 먼 이야기라는 걸 충분히 알았으니까요" }
     ]
+  },
+    {
+    id: 20,
+    title: "불행마저 사랑하게 만들까 봐",
+    cover: "https://down.mixtape.so/NAS/img/6/1/8/8/61889e345b8f337c1cc9c40898ab3403.jpg",
+    year: "2026",
+    color: "#10101a",
+    desc: "상처로 가득했던 시간을 그리움이라 부르게 될 미래가 두려운 청춘의 노래.",
+    tracks: [
+      { n: 1, title: "불행마저 사랑하게 만들까 봐", mood: "난 청춘이 두려워\n불행마저 사랑하게 만들까 봐" }
+    ]
   }
 ];
 
@@ -461,14 +472,14 @@ const CHART = [
 ];
 
 const OVERSEAS = [
-  { flag: "https://flagcdn.com/in.svg", emoji: "🇮🇳", name: "인도", pct: 18.6 },
-  { flag: "https://flagcdn.com/jp.svg", emoji: "🇯🇵", name: "일본", pct: 7.5 },
-  { flag: "https://flagcdn.com/tw.svg", emoji: "🇹🇼", name: "대만", pct: 5.2 },
-  { flag: "https://flagcdn.com/us.svg", emoji: "🇺🇸", name: "미국", pct: 4.7 },
-  { flag: "https://flagcdn.com/ua.svg", emoji: "🇺🇦", name: "우크라이나", pct: 3.7 },
-  { flag: "https://flagcdn.com/tr.svg", emoji: "🇹🇷", name: "튀르키예", pct: 2.8 },
-  { flag: "https://flagcdn.com/id.svg", emoji: "🇮🇩", name: "인도네시아", pct: 2.8 },
-  { flag: null, emoji: "🌍", name: "기타", pct: 54.7 },
+  { flag: "https://flagcdn.com/in.svg", emoji: "🇮🇳", name: "인도", pct: 21.8 },
+  { flag: "https://flagcdn.com/jp.svg", emoji: "🇯🇵", name: "일본", pct: 6.2 },
+  { flag: "https://flagcdn.com/us.svg", emoji: "🇺🇸", name: "미국", pct: 5.2 },
+  { flag: "https://flagcdn.com/tr.svg", emoji: "🇹🇷", name: "튀르키예", pct: 3.7 },
+  { flag: "https://flagcdn.com/tw.svg", emoji: "🇹🇼", name: "대만", pct: 3.7 },
+  { flag: "https://flagcdn.com/ua.svg", emoji: "🇺🇦", name: "우크라이나", pct: 3.1 },
+  { flag: "https://flagcdn.com/pk.svg", emoji: "🇵🇰", name: "파키스탄", pct: 2.5 },
+  { flag: null, emoji: "🌍", name: "기타", pct: 53.8 },
 ];
 
 const SUB_DATA = [
@@ -622,7 +633,7 @@ chartRef.current = new window.Chart(ctx, {
             },
             y: {
               min: 100,
-              max: 600,
+              max: 650,
               grid: { color: "rgba(255,255,255,0.05)" },
               ticks: {
                 color: "rgba(220,210,255,0.30)",
@@ -736,11 +747,11 @@ const PatchBadge = (
       <div style={{padding:"20px 18px 12px"}}><SecHead title="공지사항"/></div>
       <Hr/>
       {[
-        {tag:"미니",   tagC:"#ffd3b6", date:"05.16",title:"'SKIP' 발매"},
         {tag:"싱글",   tagC:"#a8e6cf", date:"05.28",title:"'두려운 것 투성이야, 세상은' 발매"},
         {tag:"정규",   tagC:"#ff8b94", date:"06.09",title:"'별 하나와 달 하나, 그리고 나의 마음' 발매"},
         {tag:"채널",   tagC:"#aaaaff", date:"06.11",title:"유튜브 구독자 500명 돌파"},
-        {tag:"예정",   tagC:"#ffcc44", date:"06.19",title:"'불행마저 사랑하게 만들까 봐' 싱글 발매예정"}
+        {tag:"싱글",   tagC:"#a8e6cf", date:"06.19",title:"'불행마저 사랑하게 만들까 봐' 싱글 발매"},
+        {tag:"예정",   tagC:"#ffcc44", date:"06.26",title:"'청춘과 죽음과 낭만에 대하여' 발매예정"}
       ].map((n,i,arr)=>(
         <div key={n.title + n.date}>
           <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 18px"}}>
@@ -814,7 +825,7 @@ const growth = ((increase / prevSubs) * 100).toFixed(1);
 
   const Overseas = (
     <G>
-      <SecHead title="해외 청취율" sub="5월 유튜브 기준"/>
+      <SecHead title="해외 청취율" sub="26년 06월 21일 기준"/>
       <div style={{marginTop:10}}>
         {OVERSEAS.map((o,i)=>(
           <div key={o.name} style={{display:"flex",alignItems:"center",marginBottom:i<OVERSEAS.length-1?10:0}}>
