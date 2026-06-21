@@ -633,7 +633,7 @@ chartRef.current = new window.Chart(ctx, {
             },
             y: {
               min: 100,
-              max: 650,
+              max: 700,
               grid: { color: "rgba(255,255,255,0.05)" },
               ticks: {
                 color: "rgba(220,210,255,0.30)",
