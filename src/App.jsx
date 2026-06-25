@@ -459,16 +459,16 @@ const ALBUMS = [
 const ALL_TRACKS = ALBUMS.flatMap(a => a.tracks.map(t => ({...t, album:a.title})));
 
 const CHART = [
-  {rank:1, title:"우리들의 발라드",                trend:null},
-  {rank:2,title:"죽어가는 모든 것들을 사랑해야지",  trend:"up"},
-  {rank:3, title:"나는 오늘 또 어떤 핑계를 대었는가",  trend:"up"},
-  {rank:4, title:"결과보단 과정을 봐줄래",            trend:"new"},
-  {rank:5, title:"가짜의 삶",  trend:"new"},
-  {rank:6, title:"말하지 않은 것들의 무게",             trend:"down"},
-  {rank:7, title:"자발적으로 표류하는 우주비행사",      trend:"up"},
-  {rank:8, title:"꽃이 피든 말든",                     trend:"down"},
-  {rank:9, title:"꿈은 없고요, 돈은 많고 싶네요",           trend:"new"},
-  {rank:10, title:"내 소중한 마음은 비밀이야",                 trend:null},
+  {rank:1, title:"죽어가는 모든 것들을 사랑해야지",                     trend:"up"},
+  {rank:2, title:"우리들의 발라드",      trend:"down"},
+  {rank:3, title:"나는 오늘 또 어떤 핑계를 대었는가",    trend:null},
+  {rank:4, title:"결과보단 과정을 봐줄래",              trend:null},
+  {rank:5, title:"푸른 하늘 은하수",                    trend:"new"},
+  {rank:6, title:"이 봄은 다른 이름이 될까",            trend:"new"},
+  {rank:7, title:"ただ風が好きだから (그냥 바람이 좋아서)", trend:"new"},
+  {rank:8, title:"고장난시계",                          trend:"new"},
+  {rank:9, title:"사랑은 말이야",                       trend:"new"},
+  {rank:10, title:"운외창천 (雲外蒼天)",                trend:"new"},
 ];
 
 const OVERSEAS = [
@@ -808,7 +808,7 @@ const growth = ((increase / prevSubs) * 100).toFixed(1);
 
   const Top10 = (
     <G pad="0">
-      <div style={{padding:"20px 18px 12px"}}><SecHead title="밤하늘극장 인기차트" sub="'26년 5월 스트리밍 기준"/></div>
+      <div style={{padding:"20px 18px 12px"}}><SecHead title="밤하늘극장 인기차트" sub="'26년 6월 26일 기준"/></div>
       <Hr/>
       {CHART.map((t,i)=>(
         <div key={t.title}>
