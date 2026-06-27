@@ -765,10 +765,10 @@ const PatchBadge = (
       <Hr/>
       {[
         {tag:"정규",   tagC:"#ff8b94", date:"06.09",title:"'별 하나와 달 하나, 그리고 나의 마음' 발매"},
-        {tag:"싱글",   tagC:"#a8e6cf", date:"06.19",title:"'불행마저 사랑하게 만들까 봐' 싱글 발매"},
+        {tag:"싱글",   tagC:"#a8e6cf", date:"06.19",title:"'불행마저 사랑하게 만들까 봐' 발매"},
         {tag:"정규",   tagC:"#ff8b94", date:"06.26",title:"'청춘과 죽음과 낭만에 대하여' 발매"},
         {tag:"채널",   tagC:"#aaaaff", date:"06.27",title:"유튜브 구독자 700명 돌파"},
-        {tag:"예정",   tagC:"#ffcc44", date:"06.30",title:"'星の世界 (별의 세계)' 발매예정"}
+        {tag:"예정",   tagC:"#ffcc44", date:"06.30",title:"'星の世界 (별의 세계)' 발매 예정"}
       ].map((n,i,arr)=>(
         <div key={n.title + n.date}>
           <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 18px"}}>
