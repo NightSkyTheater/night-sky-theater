@@ -453,6 +453,23 @@ const ALBUMS = [
     tracks: [
       { n: 1, title: "불행마저 사랑하게 만들까 봐", mood: "난 청춘이 두려워\n불행마저 사랑하게 만들까 봐" }
     ]
+  },
+      {
+    id: 21,
+    title: "청춘과 죽음과 낭만에 대하여",
+    cover: "https://down.mixtape.so/NAS/img/0/b/c/d/0bcd4d1de831c62aa52bfdf01a2f714c.jpg",
+    year: "2026",
+    color: "#10101a",
+    desc: "유한한 삶이기에 비로소 빛나는 청춘과 낭만.",
+    tracks: [
+      { n: 1, title: "혼자가 아니어서 좋아", mood: "혼자가 아니어서 좋아\n모두 하나 되어 내일을 비춰" },
+      { n: 2, title: "앞으로 나아가는 중이라 힘든 거야", mood: "앞으로 나아가는 중이라 힘든 거야\n지쳤다는 건 노력했다는 거니까" },
+      { n: 3, title: "어쩌다 보니 그렇게 된 거야", mood: "어쩌다 보니 그렇게 된 거야\n누구의 잘못도 아닌 거야" },
+      { n: 4, title: "보고 싶은 시제가 없다", mood: "보고 싶은 시제가 없다\n되돌아갈 장면도 없다" },
+      { n: 5, title: "청춘과 죽음과 낭만에 대하여", mood: "삶이라는 건 사라짐을 향해\n천천히 걸어가는 일이란다" },
+      { n: 6, title: "창백한 푸른 점에서의 우리", mood: "먼지보다 작은 존재라면 서로의 온기라도 되어야지\n우린 무엇을 차지하려 하는 걸까" },
+      { n: 7, title: "이제 나도 기뻐서 울고 싶어", mood: "내일의 걱정은 내일에 맡긴 채\n아늑한 꿈속을 걸어" }
+    ]
   }
 ];
 
@@ -472,14 +489,14 @@ const CHART = [
 ];
 
 const OVERSEAS = [
-  { flag: "https://flagcdn.com/in.svg", emoji: "🇮🇳", name: "인도", pct: 21.8 },
-  { flag: "https://flagcdn.com/jp.svg", emoji: "🇯🇵", name: "일본", pct: 6.2 },
-  { flag: "https://flagcdn.com/us.svg", emoji: "🇺🇸", name: "미국", pct: 5.2 },
-  { flag: "https://flagcdn.com/tr.svg", emoji: "🇹🇷", name: "튀르키예", pct: 3.7 },
-  { flag: "https://flagcdn.com/tw.svg", emoji: "🇹🇼", name: "대만", pct: 3.7 },
-  { flag: "https://flagcdn.com/ua.svg", emoji: "🇺🇦", name: "우크라이나", pct: 3.1 },
-  { flag: "https://flagcdn.com/pk.svg", emoji: "🇵🇰", name: "파키스탄", pct: 2.5 },
-  { flag: null, emoji: "🌍", name: "기타", pct: 53.8 },
+  { flag: "https://flagcdn.com/in.svg", emoji: "🇮🇳", name: "인도", pct: 39.5 },
+  { flag: "https://flagcdn.com/jp.svg", emoji: "🇯🇵", name: "일본", pct: 8.3 },
+  { flag: "https://flagcdn.com/us.svg", emoji: "🇺🇸", name: "미국", pct: 7.7 },
+  { flag: "https://flagcdn.com/tr.svg", emoji: "🇹🇷", name: "튀르키예", pct: 6.9 },
+  { flag: "https://flagcdn.com/tw.svg", emoji: "🇹🇼", name: "대만", pct: 4.6 },
+  { flag: "https://flagcdn.com/ua.svg", emoji: "🇺🇦", name: "우크라이나", pct: 4.2 },
+  { flag: "https://flagcdn.com/pk.svg", emoji: "🇵🇰", name: "파키스탄", pct: 4.8 },
+  { flag: null, emoji: "🌍", name: "기타", pct: 24.0 },
 ];
 
 const SUB_DATA = [
@@ -633,7 +650,7 @@ chartRef.current = new window.Chart(ctx, {
             },
             y: {
               min: 100,
-              max: 700,
+              max: 1000,
               grid: { color: "rgba(255,255,255,0.05)" },
               ticks: {
                 color: "rgba(220,210,255,0.30)",
@@ -747,11 +764,11 @@ const PatchBadge = (
       <div style={{padding:"20px 18px 12px"}}><SecHead title="공지사항"/></div>
       <Hr/>
       {[
-        {tag:"싱글",   tagC:"#a8e6cf", date:"05.28",title:"'두려운 것 투성이야, 세상은' 발매"},
         {tag:"정규",   tagC:"#ff8b94", date:"06.09",title:"'별 하나와 달 하나, 그리고 나의 마음' 발매"},
-        {tag:"채널",   tagC:"#aaaaff", date:"06.11",title:"유튜브 구독자 500명 돌파"},
         {tag:"싱글",   tagC:"#a8e6cf", date:"06.19",title:"'불행마저 사랑하게 만들까 봐' 싱글 발매"},
-        {tag:"예정",   tagC:"#ffcc44", date:"06.26",title:"'청춘과 죽음과 낭만에 대하여' 발매예정"}
+        {tag:"정규",   tagC:"#ff8b94", date:"06.26",title:"'청춘과 죽음과 낭만에 대하여' 발매"}
+        {tag:"채널",   tagC:"#aaaaff", date:"06.27",title:"유튜브 구독자 700명 돌파"},
+        {tag:"예정",   tagC:"#ffcc44", date:"06.30",title:"'星の世界 (별의 세계)' 발매예정"}
       ].map((n,i,arr)=>(
         <div key={n.title + n.date}>
           <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 18px"}}>
@@ -825,7 +842,7 @@ const growth = ((increase / prevSubs) * 100).toFixed(1);
 
   const Overseas = (
     <G>
-      <SecHead title="해외 청취율" sub="26년 06월 21일 기준"/>
+      <SecHead title="해외 청취율" sub="26년 06월 27일 기준"/>
       <div style={{marginTop:10}}>
         {OVERSEAS.map((o,i)=>(
           <div key={o.name} style={{display:"flex",alignItems:"center",marginBottom:i<OVERSEAS.length-1?10:0}}>
