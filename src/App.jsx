@@ -812,7 +812,6 @@ const growth = ((increase / prevSubs) * 100).toFixed(1);
         {[
           {label:"최근 30일 증가",val:`+${increase}`},
           {label:"채널 성장률",val:`+${growth}%`},
-          {label:"조회수",val:"17.7만회"},
         ].map((s,i)=>(
           <div key={s.label} style={{textAlign:"center"}}>
             <p style={{fontSize:14,fontWeight:800,color: i===0 ? ACCENT : i===1 ? "#4f8ef7" : "#c8d98a"}}>{s.val}</p>
