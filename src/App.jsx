@@ -1247,17 +1247,34 @@ function GuestbookTab() {
   const [done, setDone] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [cols, setCols] = useState(3);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  // 파스텔 색상 팔레트
+  const NOTE_COLORS = [
+    "#FFB3BA",
+    "#FFD6A5",
+    "#FDFFB6",
+    "#CAFFBF",
+    "#9BF6FF",
+    "#A0C4FF",
+    "#BDB2FF",
+    "#FFC6FF",
+    "#C8FFD4",
+    "#FDE2E4",
+    "#E2F0CB",
+    "#D7E3FC",
+  ];
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 768) {
-        setCols(2);
-      } else {
-        setCols(3);
-      }
+      const mobile = window.innerWidth <= 768;
+
+      setIsMobile(mobile);
+      setCols(mobile ? 1 : 3);
     };
 
     handleResize();
+
     window.addEventListener("resize", handleResize);
 
     const q = query(
@@ -1270,6 +1287,7 @@ function GuestbookTab() {
         id: d.id,
         ...d.data(),
       }));
+
       setEntries(data);
     });
 
@@ -1286,21 +1304,25 @@ function GuestbookTab() {
       name: name.trim(),
       pw: pw.trim(),
       msg: msg.trim(),
-      color: [
-        "#FFFFFF", "#F8FAFC", "#F1F5F9", "#E0F2FE", "#BAE6FD",
-        "#CFFAFE", "#CCFBF1", "#D1FAE5", "#DCFCE7", "#ECFCCB",
-        "#FEF9C3", "#FEF3C7", "#FDE68A", "#FCE7F3", "#FBCFE8",
-        "#E9D5FF", "#DDD6FE", "#C4B5FD", "#BFDBFE", "#B8FF00"
-      ][Math.floor(Math.random() * 20)],
+
+      // 랜덤 파스텔 색상 저장
+      color:
+        NOTE_COLORS[
+          Math.floor(Math.random() * NOTE_COLORS.length)
+        ],
+
       createdAt: new Date(),
     };
 
     try {
       await addDoc(collection(db, "guestbook"), newEntry);
+
       setName("");
       setPw("");
       setMsg("");
+
       setDone(true);
+
       setTimeout(() => {
         setDone(false);
         setIsOpen(false);
@@ -1314,6 +1336,7 @@ function GuestbookTab() {
     if (!window.confirm("이 낙서를 삭제하시겠습니까?")) return;
 
     const input = window.prompt("비밀번호를 입력하세요");
+
     if (!input) return;
 
     if (input === entry.pw) {
@@ -1327,16 +1350,17 @@ function GuestbookTab() {
     }
   };
 
-  const inputStyle = {
-    background: "rgba(255,255,255,.05)",
-    border: "1px solid rgba(255,255,255,.1)",
-    borderRadius: "14px",
-    color: "#fff",
-    padding: "10px 14px",
-    fontSize: "12px",
-    outline: "none",
-    fontFamily: "inherit",
-  };
+ const inputStyle = {
+  background: "rgba(255,255,255,.06)",
+  border: "1px solid rgba(255,255,255,.08)",
+  borderRadius: "16px",
+  color: "#fff",
+  padding: "13px 16px",
+  fontSize: "13px",
+  outline: "none",
+  fontFamily: "inherit",
+  transition: "all .2s ease",
+};
 
   return (
     <div
@@ -1421,25 +1445,68 @@ function GuestbookTab() {
             {entries
               .filter((_, idx) => idx % cols === colIndex)
               .map((e) => {
-                const baseColor = e.color || "#fff";
 
-                return (
-                  <div
-                    key={e.id}
-                    style={{
-                      position: "relative", // ✕ 버튼 절대 배치를 위해 고정
-                      width: "100%",
-                      minHeight: "90px",
-                      padding: "28px 24px 20px 24px", // 상단 여백 확보
-                      borderRadius: "20px",
-                      background: `linear-gradient(135deg, ${baseColor}15, ${baseColor}05)`,
-                      border: "1px solid rgba(255, 255, 255, 0.08)",
-                      backdropFilter: "blur(14px)",
-                      WebkitBackdropFilter: "blur(14px)",
-                      boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.2), inset 0 0 1px 1px rgba(255, 255, 255, 0.05)`,
-                      textAlign: "left",
-                    }}
-                  >
+    const baseColor =
+      e.color ||
+      NOTE_COLORS[
+        Math.abs(
+          [...e.id].reduce((a, c) => a + c.charCodeAt(0), 0)
+        ) % NOTE_COLORS.length
+      ];
+
+    // 메모마다 고정 회전값 (-3 ~ +3)
+    const rotate =
+      (Math.abs(
+        [...e.id].reduce((a, c) => a + c.charCodeAt(0), 0)
+      ) % 7) - 3;
+
+    return (
+      <div
+        key={e.id}
+        style={{
+          position: "relative",
+          width: "100%",
+          minHeight: "110px",
+
+          padding: isMobile
+            ? "30px 22px 22px"
+            : "28px 24px 20px",
+
+          borderRadius: "20px",
+
+          background: `linear-gradient(
+            135deg,
+            ${baseColor}95,
+            ${baseColor}70
+          )`,
+
+          border: `1px solid ${baseColor}AA`,
+
+          backdropFilter: "blur(18px)",
+          WebkitBackdropFilter: "blur(18px)",
+
+          boxShadow: `
+            0 12px 30px rgba(0,0,0,.22),
+            0 0 22px ${baseColor}40
+          `,
+
+          transform: `rotate(${rotate}deg)`,
+
+          transition: ".25s ease",
+
+          textAlign: "left",
+        }}
+
+        onMouseEnter={(e)=>{
+          e.currentTarget.style.transform=
+          `translateY(-6px) rotate(${rotate}deg) scale(1.02)`;
+        }}
+
+        onMouseLeave={(e)=>{
+          e.currentTarget.style.transform=
+          `rotate(${rotate}deg)`;
+        }}
+      >
                     {/* ✕ 삭제 버튼 (깔끔한 인터랙션 적용) */}
                     <button
                       onClick={() => del(e)}
@@ -1464,8 +1531,8 @@ function GuestbookTab() {
                     <p
                       style={{
                         margin: 0,
-                        fontSize: "13px",
-                        lineHeight: "22px",
+                        fontSize: isMobile ? "15px" : "13px",
+lineHeight: isMobile ? "26px" : "22px",
                         fontWeight: 300,
                         whiteSpace: "pre-wrap",
                         wordBreak: "keep-all",
@@ -1488,7 +1555,14 @@ function GuestbookTab() {
                         opacity: 0.7,
                       }}
                     >
-                      <span style={{ color: baseColor, fontWeight: 600, textShadow: `0 0 8px ${baseColor}44` }}>
+                      <span
+style={{
+color:"#fff",
+fontWeight:700,
+letterSpacing:".3px",
+textShadow:`0 0 12px ${baseColor}`
+}}
+>
                         ✦ {e.name}
                       </span>
                       <span>{timeAgo(e.createdAt)}</span>
@@ -1509,7 +1583,7 @@ function GuestbookTab() {
             left: 0,
             right: 0,
             bottom: 0,
-            background: "rgba(0, 0, 0, 0.5)",
+            background: "rgba(0, 0, 0, 0.65)",
             backdropFilter: "blur(16px)",
             WebkitBackdropFilter: "blur(16px)",
             display: "flex",
@@ -1524,10 +1598,20 @@ function GuestbookTab() {
             style={{
               width: "100%",
               maxWidth: "340px",
-              background: "rgba(18,18,18,0.9)",
-              backdropFilter: "blur(30px)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: "24px",
+              background:
+  "linear-gradient(180deg, rgba(24,24,32,.96), rgba(10,10,16,.96))",
+
+backdropFilter: "blur(28px)",
+WebkitBackdropFilter: "blur(28px)",
+
+border: "1px solid rgba(255,255,255,.08)",
+
+borderRadius: "24px",
+
+boxShadow: `
+0 25px 70px rgba(0,0,0,.45),
+0 0 30px rgba(184,255,0,.08)
+`,
               padding: "20px",
               display: "flex",
               flexDirection: "column",
@@ -1536,52 +1620,97 @@ function GuestbookTab() {
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2px" }}>
-              <span style={{ fontSize: "13px", fontWeight: 600, color: "#B8FF00" }}>낙서 남기기</span>
+              <span style={{ fontSize: "13px", fontWeight: 600, color: "#B8FF00" }}>밤하늘에 한 줄 남기기</span>
               <button 
                 onClick={() => setIsOpen(false)}
-                style={{ background: "none", border: "none", color: "rgba(255,255,255,0.4)", fontSize: "16px", cursor: "pointer" }}
+                onMouseEnter={(e)=>{
+  e.currentTarget.style.color="#ff6b6b";
+}}
+
+onMouseLeave={(e)=>{
+  e.currentTarget.style.color="rgba(255,255,255,.45)";
+}}
+                style={{ background: "none", border: "none", color:"rgba(255,255,255,.45)",
+transition:"all .2s ease", fontSize: "16px", cursor: "pointer" }}
               >
                 ✕
               </button>
             </div>
 
             <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="닉네임"
-              style={{ ...inputStyle, width: "100%" }}
-            />
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+  placeholder="닉네임"
+  style={{ ...inputStyle, width: "100%" }}
+  onFocus={(e) => {
+    e.target.style.border = "1px solid #B8FF00";
+    e.target.style.boxShadow = "0 0 12px rgba(184,255,0,.25)";
+  }}
+  onBlur={(e) => {
+    e.target.style.border = "1px solid rgba(255,255,255,.08)";
+    e.target.style.boxShadow = "none";
+  }}
+/>
 
             <input
-              value={pw}
-              onChange={(e) => setPw(e.target.value)}
-              placeholder="비밀번호"
-              type="password"
-              style={{ ...inputStyle, width: "100%" }}
-            />
+  value={pw}
+  onChange={(e) => setPw(e.target.value)}
+  placeholder="비밀번호"
+  type="password"
+  style={{ ...inputStyle, width: "100%" }}
+  onFocus={(e) => {
+    e.target.style.border = "1px solid #B8FF00";
+    e.target.style.boxShadow = "0 0 12px rgba(184,255,0,.25)";
+  }}
+  onBlur={(e) => {
+    e.target.style.border = "1px solid rgba(255,255,255,.08)";
+    e.target.style.boxShadow = "none";
+  }}
+/>
 
             <textarea
-              value={msg}
-              onChange={(e) => setMsg(e.target.value)}
-              placeholder="당신의 한 줄이 별이 됩니다."
-              rows={4}
-              style={{
-                ...inputStyle,
-                width: "100%",
-                resize: "none",
-                fontSize: "13px",
-              }}
-            />
+  value={msg}
+  onChange={(e) => setMsg(e.target.value)}
+  placeholder="당신의 한 줄이 별이 됩니다."
+  rows={4}
+  style={{
+    ...inputStyle,
+    width: "100%",
+    resize: "none",
+    fontSize: "13px",
+  }}
+  onFocus={(e) => {
+    e.target.style.border = "1px solid #B8FF00";
+    e.target.style.boxShadow = "0 0 12px rgba(184,255,0,.25)";
+  }}
+  onBlur={(e) => {
+    e.target.style.border = "1px solid rgba(255,255,255,.08)";
+    e.target.style.boxShadow = "none";
+  }}
+/>
 
             <button
               onClick={submit}
+              onMouseEnter={(e)=>{
+    e.currentTarget.style.transform="translateY(-2px)";
+    e.currentTarget.style.boxShadow="0 8px 20px rgba(255,255,255,.18)";
+  }}
+
+  onMouseLeave={(e)=>{
+    e.currentTarget.style.transform="translateY(0)";
+    e.currentTarget.style.boxShadow="none";
+  }}
               style={{
                 width: "100%",
                 padding: "12px 0",
                 borderRadius: "12px",
                 border: "none",
                 fontWeight: "700",
-                background: done ? "#B8FF00" : "rgba(255,255,255,0.9)",
+                background: done
+  ? "#B8FF00"
+  : "linear-gradient(135deg,#ffffff,#ececec)",
+
+transition: "all .25s ease",
                 color: "#111",
                 cursor: "pointer",
                 fontSize: "13px",
