@@ -127,7 +127,7 @@ function PatchModal({ onClose, saveOnClose = true }) {
   );
 }
 
-// ── 패치 버전 관리 (다음 패치 때 PATCH_VERSION만 바꾸면 팝업 재등장) ──
+// ── 패치 버전 관리 (다음 패치 때 PATCH_VERSION만 바꾸면 팝업 재등장)──
 const PATCH_VERSION = "v 1.1";
 
 const PATCH_HISTORY = [
