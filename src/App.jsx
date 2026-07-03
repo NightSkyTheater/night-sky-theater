@@ -517,6 +517,7 @@ const SUB_DATA = [
   {month:"3월", subs:300},
   {month:"4월", subs:345},
   {month:"5월", subs:410},
+  {month:"6월", subs:765},
 ];
 
 const PLATFORMS = [
