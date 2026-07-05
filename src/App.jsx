@@ -481,33 +481,44 @@ const ALBUMS = [
     tracks: [
       { n: 1, title: "星の世界 (별의 세계)", mood: "もし私があの星のひとつだとしたら\n誰かの夜を癒す光になれるだろうか" }
     ]
+  },
+  {
+    id: 22,
+    title: "아마 모르겠지",
+    cover: "https://down.mixtape.so/NAS/img/6/a/f/a/6afa718386f53fc5bf25cf6eb04f73e2.jpg",
+    year: "2026",
+    color: "#10101a",
+    desc: "거대한 바다 같은 진심을 홀로 삼켜내며 지독하게 담아둔 짝사랑의 고백.",
+    tracks: [
+      { n: 1, title: "아마 모르겠지", mood: "수면 위로 드러난 내 마음은\n겨우 손바닥만 한 미소뿐이라 아마 모르겠지" }
+    ]
   }
 ];
 
 const ALL_TRACKS = ALBUMS.flatMap(a => a.tracks.map(t => ({...t, album:a.title})));
 
 const CHART = [
-  {rank:1, title:"죽어가는 모든 것들을 사랑해야지",                     trend:"up"},
-  {rank:2, title:"우리들의 발라드",      trend:"down"},
-  {rank:3, title:"나는 오늘 또 어떤 핑계를 대었는가",    trend:null},
-  {rank:4, title:"결과보단 과정을 봐줄래",              trend:null},
-  {rank:5, title:"푸른 하늘 은하수",                    trend:"new"},
-  {rank:6, title:"이 봄은 다른 이름이 될까",            trend:"new"},
-  {rank:7, title:"ただ風が好きだから (그냥 바람이 좋아서)", trend:"new"},
-  {rank:8, title:"고장난시계",                          trend:"new"},
-  {rank:9, title:"사랑은 말이야",                       trend:"new"},
-  {rank:10, title:"운외창천 (雲外蒼天)",                trend:"new"},
+  { rank: 1, title: "죽어가는 모든 것들을 사랑해야지", trend: "up" },
+  { rank: 2, title: "우리들의 발라드", trend: null },
+  { rank: 3, title: "나는 오늘 또 어떤 핑계를 대었는가", trend: null },
+  { rank: 4, title: "결과보단 과정을 봐줄래", trend: null },
+  { rank: 5, title: "푸른 하늘 은하수", trend: null },
+  { rank: 6, title: "이 봄은 다른 이름이 될까", trend: "down" },
+  { rank: 7, title: "운외창천 (雲外蒼天)", trend: "up" },
+  { rank: 8, title: "ただ風が好きだから (그냥 바람이 좋아서)", trend: "down" },
+  { rank: 9, title: "고장난시계", trend: "down" },
+  { rank: 10, title: "꽃이 피든 말든", trend: "new" },
 ];
 
 const OVERSEAS = [
-  { flag: "https://flagcdn.com/in.svg", emoji: "🇮🇳", name: "인도", pct: 39.5 },
-  { flag: "https://flagcdn.com/jp.svg", emoji: "🇯🇵", name: "일본", pct: 8.3 },
-  { flag: "https://flagcdn.com/us.svg", emoji: "🇺🇸", name: "미국", pct: 7.7 },
-  { flag: "https://flagcdn.com/tr.svg", emoji: "🇹🇷", name: "튀르키예", pct: 6.9 },
-  { flag: "https://flagcdn.com/tw.svg", emoji: "🇹🇼", name: "대만", pct: 4.6 },
-  { flag: "https://flagcdn.com/ua.svg", emoji: "🇺🇦", name: "우크라이나", pct: 4.2 },
-  { flag: "https://flagcdn.com/pk.svg", emoji: "🇵🇰", name: "파키스탄", pct: 4.8 },
-  { flag: null, emoji: "🌍", name: "기타", pct: 24.0 },
+  { flag: "https://flagcdn.com/in.svg", emoji: "🇮🇳", name: "인도", pct: 42.1 },
+  { flag: "https://flagcdn.com/tr.svg", emoji: "🇹🇷", name: "튀르키예", pct: 8.2 },
+  { flag: "https://flagcdn.com/jp.svg", emoji: "🇯🇵", name: "일본", pct: 7.1 },
+  { flag: "https://flagcdn.com/us.svg", emoji: "🇺🇸", name: "미국", pct: 6.4 },
+  { flag: "https://flagcdn.com/pk.svg", emoji: "🇵🇰", name: "파키스탄", pct: 4.9 },
+  { flag: "https://flagcdn.com/ua.svg", emoji: "🇺🇦", name: "우크라이나", pct: 4.5 },
+  { flag: "https://flagcdn.com/tw.svg", emoji: "🇹🇼", name: "대만", pct: 3.1 },
+  { flag: null, emoji: "🌍", name: "기타", pct: 23.6 },
 ];
 
 const SUB_DATA = [
@@ -776,11 +787,11 @@ const PatchBadge = (
       <div style={{padding:"20px 18px 12px"}}><SecHead title="공지사항"/></div>
       <Hr/>
       {[
-        {tag:"싱글",   tagC:"#a8e6cf", date:"06.19",title:"'불행마저 사랑하게 만들까 봐' 발매"},
         {tag:"정규",   tagC:"#ff8b94", date:"06.26",title:"'청춘과 죽음과 낭만에 대하여' 발매"},
         {tag:"채널",   tagC:"#aaaaff", date:"06.27",title:"유튜브 구독자 700명 돌파"},
         {tag:"싱글",   tagC:"#a8e6cf", date:"06.30",title:"'星の世界 (별의 세계)' 발매"},
-        {tag:"예정",   tagC:"#ffcc44", date:"07.03",title:"'아마 모르겠지' 발매예정"}
+        {tag:"싱글",   tagC:"#a8e6cf", date:"07.03",title:"'아마 모르겠지' 발매"},
+        {tag:"예정",   tagC:"#ffcc44", date:"07.14",title:"'바다와 어른, 소년의 노래' 발매예정"}
       ].map((n,i,arr)=>(
         <div key={n.title + n.date}>
           <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 18px"}}>
@@ -836,7 +847,7 @@ const growth = ((increase / prevSubs) * 100).toFixed(1);
 
   const Top10 = (
     <G pad="0">
-      <div style={{padding:"20px 18px 12px"}}><SecHead title="밤하늘극장 인기차트" sub="'26년 6월 26일 기준"/></div>
+      <div style={{padding:"20px 18px 12px"}}><SecHead title="밤하늘극장 인기차트" sub="'26년 7월 05일 기준"/></div>
       <Hr/>
       {CHART.map((t,i)=>(
         <div key={t.title}>
@@ -853,7 +864,7 @@ const growth = ((increase / prevSubs) * 100).toFixed(1);
 
   const Overseas = (
     <G>
-      <SecHead title="해외 청취율" sub="26년 06월 27일 기준"/>
+      <SecHead title="해외 청취율" sub="26년 07월 05일 기준"/>
       <div style={{marginTop:10}}>
         {OVERSEAS.map((o,i)=>(
           <div key={o.name} style={{display:"flex",alignItems:"center",marginBottom:i<OVERSEAS.length-1?10:0}}>
