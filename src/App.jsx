@@ -660,15 +660,14 @@ function TopTab({ tab, setTab }) {
 >
   <span
     style={{
-      width: 34,
-      height: 34,
+      width: 40,
+      height: 40,
       borderRadius: "50%",
       overflow: "hidden",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
       background: "rgba(255,255,255,0.08)",
-      border: "1px solid rgba(255,255,255,0.12)",
     }}
   >
     <img
@@ -694,7 +693,7 @@ function TopTab({ tab, setTab }) {
                 border: "none",
                 cursor: "pointer",
                 color: tab === t ? ACCENT : "rgba(255,255,255,.62)",
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: tab === t ? 800 : 600,
                 position: "relative",
                 padding: "22px 0 20px",
