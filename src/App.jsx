@@ -650,23 +650,39 @@ function TopTab({ tab, setTab }) {
         }}
       >
         <button
-          onClick={() => setTab(NAV_ITEMS[0].id)}
-          style={{
-            minWidth: 0,
-            background: "none",
-            border: "none",
-            padding: 0,
-            cursor: "pointer",
-            color: "#fff",
-            fontFamily: "inherit",
-            fontSize: 15,
-            fontWeight: 900,
-            letterSpacing: 0,
-            whiteSpace: "nowrap",
-          }}
-        >
-          {"\uBC24\uD558\uB298\uADF9\uC7A5"}
-        </button>
+  onClick={() => setTab(NAV_ITEMS[0].id)}
+  style={{
+    background: "none",
+    border: "none",
+    padding: 0,
+    cursor: "pointer",
+  }}
+>
+  <span
+    style={{
+      width: 34,
+      height: 34,
+      borderRadius: "50%",
+      overflow: "hidden",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "rgba(255,255,255,0.08)",
+      border: "1px solid rgba(255,255,255,0.12)",
+    }}
+  >
+    <img
+      src="/favicon.svg"
+      alt="밤하늘극장"
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        display: "block",
+      }}
+    />
+  </span>
+</button>
 
         <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
           {tabs.map((t) => (
