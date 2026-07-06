@@ -545,6 +545,18 @@ const PLATFORMS = [
   { name:"Apple Music", url:"music.apple.com/kr/artist/%EB%B0%A4%ED%95%98%EB%8A%98%EA%B7%B9%EC%9E%A5/1838608388", color:"#FA2D48" }
 ];
 
+// ── 발매 일정 & 뉴스 ─────────────────────────────
+const RELEASE_SCHEDULE = [
+  { tag:"정규", tagC:"#ff8b94", date:"06.26", title:"'청춘과 죽음과 낭만에 대하여' 발매" },
+  { tag:"싱글", tagC:"#a8e6cf", date:"06.30", title:"'星の世界 (별의 세계)' 발매" },
+  { tag:"싱글", tagC:"#a8e6cf", date:"07.03", title:"'아마 모르겠지' 발매" },
+  { tag:"예정", tagC:"#ffcc44", date:"07.14", title:"'바다와 어른, 소년의 노래' 발매예정" },
+];
+
+const NEWS_ITEMS = [
+  { date:"06.27", title:"유튜브 구독자 700명 돌파" },
+];
+
 function Stars() {
   const s = useRef(Array.from({length:100},(_,i)=>({id:i,x:Math.random()*100,y:Math.random()*100,r:Math.random()*1.4+0.2,o:Math.random()*0.4+0.08,d:Math.random()*5+2}))).current;
   return (
@@ -583,6 +595,13 @@ const SecHead = ({title,sub}) => (
   </div>
 );
 
+function formatCompact(num) {
+  if (num === null || num === undefined) return "···";
+  if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+  if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+  return String(num);
+}
+
 const NAV_ITEMS = [
   {id:"홈",    svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>},
   {id:"소개",  svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>},
@@ -604,305 +623,236 @@ function BottomNav({tab,setTab}) {
   );
 }
 
-function SubChart({ liveSubs }) {
-  const canvasRef = useRef(null);
-  const chartRef  = useRef(null);
-
-  useEffect(() => {
-    if (!canvasRef.current) return;
-    const loadChart = () => {
-      if (!window.Chart) { setTimeout(loadChart, 50); return; }
-      if (chartRef.current) chartRef.current.destroy();
-      const ctx = canvasRef.current.getContext("2d");
-      const grad = ctx.createLinearGradient(0, 0, 0, 130);
-      grad.addColorStop(0, "rgba(184,255,0,0.22)");
-      grad.addColorStop(1, "rgba(184,255,0,0.00)");
-const chartData = [
-  ...SUB_DATA,
-  {
-    month: "현재",
-    subs: liveSubs ?? SUB_DATA[SUB_DATA.length - 1].subs
-  }
-];
-
-chartRef.current = new window.Chart(ctx, {
-  type: "line",
-  data: {
-    labels: chartData.map(d => d.month),
-    datasets: [{
-      data: chartData.map(d => d.subs),
-      borderColor: ACCENT,
-      borderWidth: 2,
-      tension: 0.45,
-      pointRadius: chartData.map((_, i) =>
-        i === chartData.length - 1 ? 5 : 3
-      ),
-      pointBackgroundColor: ACCENT,
-      pointBorderColor: ACCENT,
-      pointHoverRadius: 6,
-      fill: true,
-      backgroundColor: grad,
-    }]
-  },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: "rgba(20,14,50,0.92)",
-              borderColor: "rgba(184,255,0,0.25)",
-              borderWidth: 1,
-              titleColor: "rgba(220,210,255,0.55)",
-              bodyColor: ACCENT,
-              bodyFont: { size: 13, weight: "700" },
-              displayColors: false,
-              callbacks: { label: ctx => ctx.parsed.y + "명" }
-            }
-          },
-          scales: {
-            x: {
-              grid: { color: "rgba(255,255,255,0.04)" },
-              ticks: {
-                color: "rgba(220,210,255,0.38)",
-                font: { size: 10, family: "monospace" },
-                maxRotation: 0,
-                autoSkip: false,
-              },
-              border: { display: false }
-            },
-            y: {
-              min: 100,
-              max: 1000,
-              grid: { color: "rgba(255,255,255,0.05)" },
-              ticks: {
-                color: "rgba(220,210,255,0.30)",
-                font: { size: 9 },
-                stepSize: 100,
-                callback: v => v + "명"
-              },
-              border: { display: false }
-            }
-          },
-          interaction: { mode: "index", intersect: false },
-          animation: { duration: 800, easing: "easeInOutQuart" }
-        }
-      });
-    };
-    loadChart();
-    return () => { if (chartRef.current) chartRef.current.destroy(); };
-  }, [liveSubs]);
-
-  return (
-    <div style={{ width: "100%" }}>
-      <div style={{ position: "relative", width: "100%", height: 160 }}>
-        <canvas ref={canvasRef} role="img" aria-label="유튜브 채널 분석" />
-      </div>
-    </div>
-  );
-}
-
 function HomeTab({isPC, onOpenPatch}) {
   const [liveSubs, setLiveSubs] = useState(null);
+  const [liveViews, setLiveViews] = useState(null);
+  const [newsExpanded, setNewsExpanded] = useState(false);
 
-useEffect(() => {
-  async function fetchSubs() {
-    try {
-      const res = await fetch(
-        `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`
-      );
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const res = await fetch(
+          `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`
+        );
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (data.items?.[0]) {
-        setLiveSubs(Number(data.items[0].statistics.subscriberCount));
+        if (data.items?.[0]) {
+          setLiveSubs(Number(data.items[0].statistics.subscriberCount));
+          setLiveViews(Number(data.items[0].statistics.viewCount));
+        }
+      } catch (err) {
+        console.error(err);
       }
-    } catch (err) {
-      console.error(err);
     }
-  }
 
-  fetchSubs();
+    fetchStats();
 
-  const interval = setInterval(fetchSubs, 600000); // 10분마다 갱신
+    const interval = setInterval(fetchStats, 600000); // 10분마다 갱신
 
-  return () => clearInterval(interval);
-}, []);
-  const [track,setTrack]=useState(null);
+    return () => clearInterval(interval);
+  }, []);
 
-useEffect(() => {
-  setTrack(
-    ALL_TRACKS[Math.floor(Math.random() * ALL_TRACKS.length)]
-  );
-}, []);
-const refreshPick = () => {
-  setTrack(
-    ALL_TRACKS[Math.floor(Math.random() * ALL_TRACKS.length)]
-  );
-};
-  const rankColor = r => r===1?ACCENT:r===2?"rgba(91,79,245,0.65)":r===3?"rgba(91,79,245,0.4)":muted;
-  const trendColor = t => t==="up"?"#f87171":t==="down"?"#4f8ef7":t==="new"?ACCENT:muted;
-  const trendLabel = t => t==="up"?"▲":t==="down"?"▼":t==="new"?"N":"—";
+  const albumCount = ALBUMS.length;
+  const trackCount = ALL_TRACKS.length;
+  const currentSubs = liveSubs ?? SUB_DATA[SUB_DATA.length - 1].subs;
 
-const PatchBadge = (
-  <button
-    onClick={onOpenPatch}
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: 6,
-      background: "rgba(184,255,0,0.08)",
-      border: "1px solid rgba(184,255,0,0.2)",
-      borderRadius: 20,
-      padding: "8px 20px",
-      justifyContent: "space-between",
-      cursor: "pointer",
-      fontFamily: "inherit",
-      marginBottom: 4,
-    }}
-  >
-    <span style={{ fontSize: 9, color: ACCENT, fontWeight: 700, letterSpacing: "0.1em" }}>
-      🔔 PATCH NOTE
-    </span>
-<span style={{ fontSize: 10, color: "rgba(220,210,255,0.6)" }}>
-  {PATCH_VERSION} 업데이트 보기 →
-</span>
-  </button>
-);
+  const visibleNews = newsExpanded ? NEWS_ITEMS : NEWS_ITEMS.slice(0, 3);
 
-  const TodayPick = (
-    <G acc style={{padding:"26px 20px",position:"relative",overflow:"hidden", textAlign:"center"}}>
-      <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.1) 0%,transparent 70%)",pointerEvents:"none"}}/>
-      <p style={{fontSize:10,fontWeight:600,color:LIME,letterSpacing:"0.12em",margin:"0 0 18px",opacity:0.8}}>밤하늘극장 추천곡</p>
-      {track&&<>
-        <p style={{fontSize:22,fontWeight:700,color:white,margin:"0 0 6px",lineHeight:1.3,letterSpacing:"-0.3px"}}>{track.title}</p>
-        <p style={{fontSize:12,color:muted,margin:"0 0 10px"}}>{track.album}</p>
-        {track.mood&&<p style={{fontSize:13,color:`${LIME}88`,margin:0,fontFamily:"'Noto Serif KR',serif",transform: "skewX(-12deg)", display: "inline-block",whiteSpace:"pre-line"}}>"{track.mood}"</p>}
-      </>}
-    </G>
+  const PatchBadge = (
+    <button
+      onClick={onOpenPatch}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 6,
+        background: "rgba(184,255,0,0.08)",
+        border: "1px solid rgba(184,255,0,0.2)",
+        borderRadius: 20,
+        padding: "8px 20px",
+        justifyContent: "space-between",
+        cursor: "pointer",
+        fontFamily: "inherit",
+        marginBottom: 4,
+        width: "100%",
+      }}
+    >
+      <span style={{ fontSize: 9, color: ACCENT, fontWeight: 700, letterSpacing: "0.1em" }}>
+        🔔 PATCH NOTE
+      </span>
+      <span style={{ fontSize: 10, color: "rgba(220,210,255,0.6)" }}>
+        {PATCH_VERSION} 업데이트 보기 →
+      </span>
+    </button>
   );
 
-  const Notice = (
-    <G pad="0">
-      <div style={{padding:"20px 18px 12px"}}><SecHead title="공지사항"/></div>
-      <Hr/>
-      {[
-        {tag:"정규",   tagC:"#ff8b94", date:"06.26",title:"'청춘과 죽음과 낭만에 대하여' 발매"},
-        {tag:"채널",   tagC:"#aaaaff", date:"06.27",title:"유튜브 구독자 700명 돌파"},
-        {tag:"싱글",   tagC:"#a8e6cf", date:"06.30",title:"'星の世界 (별의 세계)' 발매"},
-        {tag:"싱글",   tagC:"#a8e6cf", date:"07.03",title:"'아마 모르겠지' 발매"},
-        {tag:"예정",   tagC:"#ffcc44", date:"07.14",title:"'바다와 어른, 소년의 노래' 발매예정"}
-      ].map((n,i,arr)=>(
-        <div key={n.title + n.date}>
-          <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 18px"}}>
-            <div style={{width:56,flexShrink:0}}><Tag c={n.tagC}>{n.tag}</Tag></div>
-            <span style={{width:44,flexShrink:0,fontSize:11,color:"rgba(220,210,255,0.75)",fontWeight:600}}>{n.date}</span>
-            <p style={{margin:0,fontSize:13,fontWeight:500,color:white,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1}}>{n.title}</p>
-          </div>
-          {i<arr.length-1&&<Hr/>}
-        </div>
-      ))}
-    </G>
-  );
+  const ProfileHeader = (
+    <G
+      acc
+      style={{
+        textAlign: "center",
+        position: "relative",
+        overflow: "hidden",
+        padding: "30px 22px 24px"
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(circle at 50% 0%, rgba(184,255,0,.10), transparent 70%)",
+          pointerEvents: "none"
+        }}
+      />
 
-const currentSubs = liveSubs ?? SUB_DATA[SUB_DATA.length - 1].subs;
-const prevSubs = SUB_DATA[SUB_DATA.length - 1].subs;
+      <img
+        src="https://yt3.googleusercontent.com/GcJswGDJvAePBqoBSXrr3J5UCFX-IW3zmjyioyEGsltfXr5nX63rB51QQWZXNV5sl0IclJK5=s160-c-k-c0x00ffffff-no-rj"
+        alt="밤하늘극장"
+        style={{
+          width: 84,
+          height: 84,
+          borderRadius: "50%",
+          objectFit: "cover",
+          margin: "0 auto 14px",
+          display: "block",
+          border: "1px solid rgba(184,255,0,.18)",
+          boxShadow: "0 0 40px rgba(184,255,0,.18), 0 0 80px rgba(91,79,245,.12)"
+        }}
+      />
 
-const increase = currentSubs - prevSubs;
-const growth = ((increase / prevSubs) * 100).toFixed(1);
+      <h2 style={{ fontSize: 24, fontWeight: 900, color: white, letterSpacing: "-0.03em", margin: "0 0 14px" }}>
+        밤하늘극장
+      </h2>
 
-  const SubSection = (
-    <G>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-        <SecHead title="유튜브 채널 분석" sub="최근 7개월 기준"/>
-        <div style={{textAlign:"right"}}>
-          <p
-  style={{
-    fontSize:20,
-    fontWeight:900,
-    color:ACCENT,
-    margin:0,
-    lineHeight:1
-  }}
->
-  {liveSubs ?? "..."}
-</p>
-          <p style={{fontSize:9,color:muted,margin:"3px 0 0"}}>현재 구독자</p>
-        </div>
-      </div>
-      <SubChart liveSubs={liveSubs}/>
-      <div style={{display:"flex",justifyContent:"space-around",marginTop:14}}>
+      <div style={{ display: "flex", justifyContent: "center", gap: 22, flexWrap: "wrap", marginBottom: 16 }}>
         {[
-          {label:"최근 30일 증가",val:`+${increase}`},
-          {label:"채널 성장률",val:`+${growth}%`},
-        ].map((s,i)=>(
-          <div key={s.label} style={{textAlign:"center"}}>
-            <p style={{fontSize:14,fontWeight:800,color: i===0 ? ACCENT : i===1 ? "#4f8ef7" : "#c8d98a"}}>{s.val}</p>
-            <p style={{fontSize:9,color:muted,margin:"-2px 0 0"}}>{s.label}</p>
+          { icon: "👥", val: formatCompact(currentSubs), label: "구독자" },
+          { icon: "👁", val: formatCompact(liveViews), label: "조회수" },
+          { icon: "💿", val: albumCount, label: "앨범" },
+          { icon: "🎵", val: trackCount, label: "곡" },
+        ].map((s) => (
+          <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+            <p style={{ margin: 0, fontSize: 15, fontWeight: 800, color: white }}>
+              <span style={{ fontFamily: EMOJI_FONT, marginRight: 4 }}>{s.icon}</span>{s.val}
+            </p>
+            <p style={{ margin: 0, fontSize: 9, color: muted, letterSpacing: "0.05em" }}>{s.label}</p>
           </div>
         ))}
       </div>
+
+      <p style={{ fontSize: 12.5, color: soft, lineHeight: 1.8, margin: 0, maxWidth: 380, marginInline: "auto" }}>
+        사랑과 시간, 그리고 기억에 깃든 감정을 섬세하게 노래하는 가상 인디 밴드.
+        보컬 유우레이가 청춘과 삶의 순간들을 자신만의 시선으로 들려드립니다.
+      </p>
     </G>
   );
 
-  const Top10 = (
+  const ReleaseSchedule = (
     <G pad="0">
-      <div style={{padding:"20px 18px 12px"}}><SecHead title="밤하늘극장 인기차트" sub="'26년 7월 05일 기준"/></div>
-      <Hr/>
-      {CHART.map((t,i)=>(
-        <div key={t.title}>
-          <div style={{display:"flex",alignItems:"center",gap:12,padding:"11px 18px"}}>
-            <span style={{width:22,textAlign:"center",fontWeight:900,flexShrink:0,fontSize:t.rank<=3?14:12,color:rankColor(t.rank)}}>{t.rank}</span>
-            <p style={{flex:1,margin:0,fontSize:13,fontWeight:t.rank<=3?700:400,color:t.rank===1?white:t.rank<=3?"rgba(242,238,249,0.85)":soft,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</p>
-            <span style={{fontSize:11,fontWeight:700,color:trendColor(t.trend),width:14,textAlign:"center",flexShrink:0}}>{trendLabel(t.trend)}</span>
+      <div style={{ padding: "18px 18px 10px" }}><SecHead title="📀 발매 일정" /></div>
+      <Hr />
+      {RELEASE_SCHEDULE.map((n, i, arr) => (
+        <div key={n.title + n.date}>
+          <div style={{ display: "flex", alignItems: "center", gap: 0, padding: "11px 18px" }}>
+            <div style={{ width: 56, flexShrink: 0 }}><Tag c={n.tagC}>{n.tag}</Tag></div>
+            <span style={{ width: 44, flexShrink: 0, fontSize: 11, color: "rgba(220,210,255,0.75)", fontWeight: 600 }}>{n.date}</span>
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: white, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{n.title}</p>
           </div>
-          {i<CHART.length-1&&<Hr/>}
+          {i < arr.length - 1 && <Hr />}
         </div>
       ))}
     </G>
   );
 
-  const Overseas = (
-    <G>
-      <SecHead title="해외 청취율" sub="26년 07월 05일 기준"/>
-      <div style={{marginTop:10}}>
-        {OVERSEAS.map((o,i)=>(
-          <div key={o.name} style={{display:"flex",alignItems:"center",marginBottom:i<OVERSEAS.length-1?10:0}}>
-            <div style={{width:34,flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
-              {isPC ? (
-                o.flag ? (
-                  <div style={{width:18,height:18,borderRadius:"50%",overflow:"hidden",boxShadow:"0 0 6px rgba(255,255,255,0.12)"}}>
-                    <img src={o.flag} alt={o.name} draggable={false} style={{width:"100%",height:"100%",objectFit:"cover",display:"block",userSelect:"none",pointerEvents:"none"}}/>
-                  </div>
-                ) : (
-                  <span style={{fontSize:18,fontFamily:EMOJI_FONT,lineHeight:1}}>🌍</span>
-                )
-              ) : (
-                <span style={{fontSize:18,fontFamily:EMOJI_FONT,lineHeight:1}}>{o.emoji || "🌍"}</span>
-              )}
-            </div>
-            <span style={{fontSize:12,color:muted,width:68,flexShrink:0}}>{o.name}</span>
-            <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
-              <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${ACCENT}cc,#4f8ef7)`,borderRadius:4}}/>
-            </div>
-            <span style={{fontSize:11,color:ACCENT,width:32,textAlign:"right"}}>{o.pct}%</span>
+  const News = (
+    <G pad="0">
+      <div style={{ padding: "18px 18px 10px" }}><SecHead title="📢 NEWS" /></div>
+      <Hr />
+      {visibleNews.map((n, i, arr) => (
+        <div key={n.title + n.date}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 18px" }}>
+            <span style={{ width: 44, flexShrink: 0, fontSize: 11, color: "rgba(220,210,255,0.75)", fontWeight: 600 }}>{n.date}</span>
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: white, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{n.title}</p>
           </div>
+          {i < arr.length - 1 && <Hr />}
+        </div>
+      ))}
+      {NEWS_ITEMS.length > 3 && (
+        <>
+          <Hr />
+          <button
+            onClick={() => setNewsExpanded((v) => !v)}
+            style={{
+              width: "100%", background: "none", border: "none", cursor: "pointer",
+              padding: "10px 0", fontFamily: "inherit", fontSize: 11, color: muted, fontWeight: 600
+            }}
+          >
+            {newsExpanded ? "접기 ▲" : "더보기 ▼"}
+          </button>
+        </>
+      )}
+    </G>
+  );
+
+  const OfficialLinks = (
+    <G>
+      <SecHead title="Official Links" />
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 14, justifyContent: "center" }}>
+        {PLATFORMS.map((p) => (
+          <a
+            key={p.name}
+            href={"https://" + p.url}
+            target="_blank"
+            rel="noreferrer"
+            title={p.name}
+            style={{
+              width: 34, height: 34, borderRadius: "50%",
+              background: p.color, flexShrink: 0,
+              boxShadow: `0 4px 14px ${p.color}55`,
+              border: "1px solid rgba(255,255,255,0.15)",
+              transition: "transform 0.15s"
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px) scale(1.08)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0) scale(1)"; }}
+          />
         ))}
       </div>
     </G>
+  );
+
+  const Footer = (
+    <div style={{ textAlign: "center", padding: "10px 0 4px" }}>
+      <a href="mailto:nightskytheater@gmail.com" style={{ fontSize: 12, color: soft, textDecoration: "none" }}>
+        nightskytheater@gmail.com
+      </a>
+      <p style={{ fontSize: 10, color: muted, margin: "6px 0 0" }}>
+        © 2026 Night Sky Theater. All rights reserved.
+      </p>
+    </div>
   );
 
   if (isPC) {
     return (
-      
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,textAlign:"left",alignItems:"start"}}>
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>{PatchBadge}{TodayPick}{Top10}</div>
-        <div style={{display:"flex",flexDirection:"column",gap:14}}>{Notice}{SubSection}{Overseas}</div>
+      <div style={{ maxWidth: 640, margin: "0 auto", display: "flex", flexDirection: "column", gap: 14, textAlign: "left" }}>
+        {PatchBadge}
+        {ProfileHeader}
+        {ReleaseSchedule}
+        {News}
+        {OfficialLinks}
+        {Footer}
       </div>
-
     );
   }
-  return <div style={{display:"flex",flexDirection:"column",gap:10,textAlign:"left"}}>{PatchBadge}{TodayPick}{Notice}{Top10}{SubSection}{Overseas}</div>;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "left" }}>
+      {PatchBadge}
+      {ProfileHeader}
+      {ReleaseSchedule}
+      {News}
+      {OfficialLinks}
+      {Footer}
+    </div>
+  );
 }
 
 function AboutTab({ isPC }) {
@@ -1686,4 +1636,3 @@ useEffect(() => {
     </div>
   );
 }
-
