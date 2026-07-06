@@ -660,14 +660,15 @@ function TopTab({ tab, setTab }) {
 >
   <span
     style={{
-      width: 40,
-      height: 40,
+      width: 34,
+      height: 34,
       borderRadius: "50%",
       overflow: "hidden",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
       background: "rgba(255,255,255,0.08)",
+      border: "1px solid rgba(255,255,255,0.12)",
     }}
   >
     <img
@@ -861,67 +862,90 @@ function HomeTab({ onOpenPatch }) {
     </button>
   );
 
-  const ProfileHeader = (
-    <G
-      acc
+  const ArtistHeader = (
+    <section
       style={{
         textAlign: "center",
-        position: "relative",
-        overflow: "hidden",
-        padding: "30px 22px 24px"
+        padding: "28px 22px 24px",
+        background: "#070510",
+        borderBottom: "1px solid rgba(255,255,255,0.08)",
       }}
     >
+      <img
+        src={ALBUMS[ALBUMS.length - 1]?.cover || "https://yt3.googleusercontent.com/GcJswGDJvAePBqoBSXrr3J5UCFX-IW3zmjyioyEGsltfXr5nX63rB51QQWZXNV5sl0IclJK5=s160-c-k-c0x00ffffff-no-rj"}
+        alt="Night Sky Theater"
+        style={{
+          width: 156,
+          height: 156,
+          borderRadius: 18,
+          objectFit: "cover",
+          margin: "0 auto 18px",
+          display: "block",
+          border: "1px solid rgba(255,255,255,0.12)",
+          boxShadow: "0 18px 54px rgba(0,0,0,0.42)",
+        }}
+      />
+
+      <h1
+        style={{
+          margin: "0 0 18px",
+          fontSize: 28,
+          fontWeight: 900,
+          color: white,
+          lineHeight: 1.12,
+          letterSpacing: 0,
+        }}
+      >
+        {"\uBC24\uD558\uB298\uADF9\uC7A5"}
+      </h1>
+
       <div
         style={{
-          position: "absolute",
-          inset: 0,
-          background: "radial-gradient(circle at 50% 0%, rgba(184,255,0,.10), transparent 70%)",
-          pointerEvents: "none"
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: 8,
+          marginBottom: 18,
         }}
-      />
-
-      <img
-        src="https://yt3.googleusercontent.com/GcJswGDJvAePBqoBSXrr3J5UCFX-IW3zmjyioyEGsltfXr5nX63rB51QQWZXNV5sl0IclJK5=s160-c-k-c0x00ffffff-no-rj"
-        alt="밤하늘극장"
-        style={{
-          width: 84,
-          height: 84,
-          borderRadius: "50%",
-          objectFit: "cover",
-          margin: "0 auto 14px",
-          display: "block",
-          border: "1px solid rgba(184,255,0,.18)",
-          boxShadow: "0 0 40px rgba(184,255,0,.18), 0 0 80px rgba(91,79,245,.12)"
-        }}
-      />
-
-      <h2 style={{ fontSize: 24, fontWeight: 900, color: white, letterSpacing: "-0.03em", margin: "0 0 14px" }}>
-        밤하늘극장
-      </h2>
-
-      <div style={{ display: "flex", justifyContent: "center", gap: 22, flexWrap: "wrap", marginBottom: 16 }}>
+      >
         {[
-          { icon: "👥", val: formatCompact(currentSubs), label: "구독자" },
-          { icon: "👁", val: formatCompact(liveViews), label: "조회수" },
-          { icon: "💿", val: albumCount, label: "앨범" },
-          { icon: "🎵", val: trackCount, label: "곡" },
+          { icon: "\uD83D\uDC65", val: formatCompact(currentSubs), label: "Subscribers" },
+          { icon: "\uD83D\uDCBF", val: albumCount, label: "Albums" },
+          { icon: "\uD83C\uDFB5", val: trackCount, label: "Tracks" },
         ].map((s) => (
-          <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-            <p style={{ margin: 0, fontSize: 15, fontWeight: 800, color: white }}>
-              <span style={{ fontFamily: EMOJI_FONT, marginRight: 4 }}>{s.icon}</span>{s.val}
+          <div key={s.label} style={{ minWidth: 0 }}>
+            <p style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 900, color: white }}>
+              <span style={{ fontFamily: EMOJI_FONT, marginRight: 5 }}>{s.icon}</span>{s.val}
             </p>
-            <p style={{ margin: 0, fontSize: 9, color: muted, letterSpacing: "0.05em" }}>{s.label}</p>
+            <p style={{ margin: 0, fontSize: 10, color: "rgba(255,255,255,0.48)", fontWeight: 700 }}>
+              {s.label}
+            </p>
           </div>
         ))}
       </div>
 
-      <p style={{ fontSize: 12.5, color: soft, lineHeight: 1.8, margin: 0, maxWidth: 380, marginInline: "auto" }}>
-        사랑과 시간, 그리고 기억에 깃든 감정을 섬세하게 노래하는 가상 인디 밴드.
-        보컬 유우레이가 청춘과 삶의 순간들을 자신만의 시선으로 들려드립니다.
+      <p
+        style={{
+          margin: "0 auto",
+          maxWidth: 340,
+          fontSize: 13,
+          lineHeight: 1.8,
+          color: "rgba(255,255,255,0.72)",
+          wordBreak: "keep-all",
+        }}
+      >
+        {"\uC0AC\uB791\uACFC \uC2DC\uAC04, \uAE30\uC5B5\uC758 \uAC10\uC815\uC744 \uC12C\uC138\uD558\uAC8C \uB178\uB798\uD558\uB294 \uBC24\uD558\uB298\uADF9\uC7A5\uC740 \uCCAD\uCD98\uACFC \uB0AD\uB9CC\uC758 \uC7A5\uBA74\uC744 \uC790\uC2E0\uB9CC\uC758 \uC2DC\uC120\uC73C\uB85C \uADF8\uB824\uB0B4\uB294 \uBC34\uB4DC\uC785\uB2C8\uB2E4."}
       </p>
-    </G>
-  );
 
+      <div
+        style={{
+          height: 1,
+          width: "100%",
+          marginTop: 24,
+          background: "rgba(255,255,255,0.10)",
+        }}
+      />
+    </section>
+  );
   const ReleaseSchedule = (
     <G pad="0">
       <div style={{ padding: "18px 18px 10px" }}><SecHead title="📀 발매 일정" /></div>
@@ -1008,9 +1032,8 @@ function HomeTab({ onOpenPatch }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "left" }}>
-      <HeroBanner />
+      {ArtistHeader}
       <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "12px 14px 0" }}>
-        {PatchBadge}
         {ReleaseSchedule}
         {News}
         {OfficialLinks}
