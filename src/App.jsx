@@ -760,14 +760,13 @@ function HeroBanner({ currentSubs, albumCount, trackCount }) {
           bottom: 30,
         }}
       >
-        <G
-      acc
-      style={{
-        textAlign: "center",
-        position: "relative",
-        overflow: "hidden",
-        padding: "30px 22px 24px"
-      }}
+<div
+  style={{
+    textAlign: "center",
+    position: "relative",
+    overflow: "hidden",
+    padding: "30px 22px 24px"
+  }}
     >
       <h2 style={{ fontSize: 24, fontWeight: 900, color: white, letterSpacing: "-0.03em", margin: "0 0 14px" }}>
         밤하늘극장
@@ -792,7 +791,7 @@ function HeroBanner({ currentSubs, albumCount, trackCount }) {
         사랑과 시간, 그리고 기억에 깃든 감정을 섬세하게 노래하는 가상 인디 밴드.
         보컬 유우레이가 청춘과 삶의 순간들을 자신만의 시선으로 들려드립니다.
       </p>
-    </G>
+    </div>
       </div>
     </div>
   );
