@@ -153,6 +153,7 @@ const soft   = "rgba(220,210,255,0.70)";
 const white  = "#F2EEF9";
 const EMOJI_FONT = "'Twemoji Mozilla','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
 const MOBILE_SHELL_WIDTH = 430;
+const TOP_NAV_HEIGHT = 64;
 
 const ALBUMS = [
   {
@@ -604,14 +605,21 @@ function formatCompact(num) {
 }
 
 const NAV_ITEMS = [
-  {id:"홈",    svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>},
-  {id:"소개",  svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>},
-  {id:"음악",  svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>},
-  {id:"방명록",svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>},
+  {id:"\uD648",    svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>},
+  {id:"\uC74C\uC545",  svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>},
+  {id:"\uBC29\uBA85\uB85D",svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>},
 ];
 
 function TopTab({ tab, setTab }) {
-  const tabs = ["홈", "음악", "방명록"];
+  const tabs = NAV_ITEMS.map((item) => item.id);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div
@@ -622,57 +630,81 @@ function TopTab({ tab, setTab }) {
         transform: "translateX(-50%)",
         width: "100%",
         maxWidth: MOBILE_SHELL_WIDTH,
+        height: TOP_NAV_HEIGHT,
         zIndex: 1000,
-        background: "linear-gradient(to bottom, rgba(3,1,14,.70), rgba(3,1,14,0))",
-        backdropFilter: "none",
-        WebkitBackdropFilter: "none",
-        borderBottom: "none",
+        background: scrolled ? "rgba(3,1,14,0.72)" : "#070510",
+        backdropFilter: scrolled ? "blur(18px)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(18px)" : "none",
+        borderBottom: scrolled ? "1px solid rgba(255,255,255,.08)" : "1px solid rgba(184,255,0,.08)",
+        transition: "background .22s ease, backdrop-filter .22s ease, border-color .22s ease",
       }}
     >
       <div
         style={{
+          height: "100%",
           display: "flex",
-          justifyContent: "center",
-          gap: 40,
-          height: 58,
           alignItems: "center",
+          justifyContent: "space-between",
+          gap: 14,
+          padding: "0 18px",
         }}
       >
-        {tabs.map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: tab === t ? "#B8FF00" : "rgba(255,255,255,.55)",
-              fontSize: 15,
-              fontWeight: tab === t ? 800 : 500,
-              position: "relative",
-              padding: "0 4px",
-              fontFamily: "inherit",
-            }}
-          >
-            {t}
+        <button
+          onClick={() => setTab(NAV_ITEMS[0].id)}
+          style={{
+            minWidth: 0,
+            background: "none",
+            border: "none",
+            padding: 0,
+            cursor: "pointer",
+            color: "#fff",
+            fontFamily: "inherit",
+            fontSize: 15,
+            fontWeight: 900,
+            letterSpacing: 0,
+            whiteSpace: "nowrap",
+          }}
+        >
+          {"\uBC24\uD558\uB298\uADF9\uC7A5"}
+        </button>
 
-            {tab === t && (
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: -17,
-                  left: 0,
-                  right: 0,
-                  margin: "auto",
-                  width: 32,
-                  height: 3,
-                  borderRadius: 10,
-                  background: "#B8FF00",
-                }}
-              />
-            )}
-          </button>
-        ))}
+        <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
+          {tabs.map((t) => (
+            <button
+              key={t}
+              onClick={() => setTab(t)}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                color: tab === t ? ACCENT : "rgba(255,255,255,.62)",
+                fontSize: 12,
+                fontWeight: tab === t ? 800 : 600,
+                position: "relative",
+                padding: "22px 0 20px",
+                fontFamily: "inherit",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {t}
+              {tab === t && (
+                <span
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    bottom: 12,
+                    margin: "auto",
+                    width: "100%",
+                    height: 2,
+                    borderRadius: 10,
+                    background: ACCENT,
+                  }}
+                />
+              )}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -1678,7 +1710,7 @@ const q = query(
 
 // ── APP (메인 컴포넌트 단일 Export Default) ───────────────────
 export default function App() {
-  const [tab, setTab] = useState("홈");
+  const [tab, setTab] = useState(NAV_ITEMS[0].id);
 const [showPatch, setShowPatch] = useState(false);
 useEffect(() => {
   const seen = localStorage.getItem("patch_seen");
@@ -1722,18 +1754,18 @@ useEffect(() => {
     flex: 1,
     padding:
       tab === NAV_ITEMS[0].id
-        ? "0 0 140px"
-        : tab === NAV_ITEMS[3].id
-          ? "12px 14px 0"
-          : "12px 14px 140px",
+        ? `${TOP_NAV_HEIGHT}px 0 140px`
+        : tab === NAV_ITEMS[2].id
+          ? `${TOP_NAV_HEIGHT + 12}px 14px 0`
+          : `${TOP_NAV_HEIGHT + 12}px 14px 140px`,
     animation: "fin 0.3s ease both"
   }}
   key={tab}
 >
-          {tab === "홈" && <HomeTab onOpenPatch={() => setShowPatch(true)} />}
-          {tab === "소개" && <AboutTab />}
-          {tab === "음악" && <MusicTab />}
-          {tab === "방명록" && <GuestbookTab />}
+          {tab === NAV_ITEMS[0].id && <HomeTab onOpenPatch={() => setShowPatch(true)} />}
+          
+          {tab === NAV_ITEMS[1].id && <MusicTab />}
+          {tab === NAV_ITEMS[2].id && <GuestbookTab />}
         </div>
       </div>
     </div>
