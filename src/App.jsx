@@ -901,14 +901,13 @@ function HomeTab({ onOpenPatch }) {
 
       <div style={{ display: "flex", justifyContent: "center", gap: 22, flexWrap: "wrap", marginBottom: 16 }}>
         {[
-          { icon: "👥", val: formatCompact(currentSubs), label: "구독자" },
-          { icon: "👁", val: formatCompact(liveViews), label: "조회수" },
-          { icon: "💿", val: albumCount, label: "앨범" },
-          { icon: "🎵", val: trackCount, label: "곡" },
+          { val: formatCompact(currentSubs), label: "구독자" },
+          { val: albumCount, label: "앨범" },
+          { val: trackCount, label: "곡" },
         ].map((s) => (
           <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
             <p style={{ margin: 0, fontSize: 15, fontWeight: 800, color: white }}>
-              <span style={{ fontFamily: EMOJI_FONT, marginRight: 4 }}>{s.icon}</span>{s.val}
+              {s.val}
             </p>
             <p style={{ margin: 0, fontSize: 9, color: muted, letterSpacing: "0.05em" }}>{s.label}</p>
           </div>
@@ -1009,6 +1008,7 @@ function HomeTab({ onOpenPatch }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "left" }}>
       <HeroBanner />
+      {ProfileHeader}
       <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "12px 14px 0" }}>
         {PatchBadge}
         {ReleaseSchedule}
