@@ -696,7 +696,7 @@ function TopTab({ tab, setTab }) {
                 fontSize: 14,
                 fontWeight: tab === t ? 800 : 600,
                 position: "relative",
-                padding: "22px 0 20px",
+                padding: "22px 10px 20px",
                 fontFamily: "inherit",
                 whiteSpace: "nowrap",
               }}
