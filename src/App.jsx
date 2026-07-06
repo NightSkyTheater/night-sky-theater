@@ -745,7 +745,7 @@ function HeroBanner({ currentSubs, albumCount, trackCount }) {
           bottom: 30,
         }}
       >
-        <G
+        <div
       acc
       style={{
         textAlign: "center",
@@ -777,7 +777,7 @@ function HeroBanner({ currentSubs, albumCount, trackCount }) {
         사랑과 시간, 그리고 기억에 깃든 감정을 섬세하게 노래하는 가상 인디 밴드.
         보컬 유우레이가 청춘과 삶의 순간들을 자신만의 시선으로 들려드립니다.
       </p>
-    </G>
+    </div>
       </div>
     </div>
   );
