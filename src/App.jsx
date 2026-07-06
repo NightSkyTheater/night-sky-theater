@@ -609,6 +609,70 @@ const NAV_ITEMS = [
   {id:"방명록",svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>},
 ];
 
+function TopTab({ tab, setTab }) {
+  const tabs = ["홈", "음악", "방명록"];
+
+  return (
+    <div
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 1000,
+        background: "rgba(8,8,18,.85)",
+        backdropFilter: "blur(18px)",
+        WebkitBackdropFilter: "blur(18px)",
+        borderBottom: "1px solid rgba(255,255,255,.08)",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: 40,
+          height: 58,
+          alignItems: "center",
+        }}
+      >
+        {tabs.map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: tab === t ? "#B8FF00" : "rgba(255,255,255,.55)",
+              fontSize: 15,
+              fontWeight: tab === t ? 800 : 500,
+              position: "relative",
+              padding: "0 4px",
+              fontFamily: "inherit",
+            }}
+          >
+            {t}
+
+            {tab === t && (
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: -17,
+                  left: 0,
+                  right: 0,
+                  margin: "auto",
+                  width: 32,
+                  height: 3,
+                  borderRadius: 10,
+                  background: "#B8FF00",
+                }}
+              />
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function BottomNav({tab,setTab}) {
   return (
     <div style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:900,zIndex:200,background:"rgba(3,1,14,0.97)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",borderTop:`1px solid rgba(184,255,0,0.1)`,display:"flex"}}>
@@ -1613,7 +1677,12 @@ useEffect(() => {
         strong { font-weight:800 }
       `}</style>
       <Stars />
+      
       {showPatch && <PatchModal onClose={() => setShowPatch(false)} />}
+        <TopTab
+    tab={tab}
+    setTab={setTab}
+/>
       <div style={{ position: "relative", zIndex: 1, maxWidth: isPC ? 900 : 430, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <div
   style={{
@@ -1631,7 +1700,6 @@ useEffect(() => {
           {tab === "음악" && <MusicTab isPC={isPC} />}
           {tab === "방명록" && <GuestbookTab />}
         </div>
-        <BottomNav tab={tab} setTab={setTab} />
       </div>
     </div>
   );
