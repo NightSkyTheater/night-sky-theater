@@ -568,21 +568,6 @@ function Stars() {
   );
 }
 
-const G = ({children,acc,pad="20px 18px 16px",style={}}) => (
-  <div
-  style={{
-    background: acc ? "rgba(184,255,0,0.07)" : glass,
-    backdropFilter: "blur(24px)",
-    WebkitBackdropFilter: "blur(24px)",
-    border: `1px solid ${acc ? "rgba(184,255,0,0.2)" : gb}`,
-    borderRadius: 16,
-    padding: pad,
-    ...style
-  }}
->
-    {children}
-  </div>
-);
 
 const Hr = ({my=0}) => <div style={{height:1,background:gb,margin:`${my}px 0`}}/>;
 
