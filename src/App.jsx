@@ -760,66 +760,39 @@ function HeroBanner({ currentSubs, albumCount, trackCount }) {
           bottom: 30,
         }}
       >
-        <h1
-  style={{
-    margin: 0,
-    fontSize: 34,
-    fontWeight: 900,
-    color: "#fff",
-  }}
->
-  밤하늘극장
-</h1>
+        <G
+      acc
+      style={{
+        textAlign: "center",
+        position: "relative",
+        overflow: "hidden",
+        padding: "30px 22px 24px"
+      }}
+    >
+      <h2 style={{ fontSize: 24, fontWeight: 900, color: white, letterSpacing: "-0.03em", margin: "0 0 14px" }}>
+        밤하늘극장
+      </h2>
 
-<div
-  style={{
-    display: "flex",
-    gap: 34,
-    marginTop: 14,
-    marginBottom: 14,
-  }}
->
-  <div style={{ textAlign: "center" }}>
-    <div style={{ color: "#fff", fontSize: 18, fontWeight: 800 }}>
-      {formatCompact(currentSubs)}
-    </div>
-    <div style={{ fontSize: 11, color: "rgba(255,255,255,.7)" }}>
-      구독자
-    </div>
-  </div>
+      <div style={{ display: "flex", justifyContent: "center", gap: 22, flexWrap: "wrap", marginBottom: 16 }}>
+        {[
+          { val: formatCompact(currentSubs), label: "구독자" },
+          { val: albumCount, label: "앨범" },
+          { val: trackCount, label: "곡" },
+        ].map((s) => (
+          <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+            <p style={{ margin: 0, fontSize: 15, fontWeight: 800, color: white }}>
+              {s.val}
+            </p>
+            <p style={{ margin: 0, fontSize: 9, color: muted, letterSpacing: "0.05em" }}>{s.label}</p>
+          </div>
+        ))}
+      </div>
 
-  <div style={{ textAlign: "center" }}>
-    <div style={{ color: "#fff", fontSize: 18, fontWeight: 800 }}>
-      {albumCount}
-    </div>
-    <div style={{ fontSize: 11, color: "rgba(255,255,255,.7)" }}>
-      앨범
-    </div>
-  </div>
-
-  <div style={{ textAlign: "center" }}>
-    <div style={{ color: "#fff", fontSize: 18, fontWeight: 800 }}>
-      {trackCount}
-    </div>
-    <div style={{ fontSize: 11, color: "rgba(255,255,255,.7)" }}>
-      곡
-    </div>
-  </div>
-</div>
-
-<p
-  style={{
-    margin: 0,
-    fontSize: 13,
-    lineHeight: 1.6,
-    color: "rgba(255,255,255,.82)",
-    maxWidth: 340,
-  }}
->
-  사랑과 시간, 그리고 기억에 깃든 감정을 섬세하게 노래하는 인디 밴드.
-  <br />
-  보컬 유우레이가 청춘과 삶의 순간들을 자신만의 시선으로 들려드립니다.
-</p>
+      <p style={{ fontSize: 12.5, color: soft, lineHeight: 1.8, margin: 0, maxWidth: 380, marginInline: "auto" }}>
+        사랑과 시간, 그리고 기억에 깃든 감정을 섬세하게 노래하는 가상 인디 밴드.
+        보컬 유우레이가 청춘과 삶의 순간들을 자신만의 시선으로 들려드립니다.
+      </p>
+    </G>
       </div>
     </div>
   );
@@ -901,65 +874,7 @@ function HomeTab({ onOpenPatch }) {
     </button>
   );
 
-  const ProfileHeader = (
-    <G
-      acc
-      style={{
-        textAlign: "center",
-        position: "relative",
-        overflow: "hidden",
-        padding: "30px 22px 24px"
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: "radial-gradient(circle at 50% 0%, rgba(184,255,0,.10), transparent 70%)",
-          pointerEvents: "none"
-        }}
-      />
-
-      <img
-        src="https://yt3.googleusercontent.com/GcJswGDJvAePBqoBSXrr3J5UCFX-IW3zmjyioyEGsltfXr5nX63rB51QQWZXNV5sl0IclJK5=s160-c-k-c0x00ffffff-no-rj"
-        alt="밤하늘극장"
-        style={{
-          width: 84,
-          height: 84,
-          borderRadius: "50%",
-          objectFit: "cover",
-          margin: "0 auto 14px",
-          display: "block",
-          border: "1px solid rgba(184,255,0,.18)",
-          boxShadow: "0 0 40px rgba(184,255,0,.18), 0 0 80px rgba(91,79,245,.12)"
-        }}
-      />
-
-      <h2 style={{ fontSize: 24, fontWeight: 900, color: white, letterSpacing: "-0.03em", margin: "0 0 14px" }}>
-        밤하늘극장
-      </h2>
-
-      <div style={{ display: "flex", justifyContent: "center", gap: 22, flexWrap: "wrap", marginBottom: 16 }}>
-        {[
-          { val: formatCompact(currentSubs), label: "구독자" },
-          { val: albumCount, label: "앨범" },
-          { val: trackCount, label: "곡" },
-        ].map((s) => (
-          <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-            <p style={{ margin: 0, fontSize: 15, fontWeight: 800, color: white }}>
-              {s.val}
-            </p>
-            <p style={{ margin: 0, fontSize: 9, color: muted, letterSpacing: "0.05em" }}>{s.label}</p>
-          </div>
-        ))}
-      </div>
-
-      <p style={{ fontSize: 12.5, color: soft, lineHeight: 1.8, margin: 0, maxWidth: 380, marginInline: "auto" }}>
-        사랑과 시간, 그리고 기억에 깃든 감정을 섬세하게 노래하는 가상 인디 밴드.
-        보컬 유우레이가 청춘과 삶의 순간들을 자신만의 시선으로 들려드립니다.
-      </p>
-    </G>
-  );
+ 
 
   const ReleaseSchedule = (
     <G pad="0">
@@ -1052,7 +967,6 @@ function HomeTab({ onOpenPatch }) {
   albumCount={albumCount}
   trackCount={trackCount}
 />
-      {ProfileHeader}
       <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "12px 14px 0" }}>
         {PatchBadge}
         {ReleaseSchedule}
