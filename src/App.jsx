@@ -672,7 +672,65 @@ function TopTab({ tab, setTab }) {
     </div>
   );
 }
+function HeroBanner() {
+  return (
+    <div
+      style={{
+        position: "relative",
+        height: 300,
+        overflow: "hidden",
+      }}
+    >
+      <img
+        src="https://yt3.googleusercontent.com/GcJswGDJvAePBqoBSXrr3J5UCFX-IW3zmjyioyEGsltfXr5nX63rB51QQWZXNV5sl0IclJK5=s1600"
+        alt=""
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+        }}
+      />
 
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,.15), rgba(3,1,14,.96))",
+        }}
+      />
+
+      <div
+        style={{
+          position: "absolute",
+          left: 24,
+          bottom: 30,
+        }}
+      >
+        <h1
+          style={{
+            margin: 0,
+            fontSize: 34,
+            fontWeight: 900,
+            color: "#fff",
+          }}
+        >
+          밤하늘극장
+        </h1>
+
+        <p
+          style={{
+            marginTop: 8,
+            color: "rgba(255,255,255,.75)",
+            fontSize: 13,
+          }}
+        >
+          Night Sky Theater
+        </p>
+      </div>
+    </div>
+  );
+}
 function BottomNav({tab,setTab}) {
   return (
     <div style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:900,zIndex:200,background:"rgba(3,1,14,0.97)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",borderTop:`1px solid rgba(184,255,0,0.1)`,display:"flex"}}>
@@ -1683,6 +1741,8 @@ useEffect(() => {
     tab={tab}
     setTab={setTab}
 />
+
+<HeroBanner />
       <div style={{ position: "relative", zIndex: 1, maxWidth: isPC ? 900 : 430, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <div
   style={{
