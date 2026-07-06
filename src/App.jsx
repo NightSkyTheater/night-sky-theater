@@ -956,24 +956,26 @@ function HomeTab({isPC, onOpenPatch}) {
   if (isPC) {
     return (
       <div style={{ maxWidth: 640, margin: "0 auto", display: "flex", flexDirection: "column", gap: 14, textAlign: "left" }}>
-        {PatchBadge}
-        {ProfileHeader}
-        {ReleaseSchedule}
-        {News}
-        {OfficialLinks}
-        {Footer}
-      </div>
+  <HeroBanner />
+
+  {PatchBadge}
+  {ReleaseSchedule}
+  {News}
+  {OfficialLinks}
+  {Footer}
+</div>
     );
   }
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "left" }}>
-      {PatchBadge}
-      {ProfileHeader}
-      {ReleaseSchedule}
-      {News}
-      {OfficialLinks}
-      {Footer}
-    </div>
+  <HeroBanner />
+
+  {PatchBadge}
+  {ReleaseSchedule}
+  {News}
+  {OfficialLinks}
+  {Footer}
+</div>
   );
 }
 
@@ -1742,7 +1744,6 @@ useEffect(() => {
     setTab={setTab}
 />
 
-<HeroBanner />
       <div style={{ position: "relative", zIndex: 1, maxWidth: isPC ? 900 : 430, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <div
   style={{
