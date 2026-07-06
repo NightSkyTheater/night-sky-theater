@@ -615,15 +615,13 @@ function TopTab({ tab, setTab }) {
   return (
     <div
       style={{
-        position: "fixed",
+        position: "sticky",
         top: 0,
-        left: 0,
-        right: 0,
         zIndex: 1000,
-        background: "linear-gradient(to bottom, rgba(3,1,14,.70), rgba(3,1,14,0))",
-        backdropFilter: "none",
-        WebkitBackdropFilter: "none",
-        borderBottom: "none",
+        background: "rgba(8,8,18,.85)",
+        backdropFilter: "blur(18px)",
+        WebkitBackdropFilter: "blur(18px)",
+        borderBottom: "1px solid rgba(255,255,255,.08)",
       }}
     >
       <div
@@ -679,7 +677,7 @@ function HeroBanner() {
     <div
       style={{
         position: "relative",
-        height: 360,
+        height: 300,
         overflow: "hidden",
       }}
     >
@@ -706,7 +704,6 @@ function HeroBanner() {
         style={{
           position: "absolute",
           left: 24,
-          right: 24,
           bottom: 30,
         }}
       >
@@ -736,7 +733,7 @@ function HeroBanner() {
 }
 function BottomNav({tab,setTab}) {
   return (
-    <div style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",zIndex:200,background:"rgba(3,1,14,0.97)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",borderTop:`1px solid rgba(184,255,0,0.1)`,display:"flex"}}>
+    <div style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:900,zIndex:200,background:"rgba(3,1,14,0.97)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",borderTop:`1px solid rgba(184,255,0,0.1)`,display:"flex"}}>
       {NAV_ITEMS.map(it=>(
         <button key={it.id} onClick={()=>setTab(it.id)} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:3,padding:"9px 0 7px",background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",color:tab===it.id?LIME:muted,transition:"color 0.2s",position:"relative"}}>
           {tab===it.id&&<div style={{position:"absolute",top:0,left:"50%",transform:"translateX(-50%)",width:22,height:2,background:ACCENT,borderRadius:2}}/>}
@@ -748,7 +745,7 @@ function BottomNav({tab,setTab}) {
   );
 }
 
-function HomeTab({ onOpenPatch }) {
+function HomeTab({isPC, onOpenPatch}) {
   const [liveSubs, setLiveSubs] = useState(null);
   const [liveViews, setLiveViews] = useState(null);
   const [newsExpanded, setNewsExpanded] = useState(false);
@@ -956,21 +953,33 @@ function HomeTab({ onOpenPatch }) {
     </div>
   );
 
+  if (isPC) {
+    return (
+      <div style={{ maxWidth: 640, margin: "0 auto", display: "flex", flexDirection: "column", gap: 14, textAlign: "left" }}>
+  <HeroBanner />
+
+  {PatchBadge}
+  {ReleaseSchedule}
+  {News}
+  {OfficialLinks}
+  {Footer}
+</div>
+    );
+  }
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "left" }}>
-      <HeroBanner />
-      <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "12px 14px 0" }}>
-        {PatchBadge}
-        {ReleaseSchedule}
-        {News}
-        {OfficialLinks}
-        {Footer}
-      </div>
-    </div>
+  <HeroBanner />
+
+  {PatchBadge}
+  {ReleaseSchedule}
+  {News}
+  {OfficialLinks}
+  {Footer}
+</div>
   );
 }
 
-function AboutTab() {
+function AboutTab({ isPC }) {
   const Hero = (
     <G
       style={{
@@ -1138,7 +1147,7 @@ function AboutTab() {
         style={{
           marginTop: 12,
           display: "grid",
-          gridTemplateColumns: "1fr",
+          gridTemplateColumns: isPC ? "1fr 1fr" : "1fr",
           gap: 10
         }}
       >
@@ -1226,7 +1235,7 @@ function AboutTab() {
         display: "flex",
         flexDirection: "column",
         gap: 14,
-        maxWidth: "100%",
+        maxWidth: isPC ? 760 : "100%",
         margin: "0 auto"
       }}
     >
@@ -1236,14 +1245,14 @@ function AboutTab() {
   );
 }
 
-function MusicTab() {
+function MusicTab({isPC}) {
   const [selected,setSelected]=useState(null);
   const [trackIdx,setTrackIdx]=useState(0);
 
   if (selected !== null) {
     const alb=ALBUMS[selected], tr=alb.tracks[trackIdx];
     return (
-      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+      <div style={{maxWidth:isPC?900:undefined,margin:isPC?"0 auto":undefined,display:"flex",flexDirection:"column",gap:10}}>
         <button onClick={()=>{setSelected(null);setTrackIdx(0);}} style={{display:"flex",alignItems:"center",gap:6,background:"none",border:"none",cursor:"pointer",color:ACCENT,fontSize:13,fontFamily:"inherit",padding:0,marginBottom:4}}>← 음반 목록</button>
         <G acc>
           <div style={{textAlign:"center"}}>
@@ -1288,15 +1297,15 @@ function MusicTab() {
     );
   }
 
-  const cols = "1fr 1fr";
+  const cols = isPC ? "1fr 1fr 1fr" : "1fr 1fr";
   return (
     <div>
       <div style={{marginBottom:16}}><SecHead title="디스코그래피" sub={`총 ${ALBUMS.length}개 앨범`}/></div>
-      <div style={{display:"grid",gridTemplateColumns:cols,gap:12}}>
+      <div style={{display:"grid",gridTemplateColumns:cols,gap:isPC?16:12}}>
         {[...ALBUMS].reverse().map((a,i)=>(
           <button key={a.id} onClick={()=>{setSelected(ALBUMS.length-1-i);setTrackIdx(0);}} style={{background:"none",border:"none",cursor:"pointer",padding:0,textAlign:"left",fontFamily:"inherit",width:"100%",minWidth:0}}>
             <div
-              style={{width:"100%",aspectRatio:"1/1",borderRadius:14,backgroundImage:`url(${a.cover})`,backgroundColor:a.color,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat",border:"1px solid rgba(255,255,255,0.08)",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.25s ease",overflow:"hidden",position:"relative",boxShadow:`0 10px 35px ${a.color}33`}}
+              style={{width:"100%",aspectRatio:"1/1",borderRadius:isPC?16:14,backgroundImage:`url(${a.cover})`,backgroundColor:a.color,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat",border:"1px solid rgba(255,255,255,0.08)",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.25s ease",overflow:"hidden",position:"relative",boxShadow:`0 10px 35px ${a.color}33`}}
               onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(184,255,0,0.35)";e.currentTarget.style.transform="translateY(-4px) scale(1.02)";e.currentTarget.style.boxShadow=`0 18px 45px ${a.color}55`;}}
               onMouseLeave={e => {
                 e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
@@ -1304,7 +1313,7 @@ function MusicTab() {
                 e.currentTarget.style.boxShadow = `0 10px 35px ${a.color}33`;
               }}
             />
-            <p style={{fontSize:12,fontWeight:700,color:white,margin:"0 0 2px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",lineHeight:1.3}}>{a.title}</p>
+            <p style={{fontSize:isPC?13:12,fontWeight:700,color:white,margin:"0 0 2px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",lineHeight:1.3}}>{a.title}</p>
             <p style={{fontSize:10,color:muted,margin:0}}>{a.tracks.length}곡</p>
           </button>
         ))}
@@ -1334,10 +1343,21 @@ function GuestbookTab() {
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const cols = 1;
+  const [cols, setCols] = useState(3);
 
   useEffect(() => {
-const q = query(
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setCols(1);
+      } else {
+        setCols(3);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    const q = query(
       collection(db, "guestbook"),
       orderBy("createdAt", "desc")
     );
@@ -1351,7 +1371,7 @@ const q = query(
     });
 
     return () => {
-
+      window.removeEventListener("resize", handleResize);
       unsub();
     };
   }, []);
@@ -1676,6 +1696,7 @@ const q = query(
 // ── APP (메인 컴포넌트 단일 Export Default) ───────────────────
 export default function App() {
   const [tab, setTab] = useState("홈");
+  const [isPC, setIsPC] = useState(false);
 const [showPatch, setShowPatch] = useState(false);
 useEffect(() => {
   const seen = localStorage.getItem("patch_seen");
@@ -1683,6 +1704,16 @@ useEffect(() => {
   if (seen !== PATCH_VERSION) setShowPatch(true);
 }, []);
 
+  useEffect(() => {
+    const fn = () => {
+      setIsPC(window.innerWidth >= 768);
+    };
+
+    fn(); // 최초 실행
+
+    window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
+  }, []);
 
   useEffect(() => {
     if (document.querySelector('script[src*="chart.umd.js"]')) return;
@@ -1713,23 +1744,21 @@ useEffect(() => {
     setTab={setTab}
 />
 
-      <div style={{ position: "relative", zIndex: 1, width: "100%", margin: 0, display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <div style={{ position: "relative", zIndex: 1, maxWidth: isPC ? 900 : 430, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <div
   style={{
     flex: 1,
     padding:
-      tab === NAV_ITEMS[0].id
-        ? "0 0 140px"
-        : tab === NAV_ITEMS[3].id
-          ? "12px 14px 0"
-          : "12px 14px 140px",
+      tab === "방명록"
+        ? (isPC ? "20px 24px 0" : "12px 14px 0")
+        : (isPC ? "20px 24px 90px" : "12px 14px 140px"),
     animation: "fin 0.3s ease both"
   }}
   key={tab}
 >
-          {tab === "홈" && <HomeTab onOpenPatch={() => setShowPatch(true)} />}
-          {tab === "소개" && <AboutTab />}
-          {tab === "음악" && <MusicTab />}
+          {tab === "홈" && <HomeTab isPC={isPC} onOpenPatch={() => setShowPatch(true)} />}
+          {tab === "소개" && <AboutTab isPC={isPC} />}
+          {tab === "음악" && <MusicTab isPC={isPC} />}
           {tab === "방명록" && <GuestbookTab />}
         </div>
       </div>
