@@ -771,22 +771,6 @@ function HeroBanner({ currentSubs, albumCount, trackCount }) {
       <h2 style={{ fontSize: 24, fontWeight: 900, color: white, letterSpacing: "-0.03em", margin: "0 0 14px" }}>
         밤하늘극장
       </h2>
-
-      <div style={{ display: "flex", justifyContent: "center", gap: 22, flexWrap: "wrap", marginBottom: 16 }}>
-        {[
-          { val: formatCompact(currentSubs), label: "구독자" },
-          { val: albumCount, label: "앨범" },
-          { val: trackCount, label: "곡" },
-        ].map((s) => (
-          <div key={s.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-            <p style={{ margin: 0, fontSize: 15, fontWeight: 800, color: white }}>
-              {s.val}
-            </p>
-            <p style={{ margin: 0, fontSize: 9, color: muted, letterSpacing: "0.05em" }}>{s.label}</p>
-          </div>
-        ))}
-      </div>
-
       <p style={{ fontSize: 12.5, color: soft, lineHeight: 1.8, margin: 0, maxWidth: 380, marginInline: "auto" }}>
         밤하늘극장은 사랑과 시간, 그리고 기억에 깃든 감정을<br /> 섬세하게 노래하는 <strong>버츄얼 인디 밴드</strong>입니다.
       </p>
