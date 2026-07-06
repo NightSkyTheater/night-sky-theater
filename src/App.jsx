@@ -568,6 +568,21 @@ function Stars() {
   );
 }
 
+const G = ({children,acc,pad="20px 18px 16px",style={}}) => (
+  <div
+  style={{
+    background: acc ? "rgba(184,255,0,0.07)" : glass,
+    backdropFilter: "blur(24px)",
+    WebkitBackdropFilter: "blur(24px)",
+    border: `1px solid ${acc ? "rgba(184,255,0,0.2)" : gb}`,
+    borderRadius: 16,
+    padding: pad,
+    ...style
+  }}
+>
+    {children}
+  </div>
+);
 
 const Hr = ({my=0}) => <div style={{height:1,background:gb,margin:`${my}px 0`}}/>;
 
@@ -745,7 +760,7 @@ function HeroBanner({ currentSubs, albumCount, trackCount }) {
           bottom: 30,
         }}
       >
-        <div
+        <G
       acc
       style={{
         textAlign: "center",
@@ -777,7 +792,7 @@ function HeroBanner({ currentSubs, albumCount, trackCount }) {
         사랑과 시간, 그리고 기억에 깃든 감정을 섬세하게 노래하는 가상 인디 밴드.
         보컬 유우레이가 청춘과 삶의 순간들을 자신만의 시선으로 들려드립니다.
       </p>
-    </div>
+    </G>
       </div>
     </div>
   );
