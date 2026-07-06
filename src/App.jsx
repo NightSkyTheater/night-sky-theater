@@ -872,7 +872,7 @@ function HomeTab({ onOpenPatch }) {
       }}
     >
       <img
-        src={ALBUMS[ALBUMS.length - 1]?.cover || "https://yt3.googleusercontent.com/GcJswGDJvAePBqoBSXrr3J5UCFX-IW3zmjyioyEGsltfXr5nX63rB51QQWZXNV5sl0IclJK5=s160-c-k-c0x00ffffff-no-rj"}
+        src="https://down.mixtape.so/NAS/img/b/d/d/c/bddc807264d156fa82fd1a98208a4856.png"
         alt="Night Sky Theater"
         style={{
           width: 156,
@@ -908,13 +908,13 @@ function HomeTab({ onOpenPatch }) {
         }}
       >
         {[
-          { icon: "\uD83D\uDC65", val: formatCompact(currentSubs), label: "Subscribers" },
-          { icon: "\uD83D\uDCBF", val: albumCount, label: "Albums" },
-          { icon: "\uD83C\uDFB5", val: trackCount, label: "Tracks" },
+          { val: formatCompact(currentSubs), label: "\uAD6C\uB3C5\uC790" },
+          { val: albumCount, label: "\uC568\uBC94" },
+          { val: trackCount, label: "\uACE1" },
         ].map((s) => (
           <div key={s.label} style={{ minWidth: 0 }}>
             <p style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 900, color: white }}>
-              <span style={{ fontFamily: EMOJI_FONT, marginRight: 5 }}>{s.icon}</span>{s.val}
+              {s.val}
             </p>
             <p style={{ margin: 0, fontSize: 10, color: "rgba(255,255,255,0.48)", fontWeight: 700 }}>
               {s.label}
