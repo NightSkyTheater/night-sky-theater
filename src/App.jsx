@@ -682,7 +682,7 @@ function HeroBanner() {
       }}
     >
       <img
-        src="https://down.mixtape.so/NAS/img/b/d/d/c/bddc807264d156fa82fd1a98208a4856.png=s1600"
+        src="https://down.mixtape.so/NAS/img/b/d/d/c/bddc807264d156fa82fd1a98208a4856.png"
         alt=""
         style={{
           width: "100%",
