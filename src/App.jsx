@@ -724,7 +724,7 @@ function TopTab({ tab, setTab }) {
     </div>
   );
 }
-function HeroBanner() {
+function HeroBanner({ currentSubs, albumCount, trackCount }) {
   return (
     <div
       style={{
@@ -761,25 +761,65 @@ function HeroBanner() {
         }}
       >
         <h1
-          style={{
-            margin: 0,
-            fontSize: 34,
-            fontWeight: 900,
-            color: "#fff",
-          }}
-        >
-          밤하늘극장
-        </h1>
+  style={{
+    margin: 0,
+    fontSize: 34,
+    fontWeight: 900,
+    color: "#fff",
+  }}
+>
+  밤하늘극장
+</h1>
 
-        <p
-          style={{
-            marginTop: 8,
-            color: "rgba(255,255,255,.75)",
-            fontSize: 13,
-          }}
-        >
-          Night Sky Theater
-        </p>
+<div
+  style={{
+    display: "flex",
+    gap: 34,
+    marginTop: 14,
+    marginBottom: 14,
+  }}
+>
+  <div style={{ textAlign: "center" }}>
+    <div style={{ color: "#fff", fontSize: 18, fontWeight: 800 }}>
+      {formatCompact(currentSubs)}
+    </div>
+    <div style={{ fontSize: 11, color: "rgba(255,255,255,.7)" }}>
+      구독자
+    </div>
+  </div>
+
+  <div style={{ textAlign: "center" }}>
+    <div style={{ color: "#fff", fontSize: 18, fontWeight: 800 }}>
+      {albumCount}
+    </div>
+    <div style={{ fontSize: 11, color: "rgba(255,255,255,.7)" }}>
+      앨범
+    </div>
+  </div>
+
+  <div style={{ textAlign: "center" }}>
+    <div style={{ color: "#fff", fontSize: 18, fontWeight: 800 }}>
+      {trackCount}
+    </div>
+    <div style={{ fontSize: 11, color: "rgba(255,255,255,.7)" }}>
+      곡
+    </div>
+  </div>
+</div>
+
+<p
+  style={{
+    margin: 0,
+    fontSize: 13,
+    lineHeight: 1.6,
+    color: "rgba(255,255,255,.82)",
+    maxWidth: 340,
+  }}
+>
+  사랑과 시간, 그리고 기억에 깃든 감정을 섬세하게 노래하는 인디 밴드.
+  <br />
+  보컬 유우레이가 청춘과 삶의 순간들을 자신만의 시선으로 들려드립니다.
+</p>
       </div>
     </div>
   );
@@ -1007,7 +1047,11 @@ function HomeTab({ onOpenPatch }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "left" }}>
-      <HeroBanner />
+      <HeroBanner
+  currentSubs={currentSubs}
+  albumCount={albumCount}
+  trackCount={trackCount}
+/>
       {ProfileHeader}
       <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "12px 14px 0" }}>
         {PatchBadge}
