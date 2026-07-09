@@ -420,11 +420,13 @@ const RELEASE_SCHEDULE = [
   { tag:"정규", tagC:"#ff8b94", date:"06.26", title:"'청춘과 죽음과 낭만에 대하여' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"06.30", title:"'星の世界 (별의 세계)' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"07.03", title:"'아마 모르겠지' 발매" },
-  { tag:"예정", tagC:"#ffcc44", date:"07.14", title:"'바다와 어른, 소년의 노래' 발매예정" },
+  { tag:"예정", tagC:"#ffcc44", date:"07.14", title:"'바다와 어른, 소년의 노래' 발매" },
 ];
 
 const NEWS_ITEMS = [
-  { date:"06.27", title:"유튜브 구독자 700명 돌파" },
+  { date:"04.03", title:"'겨울의 대삼각형' 제주도교육청 교육자료 수록" },
+  { date:"06.11", title:"밤하늘극장 공식 팬페이지 오픈" },
+  { date:"06.28", title:"오마이걸 효정님의 추천곡으로 KBS Cool FM '볼륨을 높여요' 소개" },
 ];
 
 function Stars() {
@@ -737,7 +739,7 @@ function HomeTab() {
 
   const ReleaseSchedule = (
     <HomeCard>
-      <div style={{ padding: "18px 18px 12px" }}><SecHead title="📀 발매 일정" /></div>
+      <div style={{ padding: "18px 18px 12px" }}><SecHead title="발매일정" /></div>
       <HomeHr />
       {RELEASE_SCHEDULE.map((n, i, arr) => (
         <div key={n.title + n.date}>
@@ -754,7 +756,7 @@ function HomeTab() {
 
   const News = (
     <HomeCard>
-      <div style={{ padding: "18px 18px 12px" }}><SecHead title="📢 NEWS" /></div>
+      <div style={{ padding: "18px 18px 12px" }}><SecHead title="공지사항" /></div>
       <HomeHr />
       {visibleNews.map((n, i, arr) => (
         <div key={n.title + n.date}>
@@ -784,8 +786,8 @@ function HomeTab() {
 
   const OfficialLinks = (
     <HomeCard pad="20px 18px 16px">
-  <SecHead title="Streaming & Social"/>
-
+  <SecHead title="Link"/>
+<HomeHr />
   <div
     style={{
       marginTop: 12,
