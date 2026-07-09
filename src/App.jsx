@@ -830,9 +830,9 @@ function HomeTab() {
   );
 
   const OfficialLinks = (
-    <HomeCard pad="20px 18px 16px">
-  <SecHead title="Link"/>
-<HomeHr />
+   <HomeCard>
+      <div style={{ padding: "18px 18px 12px" }}><SecHead title="Links" /></div>
+      <HomeHr />
   <div
     style={{
       marginTop: 12,
