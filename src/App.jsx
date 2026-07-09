@@ -12,6 +12,138 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 
+
+
+function PatchModal({ onClose, saveOnClose = true }) {
+  return (
+    <div
+      style={{
+        position: "fixed", inset: 0,
+        background: "rgba(0,0,0,0.6)",
+        backdropFilter: "blur(14px)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        zIndex: 9999, padding: 20
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          width: "100%", maxWidth: 420,
+          background: "rgba(20,16,40,0.95)",
+          border: "1px solid rgba(184,255,0,0.15)",
+          borderRadius: 18, padding: 22,
+          color: "#fff",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+          maxHeight: "80vh", overflowY: "auto"
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* 헤더 */}
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: 30 }}>
+          <div>
+            <p style={{ fontSize: 10, color: "#B8FF00", letterSpacing: "0.15em", margin: "0 0 4px", fontWeight: 700 }}>
+              PATCH NOTE
+            </p>
+            <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>업데이트 히스토리</h3>
+          </div>
+        </div>
+
+        {/* 타임라인 */}
+        <div style={{ position: "relative", paddingLeft: 20 }}>
+          {/* 세로선 */}
+          <div style={{
+            position: "absolute", left: 6, top: 8, bottom: 8,
+            width: 1, background: "rgba(184,255,0,0.15)"
+          }} />
+
+          {PATCH_HISTORY.map((patch, i) => (
+            <div key={patch.version} style={{ position: "relative", marginBottom: i < PATCH_HISTORY.length - 1 ? 22 : 0 }}>
+              {/* 타임라인 점 */}
+              <div style={{
+                position: "absolute", left: -17, top: 5,
+                width: 8, height: 8, borderRadius: "50%",
+                background: patch.isLatest ? "#B8FF00" : "rgba(184,255,0,0.3)",
+                boxShadow: patch.isLatest ? "0 0 8px rgba(184,255,0,0.6)" : "none"
+              }} />
+
+              {/* 버전 + 날짜 */}
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: patch.isLatest ? "#B8FF00" : "rgba(184,255,0,0.5)" }}>
+                  {patch.version}
+                </span>
+                <span style={{ fontSize: 10, color: "rgba(220,210,255,0.4)" }}>
+                  {patch.date}
+                </span>
+                {patch.isLatest && (
+                  <span style={{
+                    fontSize: 8, fontWeight: 700,
+                    background: "rgba(184,255,0,0.15)",
+                    color: "#B8FF00", borderRadius: 10,
+                    padding: "2px 7px", letterSpacing: "0.05em"
+                  }}>
+                    LATEST
+                  </span>
+                )}
+              </div>
+
+              {/* 로그 목록 */}
+              <div style={{
+                background: patch.isLatest ? "rgba(184,255,0,0.05)" : "rgba(255,255,255,0.02)",
+                border: `1px solid ${patch.isLatest ? "rgba(184,255,0,0.12)" : "rgba(255,255,255,0.05)"}`,
+                borderRadius: 12, padding: "10px 14px",
+                display: "flex", flexDirection: "column", gap: 6
+              }}>
+                {patch.logs.map((log, j) => (
+                  <div key={j} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ color: "#B8FF00", opacity: patch.isLatest ? 0.7 : 0.3, flexShrink: 0, marginTop: 1 }}>•</span>
+                    <span style={{ fontSize: 12, lineHeight: 1.6, color: patch.isLatest ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.4)" }}>
+                      {log}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* 확인 버튼 */}
+        <button
+          onClick={() => {
+            if (saveOnClose) localStorage.setItem("patch_seen", PATCH_VERSION);
+            onClose();
+          }}
+          style={{
+            marginTop: 20, width: "100%", padding: "11px",
+            borderRadius: 12, border: "none",
+            background: "#B8FF00", color: "#111",
+            fontWeight: 800, cursor: "pointer", fontSize: 13,
+            fontFamily: "inherit"
+          }}
+        >
+          확인
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── 패치 버전 관리 (다음 패치 때 PATCH_VERSION만 바꾸면 팝업 재등장)──
+const PATCH_VERSION = "v 1.1";
+
+const PATCH_HISTORY = [
+  {
+    version: "v 1.1",
+    date: "2026.06.13",
+    isLatest: true,
+    logs: [
+      "방명록 게시판 UI 수정",
+      "패치노트 추가",
+      "유튜브 구독자 수 자동화",
+    ]
+  },
+  // 다음 패치 때: 이 위에 새 항목 추가, 기존 항목 isLatest: false 로 변경
+];
+
 const ACCENT = "#B8FF00";
 const LIME   = ACCENT;
 const glass  = "rgba(30,20,60,0.72)";
@@ -20,8 +152,6 @@ const muted  = "rgba(220,210,255,0.36)";
 const soft   = "rgba(220,210,255,0.70)";
 const white  = "#F2EEF9";
 const EMOJI_FONT = "'Twemoji Mozilla','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
-const MOBILE_SHELL_WIDTH = 460;
-const TOP_NAV_HEIGHT = 64;
 
 const ALBUMS = [
   {
@@ -415,18 +545,6 @@ const PLATFORMS = [
   { name:"Apple Music", url:"music.apple.com/kr/artist/%EB%B0%A4%ED%95%98%EB%8A%98%EA%B7%B9%EC%9E%A5/1838608388", color:"#FA2D48" }
 ];
 
-// ── 발매 일정 & 뉴스 ─────────────────────────────
-const RELEASE_SCHEDULE = [
-  { tag:"정규", tagC:"#ff8b94", date:"06.26", title:"'청춘과 죽음과 낭만에 대하여' 발매" },
-  { tag:"싱글", tagC:"#a8e6cf", date:"06.30", title:"'星の世界 (별의 세계)' 발매" },
-  { tag:"싱글", tagC:"#a8e6cf", date:"07.03", title:"'아마 모르겠지' 발매" },
-  { tag:"예정", tagC:"#ffcc44", date:"07.14", title:"'바다와 어른, 소년의 노래' 발매예정" },
-];
-
-const NEWS_ITEMS = [
-  { date:"06.27", title:"유튜브 구독자 700명 돌파" },
-];
-
 function Stars() {
   const s = useRef(Array.from({length:100},(_,i)=>({id:i,x:Math.random()*100,y:Math.random()*100,r:Math.random()*1.4+0.2,o:Math.random()*0.4+0.08,d:Math.random()*5+2}))).current;
   return (
@@ -465,201 +583,16 @@ const SecHead = ({title,sub}) => (
   </div>
 );
 
-function formatCompact(num) {
-  if (num === null || num === undefined) return "···";
-  if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
-  if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, "") + "K";
-  return String(num);
-}
-
 const NAV_ITEMS = [
-  {id:"\uD648",    svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>},
-  {id:"\uC74C\uC545",  svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>},
-  {id:"\uBC29\uBA85\uB85D",svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>},
+  {id:"홈",    svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>},
+  {id:"소개",  svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>},
+  {id:"음악",  svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>},
+  {id:"방명록",svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>},
 ];
 
-function TopTab({ tab, setTab }) {
-  const tabs = NAV_ITEMS.map((item) => item.id);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "100%",
-        maxWidth: MOBILE_SHELL_WIDTH,
-        height: TOP_NAV_HEIGHT,
-        zIndex: 1000,
-        background: scrolled ? "rgba(3,1,14,0.72)" : "#070510",
-        backdropFilter: scrolled ? "blur(18px)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(18px)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(255,255,255,.08)" : "1px solid rgba(184,255,0,.08)",
-        transition: "background .22s ease, backdrop-filter .22s ease, border-color .22s ease",
-      }}
-    >
-      <div
-        style={{
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 14,
-          padding: "0 18px",
-        }}
-      >
-        <button
-  onClick={() => setTab(NAV_ITEMS[0].id)}
-  style={{
-    background: "none",
-    border: "none",
-    padding: 0,
-    cursor: "pointer",
-  }}
->
-  <span
-    style={{
-      width: 40,
-      height: 40,
-      borderRadius: "50%",
-      overflow: "hidden",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      background: "rgba(255,255,255,0.08)",
-    }}
-  >
-    <img
-      src="/favicon.svg"
-      alt="밤하늘극장"
-      style={{
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
-        display: "block",
-      }}
-    />
-  </span>
-</button>
-
-        <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
-          {tabs.map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                color: tab === t ? ACCENT : "rgba(255,255,255,.62)",
-                fontSize: 14,
-                fontWeight: tab === t ? 800 : 600,
-                position: "relative",
-                padding: "22px 10px 20px",
-                fontFamily: "inherit",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {t}
-              {tab === t && (
-                <span
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    right: 0,
-                    bottom: 12,
-                    margin: "auto",
-                    width: "100%",
-                    height: 2,
-                    borderRadius: 10,
-                    background: ACCENT,
-                  }}
-                />
-              )}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-function HeroBanner({ currentSubs, albumCount, trackCount }) {
-  return (
-    <div
-      style={{
-        position: "relative",
-        height: 520,
-        overflow: "hidden",
-      }}
-    >
-      <img
-        src="https://down.mixtape.so/NAS/img/b/d/d/c/bddc807264d156fa82fd1a98208a4856.png"
-          alt=""
-  style={{
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    objectPosition: "center top",
-    transform: "scale(1.03)",
-  }}
-/>
-
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: `
-linear-gradient(
-to bottom,
-rgba(0,0,0,0) 0%,
-rgba(3,1,14,0.08) 35%,
-rgba(3,1,14,0.45) 55%,
-rgba(3,1,14,0.82) 72%,
-#0e0a2e 100%
-)
-`,
-        }}
-      />
-
-      <div
-        style={{
-          position: "absolute",
-          left: 24,
-          right: 24,
-          bottom: 40,
-        }}
-      >
-<div
-  style={{
-    textAlign: "center",
-    position: "relative",
-    overflow: "hidden",
-    padding: "30px 22px 24px"
-  }}
-    >
-      <h2 style={{ fontSize: 24, fontWeight: 900, color: white, letterSpacing: "-0.03em", margin: "0 0 14px" }}>
-        밤하늘극장
-      </h2>
-      <p style={{ fontSize: 12.5, color: soft, lineHeight: 1.8, margin: 0, maxWidth: 380, marginInline: "auto" }}>
-        밤하늘극장은 사랑과 시간, 그리고 기억에 깃든 감정을<br /> 섬세하게 노래하는 <strong>버츄얼 인디 밴드</strong>입니다.
-      </p>
-    </div>
-      </div>
-    </div>
-  );
-}
 function BottomNav({tab,setTab}) {
   return (
-    <div style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:MOBILE_SHELL_WIDTH,zIndex:200,background:"rgba(3,1,14,0.97)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",borderTop:`1px solid rgba(184,255,0,0.1)`,display:"flex"}}>
+    <div style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:900,zIndex:200,background:"rgba(3,1,14,0.97)",backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",borderTop:`1px solid rgba(184,255,0,0.1)`,display:"flex"}}>
       {NAV_ITEMS.map(it=>(
         <button key={it.id} onClick={()=>setTab(it.id)} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:3,padding:"9px 0 7px",background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",color:tab===it.id?LIME:muted,transition:"color 0.2s",position:"relative"}}>
           {tab===it.id&&<div style={{position:"absolute",top:0,left:"50%",transform:"translateX(-50%)",width:22,height:2,background:ACCENT,borderRadius:2}}/>}
@@ -671,227 +604,397 @@ function BottomNav({tab,setTab}) {
   );
 }
 
-const HomeCard = ({ children, pad = "0" }) => (
-  <div
-    style={{
-      position: "relative",
-      background: "linear-gradient(180deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.015) 100%)",
-      backdropFilter: "blur(22px)",
-      WebkitBackdropFilter: "blur(22px)",
-      border: "1px solid rgba(184,255,0,0.10)",
-      borderRadius: 20,
-      padding: pad,
-      boxShadow: "0 14px 36px rgba(3,1,14,0.45), inset 0 1px 0 rgba(255,255,255,0.04)",
-      overflow: "hidden",
-    }}
-  >
-    <div
-      style={{
-        position: "absolute",
-        inset: 0,
-        background: "radial-gradient(circle at 12% 0%, rgba(184,255,0,0.06), transparent 55%)",
-        pointerEvents: "none",
-      }}
-    />
-    <div style={{ position: "relative" }}>{children}</div>
-  </div>
-);
-
-const HomeHr = () => <div style={{ height: 1, background: "rgba(184,255,0,0.08)" }} />;
-
-function HomeTab() {
-  const [liveSubs, setLiveSubs] = useState(null);
-  const [liveViews, setLiveViews] = useState(null);
-  const [newsExpanded, setNewsExpanded] = useState(false);
+function SubChart({ liveSubs }) {
+  const canvasRef = useRef(null);
+  const chartRef  = useRef(null);
 
   useEffect(() => {
-    async function fetchStats() {
-      try {
-        const res = await fetch(
-          `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`
-        );
+    if (!canvasRef.current) return;
+    const loadChart = () => {
+      if (!window.Chart) { setTimeout(loadChart, 50); return; }
+      if (chartRef.current) chartRef.current.destroy();
+      const ctx = canvasRef.current.getContext("2d");
+      const grad = ctx.createLinearGradient(0, 0, 0, 130);
+      grad.addColorStop(0, "rgba(184,255,0,0.22)");
+      grad.addColorStop(1, "rgba(184,255,0,0.00)");
+const chartData = [
+  ...SUB_DATA,
+  {
+    month: "현재",
+    subs: liveSubs ?? SUB_DATA[SUB_DATA.length - 1].subs
+  }
+];
 
-        const data = await res.json();
-
-        if (data.items?.[0]) {
-          setLiveSubs(Number(data.items[0].statistics.subscriberCount));
-          setLiveViews(Number(data.items[0].statistics.viewCount));
+chartRef.current = new window.Chart(ctx, {
+  type: "line",
+  data: {
+    labels: chartData.map(d => d.month),
+    datasets: [{
+      data: chartData.map(d => d.subs),
+      borderColor: ACCENT,
+      borderWidth: 2,
+      tension: 0.45,
+      pointRadius: chartData.map((_, i) =>
+        i === chartData.length - 1 ? 5 : 3
+      ),
+      pointBackgroundColor: ACCENT,
+      pointBorderColor: ACCENT,
+      pointHoverRadius: 6,
+      fill: true,
+      backgroundColor: grad,
+    }]
+  },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: "rgba(20,14,50,0.92)",
+              borderColor: "rgba(184,255,0,0.25)",
+              borderWidth: 1,
+              titleColor: "rgba(220,210,255,0.55)",
+              bodyColor: ACCENT,
+              bodyFont: { size: 13, weight: "700" },
+              displayColors: false,
+              callbacks: { label: ctx => ctx.parsed.y + "명" }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: "rgba(255,255,255,0.04)" },
+              ticks: {
+                color: "rgba(220,210,255,0.38)",
+                font: { size: 10, family: "monospace" },
+                maxRotation: 0,
+                autoSkip: false,
+              },
+              border: { display: false }
+            },
+            y: {
+              min: 100,
+              max: 1000,
+              grid: { color: "rgba(255,255,255,0.05)" },
+              ticks: {
+                color: "rgba(220,210,255,0.30)",
+                font: { size: 9 },
+                stepSize: 100,
+                callback: v => v + "명"
+              },
+              border: { display: false }
+            }
+          },
+          interaction: { mode: "index", intersect: false },
+          animation: { duration: 800, easing: "easeInOutQuart" }
         }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    fetchStats();
-
-    const interval = setInterval(fetchStats, 600000); // 10분마다 갱신
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const albumCount = ALBUMS.length;
-  const trackCount = ALL_TRACKS.length;
-  const currentSubs = liveSubs ?? SUB_DATA[SUB_DATA.length - 1].subs;
-
-  const visibleNews = newsExpanded ? NEWS_ITEMS : NEWS_ITEMS.slice(0, 3);
-
-  const ReleaseSchedule = (
-    <HomeCard>
-      <div style={{ padding: "18px 18px 12px" }}><SecHead title="📀 발매 일정" /></div>
-      <HomeHr />
-      {RELEASE_SCHEDULE.map((n, i, arr) => (
-        <div key={n.title + n.date}>
-          <div style={{ display: "flex", alignItems: "center", gap: 0, padding: "12px 18px" }}>
-            <div style={{ width: 56, flexShrink: 0 }}><Tag c={n.tagC}>{n.tag}</Tag></div>
-            <span style={{ width: 44, flexShrink: 0, fontSize: 11, color: "rgba(220,210,255,0.75)", fontWeight: 600 }}>{n.date}</span>
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: white, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{n.title}</p>
-          </div>
-          {i < arr.length - 1 && <HomeHr />}
-        </div>
-      ))}
-    </HomeCard>
-  );
-
-  const News = (
-    <HomeCard>
-      <div style={{ padding: "18px 18px 12px" }}><SecHead title="📢 NEWS" /></div>
-      <HomeHr />
-      {visibleNews.map((n, i, arr) => (
-        <div key={n.title + n.date}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 18px" }}>
-            <span style={{ width: 44, flexShrink: 0, fontSize: 11, color: "rgba(220,210,255,0.75)", fontWeight: 600 }}>{n.date}</span>
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: white, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{n.title}</p>
-          </div>
-          {i < arr.length - 1 && <HomeHr />}
-        </div>
-      ))}
-      {NEWS_ITEMS.length > 3 && (
-        <>
-          <HomeHr />
-          <button
-            onClick={() => setNewsExpanded((v) => !v)}
-            style={{
-              width: "100%", background: "none", border: "none", cursor: "pointer",
-              padding: "10px 0", fontFamily: "inherit", fontSize: 11, color: muted, fontWeight: 600
-            }}
-          >
-            {newsExpanded ? "접기 ▲" : "더보기 ▼"}
-          </button>
-        </>
-      )}
-    </HomeCard>
-  );
-
-  const OfficialLinks = (
-  <G>
-    <SecHead title="Official Links" sub="Streaming & Social" />
-
-    <div
-      style={{
-        marginTop: 12,
-        display: "grid",
-        gridTemplateColumns: isPC ? "1fr 1fr" : "1fr",
-        gap: 10
-      }}
-    >
-      {PLATFORMS.map((p) => (
-        <a
-          key={p.name}
-          href={"https://" + p.url}
-          target="_blank"
-          rel="noreferrer"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "12px 30px",
-            borderRadius: 16,
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.06)",
-            textDecoration: "none",
-            transition: "all .2s ease",
-            position: "relative",
-            overflow: "hidden"
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "translateX(4px)";
-            e.currentTarget.style.borderColor = p.color + "66";
-            e.currentTarget.style.background = p.color + "10";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "translateX(0)";
-            e.currentTarget.style.borderColor =
-              "rgba(255,255,255,0.06)";
-            e.currentTarget.style.background =
-              "rgba(255,255,255,0.04)";
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              left: 0,
-              top: 0,
-              bottom: 0,
-              width: 5,
-              background: p.color
-            }}
-          />
-
-          <p
-            style={{
-              margin: 0,
-              fontSize: 13,
-              fontWeight: 800,
-              color: white
-            }}
-          >
-            {p.name}
-          </p>
-
-          <span
-            style={{
-              color: "rgba(255,255,255,.4)",
-              fontSize: 14,
-              fontWeight: 700
-            }}
-          >
-            →
-          </span>
-        </a>
-      ))}
-    </div>
-  </G>
-);
-
-  const Footer = (
-    <div style={{ textAlign: "center", padding: "10px 0 4px" }}>
-      <a href="mailto:nightskytheater@gmail.com" style={{ fontSize: 12, color: soft, textDecoration: "none" }}>
-        nightskytheater@gmail.com
-      </a>
-      <p style={{ fontSize: 10, color: muted, margin: "6px 0 0" }}>
-        © 2026 Night Sky Theater. All rights reserved.
-      </p>
-    </div>
-  );
+      });
+    };
+    loadChart();
+    return () => { if (chartRef.current) chartRef.current.destroy(); };
+  }, [liveSubs]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "left" }}>
-      <HeroBanner
-  currentSubs={currentSubs}
-  albumCount={albumCount}
-  trackCount={trackCount}
-/>
-      <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "12px 14px 0" }}>
-        {ReleaseSchedule}
-        {News}
-        {OfficialLinks}
-        {Footer}
+    <div style={{ width: "100%" }}>
+      <div style={{ position: "relative", width: "100%", height: 160 }}>
+        <canvas ref={canvasRef} role="img" aria-label="유튜브 채널 분석" />
       </div>
     </div>
   );
 }
 
-function AboutTab() {
+function HomeTab({isPC, onOpenPatch}) {
+  const [liveSubs, setLiveSubs] = useState(null);
+
+useEffect(() => {
+  async function fetchSubs() {
+    try {
+      const res = await fetch(
+        `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`
+      );
+
+      const data = await res.json();
+
+      if (data.items?.[0]) {
+        setLiveSubs(Number(data.items[0].statistics.subscriberCount));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  fetchSubs();
+
+  const interval = setInterval(fetchSubs, 600000); // 10분마다 갱신
+
+  return () => clearInterval(interval);
+}, []);
+  const [track,setTrack]=useState(null);
+
+useEffect(() => {
+  setTrack(
+    ALL_TRACKS[Math.floor(Math.random() * ALL_TRACKS.length)]
+  );
+}, []);
+const refreshPick = () => {
+  setTrack(
+    ALL_TRACKS[Math.floor(Math.random() * ALL_TRACKS.length)]
+  );
+};
+  const rankColor = r => r===1?ACCENT:r===2?"rgba(91,79,245,0.65)":r===3?"rgba(91,79,245,0.4)":muted;
+  const trendColor = t => t==="up"?"#f87171":t==="down"?"#4f8ef7":t==="new"?ACCENT:muted;
+  const trendLabel = t => t==="up"?"▲":t==="down"?"▼":t==="new"?"N":"—";
+
+const PatchBadge = (
+  <button
+    onClick={onOpenPatch}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: 6,
+      background: "rgba(184,255,0,0.08)",
+      border: "1px solid rgba(184,255,0,0.2)",
+      borderRadius: 20,
+      padding: "8px 20px",
+      justifyContent: "space-between",
+      cursor: "pointer",
+      fontFamily: "inherit",
+      marginBottom: 4,
+    }}
+  >
+    <span style={{ fontSize: 9, color: ACCENT, fontWeight: 700, letterSpacing: "0.1em" }}>
+      🔔 PATCH NOTE
+    </span>
+<span style={{ fontSize: 10, color: "rgba(220,210,255,0.6)" }}>
+  {PATCH_VERSION} 업데이트 보기 →
+</span>
+  </button>
+);
+
+  const TodayPick = (
+    <G acc style={{padding:"26px 20px",position:"relative",overflow:"hidden", textAlign:"center"}}>
+      <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%,rgba(184,255,0,0.1) 0%,transparent 70%)",pointerEvents:"none"}}/>
+      <p style={{fontSize:10,fontWeight:600,color:LIME,letterSpacing:"0.12em",margin:"0 0 18px",opacity:0.8}}>밤하늘극장 추천곡</p>
+      {track&&<>
+        <p style={{fontSize:22,fontWeight:700,color:white,margin:"0 0 6px",lineHeight:1.3,letterSpacing:"-0.3px"}}>{track.title}</p>
+        <p style={{fontSize:12,color:muted,margin:"0 0 10px"}}>{track.album}</p>
+        {track.mood&&<p style={{fontSize:13,color:`${LIME}88`,margin:0,fontFamily:"'Noto Serif KR',serif",transform: "skewX(-12deg)", display: "inline-block",whiteSpace:"pre-line"}}>"{track.mood}"</p>}
+      </>}
+    </G>
+  );
+
+  const Notice = (
+    <G pad="0">
+      <div style={{padding:"20px 18px 12px"}}><SecHead title="공지사항"/></div>
+      <Hr/>
+      {[
+        {tag:"정규",   tagC:"#ff8b94", date:"06.26",title:"'청춘과 죽음과 낭만에 대하여' 발매"},
+        {tag:"채널",   tagC:"#aaaaff", date:"06.27",title:"유튜브 구독자 700명 돌파"},
+        {tag:"싱글",   tagC:"#a8e6cf", date:"06.30",title:"'星の世界 (별의 세계)' 발매"},
+        {tag:"싱글",   tagC:"#a8e6cf", date:"07.03",title:"'아마 모르겠지' 발매"},
+        {tag:"예정",   tagC:"#ffcc44", date:"07.14",title:"'바다와 어른, 소년의 노래' 발매예정"}
+      ].map((n,i,arr)=>(
+        <div key={n.title + n.date}>
+          <div style={{display:"flex",alignItems:"center",gap:0,padding:"11px 18px"}}>
+            <div style={{width:56,flexShrink:0}}><Tag c={n.tagC}>{n.tag}</Tag></div>
+            <span style={{width:44,flexShrink:0,fontSize:11,color:"rgba(220,210,255,0.75)",fontWeight:600}}>{n.date}</span>
+            <p style={{margin:0,fontSize:13,fontWeight:500,color:white,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1}}>{n.title}</p>
+          </div>
+          {i<arr.length-1&&<Hr/>}
+        </div>
+      ))}
+    </G>
+  );
+
+const currentSubs = liveSubs ?? SUB_DATA[SUB_DATA.length - 1].subs;
+const prevSubs = SUB_DATA[SUB_DATA.length - 1].subs;
+
+const increase = currentSubs - prevSubs;
+const growth = ((increase / prevSubs) * 100).toFixed(1);
+
+  const SubSection = (
+    <G>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+        <SecHead title="유튜브 채널 분석" sub="최근 7개월 기준"/>
+        <div style={{textAlign:"right"}}>
+          <p
+  style={{
+    fontSize:20,
+    fontWeight:900,
+    color:ACCENT,
+    margin:0,
+    lineHeight:1
+  }}
+>
+  {liveSubs ?? "..."}
+</p>
+          <p style={{fontSize:9,color:muted,margin:"3px 0 0"}}>현재 구독자</p>
+        </div>
+      </div>
+      <SubChart liveSubs={liveSubs}/>
+      <div style={{display:"flex",justifyContent:"space-around",marginTop:14}}>
+        {[
+          {label:"최근 30일 증가",val:`+${increase}`},
+          {label:"채널 성장률",val:`+${growth}%`},
+        ].map((s,i)=>(
+          <div key={s.label} style={{textAlign:"center"}}>
+            <p style={{fontSize:14,fontWeight:800,color: i===0 ? ACCENT : i===1 ? "#4f8ef7" : "#c8d98a"}}>{s.val}</p>
+            <p style={{fontSize:9,color:muted,margin:"-2px 0 0"}}>{s.label}</p>
+          </div>
+        ))}
+      </div>
+    </G>
+  );
+
+  const Top10 = (
+    <G pad="0">
+      <div style={{padding:"20px 18px 12px"}}><SecHead title="밤하늘극장 인기차트" sub="'26년 7월 05일 기준"/></div>
+      <Hr/>
+      {CHART.map((t,i)=>(
+        <div key={t.title}>
+          <div style={{display:"flex",alignItems:"center",gap:12,padding:"11px 18px"}}>
+            <span style={{width:22,textAlign:"center",fontWeight:900,flexShrink:0,fontSize:t.rank<=3?14:12,color:rankColor(t.rank)}}>{t.rank}</span>
+            <p style={{flex:1,margin:0,fontSize:13,fontWeight:t.rank<=3?700:400,color:t.rank===1?white:t.rank<=3?"rgba(242,238,249,0.85)":soft,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{t.title}</p>
+            <span style={{fontSize:11,fontWeight:700,color:trendColor(t.trend),width:14,textAlign:"center",flexShrink:0}}>{trendLabel(t.trend)}</span>
+          </div>
+          {i<CHART.length-1&&<Hr/>}
+        </div>
+      ))}
+    </G>
+  );
+
+  const Overseas = (
+    <G>
+      <SecHead title="해외 청취율" sub="26년 07월 05일 기준"/>
+      <div style={{marginTop:10}}>
+        {OVERSEAS.map((o,i)=>(
+          <div key={o.name} style={{display:"flex",alignItems:"center",marginBottom:i<OVERSEAS.length-1?10:0}}>
+            <div style={{width:34,flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
+              {isPC ? (
+                o.flag ? (
+                  <div style={{width:18,height:18,borderRadius:"50%",overflow:"hidden",boxShadow:"0 0 6px rgba(255,255,255,0.12)"}}>
+                    <img src={o.flag} alt={o.name} draggable={false} style={{width:"100%",height:"100%",objectFit:"cover",display:"block",userSelect:"none",pointerEvents:"none"}}/>
+                  </div>
+                ) : (
+                  <span style={{fontSize:18,fontFamily:EMOJI_FONT,lineHeight:1}}>🌍</span>
+                )
+              ) : (
+                <span style={{fontSize:18,fontFamily:EMOJI_FONT,lineHeight:1}}>{o.emoji || "🌍"}</span>
+              )}
+            </div>
+            <span style={{fontSize:12,color:muted,width:68,flexShrink:0}}>{o.name}</span>
+            <div style={{flex:1,background:"rgba(255,255,255,0.05)",borderRadius:4,height:5,overflow:"hidden"}}>
+              <div style={{width:`${o.pct}%`,height:"100%",background:`linear-gradient(90deg,${ACCENT}cc,#4f8ef7)`,borderRadius:4}}/>
+            </div>
+            <span style={{fontSize:11,color:ACCENT,width:32,textAlign:"right"}}>{o.pct}%</span>
+          </div>
+        ))}
+      </div>
+    </G>
+  );
+
+  const OfficialLinks = (
+    <G>
+      <SecHead title="Official Links" sub="Streaming & Social" />
+
+      <div
+        style={{
+          marginTop: 12,
+          display: "grid",
+          gridTemplateColumns: isPC ? "1fr 1fr" : "1fr",
+          gap: 10
+        }}
+      >
+        {PLATFORMS.map((p) => (
+          <a
+            key={p.name}
+            href={"https://" + p.url}
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "12px 30px",
+              borderRadius: 16,
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.06)",
+              textDecoration: "none",
+              transition: "all .2s ease",
+              position: "relative",
+              overflow: "hidden"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateX(4px)";
+              e.currentTarget.style.borderColor = p.color + "66";
+              e.currentTarget.style.background = p.color + "10";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateX(0)";
+              e.currentTarget.style.borderColor =
+                "rgba(255,255,255,0.06)";
+              e.currentTarget.style.background =
+                "rgba(255,255,255,0.04)";
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: 5,
+                background: p.color
+              }}
+            />
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 0
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 13,
+                  fontWeight: 800,
+                  color: white
+                }}
+              >
+                {p.name}
+              </p>
+            </div>
+
+            <span
+              style={{
+                color: "rgba(255,255,255,.4)",
+                fontSize: 14,
+                fontWeight: 700
+              }}
+            >
+              →
+            </span>
+          </a>
+        ))}
+      </div>
+    </G>
+  );
+
+  if (isPC) {
+    return (
+      
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14,textAlign:"left",alignItems:"start"}}>
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>{PatchBadge}{TodayPick}{Top10}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:14}}>{Notice}{SubSection}{Overseas}{OfficialLinks}</div>
+      </div>
+
+    );
+  }
+  return <div style={{display:"flex",flexDirection:"column",gap:10,textAlign:"left"}}>{PatchBadge}{TodayPick}{Notice}{Top10}{SubSection}{Overseas}{OfficialLinks}</div>;
+}
+
+function AboutTab({ isPC }) {
   const Hero = (
     <G
       style={{
@@ -1059,7 +1162,7 @@ function AboutTab() {
         style={{
           marginTop: 12,
           display: "grid",
-          gridTemplateColumns: "1fr",
+          gridTemplateColumns: isPC ? "1fr 1fr" : "1fr",
           gap: 10
         }}
       >
@@ -1147,7 +1250,7 @@ function AboutTab() {
         display: "flex",
         flexDirection: "column",
         gap: 14,
-        maxWidth: "100%",
+        maxWidth: isPC ? 760 : "100%",
         margin: "0 auto"
       }}
     >
@@ -1157,14 +1260,14 @@ function AboutTab() {
   );
 }
 
-function MusicTab() {
+function MusicTab({isPC}) {
   const [selected,setSelected]=useState(null);
   const [trackIdx,setTrackIdx]=useState(0);
 
   if (selected !== null) {
     const alb=ALBUMS[selected], tr=alb.tracks[trackIdx];
     return (
-      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+      <div style={{maxWidth:isPC?900:undefined,margin:isPC?"0 auto":undefined,display:"flex",flexDirection:"column",gap:10}}>
         <button onClick={()=>{setSelected(null);setTrackIdx(0);}} style={{display:"flex",alignItems:"center",gap:6,background:"none",border:"none",cursor:"pointer",color:ACCENT,fontSize:13,fontFamily:"inherit",padding:0,marginBottom:4}}>← 음반 목록</button>
         <G acc>
           <div style={{textAlign:"center"}}>
@@ -1209,15 +1312,15 @@ function MusicTab() {
     );
   }
 
-  const cols = "1fr 1fr";
+  const cols = isPC ? "1fr 1fr 1fr" : "1fr 1fr";
   return (
     <div>
       <div style={{marginBottom:16}}><SecHead title="디스코그래피" sub={`총 ${ALBUMS.length}개 앨범`}/></div>
-      <div style={{display:"grid",gridTemplateColumns:cols,gap:12}}>
+      <div style={{display:"grid",gridTemplateColumns:cols,gap:isPC?16:12}}>
         {[...ALBUMS].reverse().map((a,i)=>(
           <button key={a.id} onClick={()=>{setSelected(ALBUMS.length-1-i);setTrackIdx(0);}} style={{background:"none",border:"none",cursor:"pointer",padding:0,textAlign:"left",fontFamily:"inherit",width:"100%",minWidth:0}}>
             <div
-              style={{width:"100%",aspectRatio:"1/1",borderRadius:14,backgroundImage:`url(${a.cover})`,backgroundColor:a.color,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat",border:"1px solid rgba(255,255,255,0.08)",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.25s ease",overflow:"hidden",position:"relative",boxShadow:`0 10px 35px ${a.color}33`}}
+              style={{width:"100%",aspectRatio:"1/1",borderRadius:isPC?16:14,backgroundImage:`url(${a.cover})`,backgroundColor:a.color,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat",border:"1px solid rgba(255,255,255,0.08)",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.25s ease",overflow:"hidden",position:"relative",boxShadow:`0 10px 35px ${a.color}33`}}
               onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(184,255,0,0.35)";e.currentTarget.style.transform="translateY(-4px) scale(1.02)";e.currentTarget.style.boxShadow=`0 18px 45px ${a.color}55`;}}
               onMouseLeave={e => {
                 e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
@@ -1225,7 +1328,7 @@ function MusicTab() {
                 e.currentTarget.style.boxShadow = `0 10px 35px ${a.color}33`;
               }}
             />
-            <p style={{fontSize:12,fontWeight:700,color:white,margin:"0 0 2px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",lineHeight:1.3}}>{a.title}</p>
+            <p style={{fontSize:isPC?13:12,fontWeight:700,color:white,margin:"0 0 2px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",lineHeight:1.3}}>{a.title}</p>
             <p style={{fontSize:10,color:muted,margin:0}}>{a.tracks.length}곡</p>
           </button>
         ))}
@@ -1255,10 +1358,21 @@ function GuestbookTab() {
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const cols = 1;
+  const [cols, setCols] = useState(3);
 
   useEffect(() => {
-const q = query(
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setCols(1);
+      } else {
+        setCols(3);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    const q = query(
       collection(db, "guestbook"),
       orderBy("createdAt", "desc")
     );
@@ -1272,7 +1386,7 @@ const q = query(
     });
 
     return () => {
-
+      window.removeEventListener("resize", handleResize);
       unsub();
     };
   }, []);
@@ -1596,7 +1710,25 @@ const q = query(
 
 // ── APP (메인 컴포넌트 단일 Export Default) ───────────────────
 export default function App() {
-  const [tab, setTab] = useState(NAV_ITEMS[0].id);
+  const [tab, setTab] = useState("홈");
+  const [isPC, setIsPC] = useState(false);
+const [showPatch, setShowPatch] = useState(false);
+useEffect(() => {
+  const seen = localStorage.getItem("patch_seen");
+
+  if (seen !== PATCH_VERSION) setShowPatch(true);
+}, []);
+
+  useEffect(() => {
+    const fn = () => {
+      setIsPC(window.innerWidth >= 768);
+    };
+
+    fn(); // 최초 실행
+
+    window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
+  }, []);
 
   useEffect(() => {
     if (document.querySelector('script[src*="chart.umd.js"]')) return;
@@ -1606,7 +1738,7 @@ export default function App() {
   }, []);
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0e0a2e", color: "#fff", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}>
+    <div style={{ minHeight: "100vh", background: "linear-gradient(160deg,#0e0a2e 0%,#120d38 35%,#160f42 65%,#0e0a2e 100%)", color: "#fff", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}>
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
@@ -1620,31 +1752,25 @@ export default function App() {
         strong { font-weight:800 }
       `}</style>
       <Stars />
-
-        <TopTab
-    tab={tab}
-    setTab={setTab}
-/>
-
-      <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: MOBILE_SHELL_WIDTH, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh", overflow: "hidden" }}>
+      {showPatch && <PatchModal onClose={() => setShowPatch(false)} />}
+      <div style={{ position: "relative", zIndex: 1, maxWidth: isPC ? 900 : 430, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <div
   style={{
     flex: 1,
     padding:
-      tab === NAV_ITEMS[0].id
-        ? `${TOP_NAV_HEIGHT}px 0 140px`
-        : tab === NAV_ITEMS[2].id
-          ? `${TOP_NAV_HEIGHT + 12}px 14px 0`
-          : `${TOP_NAV_HEIGHT + 12}px 14px 140px`,
+      tab === "방명록"
+        ? (isPC ? "20px 24px 0" : "12px 14px 0")
+        : (isPC ? "20px 24px 90px" : "12px 14px 140px"),
     animation: "fin 0.3s ease both"
   }}
   key={tab}
 >
-          {tab === NAV_ITEMS[0].id && <HomeTab />}
-          
-          {tab === NAV_ITEMS[1].id && <MusicTab />}
-          {tab === NAV_ITEMS[2].id && <GuestbookTab />}
+          {tab === "홈" && <HomeTab isPC={isPC} onOpenPatch={() => setShowPatch(true)} />}
+          {tab === "소개" && <AboutTab isPC={isPC} />}
+          {tab === "음악" && <MusicTab isPC={isPC} />}
+          {tab === "방명록" && <GuestbookTab />}
         </div>
+        <BottomNav tab={tab} setTab={setTab} />
       </div>
     </div>
   );
