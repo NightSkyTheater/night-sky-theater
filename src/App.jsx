@@ -654,6 +654,51 @@ rgba(3,1,14,0.82) 72%,
       <p style={{ fontSize: 12.5, color: soft, lineHeight: 1.8, margin: 0, maxWidth: 380, marginInline: "auto" }}>
         밤하늘극장은 사랑과 시간, 그리고 기억에 깃든 감정을<br /> 섬세하게 노래하는 <strong>버츄얼 인디 밴드</strong>입니다.
       </p>
+
+      <div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    gap: 34,
+    marginTop: 24,
+  }}
+>
+  {[
+    { value: formatCompact(currentSubs), label: "Subscribers" },
+    { value: albumCount, label: "Albums" },
+    { value: trackCount, label: "Songs" },
+  ].map((item) => (
+    <div
+      key={item.label}
+      style={{
+        textAlign: "center",
+      }}
+    >
+      <div
+        style={{
+          fontSize: 22,
+          fontWeight: 900,
+          color: white,
+          lineHeight: 1,
+        }}
+      >
+        {item.value}
+      </div>
+
+      <div
+        style={{
+          marginTop: 6,
+          fontSize: 10,
+          color: muted,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+        }}
+      >
+        {item.label}
+      </div>
+    </div>
+  ))}
+</div>
     </div>
       </div>
     </div>
