@@ -637,7 +637,7 @@ rgba(3,1,14,0.82) 72%,
           position: "absolute",
           left: 24,
           right: 24,
-          bottom: 40,
+          bottom: 0,
         }}
       >
 <div
@@ -678,7 +678,7 @@ rgba(3,1,14,0.82) 72%,
         style={{
           fontSize: 22,
           fontWeight: 900,
-          color: white,
+          color: ACCENT,
           lineHeight: 1,
         }}
       >
@@ -926,7 +926,7 @@ function HomeTab() {
   albumCount={albumCount}
   trackCount={trackCount}
 />
-      <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "12px 14px 0" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 16, padding: "12px 14px 0" }}>
         {ReleaseSchedule}
         {News}
         {OfficialLinks}
