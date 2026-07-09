@@ -838,7 +838,8 @@ function HomeTab() {
       marginTop: 12,
       display: "grid",
       gridTemplateColumns: "1fr 1fr",
-      gap: 10
+      gap: 10,
+      padding: "0 14px 18px"
     }}
   >
     {PLATFORMS.map((p) => (
