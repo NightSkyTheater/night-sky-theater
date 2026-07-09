@@ -729,26 +729,36 @@ function HeroBanner({ currentSubs, albumCount, trackCount }) {
     <div
       style={{
         position: "relative",
-        height: 360,
+        height: 520,
         overflow: "hidden",
       }}
     >
       <img
         src="https://down.mixtape.so/NAS/img/b/d/d/c/bddc807264d156fa82fd1a98208a4856.png"
-        alt=""
-        style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-        }}
-      />
+          alt=""
+  style={{
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    objectPosition: "center top",
+    transform: "scale(1.03)",
+  }}
+/>
 
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background:
-            "linear-gradient(to bottom, rgba(0,0,0,.15), rgba(3,1,14,.96))",
+          background: `
+linear-gradient(
+to bottom,
+rgba(0,0,0,0) 0%,
+rgba(3,1,14,0.08) 35%,
+rgba(3,1,14,0.45) 55%,
+rgba(3,1,14,0.82) 72%,
+#0e0a2e 100%
+)
+`,
         }}
       />
 
@@ -757,7 +767,7 @@ function HeroBanner({ currentSubs, albumCount, trackCount }) {
           position: "absolute",
           left: 24,
           right: 24,
-          bottom: 30,
+          bottom: 40,
         }}
       >
 <div
