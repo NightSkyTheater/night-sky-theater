@@ -783,30 +783,85 @@ function HomeTab() {
   );
 
   const OfficialLinks = (
-    <HomeCard pad="20px 18px 16px">
-      <SecHead title="Official Links" />
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 14, justifyContent: "center" }}>
-        {PLATFORMS.map((p) => (
-          <a
-            key={p.name}
-            href={"https://" + p.url}
-            target="_blank"
-            rel="noreferrer"
-            title={p.name}
+  <G>
+    <SecHead title="Official Links" sub="Streaming & Social" />
+
+    <div
+      style={{
+        marginTop: 12,
+        display: "grid",
+        gridTemplateColumns: isPC ? "1fr 1fr" : "1fr",
+        gap: 10
+      }}
+    >
+      {PLATFORMS.map((p) => (
+        <a
+          key={p.name}
+          href={"https://" + p.url}
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "12px 30px",
+            borderRadius: 16,
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(255,255,255,0.06)",
+            textDecoration: "none",
+            transition: "all .2s ease",
+            position: "relative",
+            overflow: "hidden"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateX(4px)";
+            e.currentTarget.style.borderColor = p.color + "66";
+            e.currentTarget.style.background = p.color + "10";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateX(0)";
+            e.currentTarget.style.borderColor =
+              "rgba(255,255,255,0.06)";
+            e.currentTarget.style.background =
+              "rgba(255,255,255,0.04)";
+          }}
+        >
+          <div
             style={{
-              width: 34, height: 34, borderRadius: "50%",
-              background: p.color, flexShrink: 0,
-              boxShadow: `0 4px 14px ${p.color}55`,
-              border: "1px solid rgba(255,255,255,0.15)",
-              transition: "transform 0.15s"
+              position: "absolute",
+              left: 0,
+              top: 0,
+              bottom: 0,
+              width: 5,
+              background: p.color
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px) scale(1.08)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0) scale(1)"; }}
           />
-        ))}
-      </div>
-    </HomeCard>
-  );
+
+          <p
+            style={{
+              margin: 0,
+              fontSize: 13,
+              fontWeight: 800,
+              color: white
+            }}
+          >
+            {p.name}
+          </p>
+
+          <span
+            style={{
+              color: "rgba(255,255,255,.4)",
+              fontSize: 14,
+              fontWeight: 700
+            }}
+          >
+            →
+          </span>
+        </a>
+      ))}
+    </div>
+  </G>
+);
 
   const Footer = (
     <div style={{ textAlign: "center", padding: "10px 0 4px" }}>
