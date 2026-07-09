@@ -1258,7 +1258,7 @@ function MusicTab() {
   const cols = "1fr 1fr";
   return (
     <div>
-      <div style={{marginBottom:16}}><SecHead title="디스코그래피" sub={`총 ${ALBUMS.length}개 앨범`}/></div>
+      <div style={{marginBottom:16,marginTop:20}}><SecHead title="디스코그래피" sub={`총 ${ALBUMS.length}개 앨범`}/></div>
       <div style={{display:"grid",gridTemplateColumns:cols,gap:12}}>
         {[...ALBUMS].reverse().map((a,i)=>(
           <button key={a.id} onClick={()=>{setSelected(ALBUMS.length-1-i);setTrackIdx(0);}} style={{background:"none",border:"none",cursor:"pointer",padding:0,textAlign:"left",fontFamily:"inherit",width:"100%",minWidth:0}}>
@@ -1404,6 +1404,7 @@ const q = query(
         zIndex: 2,
         flexShrink: 0,
         display: "flex",
+        marginTop:"10px",
         justifyContent: "space-between",
         alignItems: "center"
       }}>
