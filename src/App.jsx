@@ -666,7 +666,7 @@ rgba(3,1,14,0.82) 72%,
   {[
     { value: formatCompact(currentSubs), label: "Subscribers" },
     { value: albumCount, label: "Albums" },
-    { value: trackCount, label: "Songs" },
+    { value: trackCount, label: "Tracks" },
   ].map((item) => (
     <div
       key={item.label}
