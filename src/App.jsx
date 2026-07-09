@@ -12,138 +12,6 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 
-
-
-function PatchModal({ onClose, saveOnClose = true }) {
-  return (
-    <div
-      style={{
-        position: "fixed", inset: 0,
-        background: "rgba(0,0,0,0.6)",
-        backdropFilter: "blur(14px)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        zIndex: 9999, padding: 20
-      }}
-      onClick={onClose}
-    >
-      <div
-        style={{
-          width: "100%", maxWidth: 420,
-          background: "rgba(20,16,40,0.95)",
-          border: "1px solid rgba(184,255,0,0.15)",
-          borderRadius: 18, padding: 22,
-          color: "#fff",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
-          maxHeight: "80vh", overflowY: "auto"
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* 헤더 */}
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginBottom: 30 }}>
-          <div>
-            <p style={{ fontSize: 10, color: "#B8FF00", letterSpacing: "0.15em", margin: "0 0 4px", fontWeight: 700 }}>
-              PATCH NOTE
-            </p>
-            <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>업데이트 히스토리</h3>
-          </div>
-        </div>
-
-        {/* 타임라인 */}
-        <div style={{ position: "relative", paddingLeft: 20 }}>
-          {/* 세로선 */}
-          <div style={{
-            position: "absolute", left: 6, top: 8, bottom: 8,
-            width: 1, background: "rgba(184,255,0,0.15)"
-          }} />
-
-          {PATCH_HISTORY.map((patch, i) => (
-            <div key={patch.version} style={{ position: "relative", marginBottom: i < PATCH_HISTORY.length - 1 ? 22 : 0 }}>
-              {/* 타임라인 점 */}
-              <div style={{
-                position: "absolute", left: -17, top: 5,
-                width: 8, height: 8, borderRadius: "50%",
-                background: patch.isLatest ? "#B8FF00" : "rgba(184,255,0,0.3)",
-                boxShadow: patch.isLatest ? "0 0 8px rgba(184,255,0,0.6)" : "none"
-              }} />
-
-              {/* 버전 + 날짜 */}
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: patch.isLatest ? "#B8FF00" : "rgba(184,255,0,0.5)" }}>
-                  {patch.version}
-                </span>
-                <span style={{ fontSize: 10, color: "rgba(220,210,255,0.4)" }}>
-                  {patch.date}
-                </span>
-                {patch.isLatest && (
-                  <span style={{
-                    fontSize: 8, fontWeight: 700,
-                    background: "rgba(184,255,0,0.15)",
-                    color: "#B8FF00", borderRadius: 10,
-                    padding: "2px 7px", letterSpacing: "0.05em"
-                  }}>
-                    LATEST
-                  </span>
-                )}
-              </div>
-
-              {/* 로그 목록 */}
-              <div style={{
-                background: patch.isLatest ? "rgba(184,255,0,0.05)" : "rgba(255,255,255,0.02)",
-                border: `1px solid ${patch.isLatest ? "rgba(184,255,0,0.12)" : "rgba(255,255,255,0.05)"}`,
-                borderRadius: 12, padding: "10px 14px",
-                display: "flex", flexDirection: "column", gap: 6
-              }}>
-                {patch.logs.map((log, j) => (
-                  <div key={j} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ color: "#B8FF00", opacity: patch.isLatest ? 0.7 : 0.3, flexShrink: 0, marginTop: 1 }}>•</span>
-                    <span style={{ fontSize: 12, lineHeight: 1.6, color: patch.isLatest ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.4)" }}>
-                      {log}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* 확인 버튼 */}
-        <button
-          onClick={() => {
-            if (saveOnClose) localStorage.setItem("patch_seen", PATCH_VERSION);
-            onClose();
-          }}
-          style={{
-            marginTop: 20, width: "100%", padding: "11px",
-            borderRadius: 12, border: "none",
-            background: "#B8FF00", color: "#111",
-            fontWeight: 800, cursor: "pointer", fontSize: 13,
-            fontFamily: "inherit"
-          }}
-        >
-          확인
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ── 패치 버전 관리 (다음 패치 때 PATCH_VERSION만 바꾸면 팝업 재등장)──
-const PATCH_VERSION = "v 1.1";
-
-const PATCH_HISTORY = [
-  {
-    version: "v 1.1",
-    date: "2026.06.13",
-    isLatest: true,
-    logs: [
-      "방명록 게시판 UI 수정",
-      "패치노트 추가",
-      "유튜브 구독자 수 자동화",
-    ]
-  },
-  // 다음 패치 때: 이 위에 새 항목 추가, 기존 항목 isLatest: false 로 변경
-];
-
 const ACCENT = "#B8FF00";
 const LIME   = ACCENT;
 const glass  = "rgba(30,20,60,0.72)";
@@ -152,7 +20,7 @@ const muted  = "rgba(220,210,255,0.36)";
 const soft   = "rgba(220,210,255,0.70)";
 const white  = "#F2EEF9";
 const EMOJI_FONT = "'Twemoji Mozilla','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";
-const MOBILE_SHELL_WIDTH = 430;
+const MOBILE_SHELL_WIDTH = 460;
 const TOP_NAV_HEIGHT = 64;
 
 const ALBUMS = [
@@ -803,7 +671,35 @@ function BottomNav({tab,setTab}) {
   );
 }
 
-function HomeTab({ onOpenPatch }) {
+const HomeCard = ({ children, pad = "0" }) => (
+  <div
+    style={{
+      position: "relative",
+      background: "linear-gradient(180deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.015) 100%)",
+      backdropFilter: "blur(22px)",
+      WebkitBackdropFilter: "blur(22px)",
+      border: "1px solid rgba(184,255,0,0.10)",
+      borderRadius: 20,
+      padding: pad,
+      boxShadow: "0 14px 36px rgba(3,1,14,0.45), inset 0 1px 0 rgba(255,255,255,0.04)",
+      overflow: "hidden",
+    }}
+  >
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        background: "radial-gradient(circle at 12% 0%, rgba(184,255,0,0.06), transparent 55%)",
+        pointerEvents: "none",
+      }}
+    />
+    <div style={{ position: "relative" }}>{children}</div>
+  </div>
+);
+
+const HomeHr = () => <div style={{ height: 1, background: "rgba(184,255,0,0.08)" }} />;
+
+function HomeTab() {
   const [liveSubs, setLiveSubs] = useState(null);
   const [liveViews, setLiveViews] = useState(null);
   const [newsExpanded, setNewsExpanded] = useState(false);
@@ -839,68 +735,39 @@ function HomeTab({ onOpenPatch }) {
 
   const visibleNews = newsExpanded ? NEWS_ITEMS : NEWS_ITEMS.slice(0, 3);
 
-  const PatchBadge = (
-    <button
-      onClick={onOpenPatch}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 6,
-        background: "rgba(184,255,0,0.08)",
-        border: "1px solid rgba(184,255,0,0.2)",
-        borderRadius: 20,
-        padding: "8px 20px",
-        justifyContent: "space-between",
-        cursor: "pointer",
-        fontFamily: "inherit",
-        marginBottom: 4,
-        width: "100%",
-      }}
-    >
-      <span style={{ fontSize: 9, color: ACCENT, fontWeight: 700, letterSpacing: "0.1em" }}>
-        🔔 PATCH NOTE
-      </span>
-      <span style={{ fontSize: 10, color: "rgba(220,210,255,0.6)" }}>
-        {PATCH_VERSION} 업데이트 보기 →
-      </span>
-    </button>
-  );
-
- 
-
   const ReleaseSchedule = (
-    <G pad="0">
-      <div style={{ padding: "18px 18px 10px" }}><SecHead title="📀 발매 일정" /></div>
-      <Hr />
+    <HomeCard>
+      <div style={{ padding: "18px 18px 12px" }}><SecHead title="📀 발매 일정" /></div>
+      <HomeHr />
       {RELEASE_SCHEDULE.map((n, i, arr) => (
         <div key={n.title + n.date}>
-          <div style={{ display: "flex", alignItems: "center", gap: 0, padding: "11px 18px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 0, padding: "12px 18px" }}>
             <div style={{ width: 56, flexShrink: 0 }}><Tag c={n.tagC}>{n.tag}</Tag></div>
             <span style={{ width: 44, flexShrink: 0, fontSize: 11, color: "rgba(220,210,255,0.75)", fontWeight: 600 }}>{n.date}</span>
             <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: white, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{n.title}</p>
           </div>
-          {i < arr.length - 1 && <Hr />}
+          {i < arr.length - 1 && <HomeHr />}
         </div>
       ))}
-    </G>
+    </HomeCard>
   );
 
   const News = (
-    <G pad="0">
-      <div style={{ padding: "18px 18px 10px" }}><SecHead title="📢 NEWS" /></div>
-      <Hr />
+    <HomeCard>
+      <div style={{ padding: "18px 18px 12px" }}><SecHead title="📢 NEWS" /></div>
+      <HomeHr />
       {visibleNews.map((n, i, arr) => (
         <div key={n.title + n.date}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 18px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 18px" }}>
             <span style={{ width: 44, flexShrink: 0, fontSize: 11, color: "rgba(220,210,255,0.75)", fontWeight: 600 }}>{n.date}</span>
             <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: white, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{n.title}</p>
           </div>
-          {i < arr.length - 1 && <Hr />}
+          {i < arr.length - 1 && <HomeHr />}
         </div>
       ))}
       {NEWS_ITEMS.length > 3 && (
         <>
-          <Hr />
+          <HomeHr />
           <button
             onClick={() => setNewsExpanded((v) => !v)}
             style={{
@@ -912,11 +779,11 @@ function HomeTab({ onOpenPatch }) {
           </button>
         </>
       )}
-    </G>
+    </HomeCard>
   );
 
   const OfficialLinks = (
-    <G>
+    <HomeCard pad="20px 18px 16px">
       <SecHead title="Official Links" />
       <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 14, justifyContent: "center" }}>
         {PLATFORMS.map((p) => (
@@ -938,7 +805,7 @@ function HomeTab({ onOpenPatch }) {
           />
         ))}
       </div>
-    </G>
+    </HomeCard>
   );
 
   const Footer = (
@@ -960,7 +827,6 @@ function HomeTab({ onOpenPatch }) {
   trackCount={trackCount}
 />
       <div style={{ display: "flex", flexDirection: "column", gap: 10, padding: "12px 14px 0" }}>
-        {PatchBadge}
         {ReleaseSchedule}
         {News}
         {OfficialLinks}
@@ -1676,13 +1542,6 @@ const q = query(
 // ── APP (메인 컴포넌트 단일 Export Default) ───────────────────
 export default function App() {
   const [tab, setTab] = useState(NAV_ITEMS[0].id);
-const [showPatch, setShowPatch] = useState(false);
-useEffect(() => {
-  const seen = localStorage.getItem("patch_seen");
-
-  if (seen !== PATCH_VERSION) setShowPatch(true);
-}, []);
-
 
   useEffect(() => {
     if (document.querySelector('script[src*="chart.umd.js"]')) return;
@@ -1706,8 +1565,7 @@ useEffect(() => {
         strong { font-weight:800 }
       `}</style>
       <Stars />
-      
-      {showPatch && <PatchModal onClose={() => setShowPatch(false)} />}
+
         <TopTab
     tab={tab}
     setTab={setTab}
@@ -1727,7 +1585,7 @@ useEffect(() => {
   }}
   key={tab}
 >
-          {tab === NAV_ITEMS[0].id && <HomeTab onOpenPatch={() => setShowPatch(true)} />}
+          {tab === NAV_ITEMS[0].id && <HomeTab />}
           
           {tab === NAV_ITEMS[1].id && <MusicTab />}
           {tab === NAV_ITEMS[2].id && <GuestbookTab />}
