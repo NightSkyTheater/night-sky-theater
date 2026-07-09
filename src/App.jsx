@@ -784,7 +784,7 @@ function HomeTab() {
 
   const OfficialLinks = (
     <HomeCard pad="20px 18px 16px">
-  <SecHead title="Official Links" sub="Streaming & Social" />
+  <SecHead title="Streaming & Social"/>
 
   <div
     style={{
@@ -862,9 +862,9 @@ function HomeTab() {
   );
 
   const Footer = (
-    <div style={{ textAlign: "center", padding: "10px 0 4px" }}>
-      <a href="mailto:nightskytheater@gmail.com" style={{ fontSize: 12, color: soft, textDecoration: "none" }}>
-        nightskytheater@gmail.com
+    <div style={{ textAlign: "center", padding: "40px 0 4px" }}>
+      <a href="mailto:hps_in@naver.com" style={{ fontSize: 12, color: soft, textDecoration: "none" }}>
+        ✉ hps_in@naver.com
       </a>
       <p style={{ fontSize: 10, color: muted, margin: "6px 0 0" }}>
         © 2026 Night Sky Theater. All rights reserved.
@@ -1630,10 +1630,10 @@ export default function App() {
     flex: 1,
     padding:
       tab === NAV_ITEMS[0].id
-        ? `${TOP_NAV_HEIGHT}px 0 140px`
+        ? `${TOP_NAV_HEIGHT}px 0 60px`
         : tab === NAV_ITEMS[2].id
           ? `${TOP_NAV_HEIGHT + 12}px 14px 0`
-          : `${TOP_NAV_HEIGHT + 12}px 14px 140px`,
+          : `${TOP_NAV_HEIGHT + 12}px 14px 60px`,
     animation: "fin 0.3s ease both"
   }}
   key={tab}
