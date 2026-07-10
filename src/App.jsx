@@ -1356,7 +1356,7 @@ function AnonymousAvatar({ id }) {
   );
 }
 
-function GuestbookTab() {
+function GuestbookTab({ isActive }) { // 💡 isActive props 추가
   const [entries, setEntries] = useState([]);
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
@@ -1364,6 +1364,9 @@ function GuestbookTab() {
   const [done, setDone] = useState(false);
 
   useEffect(() => {
+    // 💡 방명록 탭이 활성화되지 않았다면 Firebase 연결을 하지 않음 (로딩 최적화)
+    if (!isActive) return;
+
     const q = query(
       collection(db, "guestbook"),
       orderBy("createdAt", "desc")
@@ -1380,7 +1383,7 @@ function GuestbookTab() {
     return () => {
       unsub();
     };
-  }, []);
+  }, [isActive]); // 💡 isActive가 변경될 때마다 이펙트 재실행
 
   const submit = async () => {
     if (!name.trim() || !pw.trim() || !msg.trim()) return;
@@ -1458,7 +1461,7 @@ function GuestbookTab() {
         </p>
       </div>
 
-      {/* ✍️ 인라인 작성 카드 (모달 없이 바로 작성) */}
+      {/* ✍️ 인라인 작성 카드 */}
       <div
         style={{
           background: "rgba(255,255,255,0.04)",
@@ -1513,7 +1516,7 @@ function GuestbookTab() {
         </div>
       </div>
 
-      {/* 📜 낙서 목록 (세로 리스트, 답글/좋아요 없음) */}
+      {/* 📜 낙서 목록 */}
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {entries.map((e) => (
           <div
@@ -1605,35 +1608,36 @@ export default function App() {
       `}</style>
       <Stars />
 
-        <TopTab
-    tab={tab}
-    setTab={setTab}
-/>
+      <TopTab
+        tab={tab}
+        setTab={setTab}
+      />
 
       <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: MOBILE_SHELL_WIDTH, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh", overflow: "hidden" }}>
         <div
-  style={{
-    flex: 1,
-    padding:
-      tab === NAV_ITEMS[0].id
-        ? `${TOP_NAV_HEIGHT}px 0 60px`
-        : tab === NAV_ITEMS[2].id
-          ? `${TOP_NAV_HEIGHT + 12}px 14px 0`
-          : `${TOP_NAV_HEIGHT + 12}px 14px 60px`,
-    animation: "fin 0.3s ease both"
-  }}
->
-         <div style={{ display: tab === NAV_ITEMS[0].id ? "block" : "none" }}>
-   <HomeTab />
-</div>
+          style={{
+            flex: 1,
+            padding:
+              tab === NAV_ITEMS[0].id
+                ? `${TOP_NAV_HEIGHT}px 0 60px`
+                : tab === NAV_ITEMS[2].id
+                  ? `${TOP_NAV_HEIGHT + 12}px 14px 0`
+                  : `${TOP_NAV_HEIGHT + 12}px 14px 60px`,
+            animation: "fin 0.3s ease both"
+          }}
+        >
+          <div style={{ display: tab === NAV_ITEMS[0].id ? "block" : "none" }}>
+            <HomeTab />
+          </div>
 
-<div style={{ display: tab === NAV_ITEMS[1].id ? "block" : "none" }}>
-   <MusicTab />
-</div>
+          <div style={{ display: tab === NAV_ITEMS[1].id ? "block" : "none" }}>
+            <MusicTab />
+          </div>
 
-<div style={{ display: tab === NAV_ITEMS[2].id ? "block" : "none" }}>
-   <GuestbookTab />
-</div>
+          <div style={{ display: tab === NAV_ITEMS[2].id ? "block" : "none" }}>
+            {/* 💡 isActive 속성을 추가하여 방명록 탭이 열릴 때만 Firebase 데이터를 실시간 조회합니다. */}
+            <GuestbookTab isActive={tab === NAV_ITEMS[2].id} />
+          </div>
         </div>
       </div>
     </div>
