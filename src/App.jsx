@@ -1582,7 +1582,7 @@ const [hasMore, setHasMore] = useState(true);
     const q = query(
       collection(db, "guestbook"),
       orderBy("createdAt", "desc"),
-      limit(20)
+      limit(10)
     );
 
     const snapshot = await getDocs(q);
@@ -1596,7 +1596,7 @@ const [hasMore, setHasMore] = useState(true);
 
     setLastDoc(snapshot.docs[snapshot.docs.length - 1]);
 
-    if (snapshot.docs.length < 20) {
+    if (snapshot.docs.length < 10) {
       setHasMore(false);
     }
   }
