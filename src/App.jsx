@@ -569,9 +569,10 @@ function TopTab({ tab, setTab }) {
   key={item.id}
   onClick={() => setTab(item.id)}
   style={{
-    width: 50,
-    height: 50,
+    width: 42,
+    height: 42,
     borderRadius: 999,
+    background: "transparent",
     border: "none",
     cursor: "pointer",
 
@@ -583,6 +584,7 @@ function TopTab({ tab, setTab }) {
   tab === item.id
     ? ACCENT
     : "rgba(255,255,255,.35)",
+
     transition: "all .2s ease",
   }}
 >
