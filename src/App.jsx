@@ -1358,7 +1358,12 @@ function AnonymousAvatar({ id }) {
   );
 }
 
-function GuestbookTab({ entries, loadMore, hasMore }) {
+function GuestbookTab({
+  entries,
+  loadMore,
+  hasMore,
+  loadGuestbook,
+}) {
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
@@ -1706,6 +1711,7 @@ const loadMore = async () => {
   entries={guestbookEntries}
   loadMore={loadMore}
   hasMore={hasMore}
+  loadGuestbook={loadGuestbook}
 />
           </div>
         </div>
