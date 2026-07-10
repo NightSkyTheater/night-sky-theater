@@ -583,7 +583,7 @@ function TopTab({ tab, setTab }) {
     color:
   tab === item.id
     ? ACCENT
-    : "rgba(255,255,255,.35)",
+    : "#666666",
 
     transition: "all .2s ease",
   }}
