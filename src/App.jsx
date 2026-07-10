@@ -1687,7 +1687,7 @@ const loadMore = async () => {
               tab === NAV_ITEMS[0].id
                 ? `${TOP_NAV_HEIGHT}px 0 60px`
                 : tab === NAV_ITEMS[2].id
-                  ? `${TOP_NAV_HEIGHT + 12}px 14px 0`
+                  ? `${TOP_NAV_HEIGHT + 12}px 14px 40px`
                   : `${TOP_NAV_HEIGHT + 12}px 14px 60px`,
             animation: "fin 0.3s ease both"
           }}
