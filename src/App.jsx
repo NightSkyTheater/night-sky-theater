@@ -1584,12 +1584,33 @@ function GuestbookTab({ isActive }) { // 💡 isActive props 추가
 // ── APP (메인 컴포넌트 단일 Export Default) ───────────────────
 export default function App() {
   const [tab, setTab] = useState(NAV_ITEMS[0].id);
+  // 💡 방명록 데이터를 최상위 App에서 관리하여 앱이 켜지자마자 미리 로딩합니다.
+  const [guestbookEntries, setGuestbookEntries] = useState([]);
 
+  // Chart.js 로드용 useEffect
   useEffect(() => {
     if (document.querySelector('script[src*="chart.umd.js"]')) return;
     const s = document.createElement("script");
     s.src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";
     document.head.appendChild(s);
+  }, []);
+
+  // 💡 [핵심] 홈 화면에 있을 때도 방명록 데이터를 백그라운드에서 실시간으로 미리 로드
+  useEffect(() => {
+    const q = query(
+      collection(db, "guestbook"),
+      orderBy("createdAt", "desc")
+    );
+
+    const unsub = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+      }));
+      setGuestbookEntries(data); // 데이터를 미리 상태에 저장
+    });
+
+    return () => unsub();
   }, []);
 
   return (
@@ -1635,8 +1656,8 @@ export default function App() {
           </div>
 
           <div style={{ display: tab === NAV_ITEMS[2].id ? "block" : "none" }}>
-            {/* 💡 isActive 속성을 추가하여 방명록 탭이 열릴 때만 Firebase 데이터를 실시간 조회합니다. */}
-            <GuestbookTab isActive={tab === NAV_ITEMS[2].id} />
+            {/* 💡 미리 로드한 데이터(entries)를 GuestbookTab에 전달합니다. */}
+            <GuestbookTab entries={guestbookEntries} />
           </div>
         </div>
       </div>
