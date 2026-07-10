@@ -791,6 +791,22 @@ function HomeTab() {
           <div style={{ display: "flex", alignItems: "center", gap: 0, padding: "12px 18px" }}>
             <div style={{ width: 56, flexShrink: 0 }}><Tag c={n.tagC}>{n.tag}</Tag></div>
             <span style={{ width: 44, flexShrink: 0, fontSize: 11, color: "rgba(220,210,255,0.75)", fontWeight: 600 }}>{n.date}</span>
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: white, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{n.title}</p>
+          </div>
+          {i < arr.length - 1 && <HomeHr />}
+        </div>
+      ))}
+    </HomeCard>
+  );
+
+  const News = (
+    <HomeCard>
+      <div style={{ padding: "18px 18px 12px" }}><SecHead title="공지사항" /></div>
+      <HomeHr />
+      {visibleNews.map((n, i, arr) => (
+        <div key={n.title + n.date}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 18px" }}>
+            <span style={{ width: 44, flexShrink: 0, fontSize: 11, color: "rgba(220,210,255,0.75)", fontWeight: 600 }}>{n.date}</span>
             <p
   style={{
     margin: 0,
@@ -811,22 +827,6 @@ function HomeTab() {
 >
   {n.title}
 </p>
-          </div>
-          {i < arr.length - 1 && <HomeHr />}
-        </div>
-      ))}
-    </HomeCard>
-  );
-
-  const News = (
-    <HomeCard>
-      <div style={{ padding: "18px 18px 12px" }}><SecHead title="공지사항" /></div>
-      <HomeHr />
-      {visibleNews.map((n, i, arr) => (
-        <div key={n.title + n.date}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 18px" }}>
-            <span style={{ width: 44, flexShrink: 0, fontSize: 11, color: "rgba(220,210,255,0.75)", fontWeight: 600 }}>{n.date}</span>
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 500, color: white, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>{n.title}</p>
           </div>
           {i < arr.length - 1 && <HomeHr />}
         </div>
