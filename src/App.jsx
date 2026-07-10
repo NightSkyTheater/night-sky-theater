@@ -1298,7 +1298,7 @@ function MusicTab() {
     </div>
   );
 }
-// ── 방명록 (Firebase 기능 유지 + 투명 유리 파스텔 UI + 세로 스크롤 Flex형) ─────────────────────────────
+// ── 방명록 (Firebase 기능 유지 + 인라인 작성형 + 랜덤 어나니머스 아바타) ─────────────────────────────
 function timeAgo(date) {
   if (!date) return "";
   const targetDate =
@@ -1313,17 +1313,56 @@ function timeAgo(date) {
   return targetDate.toLocaleDateString("ko-KR");
 }
 
+// 어나니머스 아바타용 색상 팔레트 (기존 낙서 색상과 통일감 있게)
+const AVATAR_COLORS = [
+  "#B8FF00", "#8ab4ff", "#ff8b94", "#a8e6cf", "#ffcc44",
+  "#c4b5fd", "#fbcfe8", "#7dd3fc", "#fca5a5", "#86efac",
+];
+
+// entry.id 기반으로 매번 같은 색/아이콘이 나오도록 결정론적 해시
+function hashSeed(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (h << 5) - h + str.charCodeAt(i);
+    h |= 0;
+  }
+  return Math.abs(h);
+}
+
+function AnonymousAvatar({ id }) {
+  const seed = hashSeed(id || "anon");
+  const color = AVATAR_COLORS[seed % AVATAR_COLORS.length];
+  return (
+    <div
+      style={{
+        width: 32,
+        height: 32,
+        borderRadius: "50%",
+        background: `${color}22`,
+        border: `1px solid ${color}55`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+      }}
+    >
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+      </svg>
+    </div>
+  );
+}
+
 function GuestbookTab() {
   const [entries, setEntries] = useState([]);
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const cols = 1;
 
   useEffect(() => {
-const q = query(
+    const q = query(
       collection(db, "guestbook"),
       orderBy("createdAt", "desc")
     );
@@ -1337,7 +1376,6 @@ const q = query(
     });
 
     return () => {
-
       unsub();
     };
   }, []);
@@ -1364,10 +1402,7 @@ const q = query(
       setPw("");
       setMsg("");
       setDone(true);
-      setTimeout(() => {
-        setDone(false);
-        setIsOpen(false);
-      }, 2000);
+      setTimeout(() => setDone(false), 1600);
     } catch (err) {
       console.error(err);
     }
@@ -1393,269 +1428,149 @@ const q = query(
   const inputStyle = {
     background: "rgba(255,255,255,.05)",
     border: "1px solid rgba(255,255,255,.1)",
-    borderRadius: "14px",
+    borderRadius: "12px",
     color: "#fff",
     padding: "10px 14px",
     fontSize: "12px",
     outline: "none",
     fontFamily: "inherit",
+    width: "100%",
   };
 
   return (
     <div
       style={{
-        position: "relative",
-        height: "calc(100vh - 64px)",
         display: "flex",
         flexDirection: "column",
+        gap: 14,
         color: "#fff",
-        overflow: "hidden",
       }}
     >
       {/* 🌌 타이틀 */}
-      <div style={{
-        padding: "16px 20px",
-        background: "rgba(255, 255, 255, 0.02)",
-        backdropFilter: "blur(8px)",
-        WebkitBackdropFilter: "blur(8px)",
-        borderRadius: "16px",
-        border: "1px solid rgba(255, 255, 255, 0.05)",
-        zIndex: 2,
-        flexShrink: 0,
-        display: "flex",
-        marginTop:"10px",
-        justifyContent: "space-between",
-        alignItems: "center"
-      }}>
-        <div style={{ textAlign: "left" }}>
-          <h2 style={{ margin: "0 0 4px 0", fontSize: "16px", fontWeight: 600, color: "#B8FF00" }}>
-            밤하늘 낙서장
-          </h2>
-          <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)", margin: 0 }}>
-            밤하늘에 지워지지 않을 당신의 한 줄을 남겨주세요.
-          </p>
-        </div>
-
-        <button
-          onClick={() => setIsOpen(true)}
-          style={{
-            width: "36px",
-            height: "36px",
-            borderRadius: "50%",
-            border: "1px solid rgba(255,255,255,0.15)",
-            background: "rgba(255,255,255,0.05)",
-            backdropFilter: "blur(8px)",
-            WebkitBackdropFilter: "blur(8px)",
-            color: "#B8FF00",
-            fontSize: "18px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            padding: 0,
-            lineHeight: 0
-          }}
-        >
-          ＋
-        </button>
+      <div style={{ padding: "6px 4px 0" }}>
+        <h2 style={{ margin: "0 0 4px 0", fontSize: 16, fontWeight: 700, color: LIME }}>
+          밤하늘 낙서장
+        </h2>
+        <p style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", margin: 0 }}>
+          밤하늘에 지워지지 않을 당신의 한 줄을 남겨주세요.
+        </p>
       </div>
 
-      {/* 📌 포스트잇 감성 자유형 보드 */}
+      {/* ✍️ 인라인 작성 카드 (모달 없이 바로 작성) */}
       <div
         style={{
-          flex: 1,
-          padding: "20px",
-          overflowY: "auto",
+          background: "rgba(255,255,255,0.04)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          borderRadius: 18,
+          padding: 14,
           display: "flex",
-          flexDirection: "row",
-          gap: "20px",
-          alignItems: "flex-start"
+          flexDirection: "column",
+          gap: 8,
         }}
       >
-        {Array.from({ length: cols }).map((_, colIndex) => (
-          <div 
-            key={colIndex} 
-            style={{ 
-              flex: 1, 
-              display: "flex", 
-              flexDirection: "column", 
-              gap: "20px"
+        <div style={{ display: "flex", gap: 8 }}>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="닉네임"
+            style={{ ...inputStyle, flex: 1 }}
+          />
+          <input
+            value={pw}
+            onChange={(e) => setPw(e.target.value)}
+            placeholder="비밀번호"
+            type="password"
+            style={{ ...inputStyle, flex: 1 }}
+          />
+        </div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <input
+            value={msg}
+            onChange={(e) => setMsg(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && submit()}
+            placeholder="방명록을 작성해 주세요..."
+            style={{ ...inputStyle, flex: 1 }}
+          />
+          <button
+            onClick={submit}
+            style={{
+              flexShrink: 0,
+              padding: "0 18px",
+              borderRadius: 12,
+              border: "none",
+              background: done ? ACCENT : "rgba(255,255,255,0.9)",
+              color: "#111",
+              fontWeight: 700,
+              fontSize: 12,
+              cursor: "pointer",
+              fontFamily: "inherit",
             }}
           >
-            {entries
-              .filter((_, idx) => idx % cols === colIndex)
-              .map((e) => {
-                const baseColor = e.color || "#fff";
-
-                return (
-                  <div
-                    key={e.id}
-                    style={{
-                      position: "relative", // ✕ 버튼 절대 배치를 위해 고정
-                      width: "100%",
-                      minHeight: "90px",
-                      padding: "28px 24px 20px 24px", // 상단 여백 확보
-                      borderRadius: "20px",
-                      background: `linear-gradient(135deg, ${baseColor}15, ${baseColor}05)`,
-                      border: "1px solid rgba(255, 255, 255, 0.08)",
-                      backdropFilter: "blur(14px)",
-                      WebkitBackdropFilter: "blur(14px)",
-                      boxShadow: `0 8px 32px 0 rgba(0, 0, 0, 0.2), inset 0 0 1px 1px rgba(255, 255, 255, 0.05)`,
-                      textAlign: "left",
-                    }}
-                  >
-                    {/* ✕ 삭제 버튼 (깔끔한 인터랙션 적용) */}
-                    <button
-                      onClick={() => del(e)}
-                      style={{
-                        position: "absolute",
-                        top: "10px",
-                        right: "12px",
-                        background: "none",
-                        border: "none",
-                        color: "rgba(255, 255, 255, 0.3)",
-                        cursor: "pointer",
-                        fontSize: "12px",
-                        padding: "4px",
-                        transition: "color 0.2s",
-                      }}
-                      onMouseEnter={(e) => e.target.style.color = "#ff4d4d"}
-                      onMouseLeave={(e) => e.target.style.color = "rgba(255, 255, 255, 0.3)"}
-                    >
-                      ✕
-                    </button>
-
-                    <p
-                      style={{
-                        margin: 0,
-                        fontSize: "13px",
-                        lineHeight: "22px",
-                        fontWeight: 300,
-                        whiteSpace: "pre-wrap",
-                        wordBreak: "keep-all",
-                        color: "rgba(255, 255, 255, 0.95)", 
-                        textShadow: "0 1px 2px rgba(0,0,0,0.4)"
-                      }}
-                    >
-                      {e.msg}
-                    </p>
-
-                    <div
-                      style={{
-                        marginTop: "12px",
-                        paddingTop: "8px",
-                        borderTop: "1px solid rgba(255,255,255,0.06)",
-                        fontSize: "11px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        opacity: 0.7,
-                      }}
-                    >
-                      <span style={{ color: baseColor, fontWeight: 600, textShadow: `0 0 8px ${baseColor}44` }}>
-                        ✦ {e.name}
-                      </span>
-                      <span>{timeAgo(e.createdAt)}</span>
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
-        ))}
+            {done ? "완료 ✨" : "남기기"}
+          </button>
+        </div>
       </div>
 
-      {/* 📥 글쓰기 모달 창 */}
-      {isOpen && (
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "rgba(0, 0, 0, 0.5)",
-            backdropFilter: "blur(16px)",
-            WebkitBackdropFilter: "blur(16px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "20px",
-            zIndex: 20
-          }}
-          onClick={() => setIsOpen(false)}
-        >
+      {/* 📜 낙서 목록 (세로 리스트, 답글/좋아요 없음) */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {entries.map((e) => (
           <div
+            key={e.id}
             style={{
-              width: "100%",
-              maxWidth: "340px",
-              background: "rgba(18,18,18,0.9)",
-              backdropFilter: "blur(30px)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: "24px",
-              padding: "20px",
+              position: "relative",
               display: "flex",
-              flexDirection: "column",
-              gap: "20px",
+              gap: 10,
+              padding: "12px 14px",
+              borderRadius: 16,
+              background: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(255,255,255,0.06)",
             }}
-            onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2px" }}>
-              <span style={{ fontSize: "13px", fontWeight: 600, color: "#B8FF00" }}>낙서 남기기</span>
-              <button 
-                onClick={() => setIsOpen(false)}
-                style={{ background: "none", border: "none", color: "rgba(255,255,255,0.4)", fontSize: "16px", cursor: "pointer" }}
+            <AnonymousAvatar id={e.id} />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}>
+                <span style={{ fontSize: 12.5, fontWeight: 700, color: white }}>{e.name}</span>
+                <span style={{ fontSize: 10.5, color: muted }}>{timeAgo(e.createdAt)}</span>
+              </div>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 13,
+                  lineHeight: 1.6,
+                  color: soft,
+                  whiteSpace: "pre-wrap",
+                  wordBreak: "break-word",
+                }}
               >
-                ✕
-              </button>
+                {e.msg}
+              </p>
             </div>
-
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="닉네임"
-              style={{ ...inputStyle, width: "100%" }}
-            />
-
-            <input
-              value={pw}
-              onChange={(e) => setPw(e.target.value)}
-              placeholder="비밀번호"
-              type="password"
-              style={{ ...inputStyle, width: "100%" }}
-            />
-
-            <textarea
-              value={msg}
-              onChange={(e) => setMsg(e.target.value)}
-              placeholder="당신의 한 줄이 별이 됩니다."
-              rows={4}
-              style={{
-                ...inputStyle,
-                width: "100%",
-                resize: "none",
-                fontSize: "13px",
-              }}
-            />
-
             <button
-              onClick={submit}
+              onClick={() => del(e)}
               style={{
-                width: "100%",
-                padding: "12px 0",
-                borderRadius: "12px",
+                position: "absolute",
+                top: 10,
+                right: 10,
+                background: "none",
                 border: "none",
-                fontWeight: "700",
-                background: done ? "#B8FF00" : "rgba(255,255,255,0.9)",
-                color: "#111",
+                color: "rgba(255,255,255,0.28)",
                 cursor: "pointer",
-                fontSize: "13px",
+                fontSize: 12,
+                padding: 4,
               }}
+              onMouseEnter={(ev) => (ev.target.style.color = "#ff4d4d")}
+              onMouseLeave={(ev) => (ev.target.style.color = "rgba(255,255,255,0.28)")}
             >
-              {done ? "기록완료 ✨" : "남기기"}
+              ✕
             </button>
           </div>
-        </div>
-      )}
+        ))}
+        {entries.length === 0 && (
+          <p style={{ textAlign: "center", fontSize: 12, color: muted, padding: "20px 0" }}>
+            아직 낙서가 없어요. 첫 별을 남겨보세요.
+          </p>
+        )}
+      </div>
     </div>
   );
 }
