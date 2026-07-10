@@ -1356,34 +1356,13 @@ function AnonymousAvatar({ id }) {
   );
 }
 
-function GuestbookTab({ isActive }) { // 💡 isActive props 추가
-  const [entries, setEntries] = useState([]);
+function GuestbookTab({ entries }) { // 💡 기존 isActive 대신 App에서 미리 로드된 entries를 받습니다.
   const [name, setName] = useState("");
   const [pw, setPw] = useState("");
   const [msg, setMsg] = useState("");
   const [done, setDone] = useState(false);
 
-  useEffect(() => {
-    // 💡 방명록 탭이 활성화되지 않았다면 Firebase 연결을 하지 않음 (로딩 최적화)
-    if (!isActive) return;
-
-    const q = query(
-      collection(db, "guestbook"),
-      orderBy("createdAt", "desc")
-    );
-
-    const unsub = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map((d) => ({
-        id: d.id,
-        ...d.data(),
-      }));
-      setEntries(data);
-    });
-
-    return () => {
-      unsub();
-    };
-  }, [isActive]); // 💡 isActive가 변경될 때마다 이펙트 재실행
+  // 💡 데이터 로딩(onSnapshot) 관련 useEffect는 App.jsx로 이동했으므로 여기서는 깔끔하게 제거되었습니다!
 
   const submit = async () => {
     if (!name.trim() || !pw.trim() || !msg.trim()) return;
