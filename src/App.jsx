@@ -478,15 +478,15 @@ function formatCompact(num) {
 const NAV_ITEMS = [
   {
     id: "홈",
-    svg: <House size={24} strokeWidth={2.2} />,
+    svg: <House size={25} strokeWidth={2.2} />,
   },
   {
     id: "음악",
-    svg: <Disc3 size={24} strokeWidth={2.2} />,
+    svg: <Disc3 size={25} strokeWidth={2.2} />,
   },
   {
     id: "방명록",
-    svg: <NotebookPen size={24} strokeWidth={2.2} />,
+    svg: <NotebookPen size={25} strokeWidth={2.2} />,
   },
 ];
 
