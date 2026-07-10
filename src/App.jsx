@@ -1447,7 +1447,7 @@ function GuestbookTab() {
       }}
     >
       {/* 🌌 타이틀 */}
-      <div style={{ padding: "6px 4px 0" }}>
+      <div style={{ padding: "16px 4px 6px" }}>
         <h2 style={{ margin: "0 0 4px 0", fontSize: 16, fontWeight: 700, color: LIME }}>
           밤하늘 낙서장
         </h2>
@@ -1540,6 +1540,7 @@ function GuestbookTab() {
                   color: soft,
                   whiteSpace: "pre-wrap",
                   wordBreak: "break-word",
+                  textAlign: "left",
                 }}
               >
                 {e.msg}
