@@ -491,7 +491,7 @@ const NAV_ITEMS = [
 ];
 
 function TopTab({ tab, setTab }) {
-  const tabs = NAV_ITEMS.map((item) => item.id);
+  const tabs = NAV_ITEMS;
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -564,15 +564,15 @@ function TopTab({ tab, setTab }) {
 </button>
 
         <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
-          {tabs.map((t) => (
+          {tabs.map((item) => (
             <button
-              key={t}
-              onClick={() => setTab(t)}
+              key={item.id}
+              onClick={() => setTab(item.id)}
               style={{
                 background: "none",
                 border: "none",
                 cursor: "pointer",
-                color: tab === t ? ACCENT : "rgba(255,255,255,.62)",
+                color: tab === item.id ? ACCENT : "rgba(255,255,255,.62)",
                 fontSize: 14,
                 fontWeight: tab === t ? 800 : 600,
                 position: "relative",
@@ -581,8 +581,17 @@ function TopTab({ tab, setTab }) {
                 whiteSpace: "nowrap",
               }}
             >
-              {t}
-              {tab === t && (
+              <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
+  }}
+>
+  {item.svg}
+  <span>{item.id}</span>
+</div>
+              {tab === item.id && (
                 <span
                   style={{
                     position: "absolute",
