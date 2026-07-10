@@ -476,18 +476,9 @@ function formatCompact(num) {
 }
 
 const NAV_ITEMS = [
-  {
-    id: "홈",
-    svg: <House size={20} strokeWidth={2.2} />,
-  },
-  {
-    id: "음악",
-    svg: <Disc3 size={20} strokeWidth={2.2} />,
-  },
-  {
-    id: "방명록",
-    svg: <NotebookPen size={20} strokeWidth={2.2} />,
-  },
+  {id:"\uD648",    svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>},
+  {id:"\uC74C\uC545",  svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>},
+  {id:"\uBC29\uBA85\uB85D",svg:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{width:20,height:20}}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>},
 ];
 
 function TopTab({ tab, setTab }) {
@@ -566,47 +557,33 @@ function TopTab({ tab, setTab }) {
         <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
           {tabs.map((item) => (
             <button
-              key={item.id}
-              onClick={() => setTab(item.id)}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                color: tab === item.id ? ACCENT : "rgba(255,255,255,.62)",
-                fontSize: 14,
-                fontWeight: tab === t ? 800 : 600,
-                position: "relative",
-                padding: "22px 10px 20px",
-                fontFamily: "inherit",
-                whiteSpace: "nowrap",
-              }}
-            >
-              <div
+  key={item.id}
+  onClick={() => setTab(item.id)}
   style={{
+    width: 42,
+    height: 42,
+    borderRadius: 999,
+    background:
+      tab === item.id
+        ? "rgba(184,255,0,.14)"
+        : "transparent",
+    border: "none",
+    cursor: "pointer",
+
     display: "flex",
     alignItems: "center",
-    gap: 6,
+    justifyContent: "center",
+
+    color:
+      tab === item.id
+        ? ACCENT
+        : "rgba(255,255,255,.55)",
+
+    transition: "all .2s ease",
   }}
 >
   {item.svg}
-  <span>{item.id}</span>
-</div>
-              {tab === item.id && (
-                <span
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    right: 0,
-                    bottom: 12,
-                    margin: "auto",
-                    width: "100%",
-                    height: 2,
-                    borderRadius: 10,
-                    background: ACCENT,
-                  }}
-                />
-              )}
-            </button>
+</button>
           ))}
         </div>
       </div>
