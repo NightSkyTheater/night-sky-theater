@@ -1622,12 +1622,18 @@ export default function App() {
           : `${TOP_NAV_HEIGHT + 12}px 14px 60px`,
     animation: "fin 0.3s ease both"
   }}
-  key={tab}
 >
-          {tab === NAV_ITEMS[0].id && <HomeTab />}
-          
-          {tab === NAV_ITEMS[1].id && <MusicTab />}
-          {tab === NAV_ITEMS[2].id && <GuestbookTab />}
+         <div style={{ display: tab === NAV_ITEMS[0].id ? "block" : "none" }}>
+   <HomeTab />
+</div>
+
+<div style={{ display: tab === NAV_ITEMS[1].id ? "block" : "none" }}>
+   <MusicTab />
+</div>
+
+<div style={{ display: tab === NAV_ITEMS[2].id ? "block" : "none" }}>
+   <GuestbookTab />
+</div>
         </div>
       </div>
     </div>
