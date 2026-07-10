@@ -426,7 +426,7 @@ const RELEASE_SCHEDULE = [
 const NEWS_ITEMS = [
   { date:"04.03", title:"'겨울의 대삼각형' 제주도교육청 교육자료 수록" },
   { date:"06.11", title:"밤하늘극장 공식 팬페이지 오픈" },
-  { date:"06.28", title:"오마이걸 효정님 추천곡으로 KBS Cool FM '볼륨을 높여요' 방송 소개" },
+  { date:"06.28", title:"오마이걸 효정님의 추천곡으로 '죽어가는 모든 것들을 사랑해야지' 라디오 소개" },
 ];
 
 function Stars() {
