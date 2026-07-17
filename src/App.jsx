@@ -1436,40 +1436,42 @@ const nextAlb =
       <p style={{fontSize:10,color:muted,letterSpacing:"0.16em",margin:"0 0 6px",textTransform:"uppercase"}}>NIGHT SKY THEATER</p>
 
       <div
+  key={index}
   style={{
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    gap: 18,
-    padding: "10px 0",
+    justifyContent: "space-between",
+
+    height: 620,
+    padding: "20px 0",
+
+    animation:
+      `${direction === "next"
+        ? "slideUpIn"
+        : "slideDownIn"} .36s ease both`,
   }}
 >
 
 {prevAlb && (
-  <div
-    onClick={goPrev}
-    style={{
-      transform: "translateY(-35px) scale(.62)",
-      opacity: .22,
-      transition: ".35s",
-      cursor: "pointer",
-    }}
-  >
-    <CDDisc
-      cover={prevAlb.cover}
-      color={prevAlb.color}
-      size={216}
-      spinning={false}
-    />
-  </div>
-)}
+    <div
+      onClick={goPrev}
+      style={{
+        transform:"translateY(-20px) scale(.62)",
+        opacity:.3,
+        cursor:"pointer",
+      }}
+    >
+      <CDDisc
+        cover={prevAlb.cover}
+        color={prevAlb.color}
+        size={190}
+        spinning={false}
+      />
+    </div>
+  )}
 
-  <div
-    key={index}
-    style={{
-      animation: `${direction==="next"?"slideUpIn":"slideDownIn"} .36s ease both`
-    }}
-  >
+  <div>
     <div
       onClick={()=>setSelected(true)}
       style={{cursor:"pointer"}}
@@ -1514,20 +1516,19 @@ const nextAlb =
     </div>
   </div>
 
-  {nextAlb && (
-  <div
-    onClick={goNext}
-    style={{
-      transform: "translateY(35px) scale(.62)",
-      opacity: .22,
-      transition: ".35s",
-      cursor: "pointer",
-    }}
-  >
+ {nextAlb && (
+    <div
+      onClick={goNext}
+      style={{
+        transform:"translateY(20px) scale(.62)",
+        opacity:.3,
+        cursor:"pointer",
+      }}
+    >
       <CDDisc
         cover={nextAlb.cover}
         color={nextAlb.color}
-        size={216}
+        size={190}
         spinning={false}
       />
     </div>
@@ -1540,7 +1541,7 @@ const nextAlb =
           <div key={i} onClick={()=>goTo(i, i>index?"next":"prev")} style={{width:i===index?18:6,height:6,borderRadius:3,background:i===index?ACCENT:"rgba(255,255,255,0.18)",cursor:"pointer",transition:"all 0.2s"}}/>
         ))}
       </div>
-      <p style={{fontSize:10,color:muted,marginTop:8,letterSpacing:"0.06em"}}>{index+1} / {displayAlbums.length}</p>
+      <p style={{fontSize:10,color:muted,marginTop:18,letterSpacing:"0.06em"}}>{index+1} / {displayAlbums.length}</p>
       <p style={{fontSize:10,color:"rgba(255,255,255,0.22)",marginTop:14}}>↕ 스와이프해서 앨범 넘기기 · 탭하면 재생목록</p>
     </div>
   );
