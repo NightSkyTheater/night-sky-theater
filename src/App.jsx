@@ -1317,15 +1317,9 @@ function MusicTab() {
   const touchStartY = useRef(null);
 
   const alb = displayAlbums[index];
-  const prevAlb =
-  index > 0
-    ? displayAlbums[index - 1]
-    : null;
+  const prevAlb = index > 0 ? displayAlbums[index - 1] : null;
+  const nextAlb = index < displayAlbums.length - 1 ? displayAlbums[index + 1] : null;
 
-const nextAlb =
-  index < displayAlbums.length - 1
-    ? displayAlbums[index + 1]
-    : null;
   const goTo = (newIndex, dir) => {
     if (lockRef.current) return;
     if (newIndex < 0 || newIndex >= displayAlbums.length) return;
@@ -1361,6 +1355,10 @@ const nextAlb =
   const dEnd = Math.min(displayAlbums.length, dStart + dotWindow);
   dStart = Math.max(0, dEnd - dotWindow);
   const dotIndices = Array.from({ length: dEnd - dStart }, (_, k) => dStart + k);
+
+  // 가독성을 위해 배경 대비용 어두운 그림자 강도를 세팅합니다.
+  const mainShadow = "0 20px 40px rgba(0, 0, 0, 0.65)";
+  const sideShadow = "0 10px 25px rgba(0, 0, 0, 0.5)";
 
   if (selected) {
     const tr = alb.tracks[trackIdx];
@@ -1420,119 +1418,133 @@ const nextAlb =
       onTouchEnd={onTouchEnd}
       onWheel={onWheel}
       style={{
-    display:"flex",
-    flexDirection:"column",
-    alignItems:"center",
-    justifyContent:"center",
-
-    minHeight:"calc(100vh - 140px)",
-
-    paddingTop:80,
-    paddingBottom:80,
-
-    boxSizing:"border-box",
-}}
+        display:"flex",
+        flexDirection:"column",
+        alignItems:"center",
+        justifyContent:"center",
+        minHeight:"calc(100vh - 140px)",
+        paddingTop:80,
+        paddingBottom:80,
+        boxSizing:"border-box",
+      }}
     >
       <p style={{fontSize:10,color:muted,letterSpacing:"0.16em",margin:"0 0 6px",textTransform:"uppercase"}}>NIGHT SKY THEATER</p>
 
       <div
-  key={index}
-  style={{
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center", // space-between에서 center로 변경!
-
-    position: "relative", // 절대 좌표(absolute) 자식들을 잡기 위한 기준점
-    height: 620,
-    padding: "20px 0",
-
-    animation: `${
-      direction === "next" ? "slideUpIn" : "slideDownIn"
-    } .36s ease both`,
-  }}
->
-  {/* [이전 앨범] absolute로 띄워서 위쪽에 고정 */}
-  {prevAlb && (
-    <div
-      onClick={goPrev}
-      style={{
-        position: "absolute",
-        top: 20, // 컨테이너 상단 여백에 고정
-        transform: "scale(.62)",
-        opacity: 0.3,
-        cursor: "pointer",
-        zIndex: 1,
-      }}
-    >
-      <CDDisc
-        cover={prevAlb.cover}
-        color={prevAlb.color}
-        size={190}
-        spinning={false}
-      />
-    </div>
-  )}
-
-  {/* [현재 메인 앨범] 컨테이너가 center 정렬이므로 자연스럽게 정중앙에 위치 */}
-  <div style={{ zIndex: 2 }}>
-    <div onClick={() => setSelected(true)} style={{ cursor: "pointer" }}>
-      <CDDisc
-        cover={alb.cover}
-        color={alb.color}
-        size={250}
-        spinning
-        glow
-      />
-    </div>
-
-    <div style={{ textAlign: "center", marginTop: 8 }}>
-      <p
+        key={index}
         style={{
-          fontSize: 16,
-          fontWeight: 900,
-          color: white,
-          margin: "0 0 4px",
-          fontFamily: "'Noto Serif KR',serif",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+          height: 620,
+          width: "100%",
+          padding: "20px 0",
+          animation: `${direction === "next" ? "slideUpIn" : "slideDownIn"} .36s ease both`,
         }}
       >
-        {alb.title}
-      </p>
-      <p
-        style={{
-          fontSize: 11,
-          color: ACCENT,
-          fontWeight: 700,
-          margin: 0,
-        }}
-      >
-        {alb.year}
-      </p>
-    </div>
-  </div>
+        {/* [이전 앨범] 상단으로 더 밀어내고 어두운 그림자 적용 */}
+        {prevAlb && (
+          <div
+            onClick={goPrev}
+            style={{
+              position: "absolute",
+              top: 0, 
+              transform: "scale(.58)", 
+              opacity: 0.25,
+              cursor: "pointer",
+              zIndex: 1,
+              filter: `drop-shadow(${sideShadow})`,
+              transition: "all 0.3s"
+            }}
+          >
+            <CDDisc
+              cover={prevAlb.cover}
+              color={prevAlb.color}
+              size={190}
+              spinning={false}
+            />
+          </div>
+        )}
 
-  {/* [다음 앨범] absolute로 띄워서 아래쪽에 고정 */}
-  {nextAlb && (
-    <div
-      onClick={goNext}
-      style={{
-        position: "absolute",
-        bottom: 20, // 컨테이너 하단 여백에 고정
-        transform: "scale(.62)",
-        opacity: 0.3,
-        cursor: "pointer",
-        zIndex: 1,
-      }}
-    >
-      <CDDisc
-        cover={nextAlb.cover}
-        color={nextAlb.color}
-        size={190}
-        spinning={false}
-      />
-    </div>
-  )}
-</div>
+        {/* [현재 메인 앨범] 일정한 높이를 확보하여 하단 컨텐츠가 밀리지 않도록 고정 */}
+        <div 
+          style={{ 
+            zIndex: 2, 
+            display: "flex", 
+            flexDirection: "column", 
+            alignItems: "center",
+            height: 330, 
+            justifyContent: "center"
+          }}
+        >
+          <div 
+            onClick={() => setSelected(true)} 
+            style={{ 
+              cursor: "pointer",
+              filter: `drop-shadow(${mainShadow})` 
+            }}
+          >
+            <CDDisc
+              cover={alb.cover}
+              color={alb.color}
+              size={250}
+              spinning
+              glow
+            />
+          </div>
+
+          {/* 텍스트가 겹치지 않도록 명확한 상단 여백 설정 */}
+          <div style={{ textAlign: "center", marginTop: 20, minHeight: 60 }}>
+            <p
+              style={{
+                fontSize: 16,
+                fontWeight: 900,
+                color: white,
+                margin: "0 0 4px",
+                fontFamily: "'Noto Serif KR',serif",
+              }}
+            >
+              {alb.title}
+            </p>
+            <p
+              style={{
+                fontSize: 11,
+                color: ACCENT,
+                fontWeight: 700,
+                margin: 0,
+              }}
+            >
+              {alb.year}
+            </p>
+          </div>
+        </div>
+
+        {/* [다음 앨범] 하단으로 더 밀어내고 어두운 그림자 적용 */}
+        {nextAlb && (
+          <div
+            onClick={goNext}
+            style={{
+              position: "absolute",
+              bottom: 0, 
+              transform: "scale(.58)", 
+              opacity: 0.25,
+              cursor: "pointer",
+              zIndex: 1,
+              filter: `drop-shadow(${sideShadow})`,
+              transition: "all 0.3s"
+            }}
+          >
+            <CDDisc
+              cover={nextAlb.cover}
+              color={nextAlb.color}
+              size={190}
+              spinning={false}
+            />
+          </div>
+        )}
+      </div>
 
       <div style={{display:"flex",alignItems:"center",gap:6,marginTop:18}}>
         {dotIndices.map(i=>(
