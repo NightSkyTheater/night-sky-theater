@@ -1317,7 +1317,15 @@ function MusicTab() {
   const touchStartY = useRef(null);
 
   const alb = displayAlbums[index];
+  const prevAlb =
+  index > 0
+    ? displayAlbums[index - 1]
+    : null;
 
+const nextAlb =
+  index < displayAlbums.length - 1
+    ? displayAlbums[index + 1]
+    : null;
   const goTo = (newIndex, dir) => {
     if (lockRef.current) return;
     if (newIndex < 0 || newIndex >= displayAlbums.length) return;
