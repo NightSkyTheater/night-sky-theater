@@ -1420,23 +1420,20 @@ const nextAlb =
       onTouchEnd={onTouchEnd}
       onWheel={onWheel}
       style={{
-        display:"flex",
-        flexDirection:"column",
-        alignItems:"center",
-        justifyContent:"center",
-        minHeight:"calc(100vh - 140px)",
-        gap:0,
-        userSelect:"none",
-      }}
+    display:"flex",
+    flexDirection:"column",
+    alignItems:"center",
+    justifyContent:"center",
+
+    minHeight:"calc(100vh - 140px)",
+
+    paddingTop:80,
+    paddingBottom:80,
+
+    boxSizing:"border-box",
+}}
     >
       <p style={{fontSize:10,color:muted,letterSpacing:"0.16em",margin:"0 0 6px",textTransform:"uppercase"}}>NIGHT SKY THEATER</p>
-
-      <button
-        onClick={goPrev}
-        disabled={index===0}
-        style={{background:"none",border:"none",cursor:index===0?"default":"pointer",color:index===0?"rgba(255,255,255,0.12)":muted,padding:6,marginBottom:2,fontSize:16,lineHeight:1}}
-        aria-label="이전 앨범"
-      >▲</button>
 
       <div
   style={{
@@ -1448,23 +1445,24 @@ const nextAlb =
   }}
 >
 
-  {prevAlb && (
-    <div
-      style={{
-        transform: "scale(.72)",
-        opacity: .28,
-        transition: ".35s",
-        pointerEvents: "none",
-      }}
-    >
-      <CDDisc
-        cover={prevAlb.cover}
-        color={prevAlb.color}
-        size={216}
-        spinning={false}
-      />
-    </div>
-  )}
+{prevAlb && (
+  <div
+    onClick={goPrev}
+    style={{
+      transform: "translateY(-35px) scale(.62)",
+      opacity: .22,
+      transition: ".35s",
+      cursor: "pointer",
+    }}
+  >
+    <CDDisc
+      cover={prevAlb.cover}
+      color={prevAlb.color}
+      size={216}
+      spinning={false}
+    />
+  </div>
+)}
 
   <div
     key={index}
@@ -1479,7 +1477,7 @@ const nextAlb =
       <CDDisc
         cover={alb.cover}
         color={alb.color}
-        size={216}
+        size={250}
         spinning
         glow
       />
@@ -1517,14 +1515,15 @@ const nextAlb =
   </div>
 
   {nextAlb && (
-    <div
-      style={{
-        transform: "scale(.72)",
-        opacity: .28,
-        transition: ".35s",
-        pointerEvents: "none",
-      }}
-    >
+  <div
+    onClick={goNext}
+    style={{
+      transform: "translateY(35px) scale(.62)",
+      opacity: .22,
+      transition: ".35s",
+      cursor: "pointer",
+    }}
+  >
       <CDDisc
         cover={nextAlb.cover}
         color={nextAlb.color}
@@ -1535,13 +1534,6 @@ const nextAlb =
   )}
 
 </div>
-
-      <button
-        onClick={goNext}
-        disabled={index===displayAlbums.length-1}
-        style={{background:"none",border:"none",cursor:index===displayAlbums.length-1?"default":"pointer",color:index===displayAlbums.length-1?"rgba(255,255,255,0.12)":muted,padding:6,marginTop:2,fontSize:16,lineHeight:1}}
-        aria-label="다음 앨범"
-      >▼</button>
 
       <div style={{display:"flex",alignItems:"center",gap:6,marginTop:18}}>
         {dotIndices.map(i=>(
