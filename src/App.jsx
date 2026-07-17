@@ -1438,15 +1438,103 @@ const nextAlb =
         aria-label="이전 앨범"
       >▲</button>
 
-      <div key={index} style={{animation:`${direction==="next"?"slideUpIn":"slideDownIn"} 0.36s ease both`,display:"flex",flexDirection:"column",alignItems:"center",gap:14,padding:"10px 0"}}>
-        <div onClick={()=>setSelected(true)} style={{cursor:"pointer"}}>
-          <CDDisc cover={alb.cover} color={alb.color} size={216} spinning glow />
-        </div>
-        <div style={{textAlign:"center",marginTop:4}}>
-          <p style={{fontSize:16,fontWeight:900,color:white,margin:"0 0 4px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.35,letterSpacing:"-0.3px",maxWidth:280}}>{alb.title}</p>
-          <p style={{fontSize:11,color:ACCENT,fontWeight:700,margin:0,letterSpacing:"0.08em",opacity:0.85}}>{alb.year}</p>
-        </div>
-      </div>
+      <div
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 18,
+    padding: "10px 0",
+  }}
+>
+
+  {prevAlb && (
+    <div
+      style={{
+        transform: "scale(.72)",
+        opacity: .28,
+        transition: ".35s",
+        pointerEvents: "none",
+      }}
+    >
+      <CDDisc
+        cover={prevAlb.cover}
+        color={prevAlb.color}
+        size={216}
+        spinning={false}
+      />
+    </div>
+  )}
+
+  <div
+    key={index}
+    style={{
+      animation: `${direction==="next"?"slideUpIn":"slideDownIn"} .36s ease both`
+    }}
+  >
+    <div
+      onClick={()=>setSelected(true)}
+      style={{cursor:"pointer"}}
+    >
+      <CDDisc
+        cover={alb.cover}
+        color={alb.color}
+        size={216}
+        spinning
+        glow
+      />
+    </div>
+
+    <div
+      style={{
+        textAlign:"center",
+        marginTop:8
+      }}
+    >
+      <p
+        style={{
+          fontSize:16,
+          fontWeight:900,
+          color:white,
+          margin:"0 0 4px",
+          fontFamily:"'Noto Serif KR',serif"
+        }}
+      >
+        {alb.title}
+      </p>
+
+      <p
+        style={{
+          fontSize:11,
+          color:ACCENT,
+          fontWeight:700,
+          margin:0
+        }}
+      >
+        {alb.year}
+      </p>
+    </div>
+  </div>
+
+  {nextAlb && (
+    <div
+      style={{
+        transform: "scale(.72)",
+        opacity: .28,
+        transition: ".35s",
+        pointerEvents: "none",
+      }}
+    >
+      <CDDisc
+        cover={nextAlb.cover}
+        color={nextAlb.color}
+        size={216}
+        spinning={false}
+      />
+    </div>
+  )}
+
+</div>
 
       <button
         onClick={goNext}
