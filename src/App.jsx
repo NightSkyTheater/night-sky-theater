@@ -1357,7 +1357,7 @@ function MusicTab() {
   const dotIndices = Array.from({ length: dEnd - dStart }, (_, k) => dStart + k);
 
   // 가독성을 위해 배경 대비용 어두운 그림자 강도를 세팅합니다.
-  const mainShadow = "0 20px 40px rgba(0, 0, 0, 0.65)";
+  const mainShadow = "0 20px 40px rgba(0, 0, 0, 0.4)";
   const sideShadow = "0 10px 25px rgba(0, 0, 0, 0.5)";
 
   if (selected) {
