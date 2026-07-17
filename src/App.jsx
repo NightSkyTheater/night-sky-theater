@@ -1441,25 +1441,28 @@ const nextAlb =
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center", // space-between에서 center로 변경!
 
+    position: "relative", // 절대 좌표(absolute) 자식들을 잡기 위한 기준점
     height: 620,
     padding: "20px 0",
 
-    animation:
-      `${direction === "next"
-        ? "slideUpIn"
-        : "slideDownIn"} .36s ease both`,
+    animation: `${
+      direction === "next" ? "slideUpIn" : "slideDownIn"
+    } .36s ease both`,
   }}
 >
-
-{prevAlb && (
+  {/* [이전 앨범] absolute로 띄워서 위쪽에 고정 */}
+  {prevAlb && (
     <div
       onClick={goPrev}
       style={{
-        transform:"translateY(-20px) scale(.62)",
-        opacity:.3,
-        cursor:"pointer",
+        position: "absolute",
+        top: 20, // 컨테이너 상단 여백에 고정
+        transform: "scale(.62)",
+        opacity: 0.3,
+        cursor: "pointer",
+        zIndex: 1,
       }}
     >
       <CDDisc
@@ -1471,11 +1474,9 @@ const nextAlb =
     </div>
   )}
 
-  <div>
-    <div
-      onClick={()=>setSelected(true)}
-      style={{cursor:"pointer"}}
-    >
+  {/* [현재 메인 앨범] 컨테이너가 center 정렬이므로 자연스럽게 정중앙에 위치 */}
+  <div style={{ zIndex: 2 }}>
+    <div onClick={() => setSelected(true)} style={{ cursor: "pointer" }}>
       <CDDisc
         cover={alb.cover}
         color={alb.color}
@@ -1485,30 +1486,24 @@ const nextAlb =
       />
     </div>
 
-    <div
-      style={{
-        textAlign:"center",
-        marginTop:8
-      }}
-    >
+    <div style={{ textAlign: "center", marginTop: 8 }}>
       <p
         style={{
-          fontSize:16,
-          fontWeight:900,
-          color:white,
-          margin:"0 0 4px",
-          fontFamily:"'Noto Serif KR',serif"
+          fontSize: 16,
+          fontWeight: 900,
+          color: white,
+          margin: "0 0 4px",
+          fontFamily: "'Noto Serif KR',serif",
         }}
       >
         {alb.title}
       </p>
-
       <p
         style={{
-          fontSize:11,
-          color:ACCENT,
-          fontWeight:700,
-          margin:0
+          fontSize: 11,
+          color: ACCENT,
+          fontWeight: 700,
+          margin: 0,
         }}
       >
         {alb.year}
@@ -1516,13 +1511,17 @@ const nextAlb =
     </div>
   </div>
 
- {nextAlb && (
+  {/* [다음 앨범] absolute로 띄워서 아래쪽에 고정 */}
+  {nextAlb && (
     <div
       onClick={goNext}
       style={{
-        transform:"translateY(20px) scale(.62)",
-        opacity:.3,
-        cursor:"pointer",
+        position: "absolute",
+        bottom: 20, // 컨테이너 하단 여백에 고정
+        transform: "scale(.62)",
+        opacity: 0.3,
+        cursor: "pointer",
+        zIndex: 1,
       }}
     >
       <CDDisc
@@ -1533,7 +1532,6 @@ const nextAlb =
       />
     </div>
   )}
-
 </div>
 
       <div style={{display:"flex",alignItems:"center",gap:6,marginTop:18}}>
