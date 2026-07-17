@@ -802,7 +802,7 @@ function HomeTab() {
   const trackCount = ALL_TRACKS.length;
   const currentSubs = liveSubs ?? SUB_DATA[SUB_DATA.length - 1].subs;
 
-  const visibleNews = newsExpanded ? NEWS_ITEMS : NEWS_ITEMS.slice(0, 3);
+  const visibleNews = newsExpanded ? NEWS_ITEMS : NEWS_ITEMS.slice(0, 4);
 
   const ReleaseSchedule = (
     <HomeCard>
@@ -853,7 +853,7 @@ function HomeTab() {
           {i < arr.length - 1 && <HomeHr />}
         </div>
       ))}
-      {NEWS_ITEMS.length > 3 && (
+      {NEWS_ITEMS.length > 4 && (
         <>
           <HomeHr />
           <button
