@@ -1255,7 +1255,13 @@ function MusicTab() {
         <button onClick={()=>{setSelected(null);setTrackIdx(0);}} style={{display:"flex",alignItems:"center",gap:6,background:"none",border:"none",cursor:"pointer",color:ACCENT,fontSize:13,fontFamily:"inherit",padding:0,marginBottom:4}}>← 음반 목록</button>
         <G acc>
           <div style={{textAlign:"center"}}>
-            <div style={{width:120,height:120,borderRadius:18,backgroundImage:`url(${alb.cover})`,backgroundColor:alb.color,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat",border:"1px solid rgba(184,255,0,0.15)",margin:"0 auto 16px",overflow:"hidden",boxShadow:`0 10px 30px ${alb.color}44`}}/>
+            <div style={{position:"relative",width:132,height:132,margin:"0 auto 16px"}}>
+              <div style={{width:132,height:132,borderRadius:"50%",backgroundImage:`url(${alb.cover})`,backgroundColor:alb.color,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat",border:"1px solid rgba(184,255,0,0.15)",overflow:"hidden",boxShadow:`0 10px 30px ${alb.color}44`,animation:"cdspin 14s linear infinite"}}>
+                <div style={{position:"absolute",inset:0,borderRadius:"50%",background:"conic-gradient(from 0deg, rgba(255,255,255,0.02), rgba(255,255,255,0.16) 12%, rgba(255,255,255,0.02) 24%, rgba(255,255,255,0.10) 48%, rgba(255,255,255,0.02) 62%, rgba(255,255,255,0.14) 82%, rgba(255,255,255,0.02) 100%)",mixBlendMode:"overlay",pointerEvents:"none"}}/>
+              </div>
+              <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:22,height:22,borderRadius:"50%",background:"rgba(10,6,24,0.55)",border:"1px solid rgba(255,255,255,0.35)",boxShadow:"inset 0 1px 3px rgba(0,0,0,0.5)"}}/>
+              <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:7,height:7,borderRadius:"50%",background:"rgba(3,1,14,0.8)"}}/>
+            </div>
             <p style={{fontSize:10,color:ACCENT,fontWeight:700,margin:"0 0 4px",letterSpacing:"0.1em",opacity:0.8}}>{alb.year}</p>
             <p style={{fontSize:17,fontWeight:900,color:white,margin:"0 0 8px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.3,letterSpacing:"-0.3px"}}>{alb.title}</p>
             <p style={{fontSize:12,color:muted,lineHeight:1.7,margin:0,fontStyle:"italic"}}>"{alb.desc}"</p>
@@ -1304,14 +1310,18 @@ function MusicTab() {
         {[...ALBUMS].reverse().map((a,i)=>(
           <button key={a.id} onClick={()=>{setSelected(ALBUMS.length-1-i);setTrackIdx(0);}} style={{background:"none",border:"none",cursor:"pointer",padding:0,textAlign:"left",fontFamily:"inherit",width:"100%",minWidth:0}}>
             <div
-              style={{width:"100%",aspectRatio:"1/1",borderRadius:14,backgroundImage:`url(${a.cover})`,backgroundColor:a.color,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat",border:"1px solid rgba(255,255,255,0.08)",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.25s ease",overflow:"hidden",position:"relative",boxShadow:`0 10px 35px ${a.color}33`}}
+              style={{width:"100%",aspectRatio:"1/1",borderRadius:"50%",backgroundImage:`url(${a.cover})`,backgroundColor:a.color,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat",border:"1px solid rgba(255,255,255,0.08)",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.25s ease",overflow:"hidden",position:"relative",boxShadow:`0 10px 35px ${a.color}33`}}
               onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(184,255,0,0.35)";e.currentTarget.style.transform="translateY(-4px) scale(1.02)";e.currentTarget.style.boxShadow=`0 18px 45px ${a.color}55`;}}
               onMouseLeave={e => {
                 e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
                 e.currentTarget.style.transform = "translateY(0) scale(1)";
                 e.currentTarget.style.boxShadow = `0 10px 35px ${a.color}33`;
               }}
-            />
+            >
+              <div style={{position:"absolute",inset:0,borderRadius:"50%",background:"conic-gradient(from 0deg, rgba(255,255,255,0.02), rgba(255,255,255,0.16) 12%, rgba(255,255,255,0.02) 24%, rgba(255,255,255,0.10) 48%, rgba(255,255,255,0.02) 62%, rgba(255,255,255,0.14) 82%, rgba(255,255,255,0.02) 100%)",mixBlendMode:"overlay",pointerEvents:"none"}}/>
+              <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:"16%",height:"16%",borderRadius:"50%",background:"rgba(10,6,24,0.55)",border:"1px solid rgba(255,255,255,0.3)",boxShadow:"inset 0 1px 3px rgba(0,0,0,0.5)"}}/>
+              <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:"5%",height:"5%",borderRadius:"50%",background:"rgba(3,1,14,0.8)"}}/>
+            </div>
             <p style={{fontSize:12,fontWeight:700,color:white,margin:"0 0 2px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",lineHeight:1.3}}>{a.title}</p>
             <p style={{fontSize:10,color:muted,margin:0}}>{a.tracks.length}곡</p>
           </button>
@@ -1687,6 +1697,7 @@ const loadMore = async () => {
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
         @keyframes fin   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes cdspin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
         * { box-sizing:border-box; }
         body { font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif; text-align:left; margin:0; }
         p, span, div { text-align:inherit; }
