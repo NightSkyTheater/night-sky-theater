@@ -440,7 +440,7 @@ const RELEASE_SCHEDULE = [
   { tag:"싱글", tagC:"#a8e6cf", date:"06.30", title:"'星の世界 (별의 세계)' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"07.03", title:"'아마 모르겠지' 발매" },
   { tag:"정규", tagC:"#ff8b94", date:"07.14", title:"'바다와 어른, 소년의 노래' 발매" },
-  { tag:"예정", tagC:"#ffcc44", date:"07.14", title:"'문득 그 시절이 사무치게 그리워질 때면' 발매" },
+  { tag:"예정", tagC:"#ffcc44", date:"07.23", title:"'문득 그 시절이 사무치게 그리워질 때면' 발매" },
 ];
 
 const NEWS_ITEMS = [
