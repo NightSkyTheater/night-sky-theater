@@ -1244,30 +1244,134 @@ function AboutTab() {
   );
 }
 
-function MusicTab() {
-  const [selected,setSelected]=useState(null);
-  const [trackIdx,setTrackIdx]=useState(0);
+function CDDisc({ cover, color, size = 220, spinning = true, glow = false }) {
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: size,
+        height: size,
+        margin: "0 auto",
+        filter: glow ? `drop-shadow(0 14px 42px ${color}77)` : "drop-shadow(0 10px 26px rgba(0,0,0,0.5))",
+        transition: "filter 0.4s ease",
+      }}
+    >
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          borderRadius: "50%",
+          backgroundImage: `url(${cover})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundColor: color,
+          border: "1px solid rgba(255,255,255,0.14)",
+          boxShadow: "0 0 0 6px rgba(255,255,255,0.025), inset 0 0 30px rgba(0,0,0,0.25)",
+          overflow: "hidden",
+          position: "relative",
+          animation: spinning ? "cdspin 26s linear infinite" : "none",
+        }}
+      >
+        <div style={{position:"absolute",inset:0,borderRadius:"50%",background:"conic-gradient(from 0deg, rgba(255,255,255,0.02), rgba(255,255,255,0.22) 8%, rgba(255,255,255,0.02) 18%, rgba(255,255,255,0.12) 40%, rgba(255,255,255,0.02) 55%, rgba(255,255,255,0.18) 75%, rgba(255,255,255,0.02) 100%)",mixBlendMode:"overlay",pointerEvents:"none"}}/>
+        <div style={{position:"absolute",inset:0,borderRadius:"50%",background:"radial-gradient(circle at 30% 22%, rgba(255,255,255,0.28), transparent 45%)",pointerEvents:"none"}}/>
+        <div style={{position:"absolute",inset:"9%",borderRadius:"50%",border:"1px solid rgba(255,255,255,0.05)",pointerEvents:"none"}}/>
+        <div style={{position:"absolute",inset:"20%",borderRadius:"50%",border:"1px solid rgba(255,255,255,0.04)",pointerEvents:"none"}}/>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%,-50%)",
+          width: size * 0.15,
+          height: size * 0.15,
+          borderRadius: "50%",
+          background: "radial-gradient(circle at 35% 30%, rgba(255,255,255,0.3), rgba(10,6,24,0.92) 62%)",
+          border: "1px solid rgba(255,255,255,0.3)",
+          boxShadow: "inset 0 2px 5px rgba(0,0,0,0.6)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%,-50%)",
+          width: size * 0.045,
+          height: size * 0.045,
+          borderRadius: "50%",
+          background: "rgba(3,1,14,0.92)",
+        }}
+      />
+    </div>
+  );
+}
 
-  if (selected !== null) {
-    const alb=ALBUMS[selected], tr=alb.tracks[trackIdx];
+function MusicTab() {
+  const displayAlbums = [...ALBUMS].reverse();
+  const [index, setIndex] = useState(0);
+  const [selected, setSelected] = useState(false);
+  const [trackIdx, setTrackIdx] = useState(0);
+  const [direction, setDirection] = useState("next");
+  const lockRef = useRef(false);
+  const touchStartY = useRef(null);
+
+  const alb = displayAlbums[index];
+
+  const goTo = (newIndex, dir) => {
+    if (lockRef.current) return;
+    if (newIndex < 0 || newIndex >= displayAlbums.length) return;
+    lockRef.current = true;
+    setDirection(dir);
+    setIndex(newIndex);
+    setTrackIdx(0);
+    setTimeout(() => { lockRef.current = false; }, 360);
+  };
+
+  const goNext = () => goTo(index + 1, "next");
+  const goPrev = () => goTo(index - 1, "prev");
+
+  const onTouchStart = (e) => {
+    if (selected) return;
+    touchStartY.current = e.touches[0].clientY;
+  };
+  const onTouchEnd = (e) => {
+    if (selected || touchStartY.current === null) return;
+    const dy = e.changedTouches[0].clientY - touchStartY.current;
+    touchStartY.current = null;
+    if (Math.abs(dy) < 40) return;
+    if (dy < 0) goNext(); else goPrev();
+  };
+  const onWheel = (e) => {
+    if (selected) return;
+    if (Math.abs(e.deltaY) < 12) return;
+    if (e.deltaY > 0) goNext(); else goPrev();
+  };
+
+  const dotWindow = 7;
+  let dStart = Math.max(0, index - Math.floor(dotWindow / 2));
+  const dEnd = Math.min(displayAlbums.length, dStart + dotWindow);
+  dStart = Math.max(0, dEnd - dotWindow);
+  const dotIndices = Array.from({ length: dEnd - dStart }, (_, k) => dStart + k);
+
+  if (selected) {
+    const tr = alb.tracks[trackIdx];
     return (
       <div style={{display:"flex",flexDirection:"column",gap:10}}>
-        <button onClick={()=>{setSelected(null);setTrackIdx(0);}} style={{display:"flex",alignItems:"center",gap:6,background:"none",border:"none",cursor:"pointer",color:ACCENT,fontSize:13,fontFamily:"inherit",padding:0,marginBottom:4}}>← 음반 목록</button>
+        <button onClick={()=>setSelected(false)} style={{display:"flex",alignItems:"center",gap:6,background:"none",border:"none",cursor:"pointer",color:ACCENT,fontSize:13,fontFamily:"inherit",padding:0,marginBottom:4}}>← 목록으로</button>
         <G acc>
-          <div style={{textAlign:"center"}}>
-            <div style={{position:"relative",width:132,height:132,margin:"0 auto 16px"}}>
-              <div style={{width:132,height:132,borderRadius:"50%",backgroundImage:`url(${alb.cover})`,backgroundColor:alb.color,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat",border:"1px solid rgba(184,255,0,0.15)",overflow:"hidden",boxShadow:`0 10px 30px ${alb.color}44`,animation:"cdspin 14s linear infinite"}}>
-                <div style={{position:"absolute",inset:0,borderRadius:"50%",background:"conic-gradient(from 0deg, rgba(255,255,255,0.02), rgba(255,255,255,0.16) 12%, rgba(255,255,255,0.02) 24%, rgba(255,255,255,0.10) 48%, rgba(255,255,255,0.02) 62%, rgba(255,255,255,0.14) 82%, rgba(255,255,255,0.02) 100%)",mixBlendMode:"overlay",pointerEvents:"none"}}/>
-              </div>
-              <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:22,height:22,borderRadius:"50%",background:"rgba(10,6,24,0.55)",border:"1px solid rgba(255,255,255,0.35)",boxShadow:"inset 0 1px 3px rgba(0,0,0,0.5)"}}/>
-              <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:7,height:7,borderRadius:"50%",background:"rgba(3,1,14,0.8)"}}/>
+          <div style={{display:"flex",alignItems:"center",gap:16}}>
+            <div style={{flexShrink:0}}>
+              <CDDisc cover={alb.cover} color={alb.color} size={92} spinning glow />
             </div>
-            <p style={{fontSize:10,color:ACCENT,fontWeight:700,margin:"0 0 4px",letterSpacing:"0.1em",opacity:0.8}}>{alb.year}</p>
-            <p style={{fontSize:17,fontWeight:900,color:white,margin:"0 0 8px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.3,letterSpacing:"-0.3px"}}>{alb.title}</p>
-            <p style={{fontSize:12,color:muted,lineHeight:1.7,margin:0,fontStyle:"italic"}}>"{alb.desc}"</p>
+            <div style={{flex:1,minWidth:0,textAlign:"left"}}>
+              <p style={{fontSize:9,color:ACCENT,fontWeight:700,margin:"0 0 4px",letterSpacing:"0.1em",opacity:0.8}}>{alb.year}</p>
+              <p style={{fontSize:16,fontWeight:900,color:white,margin:"0 0 6px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.3,letterSpacing:"-0.3px"}}>{alb.title}</p>
+              <p style={{fontSize:11.5,color:muted,lineHeight:1.6,margin:0,fontStyle:"italic"}}>"{alb.desc}"</p>
+            </div>
           </div>
           <Hr my={16}/>
-          <div style={{display:"flex",justifyContent:"center",gap:5}}> {/* 💡 justifyCenter -> justifyContent 수정 */}
+          <div style={{display:"flex",justifyContent:"center",gap:5}}>
             {alb.tracks.map((_,j)=>(
               <div key={j} onClick={()=>setTrackIdx(j)} style={{width:j===trackIdx?20:6,height:4,borderRadius:2,background:j===trackIdx?ACCENT:"rgba(91,79,245,0.2)",transition:"all 0.2s",cursor:"pointer"}}/>
             ))}
@@ -1302,31 +1406,54 @@ function MusicTab() {
     );
   }
 
-  const cols = "1fr 1fr";
   return (
-    <div>
-      <div style={{marginBottom:16,marginTop:20}}><SecHead title="디스코그래피" sub={`총 ${ALBUMS.length}개 앨범`}/></div>
-      <div style={{display:"grid",gridTemplateColumns:cols,gap:12}}>
-        {[...ALBUMS].reverse().map((a,i)=>(
-          <button key={a.id} onClick={()=>{setSelected(ALBUMS.length-1-i);setTrackIdx(0);}} style={{background:"none",border:"none",cursor:"pointer",padding:0,textAlign:"left",fontFamily:"inherit",width:"100%",minWidth:0}}>
-            <div
-              style={{width:"100%",aspectRatio:"1/1",borderRadius:"50%",backgroundImage:`url(${a.cover})`,backgroundColor:a.color,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat",border:"1px solid rgba(255,255,255,0.08)",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"center",transition:"all 0.25s ease",overflow:"hidden",position:"relative",boxShadow:`0 10px 35px ${a.color}33`}}
-              onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(184,255,0,0.35)";e.currentTarget.style.transform="translateY(-4px) scale(1.02)";e.currentTarget.style.boxShadow=`0 18px 45px ${a.color}55`;}}
-              onMouseLeave={e => {
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
-                e.currentTarget.style.transform = "translateY(0) scale(1)";
-                e.currentTarget.style.boxShadow = `0 10px 35px ${a.color}33`;
-              }}
-            >
-              <div style={{position:"absolute",inset:0,borderRadius:"50%",background:"conic-gradient(from 0deg, rgba(255,255,255,0.02), rgba(255,255,255,0.16) 12%, rgba(255,255,255,0.02) 24%, rgba(255,255,255,0.10) 48%, rgba(255,255,255,0.02) 62%, rgba(255,255,255,0.14) 82%, rgba(255,255,255,0.02) 100%)",mixBlendMode:"overlay",pointerEvents:"none"}}/>
-              <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:"16%",height:"16%",borderRadius:"50%",background:"rgba(10,6,24,0.55)",border:"1px solid rgba(255,255,255,0.3)",boxShadow:"inset 0 1px 3px rgba(0,0,0,0.5)"}}/>
-              <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:"5%",height:"5%",borderRadius:"50%",background:"rgba(3,1,14,0.8)"}}/>
-            </div>
-            <p style={{fontSize:12,fontWeight:700,color:white,margin:"0 0 2px",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",lineHeight:1.3}}>{a.title}</p>
-            <p style={{fontSize:10,color:muted,margin:0}}>{a.tracks.length}곡</p>
-          </button>
+    <div
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      onWheel={onWheel}
+      style={{
+        display:"flex",
+        flexDirection:"column",
+        alignItems:"center",
+        justifyContent:"center",
+        minHeight:"calc(100vh - 140px)",
+        gap:0,
+        userSelect:"none",
+      }}
+    >
+      <p style={{fontSize:10,color:muted,letterSpacing:"0.16em",margin:"0 0 6px",textTransform:"uppercase"}}>NIGHT SKY THEATER</p>
+
+      <button
+        onClick={goPrev}
+        disabled={index===0}
+        style={{background:"none",border:"none",cursor:index===0?"default":"pointer",color:index===0?"rgba(255,255,255,0.12)":muted,padding:6,marginBottom:2,fontSize:16,lineHeight:1}}
+        aria-label="이전 앨범"
+      >▲</button>
+
+      <div key={index} style={{animation:`${direction==="next"?"slideUpIn":"slideDownIn"} 0.36s ease both`,display:"flex",flexDirection:"column",alignItems:"center",gap:14,padding:"10px 0"}}>
+        <div onClick={()=>setSelected(true)} style={{cursor:"pointer"}}>
+          <CDDisc cover={alb.cover} color={alb.color} size={216} spinning glow />
+        </div>
+        <div style={{textAlign:"center",marginTop:4}}>
+          <p style={{fontSize:16,fontWeight:900,color:white,margin:"0 0 4px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.35,letterSpacing:"-0.3px",maxWidth:280}}>{alb.title}</p>
+          <p style={{fontSize:11,color:ACCENT,fontWeight:700,margin:0,letterSpacing:"0.08em",opacity:0.85}}>{alb.year}</p>
+        </div>
+      </div>
+
+      <button
+        onClick={goNext}
+        disabled={index===displayAlbums.length-1}
+        style={{background:"none",border:"none",cursor:index===displayAlbums.length-1?"default":"pointer",color:index===displayAlbums.length-1?"rgba(255,255,255,0.12)":muted,padding:6,marginTop:2,fontSize:16,lineHeight:1}}
+        aria-label="다음 앨범"
+      >▼</button>
+
+      <div style={{display:"flex",alignItems:"center",gap:6,marginTop:18}}>
+        {dotIndices.map(i=>(
+          <div key={i} onClick={()=>goTo(i, i>index?"next":"prev")} style={{width:i===index?18:6,height:6,borderRadius:3,background:i===index?ACCENT:"rgba(255,255,255,0.18)",cursor:"pointer",transition:"all 0.2s"}}/>
         ))}
       </div>
+      <p style={{fontSize:10,color:muted,marginTop:8,letterSpacing:"0.06em"}}>{index+1} / {displayAlbums.length}</p>
+      <p style={{fontSize:10,color:"rgba(255,255,255,0.22)",marginTop:14}}>↕ 스와이프해서 앨범 넘기기 · 탭하면 재생목록</p>
     </div>
   );
 }
@@ -1698,6 +1825,8 @@ const loadMore = async () => {
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
         @keyframes fin   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
         @keyframes cdspin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+        @keyframes slideUpIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes slideDownIn { from{opacity:0;transform:translateY(-30px)} to{opacity:1;transform:translateY(0)} }
         * { box-sizing:border-box; }
         body { font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif; text-align:left; margin:0; }
         p, span, div { text-align:inherit; }
