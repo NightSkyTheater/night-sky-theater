@@ -1496,7 +1496,7 @@ function MusicTab() {
           </div>
 
           {/* 텍스트가 겹치지 않도록 명확한 상단 여백 설정 */}
-          <div style={{ textAlign: "center", marginTop: 20, minHeight: 60, zIndex: 3 }}>
+          <div style={{ textAlign: "center", marginTop: 20, minHeight: 60 }}>
             <p
               style={{
                 fontSize: 16,
