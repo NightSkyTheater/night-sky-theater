@@ -1418,17 +1418,44 @@ function MusicTab() {
       onTouchEnd={onTouchEnd}
       onWheel={onWheel}
       style={{
-        display:"flex",
-        flexDirection:"column",
-        alignItems:"center",
-        justifyContent:"center",
-        minHeight:"calc(100vh - 140px)",
-        paddingTop:80,
-        paddingBottom:80,
-        boxSizing:"border-box",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "calc(100vh - 140px)",
+        paddingTop: 80,
+        paddingBottom: 80,
+        boxSizing: "border-box",
       }}
     >
-      <p style={{fontSize:10,color:muted,letterSpacing:"0.16em",margin:"0 0 6px",textTransform:"uppercase"}}>NIGHT SKY THEATER</p>
+      {/* [수정] 최상단으로 이동한 앨범 타이틀 및 정보 영역 */}
+      <div style={{ textAlign: "center", marginBottom: 20, minHeight: 70 }}>
+        <p style={{ fontSize: 10, color: muted, letterSpacing: "0.16em", margin: "0 0 8px", textTransform: "uppercase" }}>
+          DISCOGRAPHY
+        </p>
+        <p
+          style={{
+            fontSize: 18,
+            fontWeight: 900,
+            color: white,
+            margin: "0 0 4px",
+            fontFamily: "'Noto Serif KR',serif",
+            letterSpacing: "-0.3px"
+          }}
+        >
+          {alb.title}
+        </p>
+        <p
+          style={{
+            fontSize: 11,
+            color: ACCENT,
+            fontWeight: 700,
+            margin: 0,
+          }}
+        >
+          {alb.year}
+        </p>
+      </div>
 
       <div
         key={index}
@@ -1438,13 +1465,13 @@ function MusicTab() {
           alignItems: "center",
           justifyContent: "center",
           position: "relative",
-          height: 620,
+          height: 520, // 텍스트가 빠진 만큼 전체 컨테이너 높이를 620 -> 520으로 밸런스를 맞췄습니다.
           width: "100%",
           padding: "20px 0",
           animation: `${direction === "next" ? "slideUpIn" : "slideDownIn"} .36s ease both`,
         }}
       >
-        {/* [이전 앨범] 상단으로 더 밀어내고 어두운 그림자 적용 */}
+        {/* [이전 앨범] */}
         {prevAlb && (
           <div
             onClick={goPrev}
@@ -1468,14 +1495,14 @@ function MusicTab() {
           </div>
         )}
 
-        {/* [현재 메인 앨범] 일정한 높이를 확보하여 하단 컨텐츠가 밀리지 않도록 고정 */}
+        {/* [현재 메인 앨범] 내부 텍스트를 제거하고 CD만 깔끔하게 노출 */}
         <div 
           style={{ 
             zIndex: 2, 
             display: "flex", 
             flexDirection: "column", 
             alignItems: "center",
-            height: 330, 
+            height: 250, // 텍스트 영역이 없어져서 순수 CD 사이즈에 맞춤
             justifyContent: "center"
           }}
         >
@@ -1494,34 +1521,9 @@ function MusicTab() {
               glow
             />
           </div>
-
-          {/* 텍스트가 겹치지 않도록 명확한 상단 여백 설정 */}
-          <div style={{ textAlign: "center", marginTop: 20, minHeight: 60 }}>
-            <p
-              style={{
-                fontSize: 16,
-                fontWeight: 900,
-                color: white,
-                margin: "0 0 4px",
-                fontFamily: "'Noto Serif KR',serif",
-              }}
-            >
-              {alb.title}
-            </p>
-            <p
-              style={{
-                fontSize: 11,
-                color: ACCENT,
-                fontWeight: 700,
-                margin: 0,
-              }}
-            >
-              {alb.year}
-            </p>
-          </div>
         </div>
 
-        {/* [다음 앨범] 하단으로 더 밀어내고 어두운 그림자 적용 */}
+        {/* [다음 앨범] */}
         {nextAlb && (
           <div
             onClick={goNext}
@@ -1546,13 +1548,14 @@ function MusicTab() {
         )}
       </div>
 
-      <div style={{display:"flex",alignItems:"center",gap:6,marginTop:18}}>
-        {dotIndices.map(i=>(
-          <div key={i} onClick={()=>goTo(i, i>index?"next":"prev")} style={{width:i===index?18:6,height:6,borderRadius:3,background:i===index?ACCENT:"rgba(255,255,255,0.18)",cursor:"pointer",transition:"all 0.2s"}}/>
+      {/* 하단 인디케이터 및 안내문 */}
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 18 }}>
+        {dotIndices.map(i => (
+          <div key={i} onClick={() => goTo(i, i > index ? "next" : "prev")} style={{ width: i === index ? 18 : 6, height: 6, borderRadius: 3, background: i === index ? ACCENT : "rgba(255,255,255,0.18)", cursor: "pointer", transition: "all 0.2s" }} />
         ))}
       </div>
-      <p style={{fontSize:10,color:muted,marginTop:18,letterSpacing:"0.06em"}}>{index+1} / {displayAlbums.length}</p>
-      <p style={{fontSize:10,color:"rgba(255,255,255,0.22)",marginTop:14}}>↕ 스와이프해서 앨범 넘기기 · 탭하면 재생목록</p>
+      <p style={{ fontSize: 10, color: muted, marginTop: 18, letterSpacing: "0.06em" }}>{index + 1} / {displayAlbums.length}</p>
+      <p style={{ fontSize: 10, color: "rgba(255,255,255,0.22)", marginTop: 14 }}>↕ 스와이프해서 앨범 넘기기 · 탭하면 재생목록</p>
     </div>
   );
 }
