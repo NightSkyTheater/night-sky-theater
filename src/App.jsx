@@ -1414,20 +1414,22 @@ function MusicTab() {
 
   return (
     <div
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-      onWheel={onWheel}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: "calc(100vh - 140px)",
-        paddingTop: 80,
-        paddingBottom: 80,
-        boxSizing: "border-box",
-      }}
-    >
+  onTouchStart={onTouchStart}
+  onTouchEnd={onTouchEnd}
+  onWheel={onWheel}
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-between", // 자식들을 위-중앙-아래로 예쁘게 분배
+    height: "100dvh",                // 모바일 주소창까지 계산한 실제 화면 높이 100%
+    paddingTop: "max(20px, 4dvh)",   // 기기 크기에 맞춘 가변 여백
+    paddingBottom: "max(20px, 4dvh)",
+    boxSizing: "border-box",
+    overflow: "hidden",              // ★ 세로 스크롤이 생기는 것을 원천 차단
+    width: "100%",
+  }}
+>
       {/* [수정] 최상단으로 이동한 앨범 타이틀 및 정보 영역 */}
       <div style={{ textAlign: "center", marginBottom: 20, minHeight: 70 }}>
         <p style={{ fontSize: 10, color: muted, letterSpacing: "0.16em", margin: "0 0 8px", textTransform: "uppercase" }}>
@@ -1458,27 +1460,28 @@ function MusicTab() {
       </div>
 
       <div
-        key={index}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          position: "relative",
-          height: 520, // 텍스트가 빠진 만큼 전체 컨테이너 높이를 620 -> 520으로 밸런스를 맞췄습니다.
-          width: "100%",
-          padding: "20px 0",
-          animation: `${direction === "next" ? "slideUpIn" : "slideDownIn"} .36s ease both`,
-        }}
-      >
+  key={index}
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+    flex: 1,         // 고정 높이를 지우고 남는 공간을 동적으로 채움
+    maxHeight: 420,  // 화면이 큰 기기에서 너무 벌어지지 않도록 최대치 제한
+    width: "100%",
+    margin: "10px 0",
+    animation: `${direction === "next" ? "slideUpIn" : "slideDownIn"} .36s ease both`,
+  }}
+>
         {/* [이전 앨범] */}
         {prevAlb && (
           <div
             onClick={goPrev}
             style={{
               position: "absolute",
-              top: 0, 
-              transform: "scale(.58)", 
+              top: 2dvh, 
+              transform: "scale(.55)", 
               opacity: 0.25,
               cursor: "pointer",
               zIndex: 1,
@@ -1489,7 +1492,7 @@ function MusicTab() {
             <CDDisc
               cover={prevAlb.cover}
               color={prevAlb.color}
-              size={190}
+              size={180}
               spinning={false}
             />
           </div>
@@ -1502,7 +1505,7 @@ function MusicTab() {
             display: "flex", 
             flexDirection: "column", 
             alignItems: "center",
-            height: 250, // 텍스트 영역이 없어져서 순수 CD 사이즈에 맞춤
+            height: 230, // 텍스트 영역이 없어져서 순수 CD 사이즈에 맞춤
             justifyContent: "center"
           }}
         >
@@ -1529,8 +1532,8 @@ function MusicTab() {
             onClick={goNext}
             style={{
               position: "absolute",
-              bottom: 0, 
-              transform: "scale(.58)", 
+              bottom: 2dvh, 
+              transform: "scale(.55)", 
               opacity: 0.25,
               cursor: "pointer",
               zIndex: 1,
@@ -1541,7 +1544,7 @@ function MusicTab() {
             <CDDisc
               cover={nextAlb.cover}
               color={nextAlb.color}
-              size={190}
+              size={180}
               spinning={false}
             />
           </div>
