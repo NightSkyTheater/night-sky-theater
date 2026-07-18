@@ -513,21 +513,16 @@ const NAV_ITEMS = [
 function TopTab({ tab, setTab }) {
   const tabs = NAV_ITEMS;
 
-  // 💡 스크롤 감지 로직(useEffect)을 완전히 제거하여 리렌더링 최적화 및 고정 스타일 유지
-
   return (
     <div
       style={{
-        position: "absolute", // ★ fixed 대신 absolute로 쉘 내부 최상단에 완전 고정
-        top: 0,
-        left: "50%",
-        transform: "translateX(-50%)",
+        position: "relative", // ★ 다른 영역을 침범하지 않는 일반 박스로 배치
         width: "100%",
-        maxWidth: MOBILE_SHELL_WIDTH,
         height: TOP_NAV_HEIGHT,
         zIndex: 1000,
-        background: "#070510", // ★ 언제나 어두운 고정 배경색 유지
-        borderBottom: "1px solid rgba(184,255,0,.08)", // ★ 고정 테두리
+        background: "#070510", // ★ 불투명한 고정 배경색
+        borderBottom: "1px solid rgba(184,255,0,.08)",
+        flexShrink: 0, // ★ 상하 구조에서 찌그러지지 않도록 고정
       }}
     >
       <div
@@ -542,12 +537,7 @@ function TopTab({ tab, setTab }) {
       >
         <button
           onClick={() => setTab(NAV_ITEMS[0].id)}
-          style={{
-            background: "none",
-            border: "none",
-            padding: 0,
-            cursor: "pointer",
-          }}
+          style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
         >
           <span
             style={{
@@ -564,12 +554,7 @@ function TopTab({ tab, setTab }) {
             <img
               src="/favicon.svg"
               alt="밤하늘극장"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                display: "block",
-              }}
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
             />
           </span>
         </button>
@@ -1909,7 +1894,18 @@ const loadMore = async () => {
   }
 };
   return (
-    <div style={{ minHeight: "100vh", background: "#0e0a2e", color: "#fff", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}> <style>{`
+    <div 
+    style={{ 
+      height: "100vh", // ★ 브라우저 창 전체 높이로 고정
+      background: "#0e0a2e", 
+      color: "#fff", 
+      fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
+    }}
+  >
+      <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
         @keyframes fin   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
@@ -1926,18 +1922,29 @@ const loadMore = async () => {
       `}</style>
       <Stars />
 
-     <TopTab tab={tab} setTab={setTab} />
+    {/* 실제 모바일 쉘 (중앙 정렬 및 가로 폭 제한) */}
+    <div 
+      style={{ 
+        width: "100%", 
+        maxWidth: MOBILE_SHELL_WIDTH, 
+        height: "100vh", // ★ 내부 쉘도 화면 높이에 맞춤
+        display: "flex", 
+        flexDirection: "column", 
+        position: "relative",
+        zIndex: 1,
+        boxShadow: "0 0 40px rgba(0,0,0,0.5)" // 필요 시 경계선 효과
+      }}
+    >
+      {/* 1. 상단 메뉴바 (그 자리에 고정되어 절대 움직이지 않음) */}
+      <TopTab tab={tab} setTab={setTab} />
 
-    <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: MOBILE_SHELL_WIDTH, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh", overflow: "hidden" }}>
+      {/* 2. 하단 스크롤 컨텐츠 영역 (메뉴바 영역을 절대 건드리지 않고 이 안에서만 스크롤) */}
       <div
         style={{
-          flex: 1,
-          // ★ 삼항 연산자로 복잡하게 나뉘어 있던 패딩을 상단바 높이만큼 깔끔하게 통일합니다.
-          // 홈 화면(tab 0)은 배너가 꽉 차야 하므로 좌우 패딩을 0으로, 나머지는 14px 여백을 줍니다.
-          padding: tab === NAV_ITEMS[0].id 
-            ? `${TOP_NAV_HEIGHT}px 0 60px` 
-            : `${TOP_NAV_HEIGHT + 16}px 14px 60px`,
-          animation: "fin 0.3s ease both"
+          flex: 1, // 남은 화면 높이를 전부 차지
+          overflowY: "auto", // ★ 본문이 길어지면 메뉴바 밑의 이 영역 안에서만 스크롤이 생김
+          padding: tab === NAV_ITEMS[0].id ? "0 0 40px" : "16px 14px 40px",
+          WebkitOverflowScrolling: "touch", // iOS 부드러운 스크롤 지원
         }}
       >
         <div style={{ display: tab === NAV_ITEMS[0].id ? "block" : "none" }}>
