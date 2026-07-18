@@ -512,19 +512,13 @@ const NAV_ITEMS = [
 
 function TopTab({ tab, setTab }) {
   const tabs = NAV_ITEMS;
-  const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  // 💡 스크롤 감지 로직(useEffect)을 완전히 제거하여 리렌더링 최적화 및 고정 스타일 유지
 
   return (
     <div
       style={{
-        position: "fixed",
+        position: "absolute", // ★ fixed 대신 absolute로 쉘 내부 최상단에 완전 고정
         top: 0,
         left: "50%",
         transform: "translateX(-50%)",
@@ -532,11 +526,8 @@ function TopTab({ tab, setTab }) {
         maxWidth: MOBILE_SHELL_WIDTH,
         height: TOP_NAV_HEIGHT,
         zIndex: 1000,
-        background: scrolled ? "rgba(3,1,14,0.72)" : "#070510",
-        backdropFilter: scrolled ? "blur(18px)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(18px)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(255,255,255,.08)" : "1px solid rgba(184,255,0,.08)",
-        transition: "background .22s ease, backdrop-filter .22s ease, border-color .22s ease",
+        background: "#070510", // ★ 언제나 어두운 고정 배경색 유지
+        borderBottom: "1px solid rgba(184,255,0,.08)", // ★ 고정 테두리
       }}
     >
       <div
@@ -550,66 +541,60 @@ function TopTab({ tab, setTab }) {
         }}
       >
         <button
-  onClick={() => setTab(NAV_ITEMS[0].id)}
-  style={{
-    background: "none",
-    border: "none",
-    padding: 0,
-    cursor: "pointer",
-  }}
->
-  <span
-    style={{
-      width: 40,
-      height: 40,
-      borderRadius: "50%",
-      overflow: "hidden",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      background: "rgba(255,255,255,0.08)",
-    }}
-  >
-    <img
-      src="/favicon.svg"
-      alt="밤하늘극장"
-      style={{
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
-        display: "block",
-      }}
-    />
-  </span>
-</button>
+          onClick={() => setTab(NAV_ITEMS[0].id)}
+          style={{
+            background: "none",
+            border: "none",
+            padding: 0,
+            cursor: "pointer",
+          }}
+        >
+          <span
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: "50%",
+              overflow: "hidden",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "rgba(255,255,255,0.08)",
+            }}
+          >
+            <img
+              src="/favicon.svg"
+              alt="밤하늘극장"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
+            />
+          </span>
+        </button>
 
         <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
           {tabs.map((item) => (
             <button
-  key={item.id}
-  onClick={() => setTab(item.id)}
-  style={{
-    width: 42,
-    height: 42,
-    borderRadius: 999,
-    background: "transparent",
-    border: "none",
-    cursor: "pointer",
-
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-
-    color:
-  tab === item.id
-    ? ACCENT
-    : "#666666",
-
-    transition: "all .2s ease",
-  }}
->
-  {item.svg}
-</button>
+              key={item.id}
+              onClick={() => setTab(item.id)}
+              style={{
+                width: 42,
+                height: 42,
+                borderRadius: 999,
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: tab === item.id ? ACCENT : "#666666",
+                transition: "all .2s ease",
+              }}
+            >
+              {item.svg}
+            </button>
           ))}
         </div>
       </div>
@@ -1924,8 +1909,7 @@ const loadMore = async () => {
   }
 };
   return (
-    <div style={{ minHeight: "100vh", background: "#0e0a2e", color: "#fff", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}>
-      <style>{`
+    <div style={{ minHeight: "100vh", background: "#0e0a2e", color: "#fff", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}> <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
         @keyframes fin   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
@@ -1942,43 +1926,38 @@ const loadMore = async () => {
       `}</style>
       <Stars />
 
-      <TopTab
-        tab={tab}
-        setTab={setTab}
-      />
+     <TopTab tab={tab} setTab={setTab} />
 
-      <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: MOBILE_SHELL_WIDTH, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh", overflow: "hidden" }}>
-        <div
-          style={{
-            flex: 1,
-            padding:
-              tab === NAV_ITEMS[0].id
-                ? `${TOP_NAV_HEIGHT}px 0 60px`
-                : tab === NAV_ITEMS[2].id
-                  ? `${TOP_NAV_HEIGHT + 12}px 14px 40px`
-                  : `${TOP_NAV_HEIGHT + 12}px 14px 60px`,
-            animation: "fin 0.3s ease both"
-          }}
-        >
-          <div style={{ display: tab === NAV_ITEMS[0].id ? "block" : "none" }}>
-            <HomeTab />
-          </div>
+    <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: MOBILE_SHELL_WIDTH, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh", overflow: "hidden" }}>
+      <div
+        style={{
+          flex: 1,
+          // ★ 삼항 연산자로 복잡하게 나뉘어 있던 패딩을 상단바 높이만큼 깔끔하게 통일합니다.
+          // 홈 화면(tab 0)은 배너가 꽉 차야 하므로 좌우 패딩을 0으로, 나머지는 14px 여백을 줍니다.
+          padding: tab === NAV_ITEMS[0].id 
+            ? `${TOP_NAV_HEIGHT}px 0 60px` 
+            : `${TOP_NAV_HEIGHT + 16}px 14px 60px`,
+          animation: "fin 0.3s ease both"
+        }}
+      >
+        <div style={{ display: tab === NAV_ITEMS[0].id ? "block" : "none" }}>
+          <HomeTab />
+        </div>
 
-          <div style={{ display: tab === NAV_ITEMS[1].id ? "block" : "none" }}>
-            <MusicTab />
-          </div>
+        <div style={{ display: tab === NAV_ITEMS[1].id ? "block" : "none" }}>
+          <MusicTab />
+        </div>
 
-          <div style={{ display: tab === NAV_ITEMS[2].id ? "block" : "none" }}>
-            {/* 💡 미리 로드한 데이터(entries)를 GuestbookTab에 전달합니다. */}
-            <GuestbookTab
-  entries={guestbookEntries}
-  loadMore={loadMore}
-  hasMore={hasMore}
-  loadGuestbook={loadGuestbook}
-/>
-          </div>
+        <div style={{ display: tab === NAV_ITEMS[2].id ? "block" : "none" }}>
+          <GuestbookTab
+            entries={guestbookEntries}
+            loadMore={loadMore}
+            hasMore={hasMore}
+            loadGuestbook={loadGuestbook}
+          />
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }
