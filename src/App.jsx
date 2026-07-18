@@ -1422,11 +1422,9 @@ function MusicTab() {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between", // 자식들을 위-중앙-아래로 예쁘게 분배
-height: "100%",
-flex: 1,
-
-paddingTop: "20px",
-paddingBottom: "20px",
+    height: "100dvh",                // 모바일 주소창까지 계산한 실제 화면 높이 100%
+    paddingTop: "max(20px, 4dvh)",   // 기기 크기에 맞춘 가변 여백
+    paddingBottom: "max(20px, 4dvh)",
     boxSizing: "border-box",
     overflow: "hidden",              // ★ 세로 스크롤이 생기는 것을 원천 차단
     width: "100%",
@@ -1482,7 +1480,7 @@ paddingBottom: "20px",
             onClick={goPrev}
             style={{
               position: "absolute",
-              top: -30, 
+              top: 0, 
               transform: "scale(.55)", 
               opacity: 0.25,
               cursor: "pointer",
@@ -1534,7 +1532,7 @@ paddingBottom: "20px",
             onClick={goNext}
             style={{
               position: "absolute",
-              bottom: -30, 
+              bottom: 0, 
               transform: "scale(.55)", 
               opacity: 0.25,
               cursor: "pointer",
@@ -1926,7 +1924,7 @@ const loadMore = async () => {
   }
 };
   return (
-    <div style={{ height: "100vh", background: "#0e0a2e", color: "#fff", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}>
+    <div style={{ minHeight: "100vh", background: "#0e0a2e", color: "#fff", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}>
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
@@ -1949,7 +1947,7 @@ const loadMore = async () => {
         setTab={setTab}
       />
 
-      <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: MOBILE_SHELL_WIDTH, margin: "0 auto", display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden" }}>
+      <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: MOBILE_SHELL_WIDTH, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh", overflow: "hidden" }}>
         <div
           style={{
             flex: 1,
@@ -1957,7 +1955,7 @@ const loadMore = async () => {
               tab === NAV_ITEMS[0].id
                 ? `${TOP_NAV_HEIGHT}px 0 60px`
                 : tab === NAV_ITEMS[2].id
-                  ? `${TOP_NAV_HEIGHT}px 0 0`
+                  ? `${TOP_NAV_HEIGHT + 12}px 14px 40px`
                   : `${TOP_NAV_HEIGHT + 12}px 14px 60px`,
             animation: "fin 0.3s ease both"
           }}
