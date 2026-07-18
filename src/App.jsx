@@ -178,7 +178,7 @@ export default function App() {
               transform: "translateX(-50%)",
               width: "100%",
               maxWidth: MOBILE_SHELL_WIDTH,
-              padding: "12px 14px 40px",
+              padding: "12px 14px 30px",
               overflow: "hidden",
               zIndex: 1,
             }}
