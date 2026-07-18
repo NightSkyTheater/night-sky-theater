@@ -1480,7 +1480,7 @@ function MusicTab() {
             onClick={goPrev}
             style={{
               position: "absolute",
-              top: 2dvh, 
+              top: "2dvh", 
               transform: "scale(.55)", 
               opacity: 0.25,
               cursor: "pointer",
@@ -1532,7 +1532,7 @@ function MusicTab() {
             onClick={goNext}
             style={{
               position: "absolute",
-              bottom: 2dvh, 
+              bottom: "2dvh", 
               transform: "scale(.55)", 
               opacity: 0.25,
               cursor: "pointer",
