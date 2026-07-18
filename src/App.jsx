@@ -1850,10 +1850,18 @@ await loadGuestbook();
 // ── APP (메인 컴포넌트 단일 Export Default) ───────────────────
 export default function App() {
   const [tab, setTab] = useState(NAV_ITEMS[0].id);
+  const scrollPositions = useRef({});
   // 💡 방명록 데이터를 최상위 App에서 관리하여 앱이 켜지자마자 미리 로딩합니다.
   const [guestbookEntries, setGuestbookEntries] = useState([]);
 const [lastDoc, setLastDoc] = useState(null);
 const [hasMore, setHasMore] = useState(true);
+const changeTab = (nextTab) => {
+  // 현재 탭 위치 저장
+  scrollPositions.current[tab] = window.scrollY;
+
+  // 탭 변경
+  setTab(nextTab);
+};
   // Chart.js 로드용 useEffect
   useEffect(() => {
     if (document.querySelector('script[src*="chart.umd.js"]')) return;
@@ -1891,6 +1899,14 @@ if (snapshot.docs.length < 10) {
 useEffect(() => {
   loadGuestbook();
 }, []);
+useEffect(() => {
+  requestAnimationFrame(() => {
+    window.scrollTo(
+      0,
+      scrollPositions.current[tab] ?? 0
+    );
+  });
+}, [tab]);
 const loadMore = async () => {
   if (!lastDoc) return;
 
@@ -1939,10 +1955,10 @@ const loadMore = async () => {
       `}</style>
       <Stars />
 
-      <TopTab
-        tab={tab}
-        setTab={setTab}
-      />
+     <TopTab
+  tab={tab}
+  setTab={changeTab}
+/>
 
       <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: MOBILE_SHELL_WIDTH, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh", overflow: "hidden" }}>
         <div
