@@ -131,7 +131,7 @@ export default function MusicTab() {
           overscrollBehavior: "contain",
         }}
       >
-      <div style={{display:"flex",flexDirection:"column",gap:10,paddingBottom:60}}>
+      <div style={{display:"flex",flexDirection:"column",gap:10,paddingBottom:80}}>
         <button onClick={()=>setSelected(false)} style={{display:"flex",alignItems:"center",gap:6,background:"none",border:"none",cursor:"pointer",color:ACCENT,fontSize:13,fontFamily:"inherit",padding:0,marginBottom:4}}>← 목록으로</button>
         <G acc>
           <div style={{display:"flex",alignItems:"center",gap:16}}>
