@@ -140,7 +140,7 @@ export default function MusicTab() {
             </div>
             <div style={{flex:1,minWidth:0,textAlign:"left"}}>
               <p style={{fontSize:9,color:ACCENT,fontWeight:700,margin:"0 0 4px",letterSpacing:"0.1em",opacity:0.8}}>{alb.year}</p>
-              <p style={{fontSize:16,fontWeight:900,color:white,margin:"0 0 6px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.3,letterSpacing:"-0.3px"}}>{alb.title}</p>
+              <p style={{fontSize:16,fontWeight:900,color:white,margin:"0 0 6px",lineHeight:1.3,letterSpacing:"-0.3px"}}>{alb.title}</p>
               <p style={{fontSize:11.5,color:muted,lineHeight:1.6,margin:0,fontStyle:"italic"}}>"{alb.desc}"</p>
             </div>
           </div>
@@ -153,7 +153,7 @@ export default function MusicTab() {
         </G>
         <G style={{textAlign:"center",minHeight:120,display:"flex",flexDirection:"column",justifyContent:"center",padding:"24px 20px"}}>
           <p style={{fontSize:10,color:muted,margin:"0 0 6px",letterSpacing:"0.1em"}}>TRACK {tr.n} / {alb.tracks.length}</p>
-          <p style={{fontSize:20,fontWeight:800,color:white,margin:"0 0 10px",fontFamily:"'Noto Serif KR',serif",lineHeight:1.35}}>{tr.title}</p>
+          <p style={{fontSize:20,fontWeight:800,color:white,margin:"0 0 10px", lineHeight:1.35}}>{tr.title}</p>
           {tr.mood&&<p style={{fontSize:13,color:soft,lineHeight:1.75,fontStyle:"italic",margin:0}}>"{tr.mood}"</p>}
         </G>
         <div style={{display:"flex",gap:8}}>
@@ -209,7 +209,6 @@ return (
             fontWeight: 900,
             color: white,
             margin: "0 0 4px",
-            fontFamily: "'Noto Serif KR',serif",
             letterSpacing: "-0.3px"
           }}
         >
