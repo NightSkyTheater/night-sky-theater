@@ -1422,7 +1422,7 @@ function MusicTab() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "68dvh",
+        height: "75dvh",
         paddingTop: 0,
         paddingBottom: 0,
         boxSizing: "border-box",
