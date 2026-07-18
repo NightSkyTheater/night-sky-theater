@@ -80,6 +80,18 @@ export default function App() {
     });
   }, [tab]);
 
+  // 🎵 뮤직탭 전용: 탑 nav 아래 영역을 화면에 고정시키는 동안
+  //    바디 자체 스크롤(바운스 포함)도 잠가서 콘텐츠가 위/아래로 밀리지 않게 합니다.
+  useEffect(() => {
+    if (tab === NAV_ITEMS[1].id) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prevOverflow;
+      };
+    }
+  }, [tab]);
+
   const loadMore = async () => {
     if (!lastDoc) return;
 
@@ -141,9 +153,11 @@ export default function App() {
             padding:
               tab === NAV_ITEMS[0].id
                 ? `${TOP_NAV_HEIGHT}px 0 60px`
-                : tab === NAV_ITEMS[2].id
-                  ? `${TOP_NAV_HEIGHT + 12}px 14px 40px`
-                  : `${TOP_NAV_HEIGHT + 12}px 14px 60px`,
+                : tab === NAV_ITEMS[1].id
+                  ? 0 // 뮤직탭은 아래 고정 레이어가 자체적으로 위치를 잡으므로 부모 패딩 불필요
+                  : tab === NAV_ITEMS[2].id
+                    ? `${TOP_NAV_HEIGHT + 12}px 14px 40px`
+                    : `${TOP_NAV_HEIGHT + 12}px 14px 60px`,
             animation: "fin 0.3s ease both"
           }}
         >
@@ -151,7 +165,24 @@ export default function App() {
             <HomeTab />
           </div>
 
-          <div style={{ display: tab === NAV_ITEMS[1].id ? "block" : "none" }}>
+          {/* 🎵 뮤직탭: 탑 nav 바로 아래부터 화면 하단까지 고정 영역.
+              페이지 스크롤과 완전히 분리되어, 콘텐츠가 스크롤되어도 nav가 밀리거나
+              콘텐츠가 화면 밖으로 흘러내려가지 않습니다. */}
+          <div
+            style={{
+              display: tab === NAV_ITEMS[1].id ? "block" : "none",
+              position: "fixed",
+              top: TOP_NAV_HEIGHT,
+              bottom: 0,
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "100%",
+              maxWidth: MOBILE_SHELL_WIDTH,
+              padding: "12px 14px 0",
+              overflow: "hidden",
+              zIndex: 1,
+            }}
+          >
             <MusicTab />
           </div>
 
