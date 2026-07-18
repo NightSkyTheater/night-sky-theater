@@ -1924,7 +1924,7 @@ const loadMore = async () => {
   }
 };
   return (
-    <div style={{ minHeight: "100vh", background: "#0e0a2e", color: "#fff", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}>
+    <div style={{ height: "100vh", background: "#0e0a2e", color: "#fff", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}>
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
@@ -1947,7 +1947,7 @@ const loadMore = async () => {
         setTab={setTab}
       />
 
-      <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: MOBILE_SHELL_WIDTH, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh", overflow: "hidden" }}>
+      <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: MOBILE_SHELL_WIDTH, margin: "0 auto", display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden" }}>
         <div
           style={{
             flex: 1,
