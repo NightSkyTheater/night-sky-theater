@@ -1423,8 +1423,8 @@ function MusicTab() {
         alignItems: "center",
         justifyContent: "center",
         minHeight: "68dvh",
-        paddingTop: 80,
-        paddingBottom: 80,
+        paddingTop: 0,
+        paddingBottom: 0,
         boxSizing: "border-box",
       }}
     >
