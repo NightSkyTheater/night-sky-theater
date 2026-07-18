@@ -1412,22 +1412,23 @@ function MusicTab() {
     );
   }
 
-  return (
-    <div
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-      onWheel={onWheel}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "66dvh",
-        paddingTop: 0,
-        paddingBottom: 0,
-        boxSizing: "border-box",
-      }}
-    >
+return (
+  <div
+    onTouchStart={onTouchStart}
+    onTouchEnd={onTouchEnd}
+    onWheel={onWheel}
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "66dvh",
+      boxSizing: "border-box",
+      
+      // 핵심: 이 영역 안에서는 브라우저의 기본 스크롤/제스처를 작동시키지 않음
+      touchAction: "none" 
+    }}
+  >
       {/* [수정] 최상단으로 이동한 앨범 타이틀 및 정보 영역 */}
       <div style={{ textAlign: "center", marginBottom: 20, minHeight: 70 }}>
         <p style={{ fontSize: 10, color: muted, letterSpacing: "0.16em", margin: "0 0 8px", textTransform: "uppercase" }}>
