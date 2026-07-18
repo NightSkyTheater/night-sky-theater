@@ -259,7 +259,7 @@ return (
             display: "flex", 
             flexDirection: "column", 
             alignItems: "center",
-            height: 250, // 텍스트 영역이 없어져서 순수 CD 사이즈에 맞춤
+            height: 220, // 텍스트 영역이 없어져서 순수 CD 사이즈에 맞춤
             justifyContent: "center"
           }}
         >
@@ -273,7 +273,7 @@ return (
             <CDDisc
               cover={alb.cover}
               color={alb.color}
-              size={250}
+              size={220}
               spinning
               glow
             />
