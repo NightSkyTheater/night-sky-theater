@@ -1422,9 +1422,9 @@ function MusicTab() {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between", // 자식들을 위-중앙-아래로 예쁘게 분배
-    height: "100dvh",                // 모바일 주소창까지 계산한 실제 화면 높이 100%
-    paddingTop: "max(20px, 8dvh)",   // 기기 크기에 맞춘 가변 여백
-    paddingBottom: "max(20px, 8dvh)",
+    height:"calc(100dvh - 60px)",                // 모바일 주소창까지 계산한 실제 화면 높이 100%
+    paddingTop: "20px",
+paddingBottom: "20px",
     boxSizing: "border-box",
     overflow: "hidden",              // ★ 세로 스크롤이 생기는 것을 원천 차단
     width: "100%",
@@ -1952,11 +1952,11 @@ const loadMore = async () => {
           style={{
             flex: 1,
             padding:
-              tab === NAV_ITEMS[0].id
-                ? `${TOP_NAV_HEIGHT}px 0 60px`
-                : tab === NAV_ITEMS[2].id
-                  ? `${TOP_NAV_HEIGHT}px 0 0`
-                  : `${TOP_NAV_HEIGHT + 12}px 14px 60px`,
+                tab === NAV_ITEMS[0].id
+    ? `${TOP_NAV_HEIGHT}px 0 60px`
+    : tab === NAV_ITEMS[1].id
+      ? `${TOP_NAV_HEIGHT}px 0 0`
+      : `${TOP_NAV_HEIGHT + 12}px 14px 40px`,
             animation: "fin 0.3s ease both"
           }}
         >
