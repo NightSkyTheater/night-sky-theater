@@ -191,7 +191,7 @@ return (
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-      height: "80dvh",
+      height: "84dvh",
       boxSizing: "border-box",
       
       // 핵심: 이 영역 안에서는 브라우저의 기본 스크롤/제스처를 작동시키지 않음
