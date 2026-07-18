@@ -512,17 +512,31 @@ const NAV_ITEMS = [
 
 function TopTab({ tab, setTab }) {
   const tabs = NAV_ITEMS;
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div
       style={{
-        position: "relative", // ★ 다른 영역을 침범하지 않는 일반 박스로 배치
+        position: "fixed",
+        top: 0,
+        left: "50%",
+        transform: "translateX(-50%)",
         width: "100%",
+        maxWidth: MOBILE_SHELL_WIDTH,
         height: TOP_NAV_HEIGHT,
         zIndex: 1000,
-        background: "#070510", // ★ 불투명한 고정 배경색
-        borderBottom: "1px solid rgba(184,255,0,.08)",
-        flexShrink: 0, // ★ 상하 구조에서 찌그러지지 않도록 고정
+        background: scrolled ? "rgba(3,1,14,0.72)" : "#070510",
+        backdropFilter: scrolled ? "blur(18px)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(18px)" : "none",
+        borderBottom: scrolled ? "1px solid rgba(255,255,255,.08)" : "1px solid rgba(184,255,0,.08)",
+        transition: "background .22s ease, backdrop-filter .22s ease, border-color .22s ease",
       }}
     >
       <div
@@ -536,50 +550,66 @@ function TopTab({ tab, setTab }) {
         }}
       >
         <button
-          onClick={() => setTab(NAV_ITEMS[0].id)}
-          style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}
-        >
-          <span
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: "50%",
-              overflow: "hidden",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "rgba(255,255,255,0.08)",
-            }}
-          >
-            <img
-              src="/favicon.svg"
-              alt="밤하늘극장"
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-            />
-          </span>
-        </button>
+  onClick={() => setTab(NAV_ITEMS[0].id)}
+  style={{
+    background: "none",
+    border: "none",
+    padding: 0,
+    cursor: "pointer",
+  }}
+>
+  <span
+    style={{
+      width: 40,
+      height: 40,
+      borderRadius: "50%",
+      overflow: "hidden",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "rgba(255,255,255,0.08)",
+    }}
+  >
+    <img
+      src="/favicon.svg"
+      alt="밤하늘극장"
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        display: "block",
+      }}
+    />
+  </span>
+</button>
 
         <div style={{ display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
           {tabs.map((item) => (
             <button
-              key={item.id}
-              onClick={() => setTab(item.id)}
-              style={{
-                width: 42,
-                height: 42,
-                borderRadius: 999,
-                background: "transparent",
-                border: "none",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: tab === item.id ? ACCENT : "#666666",
-                transition: "all .2s ease",
-              }}
-            >
-              {item.svg}
-            </button>
+  key={item.id}
+  onClick={() => setTab(item.id)}
+  style={{
+    width: 42,
+    height: 42,
+    borderRadius: 999,
+    background: "transparent",
+    border: "none",
+    cursor: "pointer",
+
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+
+    color:
+  tab === item.id
+    ? ACCENT
+    : "#666666",
+
+    transition: "all .2s ease",
+  }}
+>
+  {item.svg}
+</button>
           ))}
         </div>
       </div>
@@ -1384,22 +1414,20 @@ function MusicTab() {
 
   return (
     <div
-  onTouchStart={onTouchStart}
-  onTouchEnd={onTouchEnd}
-  onWheel={onWheel}
-  style={{
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "space-between", // 자식들을 위-중앙-아래로 예쁘게 분배
-    height: "100dvh",                // 모바일 주소창까지 계산한 실제 화면 높이 100%
-    paddingTop: "max(20px, 4dvh)",   // 기기 크기에 맞춘 가변 여백
-    paddingBottom: "max(20px, 4dvh)",
-    boxSizing: "border-box",
-    overflow: "hidden",              // ★ 세로 스크롤이 생기는 것을 원천 차단
-    width: "100%",
-  }}
->
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      onWheel={onWheel}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "68dvh",
+        paddingTop: 80,
+        paddingBottom: 80,
+        boxSizing: "border-box",
+      }}
+    >
       {/* [수정] 최상단으로 이동한 앨범 타이틀 및 정보 영역 */}
       <div style={{ textAlign: "center", marginBottom: 20, minHeight: 70 }}>
         <p style={{ fontSize: 10, color: muted, letterSpacing: "0.16em", margin: "0 0 8px", textTransform: "uppercase" }}>
@@ -1430,20 +1458,19 @@ function MusicTab() {
       </div>
 
       <div
-  key={index}
-  style={{
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
-    flex: 1,         // 고정 높이를 지우고 남는 공간을 동적으로 채움
-    maxHeight: 420,  // 화면이 큰 기기에서 너무 벌어지지 않도록 최대치 제한
-    width: "100%",
-    margin: "10px 0",
-    animation: `${direction === "next" ? "slideUpIn" : "slideDownIn"} .36s ease both`,
-  }}
->
+        key={index}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+          height: 520, // 텍스트가 빠진 만큼 전체 컨테이너 높이를 620 -> 520으로 밸런스를 맞췄습니다.
+          width: "100%",
+          padding: "20px 0",
+          animation: `${direction === "next" ? "slideUpIn" : "slideDownIn"} .36s ease both`,
+        }}
+      >
         {/* [이전 앨범] */}
         {prevAlb && (
           <div
@@ -1451,7 +1478,7 @@ function MusicTab() {
             style={{
               position: "absolute",
               top: 0, 
-              transform: "scale(.55)", 
+              transform: "scale(.58)", 
               opacity: 0.25,
               cursor: "pointer",
               zIndex: 1,
@@ -1462,7 +1489,7 @@ function MusicTab() {
             <CDDisc
               cover={prevAlb.cover}
               color={prevAlb.color}
-              size={180}
+              size={190}
               spinning={false}
             />
           </div>
@@ -1475,7 +1502,7 @@ function MusicTab() {
             display: "flex", 
             flexDirection: "column", 
             alignItems: "center",
-            height: 230, // 텍스트 영역이 없어져서 순수 CD 사이즈에 맞춤
+            height: 250, // 텍스트 영역이 없어져서 순수 CD 사이즈에 맞춤
             justifyContent: "center"
           }}
         >
@@ -1503,7 +1530,7 @@ function MusicTab() {
             style={{
               position: "absolute",
               bottom: 0, 
-              transform: "scale(.55)", 
+              transform: "scale(.58)", 
               opacity: 0.25,
               cursor: "pointer",
               zIndex: 1,
@@ -1514,7 +1541,7 @@ function MusicTab() {
             <CDDisc
               cover={nextAlb.cover}
               color={nextAlb.color}
-              size={180}
+              size={190}
               spinning={false}
             />
           </div>
@@ -1894,17 +1921,7 @@ const loadMore = async () => {
   }
 };
   return (
-    <div 
-    style={{ 
-      height: "100vh", // ★ 브라우저 창 전체 높이로 고정
-      background: "#0e0a2e", 
-      color: "#fff", 
-      fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center"
-    }}
-  >
+    <div style={{ minHeight: "100vh", background: "#0e0a2e", color: "#fff", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}>
       <style>{`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         @keyframes tw    { from{opacity:.05} to{opacity:.65} }
@@ -1922,49 +1939,43 @@ const loadMore = async () => {
       `}</style>
       <Stars />
 
-    {/* 실제 모바일 쉘 (중앙 정렬 및 가로 폭 제한) */}
-    <div 
-      style={{ 
-        width: "100%", 
-        maxWidth: MOBILE_SHELL_WIDTH, 
-        height: "100vh", // ★ 내부 쉘도 화면 높이에 맞춤
-        display: "flex", 
-        flexDirection: "column", 
-        position: "relative",
-        zIndex: 1,
-        boxShadow: "0 0 40px rgba(0,0,0,0.5)" // 필요 시 경계선 효과
-      }}
-    >
-      {/* 1. 상단 메뉴바 (그 자리에 고정되어 절대 움직이지 않음) */}
-      <TopTab tab={tab} setTab={setTab} />
+      <TopTab
+        tab={tab}
+        setTab={setTab}
+      />
 
-      {/* 2. 하단 스크롤 컨텐츠 영역 (메뉴바 영역을 절대 건드리지 않고 이 안에서만 스크롤) */}
-      <div
-        style={{
-          flex: 1, // 남은 화면 높이를 전부 차지
-          overflowY: "auto", // ★ 본문이 길어지면 메뉴바 밑의 이 영역 안에서만 스크롤이 생김
-          padding: tab === NAV_ITEMS[0].id ? "0 0 40px" : "16px 14px 40px",
-          WebkitOverflowScrolling: "touch", // iOS 부드러운 스크롤 지원
-        }}
-      >
-        <div style={{ display: tab === NAV_ITEMS[0].id ? "block" : "none" }}>
-          <HomeTab />
-        </div>
+      <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: MOBILE_SHELL_WIDTH, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh", overflow: "hidden" }}>
+        <div
+          style={{
+            flex: 1,
+            padding:
+              tab === NAV_ITEMS[0].id
+                ? `${TOP_NAV_HEIGHT}px 0 60px`
+                : tab === NAV_ITEMS[2].id
+                  ? `${TOP_NAV_HEIGHT + 12}px 14px 40px`
+                  : `${TOP_NAV_HEIGHT + 12}px 14px 60px`,
+            animation: "fin 0.3s ease both"
+          }}
+        >
+          <div style={{ display: tab === NAV_ITEMS[0].id ? "block" : "none" }}>
+            <HomeTab />
+          </div>
 
-        <div style={{ display: tab === NAV_ITEMS[1].id ? "block" : "none" }}>
-          <MusicTab />
-        </div>
+          <div style={{ display: tab === NAV_ITEMS[1].id ? "block" : "none" }}>
+            <MusicTab />
+          </div>
 
-        <div style={{ display: tab === NAV_ITEMS[2].id ? "block" : "none" }}>
-          <GuestbookTab
-            entries={guestbookEntries}
-            loadMore={loadMore}
-            hasMore={hasMore}
-            loadGuestbook={loadGuestbook}
-          />
+          <div style={{ display: tab === NAV_ITEMS[2].id ? "block" : "none" }}>
+            {/* 💡 미리 로드한 데이터(entries)를 GuestbookTab에 전달합니다. */}
+            <GuestbookTab
+  entries={guestbookEntries}
+  loadMore={loadMore}
+  hasMore={hasMore}
+  loadGuestbook={loadGuestbook}
+/>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
 }
