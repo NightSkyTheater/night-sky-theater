@@ -183,9 +183,6 @@ return (
       justifyContent: "center",
       height: "80dvh",
       boxSizing: "border-box",
-      
-      // 핵심: 이 영역 안에서는 브라우저의 기본 스크롤/제스처를 작동시키지 않음
-      touchAction: "none" 
     }}
   >
       {/* [수정] 최상단으로 이동한 앨범 타이틀 및 정보 영역 */}
