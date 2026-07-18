@@ -191,7 +191,7 @@ return (
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-      height: "66dvh",
+      height: "80dvh",
       boxSizing: "border-box",
       
       // 핵심: 이 영역 안에서는 브라우저의 기본 스크롤/제스처를 작동시키지 않음
@@ -199,7 +199,7 @@ return (
     }}
   >
       {/* [수정] 최상단으로 이동한 앨범 타이틀 및 정보 영역 */}
-      <div style={{ textAlign: "center", marginBottom: 20, minHeight: 70 }}>
+      <div style={{ textAlign: "center", marginTop: 20, marginBottom: 20, minHeight: 70 }}>
         <p style={{ fontSize: 10, color: muted, letterSpacing: "0.16em", margin: "0 0 8px", textTransform: "uppercase" }}>
           DISCOGRAPHY
         </p>
