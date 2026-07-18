@@ -122,7 +122,16 @@ export default function MusicTab() {
   if (selected) {
     const tr = alb.tracks[trackIdx];
     return (
-      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+      <div
+        style={{
+          height: "100%",
+          overflowY: "auto",
+          overflowX: "hidden",
+          WebkitOverflowScrolling: "touch",
+          overscrollBehavior: "contain",
+        }}
+      >
+      <div style={{display:"flex",flexDirection:"column",gap:10,paddingBottom:32}}>
         <button onClick={()=>setSelected(false)} style={{display:"flex",alignItems:"center",gap:6,background:"none",border:"none",cursor:"pointer",color:ACCENT,fontSize:13,fontFamily:"inherit",padding:0,marginBottom:4}}>← 목록으로</button>
         <G acc>
           <div style={{display:"flex",alignItems:"center",gap:16}}>
@@ -168,6 +177,7 @@ export default function MusicTab() {
           ))}
         </G>
       </div>
+      </div>
     );
   }
 
@@ -181,8 +191,11 @@ return (
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-      height: "80dvh",
+      height: "66dvh",
       boxSizing: "border-box",
+      
+      // 핵심: 이 영역 안에서는 브라우저의 기본 스크롤/제스처를 작동시키지 않음
+      touchAction: "none" 
     }}
   >
       {/* [수정] 최상단으로 이동한 앨범 타이틀 및 정보 영역 */}
@@ -259,7 +272,7 @@ return (
             display: "flex", 
             flexDirection: "column", 
             alignItems: "center",
-            height: 220, // 텍스트 영역이 없어져서 순수 CD 사이즈에 맞춤
+            height: 250, // 텍스트 영역이 없어져서 순수 CD 사이즈에 맞춤
             justifyContent: "center"
           }}
         >
@@ -273,7 +286,7 @@ return (
             <CDDisc
               cover={alb.cover}
               color={alb.color}
-              size={220}
+              size={250}
               spinning
               glow
             />
