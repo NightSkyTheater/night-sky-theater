@@ -354,6 +354,20 @@ export const ALBUMS = [
       { n: 6, title: "희망의 끈", mood: "내가 가진 건 이 끈 하나가 전부인 걸\n그래서 오늘도 놓지 못하는 거야" },
       { n: 7, title: "같은 극끼리는 서로 붙지 않아", mood: "같은 극끼리는 서로 붙지 않아\n다르니까 서로 끌리는 거야" }
     ]
+  },
+  {
+    id: 24,
+    title: "문득 그 시절이 사무치게 그리워질 때면",
+    cover: "https://down.mixtape.so/NAS/img/0/c/6/c/0c6c2698e6de39a3961f32b45657b298.jpg",
+    year: "2026",
+    color: "#10101a",
+    desc: "지나온 그리움을 안고 오늘을 다시 살아가는 청춘을 향한 따스한 위로.",
+    tracks: [
+      { n: 1, title: "문득 그 시절이 사무치게 그리워질 때면", mood: "문득 그 시절이 사무치게 그리워질 때면\n지금 내가 잘못 살고 있다는 걸까" },
+      { n: 2, title: "가장 어려운 말은 안녕이었어", mood: "세상은 수없이 서로를 떠나보내고\n차마 건네지 못한 안녕을 삼켜" },
+      { n: 3, title: "고난을 넘어 별을 향해", mood: "고난을 넘어 별을 향해\n한계를 넘어 저 별의 품에 안겨" },
+      { n: 4, title: "어둠이 빛을 사랑할 수 있을 거라 믿었나 봐", mood: "난 그저 너를 동경하는 마음에\n홀로 멀어질 뿐이야" }
+    ]
   }
 ];
 
@@ -409,10 +423,10 @@ export const PLATFORMS = [
 
 // ── 발매 일정 & 뉴스 ─────────────────────────────
 export const RELEASE_SCHEDULE = [
-  { tag:"싱글", tagC:"#a8e6cf", date:"06.30", title:"'星の世界 (별의 세계)' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"07.03", title:"'아마 모르겠지' 발매" },
   { tag:"정규", tagC:"#ff8b94", date:"07.14", title:"'바다와 어른, 소년의 노래' 발매" },
-  { tag:"예정", tagC:"#ffcc44", date:"07.23", title:"'문득 그 시절이 사무치게 그리워질 때면' 발매" },
+  { tag:"미니", tagC:"#c99be4", date:"07.23", title:"'문득 그 시절이 사무치게 그리워질 때면' 발매" },
+  { tag:"예정", tagC:"#ffcc44", date:"07.29", title:"'나를 애도하는 시간 Part.1' 발매" },
 ];
 
 export const NEWS_ITEMS = [
