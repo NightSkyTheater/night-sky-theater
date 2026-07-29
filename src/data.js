@@ -368,6 +368,18 @@ export const ALBUMS = [
       { n: 3, title: "고난을 넘어 별을 향해", mood: "고난을 넘어 별을 향해\n한계를 넘어 저 별의 품에 안겨" },
       { n: 4, title: "어둠이 빛을 사랑할 수 있을 거라 믿었나 봐", mood: "난 그저 너를 동경하는 마음에\n홀로 멀어질 뿐이야" }
     ]
+  },
+    {
+    id: 25,
+    title: "나를 애도하는 시간 Part.1",
+    cover: "https://down.mixtape.so/NAS/img/5/9/7/b/597b68544e0642cbba096db670993981.jpg",
+    year: "2026",
+    color: "#10101a",
+    desc: "죽음의 유한함을 받아들여 스스로를 보살피고, 주어진 오늘을 진실되게 살아가는 이야기.",
+    tracks: [
+      { n: 1, title: "나를 애도하는 시간", mood: "무엇을 위해 그토록 치열했을까\n지독하게 외로웠던 나의 영혼아" },
+      { n: 2, title: "생후감(生後感)", mood: "알려주는 거야\n너는 나보다 더 예쁘게 길을 걸었으면 해서" }
+    ]
   }
 ];
 
@@ -423,10 +435,10 @@ export const PLATFORMS = [
 
 // ── 발매 일정 & 뉴스 ─────────────────────────────
 export const RELEASE_SCHEDULE = [
-  { tag:"싱글", tagC:"#a8e6cf", date:"07.03", title:"'아마 모르겠지' 발매" },
   { tag:"정규", tagC:"#ff8b94", date:"07.14", title:"'바다와 어른, 소년의 노래' 발매" },
   { tag:"미니", tagC:"#c99be4", date:"07.23", title:"'문득 그 시절이 사무치게 그리워질 때면' 발매" },
-  { tag:"예정", tagC:"#ffcc44", date:"07.29", title:"'나를 애도하는 시간 Part.1' 발매" },
+  { tag:"싱글", tagC:"#a8e6cf", date:"07.29", title:"'나를 애도하는 시간 Part.1' 발매" },
+  { tag:"예정", tagC:"#ffcc44", date:"07.31", title:"'나를 애도하는 시간 Part.2' 발매" },
 ];
 
 export const NEWS_ITEMS = [
