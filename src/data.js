@@ -380,6 +380,18 @@ export const ALBUMS = [
       { n: 1, title: "나를 애도하는 시간", mood: "무엇을 위해 그토록 치열했을까\n지독하게 외로웠던 나의 영혼아" },
       { n: 2, title: "생후감(生後感)", mood: "알려주는 거야\n너는 나보다 더 예쁘게 길을 걸었으면 해서" }
     ]
+  },
+  {
+    id: 26,
+    title: "나를 애도하는 시간 Part.2",
+    cover: "https://down.mixtape.so/NAS/img/c/1/1/b/c11bf355a1387c83db9495f8b02c4bae.jpg",
+    year: "2026",
+    color: "#10101a",
+    desc: "이별의 상실감을 온전히 품어내어, 곁에 남은 이들을 지금 더 깊이 사랑하자는 위로.",
+    tracks: [
+      { n: 1, title: "기억할 친구로 전환되어", mood: "우리는 슬픔을 건너\n더 깊이 사랑하는 법을 배워" },
+      { n: 2, title: "잔상", mood: "아직도 너를 보고 싶어\n잊으려 할수록 더 선명해져" }
+    ]
   }
 ];
 
@@ -438,7 +450,8 @@ export const RELEASE_SCHEDULE = [
   { tag:"정규", tagC:"#ff8b94", date:"07.14", title:"'바다와 어른, 소년의 노래' 발매" },
   { tag:"미니", tagC:"#c99be4", date:"07.23", title:"'문득 그 시절이 사무치게 그리워질 때면' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"07.29", title:"'나를 애도하는 시간 Part.1' 발매" },
-  { tag:"예정", tagC:"#ffcc44", date:"07.31", title:"'나를 애도하는 시간 Part.2' 발매" },
+  { tag:"싱글", tagC:"#a8e6cf", date:"07.31", title:"'나를 애도하는 시간 Part.2' 발매" },
+  { tag:"예정", tagC:"#ffcc44", date:"08.02", title:"'깃털처럼 가벼운' 발매" },
 ];
 
 export const NEWS_ITEMS = [
