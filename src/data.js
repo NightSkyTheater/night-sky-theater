@@ -392,6 +392,19 @@ export const ALBUMS = [
       { n: 1, title: "기억할 친구로 전환되어", mood: "우리는 슬픔을 건너\n더 깊이 사랑하는 법을 배워" },
       { n: 2, title: "잔상", mood: "아직도 너를 보고 싶어\n잊으려 할수록 더 선명해져" }
     ]
+  },
+  {
+    id: 27,
+    title: "깃털처럼 가벼운",
+    cover: "https://down.mixtape.so/NAS/img/a/7/8/a/a78a7c544415d8d948dd0927a1b25480.jpg",
+    year: "2026",
+    color: "#10101a",
+    desc: "세상의 소음 속 유약한 서로를 꼭 붙잡아 따뜻한 안정감을 주는 위로의 노래.",
+    tracks: [
+      { n: 1, title: "깃털처럼 가벼운", mood: "사람들의 시선과 불필요한 말들에\n쉽게 흔들리거나 동요하지 말기를" },
+      { n: 2, title: "익숙한듯 당연하게", mood: "마음이 무뎌져 소리는 나지 않고 너 또한 무뎌져\n익숙한 듯 당연하게 내 곁을 떠나는구나" },
+      { n: 3, title: "더 크게 외쳐줄게", mood: "작은 나의 이 외침이 들리지 않는다면\n조금만 기다려줘 더 크게 외쳐줄게" }
+    ]
   }
 ];
 
@@ -447,11 +460,11 @@ export const PLATFORMS = [
 
 // ── 발매 일정 & 뉴스 ─────────────────────────────
 export const RELEASE_SCHEDULE = [
-  { tag:"정규", tagC:"#ff8b94", date:"07.14", title:"'바다와 어른, 소년의 노래' 발매" },
   { tag:"미니", tagC:"#c99be4", date:"07.23", title:"'문득 그 시절이 사무치게 그리워질 때면' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"07.29", title:"'나를 애도하는 시간 Part.1' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"07.31", title:"'나를 애도하는 시간 Part.2' 발매" },
-  { tag:"예정", tagC:"#ffcc44", date:"08.02", title:"'깃털처럼 가벼운' 발매" },
+  { tag:"미니", tagC:"#c99be4", date:"08.02", title:"'깃털처럼 가벼운' 발매" },
+  { tag:"예정", tagC:"#ffcc44", date:"08.03", title:"'오늘 내가 죽어도 너 때문은 아니야' 발매" },
 ];
 
 export const NEWS_ITEMS = [
