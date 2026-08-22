@@ -488,11 +488,11 @@ export const PLATFORMS = [
 
 // ── 발매 일정 & 뉴스 ─────────────────────────────
 export const RELEASE_SCHEDULE = [
-  { tag:"싱글", tagC:"#a8e6cf", date:"26.07.29", title:"'나를 애도하는 시간 Part.1' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"26.07.31", title:"'나를 애도하는 시간 Part.2' 발매" },
   { tag:"미니", tagC:"#c99be4", date:"26.08.02", title:"'깃털처럼 가벼운' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"26.08.03", title:"'오늘 내가 죽어도 너 때문은 아니야' 발매" },
   { tag:"정규", tagC:"#ff8b94", date:"26.08.04", title:"'이 파도가 멈추지 않았으면 해' 발매" },
+  { tag:"예정", tagC:"#ffcc44", date:"26.09.06", title:"'완전한 무조건적 사랑의 형태' 발매 예정" },
 ];
 
 export const NEWS_ITEMS = [
