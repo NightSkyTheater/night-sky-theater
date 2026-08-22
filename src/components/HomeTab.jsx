@@ -199,7 +199,7 @@ export default function HomeTab() {
           {i < arr.length - 1 && <HomeHr />}
         </div>
       ))}
-      {NEWS_ITEMS.length > 4 && (
+      {NEWS_ITEMS.length > 5 && (
         <>
           <HomeHr />
           <button
