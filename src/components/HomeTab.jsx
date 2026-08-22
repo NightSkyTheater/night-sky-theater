@@ -148,7 +148,7 @@ export default function HomeTab() {
   const trackCount = ALL_TRACKS.length;
   const currentSubs = liveSubs ?? SUB_DATA[SUB_DATA.length - 1].subs;
 
-  const visibleNews = newsExpanded ? NEWS_ITEMS : NEWS_ITEMS.slice(0, 4);
+  const visibleNews = newsExpanded ? NEWS_ITEMS : NEWS_ITEMS.slice(0, 5);
 
   const ReleaseSchedule = (
     <HomeCard>
