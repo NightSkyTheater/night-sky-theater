@@ -522,7 +522,7 @@ const pagedAlbums = displayAlbums.slice(
           fontSize: 16,
           fontWeight: 700,
           color: LIME,
-          textAlign: "left",
+          textAlign: "center",
         }}
       >
         DISCOGRAPHY
@@ -533,7 +533,7 @@ const pagedAlbums = displayAlbums.slice(
           fontSize: 12,
           color: "rgba(255,255,255,0.6)",
           margin: 0,
-          textAlign: "left",
+          textAlign: "center",
         }}
       >
         밤하늘극장의 모든 음악을 만나보세요.
