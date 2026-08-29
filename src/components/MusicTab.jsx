@@ -622,7 +622,43 @@ const pagedAlbums = displayAlbums.slice(
           {sheetTrack.title}
         </p>
       </div>
+{/* 악보 이용 안내 */}
+<div
+  style={{
+    margin: "4px 14px 10px",
+    padding: "13px 14px",
+    borderRadius: 12,
+    background: `${ACCENT}0D`,
+    border: `1px solid ${ACCENT}2E`,
+    textAlign: "left",
+  }}
+>
+  <p
+    style={{
+      margin: "0 0 7px",
+      fontSize: 12,
+      fontWeight: 800,
+      color: ACCENT,
+    }}
+  >
+    🎵 커버와 연주를 적극 환영합니다!
+  </p>
 
+  <p
+    style={{
+      margin: 0,
+      fontSize: 10.5,
+      lineHeight: 1.7,
+      color: soft,
+    }}
+  >
+    밤하늘극장의 음악을 자유롭게 연주하고
+    커버 영상으로 만들어 주세요.
+    <br /><br />
+    악보 파일 자체의 무단 재배포·판매 및
+    수정 후 재판매는 금지합니다.
+  </p>
+</div>
       {/* 악보 목록 */}
       <div
         style={{
