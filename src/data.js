@@ -288,17 +288,28 @@ export const ALBUMS = [
       { n: 7, title: "행복하지 않아도 되니 힘든 일만 없게 해주세요", mood: "난 이제 행복을 바라지 않아요\n그건 너무 먼 이야기라는 걸 충분히 알았으니까요" }
     ]
   },
-  {
-    id: 20,
-    title: "불행마저 사랑하게 만들까 봐",
-    cover: "https://down.mixtape.so/NAS/img/6/1/8/8/61889e345b8f337c1cc9c40898ab3403.jpg",
-    year: "2026",
-    color: "#10101a",
-    desc: "상처로 가득했던 시간을 그리움이라 부르게 될 미래가 두려운 청춘의 노래.",
-    tracks: [
-      { n: 1, title: "불행마저 사랑하게 만들까 봐", mood: "난 청춘이 두려워\n불행마저 사랑하게 만들까 봐" }
-    ]
-  },
+{
+  id: 20,
+  title: "불행마저 사랑하게 만들까 봐",
+  cover: "https://down.mixtape.so/NAS/img/6/1/8/8/61889e345b8f337c1cc9c40898ab3403.jpg",
+  year: "2026",
+  color: "#10101a",
+  desc: "상처로 가득했던 시간을 그리움이라 부르게 될 미래가 두려운 청춘의 노래.",
+  tracks: [
+    {
+      n: 1,
+      title: "불행마저 사랑하게 만들까 봐",
+      mood: "난 청춘이 두려워\n불행마저 사랑하게 만들까 봐",
+      sheets: [
+        {
+          type: "drum",
+          label: "Drum",
+          url: "/sheets/A20/T01-DR.pdf"
+        }
+      ]
+    }
+  ]
+},
   {
     id: 21,
     title: "청춘과 죽음과 낭만에 대하여",
