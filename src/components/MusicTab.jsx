@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ACCENT, glass, gb, muted, soft, white } from "../theme";
+import { ACCENT, LIME, glass, gb, muted, soft, white } from "../theme";
 import { ALBUMS } from "../data";
 import { G, Hr } from "./Common";
 
@@ -122,6 +122,15 @@ export default function MusicTab() {
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState(false);
   const [trackIdx, setTrackIdx] = useState(0);
+const [albumPage, setAlbumPage] = useState(0);
+
+const ALBUMS_PER_PAGE = 6;
+const totalPages = Math.ceil(displayAlbums.length / ALBUMS_PER_PAGE);
+
+const pagedAlbums = displayAlbums.slice(
+  albumPage * ALBUMS_PER_PAGE,
+  albumPage * ALBUMS_PER_PAGE + ALBUMS_PER_PAGE
+);
 
   const alb = displayAlbums[index];
 
@@ -495,49 +504,60 @@ export default function MusicTab() {
      앨범 목록 화면
   ========================= */
   return (
+  <div
+    style={{
+      height: "100%",
+      overflowY: "auto",
+      overflowX: "hidden",
+      WebkitOverflowScrolling: "touch",
+      paddingBottom: 90,
+      boxSizing: "border-box",
+    }}
+  >
+    {/* 타이틀 */}
+    <div style={{ padding: "16px 4px 18px" }}>
+      <h2
+        style={{
+          margin: "0 0 4px 0",
+          fontSize: 16,
+          fontWeight: 700,
+          color: LIME,
+          textAlign: "left",
+        }}
+      >
+        DISCOGRAPHY
+      </h2>
+
+      <p
+        style={{
+          fontSize: 12,
+          color: "rgba(255,255,255,0.6)",
+          margin: 0,
+          textAlign: "left",
+        }}
+      >
+        밤하늘극장의 모든 음악을 만나보세요.
+      </p>
+    </div>
+
+    {/* 앨범 2열 */}
     <div
       style={{
-        height: "100%",
-        overflowY: "auto",
-        overflowX: "hidden",
-        WebkitOverflowScrolling: "touch",
-        paddingBottom: 90,
-        boxSizing: "border-box",
+        display: "grid",
+        gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+        gap: "22px 14px",
+        padding: "0 4px",
       }}
     >
-      <div
-        style={{
-          textAlign: "center",
-          padding: "18px 0 22px",
-        }}
-      >
-        <p
-          style={{
-            fontSize: 10,
-            color: muted,
-            letterSpacing: "0.16em",
-            margin: 0,
-            textTransform: "uppercase",
-          }}
-        >
-          DISCOGRAPHY
-        </p>
-      </div>
+      {pagedAlbums.map((album, pageIndex) => {
+        const realIndex =
+          albumPage * ALBUMS_PER_PAGE + pageIndex;
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns:
-            "repeat(2, minmax(0, 1fr))",
-          gap: "24px 14px",
-          padding: "0 4px",
-        }}
-      >
-        {displayAlbums.map((album, i) => (
+        return (
           <div
-            key={`${album.id}-${i}`}
+            key={`${album.id}-${realIndex}`}
             onClick={() => {
-              setIndex(i);
+              setIndex(realIndex);
               setTrackIdx(0);
               setSelected(true);
             }}
@@ -554,8 +574,7 @@ export default function MusicTab() {
                 overflow: "hidden",
                 background: glass,
                 border: `1px solid ${gb}`,
-                boxShadow:
-                  "0 8px 22px rgba(0,0,0,0.28)",
+                boxShadow: "0 8px 22px rgba(0,0,0,0.28)",
               }}
             >
               <img
@@ -605,8 +624,86 @@ export default function MusicTab() {
               </p>
             </div>
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
-  );
+
+    {/* 페이지 이동 */}
+    {totalPages > 1 && (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 16,
+          marginTop: 30,
+        }}
+      >
+        <button
+          onClick={() =>
+            setAlbumPage((p) => Math.max(0, p - 1))
+          }
+          disabled={albumPage === 0}
+          style={{
+            width: 38,
+            height: 38,
+            borderRadius: "50%",
+            background: "rgba(255,255,255,0.05)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            color: albumPage === 0 ? muted : white,
+            cursor: albumPage === 0 ? "default" : "pointer",
+            opacity: albumPage === 0 ? 0.35 : 1,
+            fontSize: 18,
+            fontFamily: "inherit",
+          }}
+        >
+          ‹
+        </button>
+
+        <span
+          style={{
+            fontSize: 11,
+            color: muted,
+            minWidth: 44,
+            textAlign: "center",
+          }}
+        >
+          {albumPage + 1} / {totalPages}
+        </span>
+
+        <button
+          onClick={() =>
+            setAlbumPage((p) =>
+              Math.min(totalPages - 1, p + 1)
+            )
+          }
+          disabled={albumPage === totalPages - 1}
+          style={{
+            width: 38,
+            height: 38,
+            borderRadius: "50%",
+            background: "rgba(255,255,255,0.05)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            color:
+              albumPage === totalPages - 1
+                ? muted
+                : white,
+            cursor:
+              albumPage === totalPages - 1
+                ? "default"
+                : "pointer",
+            opacity:
+              albumPage === totalPages - 1
+                ? 0.35
+                : 1,
+            fontSize: 18,
+            fontFamily: "inherit",
+          }}
+        >
+          ›
+        </button>
+      </div>
+    )}
+  </div>
+);
 }
