@@ -797,7 +797,7 @@ const pagedAlbums = displayAlbums.slice(
           textAlign: "center",
         }}
       >
-        DISCOGRAPHY
+        앨범
       </h2>
 
       <p
