@@ -485,32 +485,37 @@ const pagedAlbums = displayAlbums.slice(
     }}
     style={{
       flexShrink: 0,
-      fontSize: 9,
-      fontWeight: 700,
+
+      minWidth: 64,
+      height: 30,
+
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 4,
+
+      fontSize: 10.5,
+      fontWeight: 800,
+
       color: ACCENT,
-      border: `1px solid ${ACCENT}55`,
-      background: `${ACCENT}12`,
-      borderRadius: 6,
-      padding: "3px 7px",
-      letterSpacing: "-0.2px",
+
+      border: `1px solid ${ACCENT}66`,
+      background: `${ACCENT}16`,
+
+      borderRadius: 8,
+
+      padding: "0 12px",
+
       cursor: "pointer",
       fontFamily: "inherit",
+
+      letterSpacing: "-0.2px",
     }}
   >
-    악보
+    ♫ 악보
   </button>
 )}
-                  {j === trackIdx && (
-                    <span
-                      style={{
-                        fontSize: 10,
-                        color: ACCENT,
-                        flexShrink: 0,
-                      }}
-                    >
-                      ▶
-                    </span>
-                  )}
+
                 </div>
 
                 {j <
@@ -797,28 +802,65 @@ const pagedAlbums = displayAlbums.slice(
             }}
           >
             <div
-              style={{
-                width: "100%",
-                aspectRatio: "1 / 1",
-                borderRadius: 10,
-                overflow: "hidden",
-                background: glass,
-                border: `1px solid ${gb}`,
-                boxShadow: "0 8px 22px rgba(0,0,0,0.28)",
-              }}
-            >
-              <img
-                src={album.cover}
-                alt={album.title}
-                loading="lazy"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  display: "block",
-                }}
-              />
-            </div>
+  style={{
+    position: "relative",
+    width: "100%",
+    aspectRatio: "1 / 1",
+    borderRadius: 10,
+    overflow: "hidden",
+    background: glass,
+    border: `1px solid ${gb}`,
+    boxShadow: "0 8px 22px rgba(0,0,0,0.28)",
+  }}
+>
+  <img
+    src={album.cover}
+    alt={album.title}
+    loading="lazy"
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      display: "block",
+    }}
+  />
+
+  {album.tracks?.some(
+    (track) => track.sheets?.length > 0
+  ) && (
+    <div
+      style={{
+        position: "absolute",
+        top: 8,
+        right: 8,
+
+        display: "flex",
+        alignItems: "center",
+        gap: 4,
+
+        padding: "5px 8px",
+
+        background: "rgba(10,8,20,0.78)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
+
+        border: `1px solid ${ACCENT}88`,
+        borderRadius: 7,
+
+        color: ACCENT,
+
+        fontSize: 9,
+        fontWeight: 800,
+
+        boxShadow: "0 3px 12px rgba(0,0,0,0.35)",
+
+        pointerEvents: "none",
+      }}
+    >
+      ♫ 악보
+    </div>
+  )}
+</div>
 
             <div
               style={{
