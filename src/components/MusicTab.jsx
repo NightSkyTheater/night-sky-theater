@@ -731,11 +731,11 @@ const pagedAlbums = displayAlbums.slice(
 <div
   style={{
     margin: "4px 14px 10px",
-    padding: "13px 14px",
+    padding: "22px 14px",
     borderRadius: 12,
     background: `${ACCENT}0D`,
     border: `1px solid ${ACCENT}2E`,
-    textAlign: "left",
+    textAlign: "center",
   }}
 >
   <p
