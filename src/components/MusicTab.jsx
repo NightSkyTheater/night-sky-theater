@@ -1,123 +1,139 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { ACCENT, glass, gb, muted, soft, white } from "../theme";
 import { ALBUMS } from "../data";
 import { G, Hr } from "./Common";
 
 function CDDisc({ cover, color, size = 220, spinning = true, glow = false }) {
-  return (
+ return (
+  <div
+    style={{
+      height: "100%",
+      overflowY: "auto",
+      overflowX: "hidden",
+      WebkitOverflowScrolling: "touch",
+      paddingBottom: 90,
+      boxSizing: "border-box",
+    }}
+  >
+    {/* 상단 타이틀 */}
     <div
       style={{
-        position: "relative",
-        width: size,
-        height: size,
-        margin: "0 auto",
-        filter: glow ? `drop-shadow(0 14px 42px ${color}77)` : "drop-shadow(0 10px 26px rgba(0,0,0,0.5))",
-        transition: "filter 0.4s ease",
+        textAlign: "center",
+        padding: "18px 0 22px",
       }}
     >
-      <div
+      <p
         style={{
-          width: "100%",
-          height: "100%",
-          borderRadius: "50%",
-          backgroundImage: `url(${cover})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundColor: color,
-          border: "1px solid rgba(255,255,255,0.14)",
-          boxShadow: "0 0 0 6px rgba(255,255,255,0.025), inset 0 0 30px rgba(0,0,0,0.25)",
-          overflow: "hidden",
-          position: "relative",
-          animation: spinning ? "cdspin 26s linear infinite" : "none",
+          fontSize: 10,
+          color: muted,
+          letterSpacing: "0.16em",
+          margin: 0,
+          textTransform: "uppercase",
         }}
       >
-        <div style={{position:"absolute",inset:0,borderRadius:"50%",background:"conic-gradient(from 0deg, rgba(255,255,255,0.02), rgba(255,255,255,0.22) 8%, rgba(255,255,255,0.02) 18%, rgba(255,255,255,0.12) 40%, rgba(255,255,255,0.02) 55%, rgba(255,255,255,0.18) 75%, rgba(255,255,255,0.02) 100%)",mixBlendMode:"overlay",pointerEvents:"none"}}/>
-        <div style={{position:"absolute",inset:0,borderRadius:"50%",background:"radial-gradient(circle at 30% 22%, rgba(255,255,255,0.28), transparent 45%)",pointerEvents:"none"}}/>
-        <div style={{position:"absolute",inset:"9%",borderRadius:"50%",border:"1px solid rgba(255,255,255,0.05)",pointerEvents:"none"}}/>
-        <div style={{position:"absolute",inset:"20%",borderRadius:"50%",border:"1px solid rgba(255,255,255,0.04)",pointerEvents:"none"}}/>
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%,-50%)",
-          width: size * 0.15,
-          height: size * 0.15,
-          borderRadius: "50%",
-          background: "radial-gradient(circle at 35% 30%, rgba(255,255,255,0.3), rgba(10,6,24,0.92) 62%)",
-          border: "1px solid rgba(255,255,255,0.3)",
-          boxShadow: "inset 0 2px 5px rgba(0,0,0,0.6)",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%,-50%)",
-          width: size * 0.045,
-          height: size * 0.045,
-          borderRadius: "50%",
-          background: "rgba(3,1,14,0.92)",
-        }}
-      />
+        DISCOGRAPHY
+      </p>
     </div>
-  );
+
+    {/* 앨범 2열 그리드 */}
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+        gap: "24px 14px",
+        padding: "0 4px",
+      }}
+    >
+      {displayAlbums.map((album, i) => (
+        <div
+          key={`${album.id}-${i}`}
+          onClick={() => {
+            setIndex(i);
+            setTrackIdx(0);
+            setSelected(true);
+          }}
+          style={{
+            cursor: "pointer",
+            minWidth: 0,
+          }}
+        >
+          {/* 앨범 커버 */}
+          <div
+            style={{
+              width: "100%",
+              aspectRatio: "1 / 1",
+              borderRadius: 10,
+              overflow: "hidden",
+              background: glass,
+              border: `1px solid ${gb}`,
+              boxShadow: "0 8px 22px rgba(0,0,0,0.28)",
+            }}
+          >
+            <img
+              src={album.cover}
+              alt={album.title}
+              loading="lazy"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+                transition: "transform 0.25s ease",
+              }}
+            />
+          </div>
+
+          {/* 앨범 정보 */}
+          <div
+            style={{
+              padding: "9px 2px 0",
+              textAlign: "left",
+            }}
+          >
+            <p
+              style={{
+                fontSize: 12.5,
+                fontWeight: 700,
+                color: white,
+                margin: "0 0 4px",
+                lineHeight: 1.4,
+
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+              }}
+            >
+              {album.title}
+            </p>
+
+            <p
+              style={{
+                fontSize: 9.5,
+                color: muted,
+                margin: 0,
+                fontWeight: 600,
+              }}
+            >
+              {album.year}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 }
 
 export default function MusicTab() {
-  const displayAlbums = [...ALBUMS].reverse();
-  const [index, setIndex] = useState(0);
-  const [selected, setSelected] = useState(false);
-  const [trackIdx, setTrackIdx] = useState(0);
-  const [direction, setDirection] = useState("next");
-  const lockRef = useRef(false);
-  const touchStartY = useRef(null);
+const displayAlbums = [...ALBUMS].reverse();
 
-  const alb = displayAlbums[index];
-  const prevAlb = index > 0 ? displayAlbums[index - 1] : null;
-  const nextAlb = index < displayAlbums.length - 1 ? displayAlbums[index + 1] : null;
+const [index, setIndex] = useState(0);
+const [selected, setSelected] = useState(false);
+const [trackIdx, setTrackIdx] = useState(0);
 
-  const goTo = (newIndex, dir) => {
-    if (lockRef.current) return;
-    if (newIndex < 0 || newIndex >= displayAlbums.length) return;
-    lockRef.current = true;
-    setDirection(dir);
-    setIndex(newIndex);
-    setTrackIdx(0);
-    setTimeout(() => { lockRef.current = false; }, 360);
-  };
+const alb = displayAlbums[index];
 
-  const goNext = () => goTo(index + 1, "next");
-  const goPrev = () => goTo(index - 1, "prev");
-
-  const onTouchStart = (e) => {
-    if (selected) return;
-    touchStartY.current = e.touches[0].clientY;
-  };
-  const onTouchEnd = (e) => {
-    if (selected || touchStartY.current === null) return;
-    const dy = e.changedTouches[0].clientY - touchStartY.current;
-    touchStartY.current = null;
-    if (Math.abs(dy) < 40) return;
-    if (dy < 0) goNext(); else goPrev();
-  };
-  const onWheel = (e) => {
-    if (selected) return;
-    if (Math.abs(e.deltaY) < 12) return;
-    if (e.deltaY > 0) goNext(); else goPrev();
-  };
-
-  const dotWindow = 7;
-  let dStart = Math.max(0, index - Math.floor(dotWindow / 2));
-  const dEnd = Math.min(displayAlbums.length, dStart + dotWindow);
-  dStart = Math.max(0, dEnd - dotWindow);
-  const dotIndices = Array.from({ length: dEnd - dStart }, (_, k) => dStart + k);
-
-  // 가독성을 위해 배경 대비용 어두운 그림자 강도를 세팅합니다.
-  const mainShadow = "0 20px 40px rgba(0, 0, 0, 0.4)";
-  const sideShadow = "0 10px 25px rgba(0, 0, 0, 0.5)";
 
   if (selected) {
     const tr = alb.tracks[trackIdx];
