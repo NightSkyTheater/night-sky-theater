@@ -123,6 +123,7 @@ export default function MusicTab() {
   const [selected, setSelected] = useState(false);
   const [trackIdx, setTrackIdx] = useState(0);
 const [albumPage, setAlbumPage] = useState(0);
+const [sheetTrack, setSheetTrack] = useState(null);
 
 const ALBUMS_PER_PAGE = 6;
 const totalPages = Math.ceil(displayAlbums.length / ALBUMS_PER_PAGE);
@@ -476,7 +477,29 @@ const pagedAlbums = displayAlbums.slice(
                       {t.title}
                     </p>
                   </div>
-
+{t.sheets?.length > 0 && (
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setSheetTrack(t);
+    }}
+    style={{
+      flexShrink: 0,
+      fontSize: 9,
+      fontWeight: 700,
+      color: ACCENT,
+      border: `1px solid ${ACCENT}55`,
+      background: `${ACCENT}12`,
+      borderRadius: 6,
+      padding: "3px 7px",
+      letterSpacing: "-0.2px",
+      cursor: "pointer",
+      fontFamily: "inherit",
+    }}
+  >
+    악보
+  </button>
+)}
                   {j === trackIdx && (
                     <span
                       style={{
@@ -495,6 +518,213 @@ const pagedAlbums = displayAlbums.slice(
               </div>
             ))}
           </G>
+          {sheetTrack && (
+  <div
+    onClick={() => setSheetTrack(null)}
+    style={{
+      position: "fixed",
+      inset: 0,
+      zIndex: 9999,
+      background: "rgba(0,0,0,0.72)",
+      backdropFilter: "blur(8px)",
+      WebkitBackdropFilter: "blur(8px)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 20,
+      boxSizing: "border-box",
+    }}
+  >
+    <div
+      onClick={(e) => e.stopPropagation()}
+      style={{
+        width: "100%",
+        maxWidth: 360,
+        background: "rgba(16,14,30,0.97)",
+        border: `1px solid ${gb}`,
+        borderRadius: 20,
+        boxShadow: "0 24px 70px rgba(0,0,0,0.55)",
+        overflow: "hidden",
+      }}
+    >
+      {/* 팝업 상단 */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "16px 18px",
+          borderBottom: `1px solid ${gb}`,
+        }}
+      >
+        <div style={{ textAlign: "left" }}>
+          <p
+            style={{
+              margin: "0 0 3px",
+              fontSize: 10,
+              fontWeight: 700,
+              color: ACCENT,
+              letterSpacing: "0.08em",
+            }}
+          >
+            SHEET MUSIC
+          </p>
+
+          <p
+            style={{
+              margin: 0,
+              fontSize: 14,
+              fontWeight: 700,
+              color: white,
+            }}
+          >
+            악보
+          </p>
+        </div>
+
+        <button
+          onClick={() => setSheetTrack(null)}
+          style={{
+            background: "none",
+            border: "none",
+            color: muted,
+            cursor: "pointer",
+            fontSize: 18,
+            padding: 4,
+            fontFamily: "inherit",
+          }}
+        >
+          ×
+        </button>
+      </div>
+
+      {/* 곡명 */}
+      <div
+        style={{
+          padding: "16px 18px 10px",
+          textAlign: "left",
+        }}
+      >
+        <p
+          style={{
+            margin: 0,
+            fontSize: 13,
+            fontWeight: 700,
+            color: white,
+            lineHeight: 1.5,
+          }}
+        >
+          {sheetTrack.title}
+        </p>
+      </div>
+
+      {/* 악보 목록 */}
+      <div
+        style={{
+          padding: "4px 14px 16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 8,
+        }}
+      >
+        {sheetTrack.sheets.map((sheet, i) => (
+          <div
+            key={`${sheet.type}-${i}`}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              padding: "12px 14px",
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.07)",
+              borderRadius: 12,
+            }}
+          >
+            <div
+              style={{
+                width: 34,
+                height: 34,
+                borderRadius: 10,
+                background: `${ACCENT}12`,
+                border: `1px solid ${ACCENT}33`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 16,
+                flexShrink: 0,
+              }}
+            >
+              {sheet.type === "drum"
+                ? "🥁"
+                : sheet.type === "guitar"
+                ? "🎸"
+                : sheet.type === "bass"
+                ? "🎸"
+                : sheet.type === "piano"
+                ? "🎹"
+                : sheet.type === "vocal"
+                ? "🎤"
+                : "🎼"}
+            </div>
+
+            <div
+              style={{
+                flex: 1,
+                minWidth: 0,
+                textAlign: "left",
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 12.5,
+                  fontWeight: 700,
+                  color: white,
+                }}
+              >
+                {sheet.label}
+              </p>
+
+              <p
+                style={{
+                  margin: "2px 0 0",
+                  fontSize: 10,
+                  color: muted,
+                }}
+              >
+                PDF 악보
+              </p>
+            </div>
+
+            <button
+              onClick={() =>
+                window.open(
+                  sheet.url,
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+              }
+              style={{
+                flexShrink: 0,
+                background: `${ACCENT}12`,
+                border: `1px solid ${ACCENT}44`,
+                color: ACCENT,
+                borderRadius: 8,
+                padding: "7px 10px",
+                fontSize: 10,
+                fontWeight: 700,
+                cursor: "pointer",
+                fontFamily: "inherit",
+              }}
+            >
+              보기 →
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
         </div>
       </div>
     );
