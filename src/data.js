@@ -487,7 +487,7 @@ export const PLATFORMS = [
   { name:"Instagram", url:"instagram.com/happy__in", color:"#E1306C" },
   { name:"Facebook", url:"facebook.com/Happyin0", color:"#1877F2" },
   { name:"TikTok", url:"tiktok.com/@nightsky_theater", color:"#111111"},
-  { name:"Melon", url:"melon.com/artist/timeline.htm?artistId=4565131", color:"#00D564"},
+  { name:"Melon", url:"melon.com/search/total/index.htm?q=%EB%B0%A4%ED%95%98%EB%8A%98%EA%B7%B9%EC%9E%A5&section=&mwkLogType=T", color:"#00D564"},
   { name:"Genie Music", url:"genie.co.kr/detail/artistInfo?xxnm=83039013", color:"#3DA5FF" },
   { name:"FLO", url:"music-flo.com/detail/artist/412503816/track?sortType=POPULARITY", color:"#7C4DFF"},
   { name:"VIBE", url:"vibe.naver.com/artist/10046198", color:"#00C73C"},
