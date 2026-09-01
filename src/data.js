@@ -167,6 +167,23 @@ export const ALBUMS = [
     year: "2026",
     color: "#0d1a0d",
     desc: "유한한 삶과 상실 속에서도 끝까지 사랑하려는 마음.",
+    sheets: [
+        {
+          type: "drum",
+          label: "Drum",
+          url: "/sheets/A11/T02-DR.pdf"
+        },
+         {
+    type: "guitar",
+    label: "Guitar",
+    url: "/sheets/A11/T02-GT.pdf"
+  },
+   {
+    type: "bass",
+    label: "Bass",
+    url: "/sheets/A11/T02-BS.pdf"
+  }
+      ],
     tracks: [
       { n: 1, title: "푸른 하늘 은하수", mood: "푸른 하늘 은하수 맑은 물결에\n내 마음 가득 담은 별빛들을 실었죠" },
       { n: 2, title: "죽어가는 모든 것들을 사랑해야지", mood: "사라질 걸 알면서도 피어나는 저 꽃들처럼\n온 세상을 끌어안고 후회 없이 사랑할 거야" },
@@ -174,6 +191,7 @@ export const ALBUMS = [
       { n: 4, title: "꽃이 피든 말든", mood: "꽃이 피든 말든 무슨 상관이야\n남들의 봄이 나의 봄일 순 없잖아" },
       { n: 5, title: "묘하게 외로운 달", mood: "달을 향해 쏘아올려\n빗나가도 별이 될 테니" }
     ]
+    
   },
   {
     id: 12,
@@ -305,7 +323,22 @@ export const ALBUMS = [
           type: "drum",
           label: "Drum",
           url: "/sheets/A20/T01-DR.pdf"
-        }
+        },
+         {
+    type: "guitar",
+    label: "Guitar",
+    url: "/sheets/A20/T01-GT.pdf"
+  },
+   {
+    type: "bass",
+    label: "Bass",
+    url: "/sheets/A20/T01-BS.pdf"
+  },
+    {
+    type: "keyboard",
+    label: "Keyboard",
+    url: "/sheets/A20/T01-KB.pdf"
+  },
       ]
     }
   ]
