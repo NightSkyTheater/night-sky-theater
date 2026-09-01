@@ -750,19 +750,22 @@ const pagedAlbums = displayAlbums.slice(
   </p>
 
   <p
-    style={{
-      margin: 0,
-      fontSize: 10.5,
-      lineHeight: 1,
-      color: soft,
-    }}
-  >
-    밤하늘극장의 음악을 자유롭게 연주하고
-    커버 영상으로 만들어 주세요.
-    <br /><br />
-    악보 파일 자체의 무단 재배포·판매 및
-    수정 후 재판매는 금지합니다.
-  </p>
+  style={{
+    margin: 0,
+    fontSize: 10.5,
+    lineHeight: 1,
+    color: soft,
+  }}
+>
+  밤하늘극장의 음악은 개인 연주 및
+  커버 영상 제작에 자유롭게 이용하실 수 있습니다.
+  <br /><br />
+  공연·수익 창출·상업적 이용 및
+  활동곡으로의 사용은 금지합니다.
+  <br /><br />
+  악보 파일의 무단 재배포·판매 및
+  수정 후 재판매를 금지합니다.
+</p>
 </div>
     </div>
   </div>
