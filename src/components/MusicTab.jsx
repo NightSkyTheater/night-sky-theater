@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ACCENT, LIME, glass, gb, muted, soft, white } from "../theme";
 import { ALBUMS } from "../data";
 import { G, Hr } from "./Common";
@@ -116,6 +116,28 @@ function CDDisc({
   );
 }
 
+
+const SHEET_PARTS = [
+  { suffix: "DR", type: "drum", label: "Drum" },
+  { suffix: "GT", type: "guitar", label: "Guitar" },
+  { suffix: "BS", type: "bass", label: "Bass" },
+  { suffix: "KB", type: "keyboard", label: "Keyboard" },
+];
+
+function getSheetKey(albumId, trackNo) {
+  return `${albumId}:${trackNo}`;
+}
+
+function getSheetCandidates(albumId, trackNo) {
+  const paddedTrack = String(trackNo).padStart(2, "0");
+
+  return SHEET_PARTS.map((part) => ({
+    type: part.type,
+    label: part.label,
+    url: `/sheets/A${albumId}/T${paddedTrack}-${part.suffix}.pdf`,
+  }));
+}
+
 export default function MusicTab() {
   const displayAlbums = [...ALBUMS].reverse();
 
@@ -124,6 +146,46 @@ export default function MusicTab() {
   const [trackIdx, setTrackIdx] = useState(0);
 const [albumPage, setAlbumPage] = useState(0);
 const [sheetTrack, setSheetTrack] = useState(null);
+const [sheetIndex, setSheetIndex] = useState({});
+const checkedSheetTracks = useRef(new Set());
+
+const detectSheetsForAlbum = useCallback(async (album) => {
+  if (!album?.tracks?.length) return;
+
+  await Promise.all(
+    album.tracks.map(async (track) => {
+      const key = getSheetKey(album.id, track.n);
+
+      if (checkedSheetTracks.current.has(key)) return;
+      checkedSheetTracks.current.add(key);
+
+      const candidates = getSheetCandidates(album.id, track.n);
+
+      const results = await Promise.all(
+        candidates.map(async (sheet) => {
+          try {
+            const response = await fetch(sheet.url, {
+              method: "HEAD",
+              cache: "no-store",
+            });
+
+            return response.ok ? sheet : null;
+          } catch {
+            return null;
+          }
+        })
+      );
+
+      const foundSheets = results.filter(Boolean);
+
+      setSheetIndex((prev) => ({
+        ...prev,
+        [key]: foundSheets,
+      }));
+    })
+  );
+}, []);
+
 
 const ALBUMS_PER_PAGE = 6;
 const totalPages = Math.ceil(displayAlbums.length / ALBUMS_PER_PAGE);
@@ -133,7 +195,19 @@ const pagedAlbums = displayAlbums.slice(
   albumPage * ALBUMS_PER_PAGE + ALBUMS_PER_PAGE
 );
 
+useEffect(() => {
+  pagedAlbums.forEach((album) => {
+    detectSheetsForAlbum(album);
+  });
+}, [albumPage, detectSheetsForAlbum]);
+
   const alb = displayAlbums[index];
+
+useEffect(() => {
+  if (selected && alb) {
+    detectSheetsForAlbum(alb);
+  }
+}, [selected, alb, detectSheetsForAlbum]);
 
   /* =========================
      앨범 상세 화면
@@ -477,11 +551,14 @@ const pagedAlbums = displayAlbums.slice(
                       {t.title}
                     </p>
                   </div>
-{t.sheets?.length > 0 && (
+{(sheetIndex[getSheetKey(alb.id, t.n)]?.length ?? 0) > 0 && (
   <button
     onClick={(e) => {
       e.stopPropagation();
-      setSheetTrack(t);
+      setSheetTrack({
+        ...t,
+        sheets: sheetIndex[getSheetKey(alb.id, t.n)],
+      });
     }}
     style={{
       flexShrink: 0,
@@ -665,7 +742,7 @@ const pagedAlbums = displayAlbums.slice(
                 ? "🎸"
                 : sheet.type === "bass"
                 ? "🎸"
-                : sheet.type === "piano"
+                : sheet.type === "keyboard"
                 ? "🎹"
                 : sheet.type === "vocal"
                 ? "🎤"
@@ -865,7 +942,8 @@ const pagedAlbums = displayAlbums.slice(
   />
 
   {album.tracks?.some(
-    (track) => track.sheets?.length > 0
+    (track) =>
+      (sheetIndex[getSheetKey(album.id, track.n)]?.length ?? 0) > 0
   ) && (
     <div
       style={{
