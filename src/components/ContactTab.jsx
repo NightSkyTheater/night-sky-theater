@@ -1,5 +1,5 @@
 import React from "react";
-import { ACCENT, muted, soft, white } from "../theme";
+import { ACCENT, MUTED, SOFT, WHITE } from "../theme";
 import { PLATFORMS } from "../data";
 
 export default function ContactTab() {
@@ -68,7 +68,7 @@ export default function ContactTab() {
               margin: "42px 0 0",
               fontSize: 17,
               lineHeight: 1.85,
-              color: soft,
+              color: "rgba(255,255,255,0.72)",
             }}
           >
             밤하늘극장은 음악 제작, 아티스트 및 콘텐츠 협업,
