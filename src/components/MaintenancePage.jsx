@@ -1,10 +1,5 @@
 import React from "react";
-
-const ACCENT = "#B8FF00";
-const BG = "#08090B";
-const MUTED = "rgba(255,255,255,.52)";
-const SOFT = "rgba(255,255,255,.72)";
-const WHITE = "#F5F7F8";
+import { ACCENT, BG, MUTED, SOFT, WHITE } from "../theme";
 
 export default function MaintenancePage() {
   return (

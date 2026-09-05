@@ -1,37 +1,82 @@
-import React, { useEffect, useRef, useState } from "react";
-import { collection, query, orderBy, limit, startAfter, getDocs } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import {
+  collection,
+  query,
+  orderBy,
+  limit,
+  startAfter,
+  getDocs,
+} from "firebase/firestore";
+
 import { db } from "./firebase";
 
-import { INK } from "./theme";
-import { Stars } from "./components/Common";
-import GNB from "./components/GNB";
-import Footer from "./components/Footer";
-import Home from "./pages/Home";
-import Label from "./pages/Label";
-import Music from "./pages/Music";
-import Community from "./pages/Community";
-import Contact from "./pages/Contact";
+import TopTab from "./components/TopTab";
+import HomeTab from "./components/HomeTab";
+import AboutTab from "./components/AboutTab";
+import MusicTab from "./components/MusicTab";
+import GuestbookTab from "./components/GuestbookTab";
+import ContactTab from "./components/ContactTab";
 
-export default function App() {
-  const [tab, setTab] = useState("HOME");
-  const scrollPositions = useRef({});
+export default function MainSite() {
+  const [tab, setTab] = useState("home");
 
-  const [guestbookEntries, setGuestbookEntries] = useState([]);
+  const [entries, setEntries] = useState([]);
   const [lastDoc, setLastDoc] = useState(null);
   const [hasMore, setHasMore] = useState(true);
 
-  const changeTab = (nextTab) => {
-    scrollPositions.current[tab] = window.scrollY;
-    setTab(nextTab);
+  const loadGuestbook = async () => {
+    try {
+      const q = query(
+        collection(db, "guestbook"),
+        orderBy("createdAt", "desc"),
+        limit(10)
+      );
+
+      const snapshot = await getDocs(q);
+
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setEntries(data);
+      setLastDoc(snapshot.docs.at(-1) || null);
+      setHasMore(snapshot.docs.length === 10);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const loadGuestbook = async () => {
-    const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"), limit(10));
-    const snapshot = await getDocs(q);
-    const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-    setGuestbookEntries(data);
-    setLastDoc(snapshot.docs[snapshot.docs.length - 1]);
-    setHasMore(snapshot.docs.length >= 10);
+  const loadMore = async () => {
+    if (!lastDoc) return;
+
+    try {
+      const q = query(
+        collection(db, "guestbook"),
+        orderBy("createdAt", "desc"),
+        startAfter(lastDoc),
+        limit(10)
+      );
+
+      const snapshot = await getDocs(q);
+
+      const newEntries = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setEntries((prev) => [...prev, ...newEntries]);
+
+      if (snapshot.docs.length > 0) {
+        setLastDoc(snapshot.docs.at(-1));
+      }
+
+      if (snapshot.docs.length < 10) {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -39,53 +84,46 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    requestAnimationFrame(() => {
-      window.scrollTo(0, scrollPositions.current[tab] ?? 0);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
     });
   }, [tab]);
 
-  const loadMore = async () => {
-    if (!lastDoc) return;
-    const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"), startAfter(lastDoc), limit(10));
-    const snapshot = await getDocs(q);
-    const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
-    setGuestbookEntries((prev) => [...prev, ...data]);
-    if (snapshot.docs.length > 0) setLastDoc(snapshot.docs[snapshot.docs.length - 1]);
-    if (snapshot.docs.length < 10) setHasMore(false);
-  };
-
   return (
-    <div style={{ minHeight: "100vh", background: INK, color: "#F4F2FA", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif", position: "relative" }}>
-      <style>{`
-        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
-        @keyframes tw { from{opacity:.05} to{opacity:.65} }
-        @keyframes fin { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-        * { box-sizing:border-box; }
-        body { margin:0; }
-        textarea::placeholder, input::placeholder { color:rgba(255,255,255,0.32) }
-        ::-webkit-scrollbar { width:3px }
-        ::-webkit-scrollbar-thumb { background:rgba(184,255,0,0.16);border-radius:3px }
-        strong { font-weight:800 }
-        @media (max-width: 760px) {
-          .gnb-desktop { display: none !important; }
-          .gnb-burger { display: flex !important; }
-        }
-      `}</style>
-      <Stars />
+    <div className="app">
+      <TopTab tab={tab} setTab={setTab} />
 
-      <GNB tab={tab} setTab={changeTab} />
+      {tab === "home" && <HomeTab setTab={setTab} />}
 
-      <div style={{ position: "relative", zIndex: 1, animation: "fin 0.3s ease both" }} key={tab}>
-        {tab === "HOME" && <Home setTab={changeTab} />}
-        {tab === "LABEL" && <Label />}
-        {tab === "MUSIC" && <Music />}
-        {tab === "COMMUNITY" && (
-          <Community entries={guestbookEntries} loadMore={loadMore} hasMore={hasMore} loadGuestbook={loadGuestbook} />
-        )}
-        {tab === "CONTACT" && <Contact />}
-        <Footer setTab={changeTab} />
-      </div>
+      {tab === "about" && <AboutTab setTab={setTab} />}
+
+      {tab === "music" && <MusicTab />}
+
+      {tab === "community" && (
+        <GuestbookTab
+          entries={entries}
+          loadMore={loadMore}
+          hasMore={hasMore}
+          loadGuestbook={loadGuestbook}
+        />
+      )}
+
+      {tab === "contact" && <ContactTab />}
+
+      <footer className="site-footer">
+        <div className="page-shell">
+          <div>
+            <b>NIGHT SKY THEATER</b>
+            <span>Independent Music Label / Creative Studio</span>
+          </div>
+
+          <div>
+            <span>SEOUL · SOUTH KOREA</span>
+            <span>© 2026 NIGHT SKY THEATER</span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
