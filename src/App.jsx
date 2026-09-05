@@ -1,19 +1,102 @@
-import React, { useEffect, useState } from "react";
-import { collection, query, orderBy, limit, startAfter, getDocs } from "firebase/firestore";
-import { db } from "./firebase";
-import TopTab from "./components/TopTab";
-import HomeTab from "./components/HomeTab";
-import AboutTab from "./components/AboutTab";
-import MusicTab from "./components/MusicTab";
-import GuestbookTab from "./components/GuestbookTab";
-import ContactTab from "./components/ContactTab";
+import React from "react";
+import { ACCENT } from "./theme";
 
-export default function App(){
-  const [tab,setTab]=useState("home");
-  const [entries,setEntries]=useState([]); const [lastDoc,setLastDoc]=useState(null); const [hasMore,setHasMore]=useState(true);
-  const loadGuestbook=async()=>{try{const q=query(collection(db,"guestbook"),orderBy("createdAt","desc"),limit(10));const s=await getDocs(q);setEntries(s.docs.map(d=>({id:d.id,...d.data()})));setLastDoc(s.docs.at(-1)||null);setHasMore(s.docs.length===10);}catch(e){console.error(e);}};
-  const loadMore=async()=>{if(!lastDoc)return;const q=query(collection(db,"guestbook"),orderBy("createdAt","desc"),startAfter(lastDoc),limit(10));const s=await getDocs(q);setEntries(v=>[...v,...s.docs.map(d=>({id:d.id,...d.data()}))]);setLastDoc(s.docs.at(-1)||lastDoc);if(s.docs.length<10)setHasMore(false);};
-  useEffect(()=>{loadGuestbook();},[]);
+export default function App() {
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#08090B",
+        color: "#F5F7F8",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "24px",
+        fontFamily:
+          "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif",
+      }}
+    >
+      <div
+        style={{
+          width: "100%",
+          maxWidth: 720,
+          textAlign: "center",
+        }}
+      >
+        <p
+          style={{
+            margin: "0 0 18px",
+            color: ACCENT,
+            fontSize: 12,
+            fontWeight: 800,
+            letterSpacing: "0.2em",
+          }}
+        >
+          NIGHT SKY THEATER
+        </p>
 
-  return <div className="app"><TopTab tab={tab} setTab={setTab}/>{tab==="home"&&<HomeTab setTab={setTab}/>} {tab==="about"&&<AboutTab setTab={setTab}/>} {tab==="music"&&<MusicTab/>} {tab==="community"&&<GuestbookTab entries={entries} loadMore={loadMore} hasMore={hasMore} loadGuestbook={loadGuestbook}/>} {tab==="contact"&&<ContactTab/>}<footer className="site-footer"><div className="page-shell"><div><b>NIGHT SKY THEATER</b><span>Independent Music Label / Creative Studio</span></div><div><span>SEOUL · SOUTH KOREA</span><span>© 2026 NIGHT SKY THEATER</span></div></div></footer></div>;
+        <h1
+          style={{
+            margin: 0,
+            fontSize: "clamp(42px, 8vw, 92px)",
+            lineHeight: 1,
+            letterSpacing: "-0.06em",
+            fontWeight: 900,
+          }}
+        >
+          UNDER
+          <br />
+          CONSTRUCTION
+        </h1>
+
+        <div
+          style={{
+            width: 52,
+            height: 3,
+            background: ACCENT,
+            margin: "30px auto",
+          }}
+        />
+
+        <p
+          style={{
+            margin: 0,
+            fontSize: 16,
+            lineHeight: 1.8,
+            color: "rgba(255,255,255,.68)",
+          }}
+        >
+          밤하늘극장 공식 홈페이지를 새롭게 준비하고 있습니다.
+          <br />
+          더 나은 모습으로 곧 다시 찾아뵙겠습니다.
+        </p>
+
+        <a
+          href="mailto:hps_in@naver.com"
+          style={{
+            display: "inline-block",
+            marginTop: 36,
+            color: "#F5F7F8",
+            textDecoration: "none",
+            fontSize: 13,
+            borderBottom: `1px solid ${ACCENT}`,
+            paddingBottom: 4,
+          }}
+        >
+          CONTACT — hps_in@naver.com
+        </a>
+
+        <p
+          style={{
+            margin: "70px 0 0",
+            fontSize: 10,
+            color: "rgba(255,255,255,.28)",
+            letterSpacing: "0.08em",
+          }}
+        >
+          © 2026 NIGHT SKY THEATER
+        </p>
+      </div>
+    </div>
+  );
 }
