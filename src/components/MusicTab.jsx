@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { ACCENT, LIME, glass, gb, muted, soft, white } from "../theme";
 import { ALBUMS } from "../data";
-import { G, Hr } from "./Common";
 
 function CDDisc({
   cover,
@@ -116,30 +115,336 @@ function CDDisc({
   );
 }
 
-
 export default function MusicTab() {
   const displayAlbums = [...ALBUMS].reverse();
 
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState(false);
   const [trackIdx, setTrackIdx] = useState(0);
-const [albumPage, setAlbumPage] = useState(0);
-const ALBUMS_PER_PAGE = 6;
-const totalPages = Math.ceil(displayAlbums.length / ALBUMS_PER_PAGE);
+  const [albumPage, setAlbumPage] = useState(0);
+  const ALBUMS_PER_PAGE = 6;
+  const totalPages = Math.ceil(displayAlbums.length / ALBUMS_PER_PAGE);
 
-const pagedAlbums = displayAlbums.slice(
-  albumPage * ALBUMS_PER_PAGE,
-  albumPage * ALBUMS_PER_PAGE + ALBUMS_PER_PAGE
-);
+  const pagedAlbums = displayAlbums.slice(
+    albumPage * ALBUMS_PER_PAGE,
+    albumPage * ALBUMS_PER_PAGE + ALBUMS_PER_PAGE
+  );
 
-const alb = displayAlbums[index];
+  const alb = displayAlbums[index];
 
-/* =========================
-     앨범 상세 화면
+  /* =========================
+     앨범 상세 화면 (redesigned)
   ========================= */
-if (selected) {
-  const tr = alb.tracks[trackIdx];
+  if (selected) {
+    const tr = alb.tracks[trackIdx];
+    const progress = ((trackIdx + 1) / alb.tracks.length) * 100;
 
+    return (
+      <div
+        style={{
+          height: "100%",
+          overflowY: "auto",
+          overflowX: "hidden",
+          WebkitOverflowScrolling: "touch",
+          overscrollBehavior: "contain",
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", paddingBottom: 80 }}>
+
+          {/* ---- Hero: blurred cover backdrop ---- */}
+          <div
+            style={{
+              position: "relative",
+              borderRadius: "0 0 26px 26px",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                backgroundImage: `url(${alb.cover})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                filter: "blur(30px) saturate(1.35) brightness(0.5)",
+                transform: "scale(1.35)",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background:
+                  "linear-gradient(180deg, rgba(8,5,20,0.1) 0%, rgba(8,5,20,0.55) 55%, rgba(8,5,20,0.95) 100%)",
+              }}
+            />
+
+            <button
+              onClick={() => setSelected(false)}
+              style={{
+                position: "relative",
+                zIndex: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                background: "rgba(0,0,0,0.28)",
+                backdropFilter: "blur(6px)",
+                border: "1px solid rgba(255,255,255,0.14)",
+                borderRadius: 20,
+                padding: "6px 14px 6px 10px",
+                margin: "14px 0 0 14px",
+                cursor: "pointer",
+                color: white,
+                fontSize: 12.5,
+                fontFamily: "inherit",
+                width: "fit-content",
+              }}
+            >
+              ← 목록으로
+            </button>
+
+            <div
+              style={{
+                position: "relative",
+                zIndex: 2,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: "10px 26px 28px",
+              }}
+            >
+              <CDDisc cover={alb.cover} color={alb.color} size={132} spinning glow />
+
+              <p
+                style={{
+                  fontSize: 11.5,
+                  color: LIME,
+                  fontWeight: 700,
+                  margin: "18px 0 5px",
+                  opacity: 0.9,
+                }}
+              >
+                {alb.year}
+              </p>
+
+              <p
+                style={{
+                  fontSize: 19,
+                  fontWeight: 900,
+                  color: white,
+                  margin: "0 0 9px",
+                  lineHeight: 1.32,
+                  textAlign: "center",
+                  letterSpacing: "-0.3px",
+                }}
+              >
+                {alb.title}
+              </p>
+
+              <p
+                style={{
+                  fontSize: 12,
+                  color: "rgba(255,255,255,0.65)",
+                  lineHeight: 1.65,
+                  margin: 0,
+                  textAlign: "center",
+                  maxWidth: 280,
+                  fontStyle: "italic",
+                }}
+              >
+                "{alb.desc}"
+              </p>
+            </div>
+          </div>
+
+          {/* ---- Now playing ---- */}
+          <div style={{ padding: "24px 20px 4px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "baseline",
+                justifyContent: "space-between",
+                marginBottom: 12,
+              }}
+            >
+              <span style={{ fontSize: 12, color: muted }}>
+                {trackIdx + 1}번째 곡 · 총 {alb.tracks.length}곡
+              </span>
+              <span style={{ fontSize: 12, color: ACCENT, fontWeight: 700 }}>
+                {tr.n}
+              </span>
+            </div>
+
+            <div
+              style={{
+                height: 3,
+                borderRadius: 2,
+                background: "rgba(255,255,255,0.08)",
+                overflow: "hidden",
+                marginBottom: 22,
+              }}
+            >
+              <div
+                style={{
+                  height: "100%",
+                  width: `${progress}%`,
+                  background: LIME,
+                  transition: "width 0.3s ease",
+                }}
+              />
+            </div>
+
+            <p
+              style={{
+                fontSize: 26,
+                fontWeight: 900,
+                color: white,
+                margin: "0 0 12px",
+                lineHeight: 1.3,
+                letterSpacing: "-0.5px",
+              }}
+            >
+              {tr.title}
+            </p>
+
+            {tr.mood && (
+              <p
+                style={{
+                  fontSize: 14,
+                  color: soft,
+                  lineHeight: 1.75,
+                  fontStyle: "italic",
+                  margin: "0 0 24px",
+                }}
+              >
+                "{tr.mood}"
+              </p>
+            )}
+
+            <div style={{ display: "flex", gap: 10, marginBottom: 32 }}>
+              <button
+                onClick={() => setTrackIdx((i) => Math.max(0, i - 1))}
+                disabled={trackIdx === 0}
+                style={{
+                  flex: 1,
+                  padding: "13px",
+                  background: "rgba(255,255,255,0.04)",
+                  border: `1px solid ${gb}`,
+                  borderRadius: 14,
+                  cursor: trackIdx === 0 ? "not-allowed" : "pointer",
+                  color: trackIdx === 0 ? muted : soft,
+                  fontSize: 13,
+                  fontFamily: "inherit",
+                  opacity: trackIdx === 0 ? 0.4 : 1,
+                  transition: "all 0.2s",
+                }}
+              >
+                이전 곡
+              </button>
+
+              <button
+                onClick={() =>
+                  setTrackIdx((i) => Math.min(alb.tracks.length - 1, i + 1))
+                }
+                disabled={trackIdx === alb.tracks.length - 1}
+                style={{
+                  flex: 1,
+                  padding: "13px",
+                  background:
+                    trackIdx === alb.tracks.length - 1
+                      ? "rgba(255,255,255,0.04)"
+                      : "rgba(184,255,0,0.1)",
+                  border: `1px solid ${
+                    trackIdx === alb.tracks.length - 1 ? gb : "rgba(184,255,0,0.3)"
+                  }`,
+                  borderRadius: 14,
+                  cursor:
+                    trackIdx === alb.tracks.length - 1 ? "not-allowed" : "pointer",
+                  color: trackIdx === alb.tracks.length - 1 ? muted : LIME,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  fontFamily: "inherit",
+                  opacity: trackIdx === alb.tracks.length - 1 ? 0.4 : 1,
+                  transition: "all 0.2s",
+                }}
+              >
+                다음 곡
+              </button>
+            </div>
+          </div>
+
+          {/* ---- Track list: flat rows, no card wrapper ---- */}
+          <div style={{ padding: "0 20px" }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: white, margin: "0 0 2px" }}>
+              수록곡
+            </p>
+
+            <div>
+              {alb.tracks.map((t, j) => (
+                <div
+                  key={`${t.title}-${j}`}
+                  onClick={() => setTrackIdx(j)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 14,
+                    padding: "13px 4px",
+                    cursor: "pointer",
+                    borderBottom: j < alb.tracks.length - 1 ? `1px solid ${gb}` : "none",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: 11,
+                      color: j === trackIdx ? LIME : muted,
+                      fontWeight: j === trackIdx ? 800 : 400,
+                      width: 18,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {t.n}
+                  </span>
+
+                  <p
+                    style={{
+                      flex: 1,
+                      minWidth: 0,
+                      margin: 0,
+                      fontSize: 13.5,
+                      fontWeight: j === trackIdx ? 700 : 400,
+                      color: j === trackIdx ? white : soft,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      textAlign: "left",
+                    }}
+                  >
+                    {t.title}
+                  </p>
+
+                  {j === trackIdx && (
+                    <span
+                      style={{
+                        width: 6,
+                        height: 6,
+                        borderRadius: "50%",
+                        background: LIME,
+                        flexShrink: 0,
+                      }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* =========================
+     앨범 목록 화면 (unchanged)
+  ========================= */
   return (
     <div
       style={{
@@ -147,569 +452,160 @@ if (selected) {
         overflowY: "auto",
         overflowX: "hidden",
         WebkitOverflowScrolling: "touch",
-        overscrollBehavior: "contain",
-        paddingBottom: 100,
+        paddingBottom: 90,
+        boxSizing: "border-box",
       }}
     >
-      {/* 뒤로가기 */}
-      <div
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 20,
-          padding: "10px 0 12px",
-          background:
-            "linear-gradient(to bottom, rgba(7,5,18,0.96), rgba(7,5,18,0.78), transparent)",
-          backdropFilter: "blur(12px)",
-        }}
-      >
-        <button
-          onClick={() => setSelected(false)}
+      <div style={{ padding: "16px 4px 18px" }}>
+        <h2
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 7,
-            border: "none",
-            background: "none",
-            color: "rgba(255,255,255,0.72)",
-            padding: "4px 2px",
-            cursor: "pointer",
-            fontSize: 12,
-            fontFamily: "inherit",
-          }}
-        >
-          <span
-            style={{
-              fontSize: 18,
-              lineHeight: 1,
-            }}
-          >
-            ‹
-          </span>
-          앨범
-        </button>
-      </div>
-
-      {/* HERO */}
-      <section
-        style={{
-          position: "relative",
-          padding: "8px 4px 30px",
-        }}
-      >
-        {/* 앨범 컬러 배경 */}
-        <div
-          style={{
-            position: "absolute",
-            top: -80,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "120%",
-            height: 360,
-            background: `
-              radial-gradient(
-                ellipse at center,
-                ${alb.color}55 0%,
-                ${alb.color}20 34%,
-                transparent 72%
-              )
-            `,
-            filter: "blur(40px)",
-            pointerEvents: "none",
-            opacity: 0.8,
-          }}
-        />
-
-        {/* 커버 */}
-        <div
-          style={{
-            position: "relative",
-            width: "min(76vw, 300px)",
-            aspectRatio: "1 / 1",
-            margin: "0 auto",
-            borderRadius: 18,
-            overflow: "hidden",
-            boxShadow:
-              "0 28px 65px rgba(0,0,0,0.50), 0 6px 18px rgba(0,0,0,0.28)",
-          }}
-        >
-          <img
-            src={alb.cover}
-            alt={alb.title}
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "block",
-              objectFit: "cover",
-            }}
-          />
-
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              background:
-                "linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.18))",
-              pointerEvents: "none",
-            }}
-          />
-        </div>
-
-        {/* 앨범 정보 */}
-        <div
-          style={{
-            position: "relative",
-            marginTop: 25,
+            margin: "0 0 4px 0",
+            fontSize: 16,
+            fontWeight: 700,
+            color: LIME,
             textAlign: "center",
-            padding: "0 12px",
           }}
         >
-          <p
-            style={{
-              margin: "0 0 8px",
-              fontSize: 9,
-              fontWeight: 700,
-              color: ACCENT,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-            }}
-          >
-            {alb.year} · NIGHT SKY THEATER
-          </p>
+          앨범
+        </h2>
 
-          <h1
-            style={{
-              margin: 0,
-              fontSize: "clamp(22px, 6vw, 30px)",
-              lineHeight: 1.28,
-              fontWeight: 850,
-              color: white,
-              letterSpacing: "-0.045em",
-              wordBreak: "keep-all",
-            }}
-          >
-            {alb.title}
-          </h1>
-
-          {alb.desc && (
-            <p
-              style={{
-                maxWidth: 420,
-                margin: "16px auto 0",
-                fontSize: 12.5,
-                lineHeight: 1.85,
-                color: "rgba(255,255,255,0.56)",
-                wordBreak: "keep-all",
-              }}
-            >
-              {alb.desc}
-            </p>
-          )}
-        </div>
-      </section>
-
-      {/* 트랙리스트 */}
-      <section
-        style={{
-          marginTop: 4,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "0 6px 13px",
-          }}
-        >
-          <p
-            style={{
-              margin: 0,
-              fontSize: 11,
-              color: "rgba(255,255,255,0.92)",
-              fontWeight: 750,
-              letterSpacing: "-0.01em",
-            }}
-          >
-            TRACKLIST
-          </p>
-
-          <p
-            style={{
-              margin: 0,
-              fontSize: 9,
-              color: "rgba(255,255,255,0.32)",
-            }}
-          >
-            {alb.tracks.length} TRACKS
-          </p>
-        </div>
-
-        <div
-          style={{
-            borderTop: "1px solid rgba(255,255,255,0.07)",
-          }}
-        >
-          {alb.tracks.map((t, j) => {
-            const active = j === trackIdx;
-
-            return (
-              <div
-                key={`${t.title}-${j}`}
-                onClick={() => setTrackIdx(j)}
-                style={{
-                  position: "relative",
-                  padding: active
-                    ? "17px 10px 18px"
-                    : "15px 10px",
-                  borderBottom:
-                    "1px solid rgba(255,255,255,0.065)",
-                  cursor: "pointer",
-                  background: active
-                    ? "linear-gradient(90deg, rgba(91,79,245,0.12), rgba(91,79,245,0.025) 70%, transparent)"
-                    : "transparent",
-                  transition:
-                    "background 0.22s ease, padding 0.22s ease",
-                }}
-              >
-                {/* 선택 표시 */}
-                {active && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      left: 0,
-                      top: 17,
-                      bottom: 17,
-                      width: 2,
-                      borderRadius: 999,
-                      background: ACCENT,
-                      boxShadow: `0 0 12px ${ACCENT}`,
-                    }}
-                  />
-                )}
-
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "28px 1fr",
-                    gap: 9,
-                    alignItems: "start",
-                  }}
-                >
-                  <span
-                    style={{
-                      paddingTop: 2,
-                      fontSize: 10,
-                      fontWeight: active ? 700 : 500,
-                      color: active
-                        ? ACCENT
-                        : "rgba(255,255,255,0.26)",
-                      fontVariantNumeric: "tabular-nums",
-                    }}
-                  >
-                    {String(t.n).padStart(2, "0")}
-                  </span>
-
-                  <div
-                    style={{
-                      minWidth: 0,
-                    }}
-                  >
-                    <p
-                      style={{
-                        margin: 0,
-                        fontSize: active ? 14 : 13,
-                        fontWeight: active ? 750 : 520,
-                        color: active
-                          ? white
-                          : "rgba(255,255,255,0.72)",
-                        lineHeight: 1.45,
-                        letterSpacing: "-0.025em",
-                        wordBreak: "keep-all",
-                        transition: "all 0.2s ease",
-                      }}
-                    >
-                      {t.title}
-                    </p>
-
-                    {/* 현재 트랙 설명 */}
-                    {active && t.mood && (
-                      <div
-                        style={{
-                          marginTop: 10,
-                          paddingRight: 10,
-                          animation:
-                            "trackFadeIn 0.25s ease forwards",
-                        }}
-                      >
-                        <p
-                          style={{
-                            margin: 0,
-                            fontSize: 11.5,
-                            lineHeight: 1.8,
-                            color:
-                              "rgba(255,255,255,0.46)",
-                            wordBreak: "keep-all",
-                          }}
-                        >
-                          {t.mood}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* 하단 정보 */}
-      <div
-        style={{
-          padding: "27px 10px 10px",
-          textAlign: "center",
-        }}
-      >
         <p
           style={{
+            fontSize: 12,
+            color: "rgba(255,255,255,0.6)",
             margin: 0,
-            fontSize: 8.5,
-            lineHeight: 1.8,
-            letterSpacing: "0.11em",
-            color: "rgba(255,255,255,0.20)",
+            textAlign: "center",
           }}
         >
-          NIGHT SKY THEATER
-          <br />
-          밤하늘극장
+          밤하늘극장의 모든 음악을 만나보세요.
         </p>
       </div>
 
-      <style>{`
-        @keyframes trackFadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(-4px);
-          }
-
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
-    </div>
-  );
-}
-
-  /* =========================
-     앨범 목록 화면
-  ========================= */
-  return (
-  <div
-    style={{
-      height: "100%",
-      overflowY: "auto",
-      overflowX: "hidden",
-      WebkitOverflowScrolling: "touch",
-      paddingBottom: 90,
-      boxSizing: "border-box",
-    }}
-  >
-    {/* 타이틀 */}
-    <div style={{ padding: "16px 4px 18px" }}>
-      <h2
-        style={{
-          margin: "0 0 4px 0",
-          fontSize: 16,
-          fontWeight: 700,
-          color: LIME,
-          textAlign: "center",
-        }}
-      >
-        앨범
-      </h2>
-
-      <p
-        style={{
-          fontSize: 12,
-          color: "rgba(255,255,255,0.6)",
-          margin: 0,
-          textAlign: "center",
-        }}
-      >
-        밤하늘극장의 모든 음악을 만나보세요.
-      </p>
-    </div>
-
-    {/* 앨범 2열 */}
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-        gap: "22px 14px",
-        padding: "0 4px",
-      }}
-    >
-      {pagedAlbums.map((album, pageIndex) => {
-        const realIndex =
-          albumPage * ALBUMS_PER_PAGE + pageIndex;
-
-        return (
-          <div
-            key={`${album.id}-${realIndex}`}
-            onClick={() => {
-              setIndex(realIndex);
-              setTrackIdx(0);
-              setSelected(true);
-            }}
-            style={{
-              cursor: "pointer",
-              minWidth: 0,
-            }}
-          >
-            <div
-  style={{
-    position: "relative",
-    width: "100%",
-    aspectRatio: "1 / 1",
-    borderRadius: 10,
-    overflow: "hidden",
-    background: glass,
-    border: `1px solid ${gb}`,
-    boxShadow: "0 8px 22px rgba(0,0,0,0.28)",
-  }}
->
-  <img
-    src={album.cover}
-    alt={album.title}
-    loading="lazy"
-    style={{
-      width: "100%",
-      height: "100%",
-      objectFit: "cover",
-      display: "block",
-    }}
-  />
-
-  
-</div>
-
-            <div
-              style={{
-                padding: "9px 2px 0",
-                textAlign: "left",
-              }}
-            >
-              <p
-                style={{
-                  fontSize: 12.5,
-                  fontWeight: 700,
-                  color: white,
-                  margin: "0 0 4px",
-                  lineHeight: 1.4,
-                  display: "-webkit-box",
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                }}
-              >
-                {album.title}
-              </p>
-
-              <p
-                style={{
-                  fontSize: 9.5,
-                  color: muted,
-                  margin: 0,
-                  fontWeight: 600,
-                }}
-              >
-                {album.year}
-              </p>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-
-    {/* 페이지 이동 */}
-    {totalPages > 1 && (
       <div
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 16,
-          marginTop: 30,
+          display: "grid",
+          gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+          gap: "22px 14px",
+          padding: "0 4px",
         }}
       >
-        <button
-          onClick={() =>
-            setAlbumPage((p) => Math.max(0, p - 1))
-          }
-          disabled={albumPage === 0}
-          style={{
-            width: 38,
-            height: 38,
-            borderRadius: "50%",
-            background: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            color: albumPage === 0 ? muted : white,
-            cursor: albumPage === 0 ? "default" : "pointer",
-            opacity: albumPage === 0 ? 0.35 : 1,
-            fontSize: 18,
-            fontFamily: "inherit",
-          }}
-        >
-          ‹
-        </button>
+        {pagedAlbums.map((album, pageIndex) => {
+          const realIndex = albumPage * ALBUMS_PER_PAGE + pageIndex;
 
-        <span
-          style={{
-            fontSize: 11,
-            color: muted,
-            minWidth: 44,
-            textAlign: "center",
-          }}
-        >
-          {albumPage + 1} / {totalPages}
-        </span>
+          return (
+            <div
+              key={`${album.id}-${realIndex}`}
+              onClick={() => {
+                setIndex(realIndex);
+                setTrackIdx(0);
+                setSelected(true);
+              }}
+              style={{ cursor: "pointer", minWidth: 0 }}
+            >
+              <div
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  aspectRatio: "1 / 1",
+                  borderRadius: 10,
+                  overflow: "hidden",
+                  background: glass,
+                  border: `1px solid ${gb}`,
+                  boxShadow: "0 8px 22px rgba(0,0,0,0.28)",
+                }}
+              >
+                <img
+                  src={album.cover}
+                  alt={album.title}
+                  loading="lazy"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                />
+              </div>
 
-        <button
-          onClick={() =>
-            setAlbumPage((p) =>
-              Math.min(totalPages - 1, p + 1)
-            )
-          }
-          disabled={albumPage === totalPages - 1}
-          style={{
-            width: 38,
-            height: 38,
-            borderRadius: "50%",
-            background: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            color:
-              albumPage === totalPages - 1
-                ? muted
-                : white,
-            cursor:
-              albumPage === totalPages - 1
-                ? "default"
-                : "pointer",
-            opacity:
-              albumPage === totalPages - 1
-                ? 0.35
-                : 1,
-            fontSize: 18,
-            fontFamily: "inherit",
-          }}
-        >
-          ›
-        </button>
+              <div style={{ padding: "9px 2px 0", textAlign: "left" }}>
+                <p
+                  style={{
+                    fontSize: 12.5,
+                    fontWeight: 700,
+                    color: white,
+                    margin: "0 0 4px",
+                    lineHeight: 1.4,
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                  }}
+                >
+                  {album.title}
+                </p>
+
+                <p style={{ fontSize: 9.5, color: muted, margin: 0, fontWeight: 600 }}>
+                  {album.year}
+                </p>
+              </div>
+            </div>
+          );
+        })}
       </div>
-    )}
-  </div>
-);
+
+      {totalPages > 1 && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 16,
+            marginTop: 30,
+          }}
+        >
+          <button
+            onClick={() => setAlbumPage((p) => Math.max(0, p - 1))}
+            disabled={albumPage === 0}
+            style={{
+              width: 38,
+              height: 38,
+              borderRadius: "50%",
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              color: albumPage === 0 ? muted : white,
+              cursor: albumPage === 0 ? "default" : "pointer",
+              opacity: albumPage === 0 ? 0.35 : 1,
+              fontSize: 18,
+              fontFamily: "inherit",
+            }}
+          >
+            ‹
+          </button>
+
+          <span style={{ fontSize: 11, color: muted, minWidth: 44, textAlign: "center" }}>
+            {albumPage + 1} / {totalPages}
+          </span>
+
+          <button
+            onClick={() => setAlbumPage((p) => Math.min(totalPages - 1, p + 1))}
+            disabled={albumPage === totalPages - 1}
+            style={{
+              width: 38,
+              height: 38,
+              borderRadius: "50%",
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              color: albumPage === totalPages - 1 ? muted : white,
+              cursor: albumPage === totalPages - 1 ? "default" : "pointer",
+              opacity: albumPage === totalPages - 1 ? 0.35 : 1,
+              fontSize: 18,
+              fontFamily: "inherit",
+            }}
+          >
+            ›
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
