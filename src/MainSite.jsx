@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
   collection,
   query,
@@ -7,63 +7,75 @@ import {
   startAfter,
   getDocs,
 } from "firebase/firestore";
+
 import { db } from "./firebase";
 
-import { MOBILE_SHELL_WIDTH, TOP_NAV_HEIGHT, NAV_ITEMS } from "./theme";
-import { Stars } from "./components/Common";
 import TopTab from "./components/TopTab";
 import HomeTab from "./components/HomeTab";
+import AboutTab from "./components/AboutTab";
 import MusicTab from "./components/MusicTab";
 import GuestbookTab from "./components/GuestbookTab";
+import ContactTab from "./components/ContactTab";
 
-// ── APP (메인 컴포넌트 단일 Export Default) ───────────────────
-export default function App() {
-  const [tab, setTab] = useState(NAV_ITEMS[0].id);
-  const scrollPositions = useRef({});
-  // 💡 방명록 데이터를 최상위 App에서 관리하여 앱이 켜지자마자 미리 로딩합니다.
-  const [guestbookEntries, setGuestbookEntries] = useState([]);
+export default function MainSite() {
+  const [tab, setTab] = useState("home");
+
+  const [entries, setEntries] = useState([]);
   const [lastDoc, setLastDoc] = useState(null);
   const [hasMore, setHasMore] = useState(true);
 
-  const changeTab = (nextTab) => {
-    // 현재 탭 위치 저장
-    scrollPositions.current[tab] = window.scrollY;
+  const loadGuestbook = async () => {
+    try {
+      const q = query(
+        collection(db, "guestbook"),
+        orderBy("createdAt", "desc"),
+        limit(10)
+      );
 
-    // 탭 변경
-    setTab(nextTab);
+      const snapshot = await getDocs(q);
+
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setEntries(data);
+      setLastDoc(snapshot.docs.at(-1) || null);
+      setHasMore(snapshot.docs.length === 10);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  // Chart.js 로드용 useEffect
-  useEffect(() => {
-    if (document.querySelector('script[src*="chart.umd.js"]')) return;
-    const s = document.createElement("script");
-    s.src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js";
-    document.head.appendChild(s);
-  }, []);
+  const loadMore = async () => {
+    if (!lastDoc) return;
 
-  const loadGuestbook = async () => {
-    const q = query(
-      collection(db, "guestbook"),
-      orderBy("createdAt", "desc"),
-      limit(10)
-    );
+    try {
+      const q = query(
+        collection(db, "guestbook"),
+        orderBy("createdAt", "desc"),
+        startAfter(lastDoc),
+        limit(10)
+      );
 
-    const snapshot = await getDocs(q);
+      const snapshot = await getDocs(q);
 
-    const data = snapshot.docs.map((d) => ({
-      id: d.id,
-      ...d.data(),
-    }));
+      const newEntries = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-    setGuestbookEntries(data);
+      setEntries((prev) => [...prev, ...newEntries]);
 
-    setLastDoc(snapshot.docs[snapshot.docs.length - 1]);
+      if (snapshot.docs.length > 0) {
+        setLastDoc(snapshot.docs.at(-1));
+      }
 
-    // 항상 초기화
-    setHasMore(true);
-
-    if (snapshot.docs.length < 10) {
-      setHasMore(false);
+      if (snapshot.docs.length < 10) {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -72,131 +84,46 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    requestAnimationFrame(() => {
-      window.scrollTo(
-        0,
-        scrollPositions.current[tab] ?? 0
-      );
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
     });
   }, [tab]);
 
-  // 🎵 뮤직탭 전용: 탑 nav 아래 영역을 화면에 고정시키는 동안
-  //    바디 자체 스크롤(바운스 포함)도 잠가서 콘텐츠가 위/아래로 밀리지 않게 합니다.
-  useEffect(() => {
-    if (tab === NAV_ITEMS[1].id) {
-      const prevOverflow = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = prevOverflow;
-      };
-    }
-  }, [tab]);
-
-  const loadMore = async () => {
-    if (!lastDoc) return;
-
-    const q = query(
-      collection(db, "guestbook"),
-      orderBy("createdAt", "desc"),
-      startAfter(lastDoc),
-      limit(10)
-    );
-
-    const snapshot = await getDocs(q);
-
-    const data = snapshot.docs.map((d) => ({
-      id: d.id,
-      ...d.data(),
-    }));
-
-    setGuestbookEntries((prev) => [...prev, ...data]);
-
-    // 마지막 문서 저장
-    if (snapshot.docs.length > 0) {
-      setLastDoc(snapshot.docs[snapshot.docs.length - 1]);
-    }
-
-    // 더 가져올 데이터가 없으면 버튼 숨김
-    if (snapshot.docs.length < 10) {
-      setHasMore(false);
-    }
-  };
-
   return (
-    <div style={{ minHeight: "100vh", background: "#0e0a2e", color: "#fff", fontFamily: "'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif !important;", position: "relative" }}>
-      <style>{`
-        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-        @keyframes tw    { from{opacity:.05} to{opacity:.65} }
-        @keyframes fin   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes cdspin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-        @keyframes slideUpIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes slideDownIn { from{opacity:0;transform:translateY(-30px)} to{opacity:1;transform:translateY(0)} }
-        * { box-sizing:border-box; }
-        body { font-family:'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif; text-align:left; margin:0; }
-        p, span, div { text-align:inherit; }
-        textarea::placeholder, input::placeholder { color:rgba(255,255,255,0.3) }
-        ::-webkit-scrollbar { width:3px }
-        ::-webkit-scrollbar-thumb { background:rgba(184,255,0,0.16);border-radius:3px }
-        strong { font-weight:800 }
-      `}</style>
-      <Stars />
+    <div className="app">
+      <TopTab tab={tab} setTab={setTab} />
 
-      <TopTab
-        tab={tab}
-        setTab={changeTab}
-      />
+      {tab === "home" && <HomeTab setTab={setTab} />}
 
-      <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: MOBILE_SHELL_WIDTH, margin: "0 auto", display: "flex", flexDirection: "column", minHeight: "100vh", overflow: "hidden" }}>
-        <div
-          style={{
-            flex: 1,
-            padding:
-              tab === NAV_ITEMS[0].id
-                ? `${TOP_NAV_HEIGHT}px 0 60px`
-                : tab === NAV_ITEMS[1].id
-                  ? 0 // 뮤직탭은 아래 고정 레이어가 자체적으로 위치를 잡으므로 부모 패딩 불필요
-                  : tab === NAV_ITEMS[2].id
-                    ? `${TOP_NAV_HEIGHT + 12}px 14px 40px`
-                    : `${TOP_NAV_HEIGHT + 12}px 14px 60px`,
-            animation: "fin 0.3s ease both"
-          }}
-        >
-          <div style={{ display: tab === NAV_ITEMS[0].id ? "block" : "none" }}>
-            <HomeTab />
+      {tab === "about" && <AboutTab setTab={setTab} />}
+
+      {tab === "music" && <MusicTab />}
+
+      {tab === "community" && (
+        <GuestbookTab
+          entries={entries}
+          loadMore={loadMore}
+          hasMore={hasMore}
+          loadGuestbook={loadGuestbook}
+        />
+      )}
+
+      {tab === "contact" && <ContactTab />}
+
+      <footer className="site-footer">
+        <div className="page-shell">
+          <div>
+            <b>NIGHT SKY THEATER</b>
+            <span>Independent Music Label / Creative Studio</span>
           </div>
 
-          {/* 🎵 뮤직탭: 탑 nav 바로 아래부터 화면 하단까지 고정 영역.
-              페이지 스크롤과 완전히 분리되어, 콘텐츠가 스크롤되어도 nav가 밀리거나
-              콘텐츠가 화면 밖으로 흘러내려가지 않습니다. */}
-          <div
-            style={{
-              display: tab === NAV_ITEMS[1].id ? "block" : "none",
-              position: "fixed",
-              top: TOP_NAV_HEIGHT,
-              bottom: 0,
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: "100%",
-              maxWidth: MOBILE_SHELL_WIDTH,
-              padding: "12px 14px 20px",
-              overflow: "hidden",
-              zIndex: 1,
-            }}
-          >
-            <MusicTab />
-          </div>
-
-          <div style={{ display: tab === NAV_ITEMS[2].id ? "block" : "none" }}>
-            {/* 💡 미리 로드한 데이터(entries)를 GuestbookTab에 전달합니다. */}
-            <GuestbookTab
-              entries={guestbookEntries}
-              loadMore={loadMore}
-              hasMore={hasMore}
-              loadGuestbook={loadGuestbook}
-            />
+          <div>
+            <span>SEOUL · SOUTH KOREA</span>
+            <span>© 2026 NIGHT SKY THEATER</span>
           </div>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }
