@@ -1,6 +1,4 @@
-
 import React from "react";
-import { Mail, ArrowRight, Music2 } from "lucide-react";
 import { ACCENT, muted, soft, white } from "../theme";
 import { PLATFORMS } from "../data";
 
@@ -12,17 +10,14 @@ export default function ContactTab() {
     {
       label: "Instagram",
       href: instagram ? `https://${instagram.url}` : "#",
-      icon: <Music2 size={18} strokeWidth={1.8} />,
     },
     {
       label: "YouTube",
       href: "https://youtube.com/@NightSkyTheater",
-      icon: <Music2 size={18} strokeWidth={1.8} />,
     },
     {
       label: "YouTube Music",
       href: youtubeMusic ? `https://${youtubeMusic.url}` : "#",
-      icon: <Music2 size={18} strokeWidth={1.8} />,
     },
   ];
 
@@ -35,15 +30,7 @@ export default function ContactTab() {
         margin: "0 auto",
       }}
     >
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1.3fr) minmax(320px, 0.7fr)",
-          gap: 80,
-          alignItems: "start",
-        }}
-        className="contact-grid"
-      >
+      <div className="contact-grid">
         <section>
           <p
             style={{
@@ -126,12 +113,8 @@ export default function ContactTab() {
                 fontWeight: 700,
               }}
             >
-              <span style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <Mail size={19} strokeWidth={1.8} />
-                hps_in@naver.com
-              </span>
-
-              <ArrowRight size={18} />
+              <span>hps_in@naver.com</span>
+              <span aria-hidden="true">→</span>
             </a>
           </div>
 
@@ -153,7 +136,13 @@ export default function ContactTab() {
               SOCIAL
             </p>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 16,
+              }}
+            >
               {links.map((item) => (
                 <a
                   key={item.label}
@@ -169,12 +158,8 @@ export default function ContactTab() {
                     fontSize: 15,
                   }}
                 >
-                  <span style={{ display: "flex", alignItems: "center", gap: 11 }}>
-                    {item.icon}
-                    {item.label}
-                  </span>
-
-                  <ArrowRight size={16} />
+                  <span>{item.label}</span>
+                  <span aria-hidden="true">→</span>
                 </a>
               ))}
             </div>
@@ -223,7 +208,7 @@ export default function ContactTab() {
         </p>
 
         <p style={{ margin: 0, fontSize: 11, color: muted }}>
-          MUSIC LABEL & CREATIVE STUDIO
+          MUSIC LABEL &amp; CREATIVE STUDIO
         </p>
       </div>
     </main>
