@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { ACCENT, muted, soft, white } from "../theme";
+import { ACCENT, LIME, muted, soft, white } from "../theme";
 import { ALBUMS, ALL_TRACKS, SUB_DATA, PLATFORMS, RELEASE_SCHEDULE, NEWS_ITEMS } from "../data";
-import { SecHead, Tag, HomeCard, HomeHr, formatCompact } from "./Common";
+import { formatCompact } from "./Common";
 
-function HeroBanner({ currentSubs, albumCount, trackCount }) {
+const RULE = "1px solid rgba(255,255,255,0.08)";
+
+function HeroBanner() {
   return (
-    <div
-      style={{
-        position: "relative",
-        height: 520,
-        overflow: "hidden",
-      }}
-    >
+    <div style={{ position: "relative", height: 300, overflow: "hidden" }}>
       <img
         src="https://down.mixtape.so/NAS/img/b/d/d/c/bddc807264d156fa82fd1a98208a4856.png"
         alt=""
@@ -20,7 +16,6 @@ function HeroBanner({ currentSubs, albumCount, trackCount }) {
           height: "100%",
           objectFit: "cover",
           objectPosition: "center top",
-          transform: "scale(1.03)",
         }}
       />
 
@@ -28,93 +23,66 @@ function HeroBanner({ currentSubs, albumCount, trackCount }) {
         style={{
           position: "absolute",
           inset: 0,
-          background: `
-linear-gradient(
-to bottom,
-rgba(0,0,0,0) 0%,
-rgba(3,1,14,0.08) 35%,
-rgba(3,1,14,0.45) 55%,
-rgba(3,1,14,0.82) 72%,
-#0e0a2e 100%
-)
-`,
+          background:
+            "linear-gradient(180deg, rgba(3,1,14,0) 0%, rgba(3,1,14,0.15) 45%, rgba(3,1,14,0.94) 100%)",
         }}
       />
 
-      <div style={{ position: "absolute", left: 24, right: 24, bottom: 0 }}>
-        <div
+      <div style={{ position: "absolute", left: 20, right: 20, bottom: 22 }}>
+        <p style={{ fontSize: 11, color: LIME, margin: "0 0 8px", letterSpacing: "0.03em" }}>
+          Night Sky Theater
+        </p>
+        <h1
           style={{
-            textAlign: "center",
-            position: "relative",
-            overflow: "hidden",
-            padding: "30px 22px 24px",
+            fontSize: 26,
+            fontWeight: 900,
+            color: white,
+            letterSpacing: "-0.03em",
+            margin: "0 0 8px",
           }}
         >
-          <h2
-            style={{
-              fontSize: 24,
-              fontWeight: 900,
-              color: white,
-              letterSpacing: "-0.03em",
-              margin: "0 0 14px",
-            }}
-          >
-            밤하늘극장
-          </h2>
-          <p
-            style={{
-              fontSize: 12.5,
-              color: soft,
-              lineHeight: 1.8,
-              margin: 0,
-              maxWidth: 380,
-              marginInline: "auto",
-            }}
-          >
-            밤하늘극장은 사랑과 시간, 그리고 기억에 깃든 감정을
-            <br /> 섬세하게 노래하는 <strong>버츄얼 인디 밴드</strong>입니다.
-          </p>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: 34,
-              marginTop: 24,
-            }}
-          >
-            {[
-              { value: formatCompact(currentSubs), label: "구독자" },
-              { value: albumCount, label: "앨범" },
-              { value: trackCount, label: "트랙" },
-            ].map((item) => (
-              <div key={item.label} style={{ textAlign: "center" }}>
-                <div
-                  style={{
-                    fontSize: 22,
-                    fontWeight: 900,
-                    color: ACCENT,
-                    lineHeight: 1,
-                  }}
-                >
-                  {item.value}
-                </div>
-
-                <div
-                  style={{
-                    marginTop: 6,
-                    fontSize: 11,
-                    color: muted,
-                    letterSpacing: "0.02em",
-                  }}
-                >
-                  {item.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+          밤하늘극장
+        </h1>
+        <p style={{ fontSize: 12.5, color: soft, lineHeight: 1.7, margin: 0, maxWidth: 340 }}>
+          사랑과 시간, 그리고 기억에 깃든 감정을 섬세하게 노래하는 버츄얼 인디 밴드
+        </p>
       </div>
+    </div>
+  );
+}
+
+function StatsStrip({ currentSubs, albumCount, trackCount }) {
+  const items = [
+    { value: formatCompact(currentSubs), label: "구독자" },
+    { value: albumCount, label: "앨범" },
+    { value: trackCount, label: "트랙" },
+  ];
+
+  return (
+    <div style={{ display: "flex", borderTop: RULE, borderBottom: RULE }}>
+      {items.map((item, i) => (
+        <div
+          key={item.label}
+          style={{
+            flex: 1,
+            textAlign: "center",
+            padding: "18px 8px",
+            borderLeft: i > 0 ? RULE : "none",
+          }}
+        >
+          <div style={{ fontSize: 20, fontWeight: 800, color: white }}>{item.value}</div>
+          <div style={{ fontSize: 11, color: muted, marginTop: 4 }}>{item.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SectionHeader({ index, title }) {
+  return (
+    <div style={{ display: "flex", alignItems: "baseline", gap: 10, padding: "24px 20px 12px" }}>
+      <span style={{ fontSize: 11, color: ACCENT, fontWeight: 700 }}>{index}</span>
+      <h3 style={{ fontSize: 14, fontWeight: 800, color: white, margin: 0 }}>{title}</h3>
     </div>
   );
 }
@@ -156,27 +124,33 @@ export default function HomeTab() {
   const visibleNews = newsExpanded ? NEWS_ITEMS : NEWS_ITEMS.slice(0, 5);
 
   const ReleaseSchedule = (
-    <HomeCard>
-      <div style={{ padding: "18px 18px 12px" }}>
-        <SecHead title="발매일정" />
-      </div>
-      <HomeHr />
-      {RELEASE_SCHEDULE.map((n, i, arr) => (
-        <div key={n.title + n.date}>
-          <div style={{ display: "flex", alignItems: "center", gap: 0, padding: "12px 18px" }}>
-            <div style={{ width: 56, flexShrink: 0 }}>
-              <Tag c={n.tagC}>{n.tag}</Tag>
-            </div>
+    <div>
+      <SectionHeader index="01" title="발매일정" />
+      <div>
+        {RELEASE_SCHEDULE.map((n, i) => (
+          <div
+            key={n.title + n.date}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
+              padding: "13px 20px",
+              borderTop: i === 0 ? RULE : "none",
+              borderBottom: RULE,
+            }}
+          >
+            <span style={{ fontSize: 11, color: muted, width: 62, flexShrink: 0 }}>{n.date}</span>
             <span
               style={{
-                width: 56,
+                fontSize: 10.5,
+                color: n.tagC || ACCENT,
+                border: `1px solid ${(n.tagC || ACCENT)}55`,
+                borderRadius: 4,
+                padding: "2px 6px",
                 flexShrink: 0,
-                fontSize: 11,
-                color: "rgba(220,210,255,0.75)",
-                fontWeight: 600,
               }}
             >
-              {n.date}
+              {n.tag}
             </span>
             <p
               style={{
@@ -184,39 +158,37 @@ export default function HomeTab() {
                 fontSize: 13,
                 fontWeight: 500,
                 color: white,
+                flex: 1,
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
-                flex: 1,
               }}
             >
               {n.title}
             </p>
           </div>
-          {i < arr.length - 1 && <HomeHr />}
-        </div>
-      ))}
-    </HomeCard>
+        ))}
+      </div>
+    </div>
   );
 
   const News = (
-    <HomeCard>
-      <div style={{ padding: "18px 18px 12px" }}>
-        <SecHead title="공지사항" />
-      </div>
-      <HomeHr />
-      {visibleNews.map((n, i, arr) => (
-        <div key={n.title + n.date}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 18px" }}>
-            <span
-              style={{
-                width: 56,
-                flexShrink: 0,
-                fontSize: 11,
-                color: "rgba(220,210,255,0.75)",
-                fontWeight: 600,
-              }}
-            >
+    <div>
+      <SectionHeader index="02" title="공지사항" />
+      <div>
+        {visibleNews.map((n, i) => (
+          <div
+            key={n.title + n.date}
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 14,
+              padding: "13px 20px",
+              borderTop: i === 0 ? RULE : "none",
+              borderBottom: RULE,
+            }}
+          >
+            <span style={{ fontSize: 11, color: muted, width: 62, flexShrink: 0, paddingTop: 2 }}>
               {n.date}
             </span>
             <p
@@ -232,54 +204,41 @@ export default function HomeTab() {
                 WebkitLineClamp: 2,
                 overflow: "hidden",
                 textOverflow: "ellipsis",
-                whiteSpace: "normal",
               }}
             >
               {n.title}
             </p>
           </div>
-          {i < arr.length - 1 && <HomeHr />}
-        </div>
-      ))}
+        ))}
+      </div>
       {NEWS_ITEMS.length > 5 && (
-        <>
-          <HomeHr />
+        <div style={{ padding: "12px 20px 4px" }}>
           <button
             onClick={() => setNewsExpanded((v) => !v)}
             style={{
-              width: "100%",
               background: "none",
               border: "none",
               cursor: "pointer",
-              padding: "10px 0",
+              padding: 0,
               fontFamily: "inherit",
-              fontSize: 11,
-              color: muted,
+              fontSize: 11.5,
+              color: soft,
               fontWeight: 600,
+              textDecoration: "underline",
+              textUnderlineOffset: 3,
             }}
           >
-            {newsExpanded ? "접기 ▲" : "더보기 ▼"}
+            {newsExpanded ? "접기" : "더보기"}
           </button>
-        </>
+        </div>
       )}
-    </HomeCard>
+    </div>
   );
 
   const OfficialLinks = (
-    <HomeCard>
-      <div style={{ padding: "18px 18px 12px" }}>
-        <SecHead title="Links" />
-      </div>
-      <HomeHr />
-      <div
-        style={{
-          marginTop: 12,
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 10,
-          padding: "0 14px 18px",
-        }}
-      >
+    <div>
+      <SectionHeader index="03" title="링크" />
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 24px", padding: "0 20px 24px" }}>
         {PLATFORMS.map((p) => (
           <a
             key={p.name}
@@ -288,63 +247,58 @@ export default function HomeTab() {
             rel="noreferrer"
             style={{
               display: "flex",
-              flexDirection: "column",
-              gap: 8,
-              padding: "14px 14px",
-              borderRadius: 14,
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.07)",
+              alignItems: "center",
+              gap: 7,
+              fontSize: 13,
+              fontWeight: 700,
+              color: white,
               textDecoration: "none",
-              transition: "border-color .2s ease, background .2s ease, transform .2s ease",
+              transition: "color .15s ease",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.borderColor = p.color + "66";
-              e.currentTarget.style.background = p.color + "12";
+              e.currentTarget.style.color = p.color;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
-              e.currentTarget.style.background = "rgba(255,255,255,0.03)";
+              e.currentTarget.style.color = white;
             }}
           >
-            <span
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                background: p.color,
-              }}
-            />
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 800, color: white }}>
-              {p.name}
-            </p>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: p.color, flexShrink: 0 }} />
+            {p.name}
           </a>
         ))}
       </div>
-    </HomeCard>
+    </div>
   );
 
   const Footer = (
-    <div style={{ textAlign: "center", padding: "40px 0 4px" }}>
-      <a href="mailto:hps_in@naver.com" style={{ fontSize: 12, color: soft, textDecoration: "none" }}>
-        ✉ hps_in@naver.com
-      </a>
-      <p style={{ fontSize: 10, color: muted, margin: "6px 0 0" }}>
+    <div
+      style={{
+        borderTop: RULE,
+        padding: "18px 20px 6px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: 8,
+      }}
+    >
+      <p style={{ fontSize: 10.5, color: muted, margin: 0 }}>
         © 2026 Night Sky Theater. All rights reserved.
       </p>
+      <a href="mailto:hps_in@naver.com" style={{ fontSize: 11, color: soft, textDecoration: "none" }}>
+        hps_in@naver.com
+      </a>
     </div>
   );
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "left" }}>
-      <HeroBanner currentSubs={currentSubs} albumCount={albumCount} trackCount={trackCount} />
-      <div style={{ display: "flex", flexDirection: "column", gap: 16, padding: "12px 14px 0" }}>
-        {ReleaseSchedule}
-        {News}
-        {OfficialLinks}
-        {Footer}
-      </div>
+    <div style={{ display: "flex", flexDirection: "column", textAlign: "left" }}>
+      <HeroBanner />
+      <StatsStrip currentSubs={currentSubs} albumCount={albumCount} trackCount={trackCount} />
+      {ReleaseSchedule}
+      {News}
+      {OfficialLinks}
+      {Footer}
     </div>
   );
 }
