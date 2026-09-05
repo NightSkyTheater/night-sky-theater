@@ -1,141 +1,312 @@
 import React, { useState, useEffect } from "react";
-import { ACCENT, muted, soft, white } from "../theme";
-import { ALBUMS, ALL_TRACKS, SUB_DATA, PLATFORMS, RELEASE_SCHEDULE, NEWS_ITEMS } from "../data";
-import { SecHead, Tag, HomeCard, HomeHr, formatCompact } from "./Common";
+import {
+  ACCENT,
+  LIME,
+  muted,
+  soft,
+  white
+} from "../theme";
 
-function HeroBanner({ currentSubs, albumCount, trackCount }) {
+import {
+  ALBUMS,
+  ALL_TRACKS,
+  SUB_DATA,
+  PLATFORMS,
+  RELEASE_SCHEDULE,
+  NEWS_ITEMS
+} from "../data";
+
+import { formatCompact } from "./Common";
+
+
+/* =========================
+   HERO
+========================= */
+function HeroBanner({
+  currentSubs,
+  albumCount,
+  trackCount
+}) {
   return (
-    <div
+    <section
       style={{
         position: "relative",
-        height: 520,
-        overflow: "hidden",
+        minHeight: 570,
+        overflow: "hidden"
       }}
     >
+      {/* Background */}
       <img
         src="https://down.mixtape.so/NAS/img/b/d/d/c/bddc807264d156fa82fd1a98208a4856.png"
-        alt=""
+        alt="밤하늘극장"
         style={{
+          position: "absolute",
+          inset: 0,
           width: "100%",
           height: "100%",
           objectFit: "cover",
           objectPosition: "center top",
-          transform: "scale(1.03)",
+          transform: "scale(1.025)"
         }}
       />
 
+      {/* Dark gradient */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           background: `
-linear-gradient(
-to bottom,
-rgba(0,0,0,0) 0%,
-rgba(3,1,14,0.08) 35%,
-rgba(3,1,14,0.45) 55%,
-rgba(3,1,14,0.82) 72%,
-#0e0a2e 100%
-)
-`,
+            linear-gradient(
+              to bottom,
+              rgba(3,1,14,0.02) 0%,
+              rgba(3,1,14,0.12) 30%,
+              rgba(3,1,14,0.52) 55%,
+              rgba(14,10,46,0.90) 78%,
+              #0e0a2e 100%
+            )
+          `
         }}
       />
 
-      <div style={{ position: "absolute", left: 24, right: 24, bottom: 0 }}>
-        <div
+      {/* subtle glow */}
+      <div
+        style={{
+          position: "absolute",
+          width: 380,
+          height: 380,
+          left: "50%",
+          bottom: -170,
+          transform: "translateX(-50%)",
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(184,255,0,0.10), rgba(91,79,245,0.10) 35%, transparent 70%)",
+          filter: "blur(35px)",
+          pointerEvents: "none"
+        }}
+      />
+
+      {/* Hero content */}
+      <div
+        style={{
+          position: "absolute",
+          left: 20,
+          right: 20,
+          bottom: 30,
+          zIndex: 2,
+          textAlign: "center"
+        }}
+      >
+        <p
           style={{
-            textAlign: "center",
-            position: "relative",
-            overflow: "hidden",
-            padding: "30px 22px 24px",
+            margin: "0 0 8px",
+            fontSize: 9,
+            fontWeight: 800,
+            color: LIME,
+            letterSpacing: "0.2em"
           }}
         >
-          <h2
+          NIGHT SKY THEATER
+        </p>
+
+        <h1
+          style={{
+            margin: 0,
+            color: white,
+            fontSize: 34,
+            fontWeight: 900,
+            lineHeight: 1.15,
+            letterSpacing: "-0.055em"
+          }}
+        >
+          밤하늘극장
+        </h1>
+
+        <p
+          style={{
+            margin: "14px auto 0",
+            maxWidth: 360,
+            fontSize: 13,
+            color: "rgba(255,255,255,0.66)",
+            lineHeight: 1.8,
+            wordBreak: "keep-all"
+          }}
+        >
+          사랑과 시간, 그리고 기억에 깃든 감정을
+          <br />
+          섬세하게 노래하는{" "}
+          <strong
             style={{
-              fontSize: 24,
-              fontWeight: 900,
               color: white,
-              letterSpacing: "-0.03em",
-              margin: "0 0 14px",
+              fontWeight: 750
             }}
           >
-            밤하늘극장
-          </h2>
-          <p
-            style={{
-              fontSize: 12.5,
-              color: soft,
-              lineHeight: 1.8,
-              margin: 0,
-              maxWidth: 380,
-              marginInline: "auto",
-            }}
-          >
-            밤하늘극장은 사랑과 시간, 그리고 기억에 깃든 감정을
-            <br /> 섬세하게 노래하는 <strong>버츄얼 인디 밴드</strong>입니다.
-          </p>
+            버츄얼 인디 밴드
+          </strong>
+          입니다.
+        </p>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: 34,
-              marginTop: 24,
-            }}
-          >
-            {[
-              { value: formatCompact(currentSubs), label: "구독자" },
-              { value: albumCount, label: "앨범" },
-              { value: trackCount, label: "트랙" },
-            ].map((item) => (
-              <div key={item.label} style={{ textAlign: "center" }}>
-                <div
-                  style={{
-                    fontSize: 22,
-                    fontWeight: 900,
-                    color: ACCENT,
-                    lineHeight: 1,
-                  }}
-                >
-                  {item.value}
-                </div>
-
-                <div
-                  style={{
-                    marginTop: 6,
-                    fontSize: 11,
-                    color: muted,
-                    letterSpacing: "0.02em",
-                  }}
-                >
-                  {item.label}
-                </div>
+        {/* stats */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            marginTop: 28,
+            paddingTop: 20,
+            borderTop:
+              "1px solid rgba(255,255,255,0.10)"
+          }}
+        >
+          {[
+            {
+              value: formatCompact(currentSubs),
+              label: "SUBSCRIBERS"
+            },
+            {
+              value: albumCount,
+              label: "ALBUMS"
+            },
+            {
+              value: trackCount,
+              label: "TRACKS"
+            }
+          ].map((item, index) => (
+            <div
+              key={item.label}
+              style={{
+                textAlign: "center",
+                borderLeft:
+                  index > 0
+                    ? "1px solid rgba(255,255,255,0.08)"
+                    : "none"
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 21,
+                  fontWeight: 900,
+                  lineHeight: 1,
+                  color: white,
+                  letterSpacing: "-0.03em"
+                }}
+              >
+                {item.value}
               </div>
-            ))}
-          </div>
+
+              <div
+                style={{
+                  marginTop: 7,
+                  fontSize: 8,
+                  color:
+                    "rgba(255,255,255,0.30)",
+                  letterSpacing: "0.12em"
+                }}
+              >
+                {item.label}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
+    </section>
+  );
+}
+
+
+/* =========================
+   SECTION HEADER
+========================= */
+function SectionHeader({
+  eyebrow,
+  title,
+  right
+}) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "flex-end",
+        marginBottom: 15
+      }}
+    >
+      <div>
+        {eyebrow && (
+          <p
+            style={{
+              margin: "0 0 5px",
+              fontSize: 8.5,
+              fontWeight: 700,
+              color:
+                "rgba(255,255,255,0.28)",
+              letterSpacing: "0.15em"
+            }}
+          >
+            {eyebrow}
+          </p>
+        )}
+
+        <h2
+          style={{
+            margin: 0,
+            color: white,
+            fontSize: 18,
+            fontWeight: 800,
+            letterSpacing: "-0.04em"
+          }}
+        >
+          {title}
+        </h2>
+      </div>
+
+      {right}
     </div>
   );
 }
 
-export default function HomeTab() {
-  const [liveSubs, setLiveSubs] = useState(null);
-  const [liveViews, setLiveViews] = useState(null);
-  const [newsExpanded, setNewsExpanded] = useState(false);
 
+/* =========================
+   HOME TAB
+========================= */
+export default function HomeTab() {
+  const [liveSubs, setLiveSubs] =
+    useState(null);
+
+  const [liveViews, setLiveViews] =
+    useState(null);
+
+  const [newsExpanded, setNewsExpanded] =
+    useState(false);
+
+
+  /* -------------------------
+     YouTube Stats
+  ------------------------- */
   useEffect(() => {
     async function fetchStats() {
       try {
         const res = await fetch(
-          `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`
+          `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${
+            import.meta.env
+              .VITE_YOUTUBE_API_KEY
+          }`
         );
 
         const data = await res.json();
 
         if (data.items?.[0]) {
-          setLiveSubs(Number(data.items[0].statistics.subscriberCount));
-          setLiveViews(Number(data.items[0].statistics.viewCount));
+          setLiveSubs(
+            Number(
+              data.items[0].statistics
+                .subscriberCount
+            )
+          );
+
+          setLiveViews(
+            Number(
+              data.items[0].statistics
+                .viewCount
+            )
+          );
         }
       } catch (err) {
         console.error(err);
@@ -144,206 +315,374 @@ export default function HomeTab() {
 
     fetchStats();
 
-    const interval = setInterval(fetchStats, 600000); // 10분마다 갱신
+    const interval = setInterval(
+      fetchStats,
+      600000
+    );
 
-    return () => clearInterval(interval);
+    return () =>
+      clearInterval(interval);
   }, []);
+
 
   const albumCount = ALBUMS.length;
   const trackCount = ALL_TRACKS.length;
-  const currentSubs = liveSubs ?? SUB_DATA[SUB_DATA.length - 1].subs;
 
-  const visibleNews = newsExpanded ? NEWS_ITEMS : NEWS_ITEMS.slice(0, 5);
+  const currentSubs =
+    liveSubs ??
+    SUB_DATA[SUB_DATA.length - 1].subs;
 
-  const ReleaseSchedule = (
-    <HomeCard>
-      <div style={{ padding: "18px 18px 12px" }}>
-        <SecHead title="발매일정" />
-      </div>
-      <HomeHr />
-      {RELEASE_SCHEDULE.map((n, i, arr) => (
-        <div key={n.title + n.date}>
-          <div style={{ display: "flex", alignItems: "center", gap: 0, padding: "12px 18px" }}>
-            <div style={{ width: 56, flexShrink: 0 }}>
-              <Tag c={n.tagC}>{n.tag}</Tag>
-            </div>
-            <span
-              style={{
-                width: 56,
-                flexShrink: 0,
-                fontSize: 11,
-                color: "rgba(220,210,255,0.75)",
-                fontWeight: 600,
-              }}
-            >
-              {n.date}
-            </span>
-            <p
-              style={{
-                margin: 0,
-                fontSize: 13,
-                fontWeight: 500,
-                color: white,
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                flex: 1,
-              }}
-            >
-              {n.title}
-            </p>
-          </div>
-          {i < arr.length - 1 && <HomeHr />}
-        </div>
-      ))}
-    </HomeCard>
-  );
+  const visibleNews = newsExpanded
+    ? NEWS_ITEMS
+    : NEWS_ITEMS.slice(0, 5);
 
-  const News = (
-    <HomeCard>
-      <div style={{ padding: "18px 18px 12px" }}>
-        <SecHead title="공지사항" />
-      </div>
-      <HomeHr />
-      {visibleNews.map((n, i, arr) => (
-        <div key={n.title + n.date}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 18px" }}>
-            <span
-              style={{
-                width: 56,
-                flexShrink: 0,
-                fontSize: 11,
-                color: "rgba(220,210,255,0.75)",
-                fontWeight: 600,
-              }}
-            >
-              {n.date}
-            </span>
-            <p
-              style={{
-                margin: 0,
-                fontSize: 13,
-                fontWeight: 500,
-                color: white,
-                flex: 1,
-                lineHeight: "20px",
-                display: "-webkit-box",
-                WebkitBoxOrient: "vertical",
-                WebkitLineClamp: 2,
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "normal",
-              }}
-            >
-              {n.title}
-            </p>
-          </div>
-          {i < arr.length - 1 && <HomeHr />}
-        </div>
-      ))}
-      {NEWS_ITEMS.length > 5 && (
-        <>
-          <HomeHr />
-          <button
-            onClick={() => setNewsExpanded((v) => !v)}
-            style={{
-              width: "100%",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: "10px 0",
-              fontFamily: "inherit",
-              fontSize: 11,
-              color: muted,
-              fontWeight: 600,
-            }}
-          >
-            {newsExpanded ? "접기 ▲" : "더보기 ▼"}
-          </button>
-        </>
-      )}
-    </HomeCard>
-  );
-
-  const OfficialLinks = (
-    <HomeCard>
-      <div style={{ padding: "18px 18px 12px" }}>
-        <SecHead title="Links" />
-      </div>
-      <HomeHr />
-      <div
-        style={{
-          marginTop: 12,
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 10,
-          padding: "0 14px 18px",
-        }}
-      >
-        {PLATFORMS.map((p) => (
-          <a
-            key={p.name}
-            href={"https://" + p.url}
-            target="_blank"
-            rel="noreferrer"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 8,
-              padding: "14px 14px",
-              borderRadius: 14,
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.07)",
-              textDecoration: "none",
-              transition: "border-color .2s ease, background .2s ease, transform .2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.borderColor = p.color + "66";
-              e.currentTarget.style.background = p.color + "12";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
-              e.currentTarget.style.background = "rgba(255,255,255,0.03)";
-            }}
-          >
-            <span
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                background: p.color,
-              }}
-            />
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 800, color: white }}>
-              {p.name}
-            </p>
-          </a>
-        ))}
-      </div>
-    </HomeCard>
-  );
-
-  const Footer = (
-    <div style={{ textAlign: "center", padding: "40px 0 4px" }}>
-      <a href="mailto:hps_in@naver.com" style={{ fontSize: 12, color: soft, textDecoration: "none" }}>
-        ✉ hps_in@naver.com
-      </a>
-      <p style={{ fontSize: 10, color: muted, margin: "6px 0 0" }}>
-        © 2026 Night Sky Theater. All rights reserved.
-      </p>
-    </div>
-  );
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "left" }}>
-      <HeroBanner currentSubs={currentSubs} albumCount={albumCount} trackCount={trackCount} />
-      <div style={{ display: "flex", flexDirection: "column", gap: 16, padding: "12px 14px 0" }}>
-        {ReleaseSchedule}
-        {News}
-        {OfficialLinks}
-        {Footer}
+    <div
+      style={{
+        width: "100%",
+        overflowX: "hidden",
+        paddingBottom: 100
+      }}
+    >
+      {/* =========================
+          HERO
+      ========================= */}
+      <HeroBanner
+        currentSubs={currentSubs}
+        albumCount={albumCount}
+        trackCount={trackCount}
+      />
+
+
+      {/* =========================
+          CONTENT
+      ========================= */}
+      <div
+        style={{
+          padding: "36px 20px 0"
+        }}
+      >
+
+        {/* =========================
+            RELEASE SCHEDULE
+        ========================= */}
+        <section>
+          <SectionHeader
+            eyebrow="UPCOMING"
+            title="발매 일정"
+            right={
+              <span
+                style={{
+                  fontSize: 9,
+                  color:
+                    "rgba(255,255,255,0.25)"
+                }}
+              >
+                {RELEASE_SCHEDULE.length} RELEASES
+              </span>
+            }
+          />
+
+          <div
+            style={{
+              borderTop:
+                "1px solid rgba(255,255,255,0.08)"
+            }}
+          >
+            {RELEASE_SCHEDULE.map(
+              (n, i) => (
+                <div
+                  key={n.title + n.date}
+                  style={{
+                    position: "relative",
+                    display: "grid",
+                    gridTemplateColumns:
+                      "54px 1fr",
+                    gap: 13,
+                    padding: "16px 4px",
+                    borderBottom:
+                      "1px solid rgba(255,255,255,0.065)"
+                  }}
+                >
+                  {/* date */}
+                  <div>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: 10,
+                        fontWeight: 700,
+                        color:
+                          "rgba(255,255,255,0.40)"
+                      }}
+                    >
+                      {n.date}
+                    </p>
+
+                    <div
+                      style={{
+                        marginTop: 8,
+                        display:
+                          "inline-flex",
+                        padding:
+                          "4px 7px",
+                        borderRadius: 999,
+                        background:
+                          `${n.tagC}12`,
+                        border:
+                          `1px solid ${n.tagC}30`,
+                        fontSize: 8,
+                        fontWeight: 700,
+                        color: n.tagC
+                      }}
+                    >
+                      {n.tag}
+                    </div>
+                  </div>
+
+                  {/* release title */}
+                  <div
+                    style={{
+                      minWidth: 0
+                    }}
+                  >
+                    <p
+                      style={{
+                        margin: 0,
+                        color: white,
+                        fontSize: 13.5,
+                        lineHeight: 1.55,
+                        fontWeight: 650,
+                        letterSpacing:
+                          "-0.02em",
+                        wordBreak: "keep-all"
+                      }}
+                    >
+                      {n.title}
+                    </p>
+                  </div>
+                </div>
+              )
+            )}
+          </div>
+        </section>
+
+
+        {/* =========================
+            NEWS
+        ========================= */}
+        <section
+          style={{
+            marginTop: 46
+          }}
+        >
+          <SectionHeader
+            eyebrow="NEWS"
+            title="공지사항"
+          />
+
+          <div
+            style={{
+              borderTop:
+                "1px solid rgba(255,255,255,0.08)"
+            }}
+          >
+            {visibleNews.map((n) => (
+              <div
+                key={n.title + n.date}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns:
+                    "54px 1fr",
+                  gap: 13,
+                  padding: "15px 4px",
+                  borderBottom:
+                    "1px solid rgba(255,255,255,0.065)"
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: 9.5,
+                    fontWeight: 650,
+                    color:
+                      "rgba(255,255,255,0.30)",
+                    paddingTop: 2
+                  }}
+                >
+                  {n.date}
+                </span>
+
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: 13,
+                    fontWeight: 500,
+                    color:
+                      "rgba(255,255,255,0.72)",
+                    lineHeight: 1.6,
+                    letterSpacing:
+                      "-0.015em",
+                    wordBreak: "keep-all"
+                  }}
+                >
+                  {n.title}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {NEWS_ITEMS.length > 5 && (
+            <button
+              onClick={() =>
+                setNewsExpanded(
+                  (v) => !v
+                )
+              }
+              style={{
+                width: "100%",
+                marginTop: 12,
+                padding: "9px 0",
+                border: "none",
+                background: "none",
+                color:
+                  "rgba(255,255,255,0.35)",
+                fontSize: 10,
+                fontWeight: 650,
+                cursor: "pointer",
+                fontFamily: "inherit"
+              }}
+            >
+              {newsExpanded
+                ? "접기 ↑"
+                : "공지 더보기 ↓"}
+            </button>
+          )}
+        </section>
+
+
+        {/* =========================
+            LINKS
+        ========================= */}
+        <section
+          style={{
+            marginTop: 46
+          }}
+        >
+          <SectionHeader
+            eyebrow="STREAMING & SOCIAL"
+            title="Links"
+          />
+
+          <div
+            style={{
+              borderTop:
+                "1px solid rgba(255,255,255,0.08)"
+            }}
+          >
+            {PLATFORMS.map((p) => (
+              <a
+                key={p.name}
+                href={"https://" + p.url}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  minHeight: 58,
+                  gap: 13,
+                  textDecoration: "none",
+                  borderBottom:
+                    "1px solid rgba(255,255,255,0.065)",
+                  transition:
+                    "all 0.2s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.paddingLeft =
+                    "6px";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.paddingLeft =
+                    "0";
+                }}
+              >
+                <span
+                  style={{
+                    width: 7,
+                    height: 7,
+                    borderRadius: "50%",
+                    background: p.color,
+                    boxShadow:
+                      `0 0 11px ${p.color}66`,
+                    flexShrink: 0
+                  }}
+                />
+
+                <span
+                  style={{
+                    flex: 1,
+                    fontSize: 13,
+                    color:
+                      "rgba(255,255,255,0.76)",
+                    fontWeight: 650
+                  }}
+                >
+                  {p.name}
+                </span>
+
+                <span
+                  style={{
+                    fontSize: 15,
+                    color:
+                      "rgba(255,255,255,0.22)",
+                    transform:
+                      "rotate(-45deg)"
+                  }}
+                >
+                  →
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+
+
+        {/* =========================
+            FOOTER
+        ========================= */}
+        <footer
+          style={{
+            marginTop: 52,
+            padding:
+              "30px 0 10px",
+            textAlign: "center",
+            borderTop:
+              "1px solid rgba(255,255,255,0.06)"
+          }}
+        >
+          <a
+            href="mailto:hps_in@naver.com"
+            style={{
+              fontSize: 11,
+              color:
+                "rgba(255,255,255,0.45)",
+              textDecoration: "none"
+            }}
+          >
+            hps_in@naver.com
+          </a>
+
+          <p
+            style={{
+              margin: "8px 0 0",
+              fontSize: 8.5,
+              color:
+                "rgba(255,255,255,0.16)",
+              letterSpacing: "0.08em"
+            }}
+          >
+            © 2026 NIGHT SKY THEATER
+          </p>
+        </footer>
       </div>
     </div>
   );
