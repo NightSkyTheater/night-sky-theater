@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import MainSite from "./MainSite";
 import MaintenancePage from "./components/MaintenancePage";
 
