@@ -441,7 +441,7 @@ export const ALBUMS = [
     {
     id: 30,
     title: "완전한 무조건적 사랑의 형태",
-    cover: "https://down.mixtape.so/NAS/img/a/7/8/a/a78a7c544415d8d948dd0927a1b25480.jpg",
+    cover: "/covers/A30.jpg",
     year: "2026",
     color: "#10101a",
     desc: "세상의 소음 속 유약한 서로를 꼭 붙잡아 따뜻한 안정감을 주는 위로의 노래.",
