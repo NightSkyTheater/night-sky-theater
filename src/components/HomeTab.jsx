@@ -41,7 +41,7 @@ export default function HomeTab({ setTab }) {
             </div>
           </div>
           <div className="hero-index">
-            <span>EST. 2025</span><span>ROCK · K-POP · J-POP</span><span>VIRTUAL INDIE BAND</span>
+            <span>EST. 2025</span><span>VIRTUAL INDIE BAND</span>
           </div>
         </div>
       </section>
@@ -52,7 +52,7 @@ export default function HomeTab({ setTab }) {
             [formatCompact(liveSubs ?? SUB_DATA.at(-1)?.subs), "YOUTUBE SUBSCRIBERS"],
             [ALBUMS.length, "RELEASES"],
             [ALL_TRACKS.length, "ORIGINAL TRACKS"],
-            ["KR / JP", "LANGUAGE PROJECTS"],
+            ["ROCK · R&B · BALLAD", "CORE GENRES"],
           ].map(([value, label]) => <div className="stat" key={label}><strong>{value}</strong><span>{label}</span></div>)}
         </div>
       </section>
