@@ -205,7 +205,7 @@ const [countdown, setCountdown] = useState({
     </div>
   </div>
 </div>
-            <p className="release-meta">NST · 2026 · {latest.tracks.length} TRACKS</p>
+            <p className="release-meta">SINGLE · 2026 · {latest.tracks.length} TRACKS</p>
             <h3>{latest.title}</h3>
             <p>{latest.desc}</p>
             <ol>{latest.tracks.map(t => <li key={t.n}><span>0{t.n}</span><b>{t.title}</b></li>)}</ol>
