@@ -20,7 +20,12 @@ export default function AboutTab({ setTab }) {
 
     <section className="section section-dark"><div className="page-shell"><SectionTitle kicker="ARTIST PROJECT" title="YUREI / 유우레이" body="밤하늘극장 소속의 가상 아티스트 프로젝트. 사랑과 청춘, 삶과 죽음의 경계에서 발견한 감정을 자신만의 언어로 노래합니다."/><div className="artist-panel"><div className="artist-portrait"/><div><span>VIRTUAL ARTIST · VOCAL PROJECT</span><h3>YUREI</h3><p>음원 검색 시에는 아티스트 프로젝트명보다 <b>‘밤하늘극장’</b>으로 검색하시면 발매 작품을 더 정확하게 확인하실 수 있습니다.</p></div></div></div></section>
 
-    <section className="section page-shell"><SectionTitle kicker="STREAMING & SOCIAL" title="Find us everywhere."/>
+    <section className="section page-shell">
+      <SectionTitle
+  kicker="음원 및 소셜 채널"
+  title="밤하늘극장을 다양한 플랫폼에서 만나보세요."
+  body="주요 음원 플랫폼과 공식 소셜 채널을 통해 밤하늘극장의 음악과 새로운 소식을 만나보실 수 있습니다."
+/>
 <div className="platform-logo-grid">
   {PLATFORMS.map((platform) => (
     <a

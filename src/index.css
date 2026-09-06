@@ -128,20 +128,28 @@
 .modal-art img{position:relative;top:0}.contact-primary{min-height:340px}}
 @media(max-width:640px){.page-shell,.gnb-inner{width:calc(100% - 28px)}.gnb{height:70px}.brand-copy small{display:none}.brand-mark{width:34px;height:34px}.mobile-nav{top:70px}.subpage{padding-top:70px}.hero-corporate{min-height:660px}.hero-copy h1{font-size:55px}.hero-copy p{font-size:14px}.hero-actions{flex-direction:column;align-items:stretch}.btn{width:100%}.section{padding:70px 0}.section-head{align-items:flex-start;flex-direction:column}.section-head h2{font-size:42px}.latest-layout{gap:34px}.latest-info h3{font-size:30px}.release-grid{grid-template-columns:1fr 1fr;gap:28px 12px}.release-card-copy h3{font-size:13px}.manifesto-title h2{font-size:46px}.manifesto-item{grid-template-columns:32px 1fr}.manifesto-item p{grid-column:2}
 
+/* =========================
+   STREAMING & SOCIAL
+========================= */
+
 .platform-logo-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
+
+  margin-top: 42px;
 }
 
 .platform-logo-card {
-  height: 110px;
+  position: relative;
+
+  height: 126px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  padding: 22px;
+  padding: 24px;
 
   background: transparent;
 
@@ -150,23 +158,25 @@
 
   text-decoration: none;
 
+  overflow: hidden;
+
   transition:
     background .2s ease,
     transform .2s ease,
-    opacity .2s ease;
+    box-shadow .2s ease;
 }
 
 .platform-logo-card:hover {
   background: rgba(255,255,255,.025);
   transform: translateY(-2px);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.02);
 }
 
 .platform-logo-card img {
-  max-width: 130px;
-  max-height: 36px;
-
-  width: auto;
-  height: auto;
+  width: 52px;
+  height: 52px;
 
   display: block;
 
@@ -174,28 +184,59 @@
 
   user-select: none;
   -webkit-user-drag: none;
+
+  transition:
+    transform .2s ease,
+    opacity .2s ease;
 }
+
+.platform-logo-card:hover img {
+  transform: scale(1.06);
+  opacity: .96;
+}
+
+
+/* =========================
+   TABLET
+========================= */
 
 @media (max-width: 980px) {
   .platform-logo-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 640px) {
-  .platform-logo-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
   }
 
   .platform-logo-card {
-    height: 90px;
-    padding: 16px;
+    height: 116px;
   }
 
   .platform-logo-card img {
-    max-width: 105px;
-    max-height: 30px;
+    width: 48px;
+    height: 48px;
+  }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 640px) {
+  .platform-logo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+
+    margin-top: 30px;
+  }
+
+  .platform-logo-card {
+    height: 96px;
+    padding: 18px;
+  }
+
+  .platform-logo-card img {
+    width: 42px;
+    height: 42px;
   }
 }
 
