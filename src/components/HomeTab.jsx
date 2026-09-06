@@ -19,11 +19,12 @@ export default function HomeTab({ setTab }) {
   const [liveViews, setLiveViews] = useState(null);
 
   const [countdown, setCountdown] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
+  released: false,
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
+});
 
   const latest = ALBUMS[ALBUMS.length - 1];
 
@@ -65,54 +66,46 @@ export default function HomeTab({ setTab }) {
 
   // 발매 카운트다운
   useEffect(() => {
-    function updateCountdown() {
-      const now = new Date();
-      const diff = RELEASE_DATE.getTime() - now.getTime();
+  function updateCountdown() {
+    const now = new Date();
+    const diff = RELEASE_DATE.getTime() - now.getTime();
 
-      if (diff <= 0) {
-        setCountdown({
-          days: 0,
-          hours: 0,
-          minutes: 0,
-          seconds: 0,
-        });
+    const released = diff <= 0;
 
-        return;
-      }
+    // 발매 전이면 남은 시간, 발매 후면 경과 시간
+    const distance = Math.abs(diff);
 
-      const days = Math.floor(
-        diff / (1000 * 60 * 60 * 24)
-      );
-
-      const hours = Math.floor(
-        (diff / (1000 * 60 * 60)) % 24
-      );
-
-      const minutes = Math.floor(
-        (diff / (1000 * 60)) % 60
-      );
-
-      const seconds = Math.floor(
-        (diff / 1000) % 60
-      );
-
-      setCountdown({
-        days,
-        hours,
-        minutes,
-        seconds,
-      });
-    }
-
-    updateCountdown();
-
-    const timer = setInterval(
-      updateCountdown,
-      1000
+    const days = Math.floor(
+      distance / (1000 * 60 * 60 * 24)
     );
 
-    return () => clearInterval(timer);
-  }, []);
+    const hours = Math.floor(
+      (distance / (1000 * 60 * 60)) % 24
+    );
+
+    const minutes = Math.floor(
+      (distance / (1000 * 60)) % 60
+    );
+
+    const seconds = Math.floor(
+      (distance / 1000) % 60
+    );
+
+    setCountdown({
+      released,
+      days,
+      hours,
+      minutes,
+      seconds,
+    });
+  }
+
+  updateCountdown();
+
+  const timer = setInterval(updateCountdown, 1000);
+
+  return () => clearInterval(timer);
+}, []);
 
   return (
     <main>
@@ -157,11 +150,16 @@ export default function HomeTab({ setTab }) {
           <div className="latest-cover-wrap"><img src={latest.cover} alt={latest.title} /><span className="release-stamp">OUT NOW</span></div>
           <div className="latest-info">
             <div className="release-countdown">
-  <span className="countdown-label">NEXT RELEASE IN</span>
+  <span className="countdown-label">
+    {countdown.released ? "RELEASED" : "RELEASE IN"}
+  </span>
 
   <div className="countdown-time">
     <div>
-      <strong>{String(countdown.days).padStart(2, "0")}</strong>
+      <strong>
+        {countdown.released ? "+" : ""}
+        {String(countdown.days).padStart(2, "0")}
+      </strong>
       <span>DAYS</span>
     </div>
 
