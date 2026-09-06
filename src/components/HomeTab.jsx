@@ -18,6 +18,7 @@ const RELEASE_DATE =
   추천 앨범
   data.js의 album.id를 원하는 순서대로 입력
 */
+
 const FEATURED_ALBUM_IDS = [
   2,
   3,
@@ -34,10 +35,13 @@ const FEATURED_ALBUM_IDS = [
   29,
 ];
 
-export default function HomeTab({ setTab }) {
+export default function HomeTab({
+  setTab,
+  setSelectedAlbum,
+}) {
   const [liveSubs, setLiveSubs] = useState(null);
   const [liveViews, setLiveViews] = useState(null);
-
+const [selectedAlbum, setSelectedAlbum] = useState(null);
   const [countdown, setCountdown] = useState({
     released: false,
     days: 0,
@@ -550,12 +554,13 @@ export default function HomeTab({ setTab }) {
               (album, i) => (
 
                 <button
-                  className="featured-card"
-                  key={`${album.id}-${i}`}
-                  onClick={() =>
-                    setTab("music")
-                  }
-                >
+  className="featured-card"
+  key={`${album.id}-${i}`}
+  onClick={() => {
+    setSelectedAlbum(album);
+    setTab("music");
+  }}
+>
 
                   <div className="featured-art">
 

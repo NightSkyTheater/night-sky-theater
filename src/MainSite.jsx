@@ -19,6 +19,7 @@ import ContactTab from "./components/ContactTab";
 
 export default function MainSite() {
   const [tab, setTab] = useState("home");
+  const [selectedAlbum, setSelectedAlbum] = useState(null);
 
   const [entries, setEntries] = useState([]);
   const [lastDoc, setLastDoc] = useState(null);
@@ -94,11 +95,21 @@ export default function MainSite() {
     <div className="app">
       <TopTab tab={tab} setTab={setTab} />
 
-      {tab === "home" && <HomeTab setTab={setTab} />}
+      {tab === "home" && (
+  <HomeTab
+    setTab={setTab}
+    setSelectedAlbum={setSelectedAlbum}
+  />
+)}
 
       {tab === "about" && <AboutTab setTab={setTab} />}
 
-      {tab === "music" && <MusicTab />}
+      {tab === "music" && (
+  <MusicTab
+    selectedAlbum={selectedAlbum}
+    setSelectedAlbum={setSelectedAlbum}
+  />
+)}
 
       {tab === "community" && (
         <GuestbookTab
