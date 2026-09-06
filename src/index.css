@@ -51,14 +51,11 @@ button,input,textarea{font:inherit}button{color:inherit}a{color:inherit}
 .news-columns{display:grid;grid-template-columns:1fr 1fr;gap:60px}.news-block h3{font-size:10px;letter-spacing:.14em;color:var(--muted);margin-bottom:14px}
 .news-row {
   display: grid;
-  grid-template-columns: 90px 1fr auto;
+  grid-template-columns: 90px auto 1fr;
   gap: 16px;
-
   align-items: center;
-
   height: 58px;
   padding: 0;
-
   border-top: 1px solid var(--line);
 }
 

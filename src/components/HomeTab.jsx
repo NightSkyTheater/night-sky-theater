@@ -695,24 +695,24 @@ export default function HomeTab({
         .slice(0, 4)
         .map((n) => (
 
-          <div
-            className="news-row"
-            key={n.date + n.title}
-          >
-            <span className="news-date">
-              {n.date}
-            </span>
+<div
+  className="news-row"
+  key={n.date + n.title}
+>
+  <span className="news-date">
+    {n.date}
+  </span>
 
-            <b>
-              {n.title}
-            </b>
+  <span
+    className={`release-label release-label-${n.tag}`}
+  >
+    {n.tag}
+  </span>
 
-            <span
-              className={`release-label release-label-${n.tag}`}
-            >
-              {n.tag}
-            </span>
-          </div>
+  <b>
+    {n.title}
+  </b>
+</div>
 
         ))}
 
