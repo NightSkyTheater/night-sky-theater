@@ -11,14 +11,14 @@ import { SectionTitle, formatCompact } from "./Common";
 
 const HERO_IMAGE = "/img/homebg.png";
 
-// 2026년 9월 6일 낮 12시 (한국시간)
-const RELEASE_DATE = new Date("2026-09-06T12:00:00+09:00");
+const RELEASE_DATE =
+  new Date("2026-09-06T12:00:00+09:00");
 
 export default function HomeTab({ setTab }) {
   const [liveSubs, setLiveSubs] = useState(null);
   const [liveViews, setLiveViews] = useState(null);
 
-  const [countdown, setCountdown] = useState({
+const [countdown, setCountdown] = useState({
   released: false,
   days: 0,
   hours: 0,
@@ -68,27 +68,35 @@ export default function HomeTab({ setTab }) {
   useEffect(() => {
   function updateCountdown() {
     const now = new Date();
-    const diff = RELEASE_DATE.getTime() - now.getTime();
+
+    const diff =
+      RELEASE_DATE.getTime() -
+      now.getTime();
 
     const released = diff <= 0;
 
-    // 발매 전이면 남은 시간, 발매 후면 경과 시간
     const distance = Math.abs(diff);
 
     const days = Math.floor(
-      distance / (1000 * 60 * 60 * 24)
+      distance /
+        (1000 * 60 * 60 * 24)
     );
 
     const hours = Math.floor(
-      (distance / (1000 * 60 * 60)) % 24
+      (distance /
+        (1000 * 60 * 60)) %
+        24
     );
 
     const minutes = Math.floor(
-      (distance / (1000 * 60)) % 60
+      (distance /
+        (1000 * 60)) %
+        60
     );
 
     const seconds = Math.floor(
-      (distance / 1000) % 60
+      (distance / 1000) %
+        60
     );
 
     setCountdown({
@@ -102,9 +110,14 @@ export default function HomeTab({ setTab }) {
 
   updateCountdown();
 
-  const timer = setInterval(updateCountdown, 1000);
+  const timer =
+    setInterval(
+      updateCountdown,
+      1000
+    );
 
-  return () => clearInterval(timer);
+  return () =>
+    clearInterval(timer);
 }, []);
 
   return (
@@ -149,13 +162,20 @@ export default function HomeTab({ setTab }) {
         <div className="latest-layout">
           <div className="latest-cover-wrap"><img src={latest.cover} alt={latest.title} /><span className="release-stamp">OUT NOW</span></div>
           <div className="latest-info">
-            <div className="release-countdown">
-  <span className="countdown-label">
-    {countdown.released ? "RELEASED" : "RELEASE IN"}
-  </span>
+<div className="release-countdown">
+  <div className="countdown-head">
+    <span className="countdown-label">
+      {countdown.released ? "RELEASED AGO" : "RELEASE IN"}
+    </span>
+
+    <span className="countdown-status">
+      <i />
+      {countdown.released ? "OUT NOW" : "COMING SOON"}
+    </span>
+  </div>
 
   <div className="countdown-time">
-    <div>
+    <div className="countdown-unit">
       <strong>
         {countdown.released ? "+" : ""}
         {String(countdown.days).padStart(2, "0")}
@@ -163,18 +183,24 @@ export default function HomeTab({ setTab }) {
       <span>DAYS</span>
     </div>
 
-    <div>
-      <strong>{String(countdown.hours).padStart(2, "0")}</strong>
+    <div className="countdown-unit">
+      <strong>
+        {String(countdown.hours).padStart(2, "0")}
+      </strong>
       <span>HRS</span>
     </div>
 
-    <div>
-      <strong>{String(countdown.minutes).padStart(2, "0")}</strong>
+    <div className="countdown-unit">
+      <strong>
+        {String(countdown.minutes).padStart(2, "0")}
+      </strong>
       <span>MIN</span>
     </div>
 
-    <div>
-      <strong>{String(countdown.seconds).padStart(2, "0")}</strong>
+    <div className="countdown-unit">
+      <strong>
+        {String(countdown.seconds).padStart(2, "0")}
+      </strong>
       <span>SEC</span>
     </div>
   </div>
