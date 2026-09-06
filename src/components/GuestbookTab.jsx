@@ -1,20 +1,38 @@
 import React, { useState } from "react";
 import { collection, addDoc, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
-import { Send, Trash2 } from "lucide-react";
+import { Send, Trash2, X, PenLine } from "lucide-react";
 
 function timeAgo(date) {
   if (!date) return "";
-  const d = date instanceof Date ? date : date.toDate ? date.toDate() : new Date(date);
+
+  const d =
+    date instanceof Date
+      ? date
+      : date.toDate
+      ? date.toDate()
+      : new Date(date);
+
   const diff = Math.floor((Date.now() - d.getTime()) / 1000);
+
   if (diff < 60) return "방금 전";
   if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
   if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
+
   return d.toLocaleDateString("ko-KR");
 }
+
 const AVATAR_COLORS = [
-  "#B8FF00", "#8ab4ff", "#ff8b94", "#a8e6cf", "#ffcc44",
-  "#c4b5fd", "#fbcfe8", "#7dd3fc", "#fca5a5", "#86efac",
+  "#B8FF00",
+  "#8ab4ff",
+  "#ff8b94",
+  "#a8e6cf",
+  "#ffcc44",
+  "#c4b5fd",
+  "#fbcfe8",
+  "#7dd3fc",
+  "#fca5a5",
+  "#86efac",
 ];
 
 function hashSeed(str) {
@@ -56,72 +74,184 @@ function AnonymousAvatar({ id }) {
     </div>
   );
 }
-export default function GuestbookTab({ entries, loadMore, hasMore, loadGuestbook }) {
-  const [name,setName]=useState(""); const [pw,setPw]=useState(""); const [msg,setMsg]=useState("");
-  const submit=async()=>{if(!name.trim()||!pw.trim()||!msg.trim()) return; await addDoc(collection(db,"guestbook"),{name:name.trim(),pw:pw.trim(),msg:msg.trim(),createdAt:new Date()}); setName("");setPw("");setMsg(""); await loadGuestbook();};
-  const del=async(e)=>{if(!window.confirm("이 메시지를 삭제하시겠습니까?")) return; const input=window.prompt("비밀번호를 입력하세요"); if(input===e.pw){await deleteDoc(doc(db,"guestbook",e.id));await loadGuestbook();}else if(input){alert("비밀번호가 틀렸습니다.");}};
 
-  return <main className="subpage">
-    <section className="page-shell community-layout">
-  <div className="guestbook-list">
-    {entries.map((e) => (
-      <article key={e.id}>
-        <AnonymousAvatar id={e.id} />
+/* 입력폼을 GuestbookTab 바깥으로 분리 */
+function GuestbookForm({
+  name,
+  setName,
+  pw,
+  setPw,
+  msg,
+  setMsg,
+  submit,
+}) {
+  return (
+    <>
+      <span className="eyebrow">LEAVE A NOTE</span>
 
-        <div className="note-body">
-          <div>
-            <b>{e.name}</b>
-            <span>{timeAgo(e.createdAt)}</span>
-          </div>
-          <p>{e.msg}</p>
+      <h2>당신의 한 줄을 남겨주세요.</h2>
+
+      <div className="form-row">
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="닉네임"
+        />
+
+        <input
+          type="password"
+          value={pw}
+          onChange={(e) => setPw(e.target.value)}
+          placeholder="삭제 비밀번호"
+        />
+      </div>
+
+      <textarea
+        value={msg}
+        onChange={(e) => setMsg(e.target.value)}
+        placeholder="메시지를 입력해 주세요."
+        rows={6}
+      />
+
+      <button className="btn primary" onClick={submit}>
+        SEND NOTE
+        <Send size={15} />
+      </button>
+    </>
+  );
+}
+
+export default function GuestbookTab({
+  entries,
+  loadMore,
+  hasMore,
+  loadGuestbook,
+}) {
+  const [name, setName] = useState("");
+  const [pw, setPw] = useState("");
+  const [msg, setMsg] = useState("");
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
+  const submit = async () => {
+    if (!name.trim() || !pw.trim() || !msg.trim()) return;
+
+    await addDoc(collection(db, "guestbook"), {
+      name: name.trim(),
+      pw: pw.trim(),
+      msg: msg.trim(),
+      createdAt: new Date(),
+    });
+
+    setName("");
+    setPw("");
+    setMsg("");
+    setIsFormOpen(false);
+
+    await loadGuestbook();
+  };
+
+  const del = async (e) => {
+    if (!window.confirm("이 메시지를 삭제하시겠습니까?")) return;
+
+    const input = window.prompt("비밀번호를 입력하세요");
+
+    if (input === e.pw) {
+      await deleteDoc(doc(db, "guestbook", e.id));
+      await loadGuestbook();
+    } else if (input) {
+      alert("비밀번호가 틀렸습니다.");
+    }
+  };
+
+  return (
+    <main className="subpage">
+      <section className="page-shell community-layout">
+        <div className="guestbook-list">
+          {entries.map((e) => (
+            <article key={e.id}>
+              <AnonymousAvatar id={e.id} />
+
+              <div className="note-body">
+                <div>
+                  <b>{e.name}</b>
+                  <span>{timeAgo(e.createdAt)}</span>
+                </div>
+
+                <p>{e.msg}</p>
+              </div>
+
+              <button onClick={() => del(e)} aria-label="삭제">
+                <Trash2 size={15} />
+              </button>
+            </article>
+          ))}
+
+          {entries.length === 0 && (
+            <p className="empty-note">
+              아직 남겨진 메시지가 없습니다.
+            </p>
+          )}
+
+          {hasMore && (
+            <button className="load-more" onClick={loadMore}>
+              LOAD MORE
+            </button>
+          )}
         </div>
 
-        <button onClick={() => del(e)} aria-label="삭제">
-          <Trash2 size={15} />
-        </button>
-      </article>
-    ))}
+        {/* PC 입력폼 */}
+        <div className="guestbook-form desktop-guestbook-form">
+          <GuestbookForm
+            name={name}
+            setName={setName}
+            pw={pw}
+            setPw={setPw}
+            msg={msg}
+            setMsg={setMsg}
+            submit={submit}
+          />
+        </div>
+      </section>
 
-    {entries.length === 0 && (
-      <p className="empty-note">아직 남겨진 메시지가 없습니다.</p>
-    )}
-
-    {hasMore && (
-      <button className="load-more" onClick={loadMore}>
-        LOAD MORE
+      {/* 모바일 플로팅 버튼 */}
+      <button
+        className="guestbook-floating-button"
+        onClick={() => setIsFormOpen(true)}
+      >
+        <PenLine size={17} />
+        한 줄 남기기
       </button>
-    )}
-  </div>
 
-  <div className="guestbook-form">
-    <span className="eyebrow">LEAVE A NOTE</span>
-    <h2>당신의 한 줄을 남겨주세요.</h2>
+      {/* 모바일 Bottom Sheet */}
+      {isFormOpen && (
+        <div
+          className="guestbook-sheet-backdrop"
+          onClick={() => setIsFormOpen(false)}
+        >
+          <div
+            className="guestbook-sheet"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="guestbook-sheet-close"
+              onClick={() => setIsFormOpen(false)}
+              aria-label="닫기"
+            >
+              <X size={20} />
+            </button>
 
-    <div className="form-row">
-      <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="닉네임"
-      />
-      <input
-        type="password"
-        value={pw}
-        onChange={(e) => setPw(e.target.value)}
-        placeholder="삭제 비밀번호"
-      />
-    </div>
-
-    <textarea
-      value={msg}
-      onChange={(e) => setMsg(e.target.value)}
-      placeholder="메시지를 입력해 주세요."
-      rows={6}
-    />
-
-    <button className="btn primary" onClick={submit}>
-      SEND NOTE <Send size={15} />
-    </button>
-  </div>
-</section>
-  </main>
+            <GuestbookForm
+              name={name}
+              setName={setName}
+              pw={pw}
+              setPw={setPw}
+              msg={msg}
+              setMsg={setMsg}
+              submit={submit}
+            />
+          </div>
+        </div>
+      )}
+    </main>
+  );
 }
