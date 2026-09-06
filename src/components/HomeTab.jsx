@@ -230,7 +230,7 @@ export default function HomeTab({
           <div className="hero-copy">
 
             <span className="hero-label">
-              INDEPENDENT MUSIC LABEL
+              MUSIC · CREATIVE STUDIO
             </span>
 
             <h1>

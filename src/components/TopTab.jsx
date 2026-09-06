@@ -24,7 +24,7 @@ export default function TopTab({ tab, setTab }) {
       <div className="gnb-inner">
         <button className="brand" onClick={() => go("home")} aria-label="밤하늘극장 홈">
           <span className="brand-mark"><img src="/favicon.svg" alt="" /></span>
-          <span className="brand-copy"><b>밤하늘극장</b><small>CREATIVE STUDIO</small></span>
+          <span className="brand-copy"><b>밤하늘극장</b><small>NIGHT SKY THEATER</small></span>
         </button>
 
         <nav className="desktop-nav" aria-label="메인 메뉴">
