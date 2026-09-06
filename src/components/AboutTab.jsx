@@ -81,7 +81,7 @@ export default function AboutTab() {
   />
 
       <div>
-        <span className="eyebrow">브랜드 아이덴티티 · CI</span>
+        <span className="eyebrow">BRAND IDENTITY · CI</span>
 
         <h3>밤하늘극장</h3>
 
