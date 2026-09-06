@@ -769,14 +769,10 @@ export default function HomeTab({
 
           <div>
 
-            <Sparkles
-              size={22}
-            />
-
             <h2>
               우리의 밤이,
               <br />
-              누군가의 오래된 기억이 되도록.
+              누군가의 오랜 기억이 되도록.
             </h2>
 
           </div>
