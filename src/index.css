@@ -261,7 +261,7 @@
 
   padding: 0 20px 10px;
 
-  animation: featured-scroll 42s linear infinite;
+  animation: featured-scroll 80s linear infinite;
   will-change: transform;
 }
 

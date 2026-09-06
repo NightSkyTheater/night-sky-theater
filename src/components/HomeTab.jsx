@@ -41,7 +41,7 @@ export default function HomeTab({
 }) {
   const [liveSubs, setLiveSubs] = useState(null);
   const [liveViews, setLiveViews] = useState(null);
-const [selectedAlbum, setSelectedAlbum] = useState(null);
+
   const [countdown, setCountdown] = useState({
     released: false,
     days: 0,
