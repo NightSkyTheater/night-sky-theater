@@ -165,12 +165,12 @@ const [countdown, setCountdown] = useState({
 <div className="release-countdown">
   <div className="countdown-head">
     <span className="countdown-label">
-      {countdown.released ? "RELEASED AGO" : "RELEASE IN"}
+      {countdown.released ? "RELEASED AGO" : "발매일"}
     </span>
 
     <span className="countdown-status">
       <i />
-      {countdown.released ? "OUT NOW" : "COMING SOON"}
+      {countdown.released ? "발매완료" : "발매예정"}
     </span>
   </div>
 
