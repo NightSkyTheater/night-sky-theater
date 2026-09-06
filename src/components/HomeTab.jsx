@@ -32,8 +32,8 @@ export default function HomeTab({ setTab }) {
         <div className="hero-overlay" />
         <div className="page-shell hero-grid">
           <div className="hero-copy">
-            <span className="hero-label">INDEPENDENT MUSIC LABEL · SEOUL</span>
-            <h1>WE MAKE<br /><em>STORIES</em> SOUND.</h1>
+            <span className="hero-label">INDEPENDENT MUSIC LABEL · VIRTUAL INDIE BAND</span>
+            <h1>모든 밤에는<br /><em>남겨야 할</em>노래가 있다.</h1>
             <p>밤하늘극장은 음악과 서사, 비주얼을 하나의 세계관으로 설계하는 독립 뮤직 레이블이자 크리에이티브 스튜디오입니다.</p>
             <div className="hero-actions">
               <button className="btn primary" onClick={() => setTab("music")}>EXPLORE RELEASES <ArrowRight size={16} /></button>
