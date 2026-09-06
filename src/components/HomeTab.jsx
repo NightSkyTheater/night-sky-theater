@@ -127,7 +127,7 @@ const [countdown, setCountdown] = useState({
         <div className="hero-overlay" />
         <div className="page-shell hero-grid">
           <div className="hero-copy">
-            <span className="hero-label">CREATIVE STUDIO · INDEPENDENT MUSIC LABEL</span>
+            <span className="hero-label">INDEPENDENT MUSIC LABEL</span>
             <h1>모든 밤에는<br /><em>남겨야 할</em><br />노래가 있다.</h1>
             <p>밤하늘극장은 청춘과 사랑, 삶과 죽음에 관한 이야기를 음악으로 풀어내는 버츄얼 인디 밴드입니다. 한 곡의 노래에서 시작된 감정과 서사를 가사와 캐릭터, 비주얼, 영상으로 확장하며 밤하늘극장만의 세계를 만들어갑니다.</p>
             <div className="hero-actions">
