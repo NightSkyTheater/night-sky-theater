@@ -637,19 +637,10 @@ export default function HomeTab({
             ].map(
               (album, i) => (
 
-                <button
-                  className="featured-card"
-                  key={`${album.id}-${i}`}
-                  onClick={() => {
-                    if (didDrag.current) {
-                      didDrag.current = false;
-                      return;
-                    }
-
-                    setSelectedAlbum(album);
-                    setTab("music");
-                  }}
-                >
+<div
+  className="featured-card"
+  key={`${album.id}-${i}`}
+>
 
                   <div className="featured-art">
 
@@ -676,7 +667,7 @@ export default function HomeTab({
 
                   </div>
 
-                </button>
+                </div>
 
               )
             )}

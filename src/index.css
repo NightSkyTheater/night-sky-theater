@@ -277,16 +277,16 @@
 
 .featured-card {
   flex: 0 0 auto;
-
   width: 300px;
 
   padding: 0;
 
-  border: 0;
   background: transparent;
 
   text-align: left;
-  cursor: pointer;
+
+  user-select: none;
+  pointer-events: none;
 }
 
 .featured-art {
@@ -310,6 +310,10 @@
   transition:
     transform .4s ease,
     opacity .4s ease;
+
+    pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .featured-card:hover .featured-art img {
