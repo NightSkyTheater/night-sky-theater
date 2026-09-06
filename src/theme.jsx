@@ -11,9 +11,9 @@ export const MAX_WIDTH = 1440;
 export const GNB_HEIGHT = 82;
 
 export const NAV_ITEMS = [
-  { id: "home", label: "HOME" },
-  { id: "about", label: "ABOUT" },
-  { id: "music", label: "RELEASES" },
-  { id: "community", label: "COMMUNITY" },
-  { id: "contact", label: "CONTACT" },
+  { id: "home", label: "홈" },
+  { id: "about", label: "소개" },
+  { id: "music", label: "음악" },
+  { id: "community", label: "커뮤니티" },
+  { id: "contact", label: "문의" },
 ];
