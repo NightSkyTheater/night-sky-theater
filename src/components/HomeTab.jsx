@@ -3,7 +3,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { ALBUMS, ALL_TRACKS, NEWS_ITEMS, RELEASE_SCHEDULE, SUB_DATA } from "../data";
 import { SectionTitle, formatCompact } from "./Common";
 
-const HERO_IMAGE = "img/homebg.jpg";
+const HERO_IMAGE = "img/homebg.png";
 
 export default function HomeTab({ setTab }) {
   const [liveSubs, setLiveSubs] = useState(null);
