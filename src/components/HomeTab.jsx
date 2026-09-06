@@ -1,4 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import {
   ALBUMS,
@@ -39,6 +44,13 @@ export default function HomeTab({
   setTab,
   setSelectedAlbum,
 }) {
+  const sliderRef = useRef(null);
+  const dragStartX = useRef(0);
+  const dragStartScroll = useRef(0);
+  const didDrag = useRef(false);
+
+  const [isSliderPaused, setIsSliderPaused] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [liveSubs, setLiveSubs] = useState(null);
   const [liveViews, setLiveViews] = useState(null);
 
@@ -107,6 +119,7 @@ export default function HomeTab({
     fetchStats();
   }, []);
 
+  
   /*
     발매 카운트다운
     발매 전 = 남은 시간
@@ -167,6 +180,34 @@ export default function HomeTab({
     return () =>
       clearInterval(timer);
   }, []);
+
+
+  // 추천 앨범 자동 스크롤
+  useEffect(() => {
+    const slider = sliderRef.current;
+
+    if (!slider) return;
+
+    let animationFrame;
+
+    function autoScroll() {
+      if (!isSliderPaused && !isDragging) {
+        slider.scrollLeft += 0.45;
+
+        const halfWidth = slider.scrollWidth / 2;
+
+        if (slider.scrollLeft >= halfWidth) {
+          slider.scrollLeft -= halfWidth;
+        }
+      }
+
+      animationFrame = requestAnimationFrame(autoScroll);
+    }
+
+    animationFrame = requestAnimationFrame(autoScroll);
+
+    return () => cancelAnimationFrame(animationFrame);
+  }, [isSliderPaused, isDragging]);
 
   return (
     <main>
@@ -543,7 +584,50 @@ export default function HomeTab({
 
         {/* 자동 가로 슬라이드 */}
 
-        <div className="featured-slider">
+        <div
+          className={`featured-slider ${
+            isDragging ? "is-dragging" : ""
+          }`}
+          ref={sliderRef}
+          onMouseEnter={() => {
+            setIsSliderPaused(true);
+          }}
+          onMouseLeave={() => {
+            setIsSliderPaused(false);
+            setIsDragging(false);
+          }}
+          onPointerDown={(e) => {
+            didDrag.current = false;
+            setIsDragging(true);
+
+            dragStartX.current = e.clientX;
+            dragStartScroll.current = e.currentTarget.scrollLeft;
+
+            e.currentTarget.setPointerCapture(e.pointerId);
+          }}
+          onPointerMove={(e) => {
+            if (!isDragging) return;
+
+            const distance = e.clientX - dragStartX.current;
+
+            if (Math.abs(distance) > 5) {
+              didDrag.current = true;
+            }
+
+            e.currentTarget.scrollLeft =
+              dragStartScroll.current - distance;
+          }}
+          onPointerUp={(e) => {
+            setIsDragging(false);
+
+            if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+              e.currentTarget.releasePointerCapture(e.pointerId);
+            }
+          }}
+          onPointerCancel={() => {
+            setIsDragging(false);
+          }}
+        >
 
           <div className="featured-track">
 
@@ -554,13 +638,18 @@ export default function HomeTab({
               (album, i) => (
 
                 <button
-  className="featured-card"
-  key={`${album.id}-${i}`}
-  onClick={() => {
-    setSelectedAlbum(album);
-    setTab("music");
-  }}
->
+                  className="featured-card"
+                  key={`${album.id}-${i}`}
+                  onClick={() => {
+                    if (didDrag.current) {
+                      didDrag.current = false;
+                      return;
+                    }
+
+                    setSelectedAlbum(album);
+                    setTab("music");
+                  }}
+                >
 
                   <div className="featured-art">
 
