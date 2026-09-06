@@ -680,94 +680,83 @@ export default function HomeTab({
 
 
    
-      {/* =========================
-          NEWS & SCHEDULE
-      ========================= */}
+    {/* =========================
+    소식 & 발매 일정
+========================= */}
 
-      <section className="section page-shell news-layout">
+<section className="section page-shell news-layout">
 
-        <SectionTitle
-          kicker="UPDATES"
-          title="News & Schedule"
-        />
+  <SectionTitle
+    kicker="새소식"
+    title="소식 및 발매 일정"
+  />
 
+  <div className="news-columns">
 
-        <div className="news-columns">
+    {/* 발매 일정 */}
+    <div className="news-block">
 
-          <div className="news-block">
+      <h3>발매 일정</h3>
 
-            <h3>
-              RELEASE SCHEDULE
-            </h3>
+      {[...RELEASE_SCHEDULE]
+        .reverse()
+        .slice(0, 4)
+        .map((n) => (
 
-            {[...RELEASE_SCHEDULE]
-              .reverse()
-              .slice(0, 4)
-              .map((n) => (
+          <div
+            className="news-row"
+            key={n.date + n.title}
+          >
+            <span className="news-date">
+              {n.date}
+            </span>
 
-                <div
-                  className="news-row"
-                  key={
-                    n.date +
-                    n.title
-                  }
-                >
+            <b>
+              {n.title}
+            </b>
 
-                  <span>
-                    {n.date}
-                  </span>
-
-                  <b>
-                    {n.title}
-                  </b>
-
-                  <i>
-                    {n.tag}
-                  </i>
-
-                </div>
-
-              ))}
-
+            <span
+              className={`release-label release-label-${n.tag}`}
+            >
+              {n.tag}
+            </span>
           </div>
 
+        ))}
 
-          <div className="news-block">
+    </div>
 
-            <h3>
-              NEWSROOM
-            </h3>
 
-            {[...NEWS_ITEMS]
-              .reverse()
-              .slice(0, 4)
-              .map((n) => (
+    {/* 새소식 */}
+    <div className="news-block">
 
-                <div
-                  className="news-row"
-                  key={
-                    n.date +
-                    n.title
-                  }
-                >
+      <h3>새소식</h3>
 
-                  <span>
-                    {n.date}
-                  </span>
+      {[...NEWS_ITEMS]
+        .reverse()
+        .slice(0, 4)
+        .map((n) => (
 
-                  <b>
-                    {n.title}
-                  </b>
+          <div
+            className="news-row"
+            key={n.date + n.title}
+          >
+            <span className="news-date">
+              {n.date}
+            </span>
 
-                </div>
-
-              ))}
-
+            <b>
+              {n.title}
+            </b>
           </div>
 
-        </div>
+        ))}
 
-      </section>
+    </div>
+
+  </div>
+
+</section>
 
 
       {/* =========================
