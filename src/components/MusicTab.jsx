@@ -8,16 +8,16 @@ export default function MusicTab() {
 
   return <main className="subpage">
     <section className="page-shell sub-hero releases-hero">
-      <span className="eyebrow">DISCOGRAPHY / CATALOG</span>
-      <h1>RELEASES</h1>
-      <p>밤하늘극장이 지금까지 기록해 온 모든 정규·EP·싱글을 한곳에 모았습니다.</p>
-      <div className="catalog-count"><b>{String(albums.length).padStart(2,"0")}</b><span>CATALOG RELEASES</span></div>
+      <span className="eyebrow">디스코그래피</span>
+      <h1>발매 음원</h1>
+      <p>밤하늘극장이 지금까지 발매해 온 모든 정규·EP·싱글을 한곳에 모았습니다.</p>
+      <div className="catalog-count"><b>{String(albums.length).padStart(2,"0")}</b><span>RELEASES</span></div>
     </section>
 
     <section className="page-shell catalog-grid-section">
       <div className="catalog-grid">
         {albums.map((album, i) => <button className="catalog-card" onClick={()=>setSelected(album)} key={`${album.id}-${i}`}>
-          <div className="catalog-art"><img src={album.cover} alt={album.title}/><div className="catalog-hover">VIEW RELEASE <ArrowRight size={15}/></div></div>
+          <div className="catalog-art"><img src={album.cover} alt={album.title}/><div className="catalog-hover">자세히 보기 <ArrowRight size={15}/></div></div>
           <div className="catalog-copy"><span>{album.year} / NST</span><h3>{album.title}</h3><p>{album.tracks.length} TRACKS</p></div>
         </button>)}
       </div>
@@ -28,7 +28,7 @@ export default function MusicTab() {
       <div className="modal-backdrop" style={{backgroundImage:`url(${selected.cover})`}}/>
       <div className="modal-content page-shell">
         <div className="modal-art"><img src={selected.cover} alt={selected.title}/></div>
-        <div className="modal-info"><span className="eyebrow">{selected.year} · NIGHT SKY THEATER</span><h2>{selected.title}</h2><p className="modal-desc">{selected.desc}</p><div className="tracklist">{selected.tracks.map(t => <div key={t.n}><span>{String(t.n).padStart(2,"0")}</span><div><b>{t.title}</b>{t.mood && <p>{t.mood}</p>}</div></div>)}</div><button className="text-link" onClick={()=>setSelected(null)}><ArrowLeft size={15}/> BACK TO CATALOG</button></div>
+        <div className="modal-info"><span className="eyebrow">{selected.year} · NIGHT SKY THEATER</span><h2>{selected.title}</h2><p className="modal-desc">{selected.desc}</p><div className="tracklist">{selected.tracks.map(t => <div key={t.n}><span>{String(t.n).padStart(2,"0")}</span><div><b>{t.title}</b>{t.mood && <p>{t.mood}</p>}</div></div>)}</div><button className="text-link" onClick={()=>setSelected(null)}><ArrowLeft size={15}/> 앨범 목록으로 돌아가기</button></div>
       </div>
     </div>}
   </main>
