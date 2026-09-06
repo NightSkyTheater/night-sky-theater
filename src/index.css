@@ -55,3 +55,52 @@
     gap: 64px;
   }
 }
+.release-countdown {
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.countdown-label {
+  display: block;
+  margin-bottom: 12px;
+
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .16em;
+}
+
+.countdown-time {
+  display: flex;
+  align-items: flex-end;
+  gap: 26px;
+}
+
+.countdown-time > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.countdown-time strong {
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.countdown-time span {
+  font-size: 8px;
+  letter-spacing: .12em;
+  color: var(--muted);
+}
+@media (max-width: 640px) {
+  .countdown-time {
+    gap: 18px;
+  }
+
+  .countdown-time strong {
+    font-size: 24px;
+  }
+}
