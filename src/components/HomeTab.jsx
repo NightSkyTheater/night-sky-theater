@@ -353,7 +353,7 @@ export default function HomeTab({
       <section className="section page-shell latest-section">
 
         <SectionTitle
-          kicker="최신 발매"
+          kicker="LATEST RELEASE"
           title="완전한 무조건적 사랑의 형태"
           body="사랑이라는 감정이 도달할 수 있는 가장 깊고 숭고한 경지, ‘조건 없음’에 대하여."
         />
@@ -552,8 +552,8 @@ export default function HomeTab({
         <div className="page-shell">
 
           <SectionTitle
-            kicker="추천 앨범"
-            title="우리가 지나온 밤의 소리"
+            kicker="OUR MUSIC"
+            title="밤하늘극장의 음악"
             body="청춘과 사랑, 상실과 위로, 삶과 죽음에 관한 이야기를 밤하늘극장만의 음악으로 기록해갑니다."
             action={
               <button
@@ -679,7 +679,7 @@ export default function HomeTab({
 <section className="section page-shell news-layout">
 
   <SectionTitle
-    kicker="새소식"
+    kicker="NEWS"
     title="소식 및 발매 일정"
   />
 

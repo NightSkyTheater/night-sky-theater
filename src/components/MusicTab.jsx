@@ -8,7 +8,7 @@ export default function MusicTab() {
 
   return <main className="subpage">
     <section className="page-shell sub-hero releases-hero">
-      <span className="eyebrow">디스코그래피</span>
+      <span className="eyebrow">DISCOGRAPHY</span>
       <h1>발매 음원</h1>
       <p>밤하늘극장이 지금까지 발매해 온 모든 정규·EP·싱글을 한곳에 모았습니다.</p>
       <div className="catalog-count"><b>{String(albums.length).padStart(2,"0")}</b><span>RELEASES</span></div>

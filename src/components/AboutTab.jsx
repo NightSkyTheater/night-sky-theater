@@ -6,7 +6,7 @@ export default function AboutTab() {
   return (
   <main className="subpage">
     <section className="page-shell sub-hero">
-      <span className="eyebrow">밤하늘극장 소개</span>
+      <span className="eyebrow">ABOUT</span>
 
       <h1>
         하루의 마지막,
