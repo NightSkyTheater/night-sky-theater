@@ -505,7 +505,7 @@ export const PLATFORMS = [
   {
     name: "TikTok",
     url: "tiktok.com/@nightsky_theater",
-    color: "#111111",
+    color: "#25F4EE",
     logo: "/platforms/tiktok.png",
   },
   {
