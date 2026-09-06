@@ -82,12 +82,6 @@ export default function AboutTab() {
 
     <section className="section section-dark">
   <div className="page-shell">
-    <SectionTitle
-      kicker="브랜드 아이덴티티"
-      title="밤하늘극장 · NIGHT SKY THEATER"
-      body="서로 다른 점들이 만나 하나의 우주가 되듯, 밤하늘극장의 CI는 별과 달, 그리고 그 사이를 이어가는 하나의 궤도를 통해 음악과 이야기가 연결되는 과정을 표현합니다."
-    />
-
 <div className="identity-panel">
   <div
     className="identity-symbol"
