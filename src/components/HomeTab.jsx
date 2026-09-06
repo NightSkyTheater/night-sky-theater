@@ -509,8 +509,8 @@ export default function HomeTab({ setTab }) {
 
           <SectionTitle
             kicker="추천 앨범"
-            title="밤이 지난 뒤에도 남는 음악"
-            body="밤하늘극장의 음악 중 지금 가장 먼저 소개하고 싶은 작품들을 모았습니다."
+            title="우리가 지나온 밤의 소리"
+            body="청춘과 사랑, 상실과 위로, 삶과 죽음에 관한 이야기를 밤하늘극장만의 음악으로 기록해갑니다."
             action={
               <button
                 className="text-link"
