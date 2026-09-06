@@ -763,22 +763,14 @@ export default function HomeTab({
           CONTACT CTA
       ========================= */}
 
-      <section className="cta-band">
-
-        <div className="page-shell cta-inner">
-
-          <div>
-
+    <section className="cta-band"><div className="page-shell cta-inner"><div>
             <h2>
               우리의 밤이,
               <br />
               누군가의 오랜 기억이 되도록.
             </h2>
-
-          </div>
-
-
-          <button
+            <p>프로젝트 제안과 협업 문의를 기다립니다.</p></div>
+            <button
             className="btn light"
             onClick={() =>
               setTab("contact")
@@ -790,10 +782,11 @@ export default function HomeTab({
               size={16}
             />
           </button>
+            </div>
+            
+    </section>
 
-        </div>
 
-      </section>
 
     </main>
   );
