@@ -22,6 +22,27 @@ export default function AboutTab({ setTab }) {
 
     <section className="section page-shell"><SectionTitle kicker="STREAMING & SOCIAL" title="Find us everywhere."/><div className="platform-grid">{PLATFORMS.map(p => <a key={p.name} href={`https://${p.url}`} target="_blank" rel="noreferrer"><span>{p.name}</span><ArrowRight size={15}/></a>)}</div></section>
 
-    <section className="cta-band"><div className="page-shell cta-inner"><div><h2>Project, press or collaboration?</h2><p>프로젝트 제안과 협업 문의를 기다립니다.</p></div><button className="btn light" onClick={()=>setTab("contact")}>CONTACT <ArrowRight size={16}/></button></div></section>
+        <section className="cta-band"><div className="page-shell cta-inner"><div>
+                <h2>
+                  우리의 밤이,
+                  <br />
+                  누군가의 오랜 기억이 되도록.
+                </h2>
+                <p>프로젝트 제안과 협업 문의를 기다립니다.</p></div>
+                <button
+                className="btn light"
+                onClick={() =>
+                  setTab("contact")
+                }
+              >
+                문의하기
+    
+                <ArrowRight
+                  size={16}
+                />
+              </button>
+                </div>
+                
+        </section>
   </main>
 }
