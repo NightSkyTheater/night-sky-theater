@@ -45,9 +45,11 @@ export default function AboutTab({ setTab }) {
     >
       <img
         src={platform.logo}
-        alt={platform.name}
+        alt=""
         draggable="false"
       />
+
+      <span>{platform.name}</span>
     </a>
   ))}
 </div>
