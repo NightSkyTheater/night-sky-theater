@@ -527,12 +527,6 @@ export const PLATFORMS = [
     logo: "/platforms/flo.png",
   },
   {
-    name: "VIBE",
-    url: "vibe.naver.com/artist/10046198",
-    color: "#00C73C",
-    logo: "/platforms/vibe.png",
-  },
-  {
     name: "Bugs",
     url: "music.bugs.co.kr/artist/14382832",
     color: "#FF3B30",
