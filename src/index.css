@@ -146,16 +146,12 @@
   }
 }
 
-.hero-copy {
-  max-width: 760px;
-}
-
 .hero-copy p {
   margin: 0;
-  line-height: 1.85;
+  line-height: 1.8;
 }
 
-.hero-copy p + p {
+.hero-copy .paragraph-break {
   margin-top: 24px;
 }
 
