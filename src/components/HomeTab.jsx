@@ -338,15 +338,17 @@ export default function HomeTab({ setTab }) {
   발매 카운트다운
 </span>
 
-                <span className="countdown-status">
+                <span
+  className={`countdown-status ${
+    countdown.released ? "is-live" : "is-upcoming"
+  }`}
+>
+  <i />
 
-                  <i />
-
-                  {countdown.released
-                    ? "공개 중"
-                    : "공개 예정"}
-
-                </span>
+  {countdown.released
+    ? "공개 중"
+    : "공개 예정"}
+</span>
 
               </div>
 

@@ -107,11 +107,20 @@
 .countdown-status i {
   width: 5px;
   height: 5px;
-
   display: block;
-
   border-radius: 50%;
-  background: var(--accent);
+}
+
+/* 공개 중 */
+.countdown-status.is-live i {
+  background: #ff4d4d;
+  box-shadow: 0 0 7px rgba(255, 77, 77, .45);
+}
+
+/* 공개 예정 */
+.countdown-status.is-upcoming i {
+  background: #6f7379;
+  box-shadow: none;
 }
 
 /* 숫자 영역 */
