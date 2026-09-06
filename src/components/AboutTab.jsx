@@ -107,7 +107,7 @@ export default function AboutTab() {
 
     <section className="section page-shell">
       <SectionTitle
-  kicker="음원 및 소셜 채널"
+  kicker="MUSIC & SOCIAL"
   title={
     <>
       밤하늘극장을
