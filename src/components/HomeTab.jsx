@@ -19,12 +19,19 @@ const RELEASE_DATE =
   data.js의 album.id를 원하는 순서대로 입력
 */
 const FEATURED_ALBUM_IDS = [
-  30,
-  24,
-  21,
-  18,
+  2,
+  3,
+  5,
+  10,
   11,
-  7,
+  12,
+  14,
+  17,
+  19,
+  20,
+  21,
+  25,
+  29,
 ];
 
 export default function HomeTab({ setTab }) {
