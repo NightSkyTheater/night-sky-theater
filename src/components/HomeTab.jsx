@@ -158,9 +158,9 @@ const [countdown, setCountdown] = useState({
 </section>
 
       <section className="section page-shell latest-section">
-        <SectionTitle kicker="LATEST RELEASE" title="완전한 무조건적 사랑의 형태" body="사랑이라는 감정이 도달할 수 있는 가장 깊고 숭고한 경지, ‘조건 없음’에 대하여." />
+        <SectionTitle kicker="최신 발매" title="완전한 무조건적 사랑의 형태" body="사랑이라는 감정이 도달할 수 있는 가장 깊고 숭고한 경지, ‘조건 없음’에 대하여." />
         <div className="latest-layout">
-          <div className="latest-cover-wrap"><img src={latest.cover} alt={latest.title} /><span className="release-stamp">OUT NOW</span></div>
+          <div className="latest-cover-wrap"><img src={latest.cover} alt={latest.title} /></div>
           <div className="latest-info">
 <div className="release-countdown">
   <div className="countdown-head">
@@ -205,7 +205,7 @@ const [countdown, setCountdown] = useState({
     </div>
   </div>
 </div>
-            <p className="release-meta">SINGLE · 2026 · {latest.tracks.length} TRACKS</p>
+            <p className="release-meta">SINGLE · {latest.tracks.length} TRACKS</p>
             <h3>{latest.title}</h3>
             <p>{latest.desc}</p>
             <ol>{latest.tracks.map(t => <li key={t.n}><span>0{t.n}</span><b>{t.title}</b></li>)}</ol>
