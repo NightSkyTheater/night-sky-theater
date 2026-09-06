@@ -64,7 +64,7 @@ export default function GuestbookTab({ entries, loadMore, hasMore, loadGuestbook
   return <main className="subpage">
     <section className="page-shell community-layout">
   <div className="guestbook-list">
-    {entries.map((e, i) => (
+    {entries.map((e) => (
       <article key={e.id}>
         <AnonymousAvatar id={e.id} />
 
