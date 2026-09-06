@@ -130,6 +130,7 @@
 
 
 .news-row{grid-template-columns:72px 1fr}.news-row i{display:none}.cta-inner{align-items:flex-start;flex-direction:column}.sub-hero{padding-top:80px;padding-bottom:56px}.sub-hero h1,.contact-hero h1{font-size:54px}.about-image-band{min-height:330px}.two-column-copy h2{font-size:36px}.identity-panel{grid-template-columns:1fr}.identity-panel h3{font-size:52px}
+
 .catalog-count{position:static;text-align:left;margin-top:30px}.catalog-grid{grid-template-columns:repeat(2,1fr);gap:34px 12px}.catalog-copy h3{font-size:13px}.modal-content{padding-top:90px}.modal-close{right:16px;top:16px}.form-row{grid-template-columns:1fr}.guestbook-form{padding:24px}.contact-hero{padding-top:90px}.contact-primary{padding:28px;min-height:380px}.contact-primary h2{font-size:30px}.contact-note,.site-footer .page-shell{flex-direction:column;gap:14px}.site-footer .page-shell>div:last-child{align-items:flex-start}.stats-grid{grid-template-columns:1fr 1fr}.stat{padding:22px 0}.stat strong{font-size:22px}}
 .contact-grid {
   display: grid;
@@ -144,6 +145,20 @@
     gap: 64px;
   }
 }
+
+.hero-copy {
+  max-width: 760px;
+}
+
+.hero-copy p {
+  margin: 0;
+  line-height: 1.85;
+}
+
+.hero-copy p + p {
+  margin-top: 24px;
+}
+
 /* =========================
    RELEASE COUNTDOWN
 ========================= */
