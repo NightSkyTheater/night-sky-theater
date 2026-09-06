@@ -41,7 +41,7 @@ export default function HomeTab({ setTab }) {
             </div>
           </div>
           <div className="hero-index">
-            <span>EST. 2025</span><span>ROCK · K-POP · J-POP</span><span>VIRTUAL INDIE BANDT</span>
+            <span>EST. 2025</span><span>ROCK · K-POP · J-POP</span><span>VIRTUAL INDIE BAND</span>
           </div>
         </div>
       </section>
