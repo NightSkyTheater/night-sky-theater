@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ArrowRight, Play, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { ALBUMS, ALL_TRACKS, NEWS_ITEMS, RELEASE_SCHEDULE, SUB_DATA } from "../data";
 import { SectionTitle, formatCompact } from "./Common";
 
@@ -7,6 +7,7 @@ const HERO_IMAGE = "https://down.mixtape.so/NAS/img/b/d/d/c/bddc807264d156fa82fd
 
 export default function HomeTab({ setTab }) {
   const [liveSubs, setLiveSubs] = useState(null);
+  const [liveViews, setLiveViews] = useState(null);
   const latest = ALBUMS[ALBUMS.length - 1];
   const featured = useMemo(() => [...ALBUMS].slice(-6).reverse(), []);
 
@@ -17,8 +18,10 @@ export default function HomeTab({ setTab }) {
         if (!key) return;
         const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${key}`);
         const data = await res.json();
-        if (data.items?.[0]) setLiveSubs(Number(data.items[0].statistics.subscriberCount));
-      } catch (e) {
+        if (data.items?.[0]) {
+  setLiveSubs(Number(data.items[0].statistics.subscriberCount));
+  setLiveViews(Number(data.items[0].statistics.viewCount));
+} catch (e) {
         console.error(e);
       }
     }
@@ -47,15 +50,20 @@ export default function HomeTab({ setTab }) {
       </section>
 
       <section className="stats-strip">
-        <div className="page-shell stats-grid">
-          {[
-            [formatCompact(liveSubs ?? SUB_DATA.at(-1)?.subs), "YOUTUBE SUBSCRIBERS"],
-            [ALBUMS.length, "RELEASES"],
-            [ALL_TRACKS.length, "ORIGINAL TRACKS"],
-            ["KR·JP·EN", "LANGUAGE PROJECTS"],
-          ].map(([value, label]) => <div className="stat" key={label}><strong>{value}</strong><span>{label}</span></div>)}
-        </div>
-      </section>
+  <div className="page-shell stats-grid">
+    {[
+      [formatCompact(liveSubs ?? SUB_DATA.at(-1)?.subs), "YOUTUBE SUBSCRIBERS"],
+      [formatCompact(liveViews ?? 0), "YOUTUBE VIEWS"],
+      [ALBUMS.length, "RELEASES"],
+      [ALL_TRACKS.length, "ORIGINAL TRACKS"],
+    ].map(([value, label]) => (
+      <div className="stat" key={label}>
+        <strong>{value}</strong>
+        <span>{label}</span>
+      </div>
+    ))}
+  </div>
+</section>
 
       <section className="section page-shell latest-section">
         <SectionTitle kicker="LATEST RELEASE" title="완전한 무조건적 사랑의 형태" body="사랑이라는 감정이 도달할 수 있는 가장 깊고 숭고한 경지, ‘조건 없음’에 대하여." />
