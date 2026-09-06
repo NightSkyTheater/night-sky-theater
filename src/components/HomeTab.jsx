@@ -12,22 +12,28 @@ export default function HomeTab({ setTab }) {
   const featured = useMemo(() => [...ALBUMS].slice(-6).reverse(), []);
 
   useEffect(() => {
-    async function fetchStats() {
-      try {
-        const key = import.meta.env.VITE_YOUTUBE_API_KEY;
-        if (!key) return;
-        const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${key}`);
-        const data = await res.json();
-        if (data.items?.[0]) {
-  setLiveSubs(Number(data.items[0].statistics.subscriberCount));
-  setLiveViews(Number(data.items[0].statistics.viewCount));
-} catch (e) {
-        console.error(e);
-      }
-    }
-    fetchStats();
-  }, []);
+  async function fetchStats() {
+    try {
+      const key = import.meta.env.VITE_YOUTUBE_API_KEY;
+      if (!key) return;
 
+      const res = await fetch(
+        `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${key}`
+      );
+
+      const data = await res.json();
+
+      if (data.items?.[0]) {
+        setLiveSubs(Number(data.items[0].statistics.subscriberCount));
+        setLiveViews(Number(data.items[0].statistics.viewCount));
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  fetchStats();
+}, []);
   return (
     <main>
       <section className="hero-corporate">
