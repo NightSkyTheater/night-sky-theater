@@ -335,12 +335,8 @@ export default function HomeTab({ setTab }) {
               <div className="countdown-head">
 
                 <span className="countdown-label">
-
-                  {countdown.released
-                    ? "발매 후"
-                    : "발매까지"}
-
-                </span>
+  발매 카운트다운
+</span>
 
                 <span className="countdown-status">
 
