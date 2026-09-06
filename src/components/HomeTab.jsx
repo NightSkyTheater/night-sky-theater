@@ -700,7 +700,7 @@ export default function HomeTab({
 
       {[...RELEASE_SCHEDULE]
         .reverse()
-        .slice(0, 5)
+        .slice(0, 4)
         .map((n) => (
 
           <div
@@ -734,7 +734,7 @@ export default function HomeTab({
 
       {[...NEWS_ITEMS]
         .reverse()
-        .slice(0, 5)
+        .slice(0, 4)
         .map((n) => (
 
           <div
