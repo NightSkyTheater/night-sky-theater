@@ -20,7 +20,29 @@ export default function AboutTab({ setTab }) {
 
     <section className="section section-dark"><div className="page-shell"><SectionTitle kicker="ARTIST PROJECT" title="YUREI / 유우레이" body="밤하늘극장 소속의 가상 아티스트 프로젝트. 사랑과 청춘, 삶과 죽음의 경계에서 발견한 감정을 자신만의 언어로 노래합니다."/><div className="artist-panel"><div className="artist-portrait"/><div><span>VIRTUAL ARTIST · VOCAL PROJECT</span><h3>YUREI</h3><p>음원 검색 시에는 아티스트 프로젝트명보다 <b>‘밤하늘극장’</b>으로 검색하시면 발매 작품을 더 정확하게 확인하실 수 있습니다.</p></div></div></div></section>
 
-    <section className="section page-shell"><SectionTitle kicker="STREAMING & SOCIAL" title="Find us everywhere."/><div className="platform-grid">{PLATFORMS.map(p => <a key={p.name} href={`https://${p.url}`} target="_blank" rel="noreferrer"><span>{p.name}</span><ArrowRight size={15}/></a>)}</div></section>
+    <section className="section page-shell"><SectionTitle kicker="STREAMING & SOCIAL" title="Find us everywhere."/>
+<div className="platform-logo-grid">
+  {PLATFORMS.map((platform) => (
+    <a
+      key={platform.name}
+      href={`https://${platform.url}`}
+      target="_blank"
+      rel="noreferrer"
+      className="platform-logo-card"
+      style={{
+        borderColor: platform.color,
+      }}
+      aria-label={`${platform.name}에서 밤하늘극장 보기`}
+    >
+      <img
+        src={platform.logo}
+        alt={platform.name}
+        draggable="false"
+      />
+    </a>
+  ))}
+</div>
+    </section>
 
   </main>
 }

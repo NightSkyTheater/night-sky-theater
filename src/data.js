@@ -490,17 +490,72 @@ export const SUB_DATA = [
 ];
 
 export const PLATFORMS = [
-  { name:"Instagram", url:"instagram.com/happy__in", color:"#E1306C" },
-  { name:"Facebook", url:"facebook.com/Happyin0", color:"#1877F2" },
-  { name:"TikTok", url:"tiktok.com/@nightsky_theater", color:"#111111"},
-  { name:"Melon", url:"kko.to/TYSwBcwGbZ", color:"#00D564"},
-  { name:"Genie Music", url:"genie.co.kr/detail/artistInfo?xxnm=83039013", color:"#3DA5FF" },
-  { name:"FLO", url:"music-flo.com/detail/artist/412503816/track?sortType=POPULARITY", color:"#7C4DFF"},
-  { name:"VIBE", url:"vibe.naver.com/artist/10046198", color:"#00C73C"},
-  { name:"Bugs", url:"music.bugs.co.kr/artist/14382832", color:"#FF3B30" },
-  { name:"YouTube Music", url:"music.youtube.com/channel/UCGCMDvnVgg508GYghgeT3vw", color:"#FF0000" },
-  { name:"Spotify", url:"open.spotify.com/artist/3QiNf9Qb6lJukt8ljMcZuR", color:"#1DB954" },
-  { name:"Apple Music", url:"music.apple.com/kr/artist/%EB%B0%A4%ED%95%98%EB%8A%98%EA%B7%B9%EC%9E%A5/1838608388", color:"#FA2D48" }
+  {
+    name: "Instagram",
+    url: "instagram.com/happy__in",
+    color: "#E1306C",
+    logo: "/platforms/instagram.png",
+  },
+  {
+    name: "Facebook",
+    url: "facebook.com/Happyin0",
+    color: "#1877F2",
+    logo: "/platforms/facebook.png",
+  },
+  {
+    name: "TikTok",
+    url: "tiktok.com/@nightsky_theater",
+    color: "#111111",
+    logo: "/platforms/tiktok.png",
+  },
+  {
+    name: "Melon",
+    url: "kko.to/TYSwBcwGbZ",
+    color: "#00D564",
+    logo: "/platforms/melon.png",
+  },
+  {
+    name: "Genie Music",
+    url: "genie.co.kr/detail/artistInfo?xxnm=83039013",
+    color: "#3DA5FF",
+    logo: "/platforms/genie.png",
+  },
+  {
+    name: "FLO",
+    url: "music-flo.com/detail/artist/412503816/track?sortType=POPULARITY",
+    color: "#7C4DFF",
+    logo: "/platforms/flo.png",
+  },
+  {
+    name: "VIBE",
+    url: "vibe.naver.com/artist/10046198",
+    color: "#00C73C",
+    logo: "/platforms/vibe.png",
+  },
+  {
+    name: "Bugs",
+    url: "music.bugs.co.kr/artist/14382832",
+    color: "#FF3B30",
+    logo: "/platforms/bugs.png",
+  },
+  {
+    name: "YouTube Music",
+    url: "music.youtube.com/channel/UCGCMDvnVgg508GYghgeT3vw",
+    color: "#FF0000",
+    logo: "/platforms/youtube-music.png",
+  },
+  {
+    name: "Spotify",
+    url: "open.spotify.com/artist/3QiNf9Qb6lJukt8ljMcZuR",
+    color: "#1DB954",
+    logo: "/platforms/spotify.png",
+  },
+  {
+    name: "Apple Music",
+    url: "music.apple.com/kr/artist/%EB%B0%A4%ED%95%98%EB%8A%98%EA%B7%B9%EC%9E%A5/1838608388",
+    color: "#FA2D48",
+    logo: "/platforms/apple-music.png",
+  },
 ];
 
 // ── 발매 일정 & 뉴스 ─────────────────────────────
