@@ -73,7 +73,7 @@ export default function AboutTab() {
     className="identity-symbol"
     style={{
       backgroundImage: "url('/favicon.svg')",
-      backgroundSize: "62%",
+      backgroundSize: "70%",
       backgroundRepeat: "no-repeat",
       backgroundPosition: "center",
       backgroundColor: "#B8FF00",
@@ -91,8 +91,8 @@ export default function AboutTab() {
         <p>밤하늘극장의 음악 또한 각자의 이야기가 만나 새로운 의미를 만들어가는 과정을 담고 있습니다.</p>
 
         <p className="paragraph-break">중심에서 빛나는 별은 끝내 놓치고 싶지 않은 마음을,</p>
-        <p>서로를 감싸며 이어지는 궤도는</p>
-        <p>수많은 밤과 감정이 연결되어 만들어지는 밤하늘극장의 세계를 상징합니다.</p>
+        <p>서로를 감싸며 이어지는 궤도는 수많은 밤과 감정이 연결되어 만들어지는</p>
+        <p>밤하늘극장의 세계를 상징합니다.</p>
 
         <p className="paragraph-break">선명한 라임 컬러는 어두운 밤 속에서도 사라지지 않는 작은 빛을 뜻합니다.</p>
         <p>흔들리고 무너지는 순간에도 다시 다음 점을 향해 나아가듯,</p>
