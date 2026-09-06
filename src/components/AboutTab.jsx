@@ -31,14 +31,6 @@ export default function AboutTab() {
       <div className="about-image" />
     </section>
 
-<section className="about-image-band">
-  <div className="about-image" />
-</section>
-
-<section className="about-image-band">
-  <div className="about-image" />
-</section>
-
 <section className="section page-shell two-column-copy">
   <div>
     <span className="eyebrow">우리가 바라보는 것</span>
