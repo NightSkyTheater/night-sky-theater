@@ -12,7 +12,50 @@ function timeAgo(date) {
   if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
   return d.toLocaleDateString("ko-KR");
 }
+const AVATAR_COLORS = [
+  "#B8FF00", "#8ab4ff", "#ff8b94", "#a8e6cf", "#ffcc44",
+  "#c4b5fd", "#fbcfe8", "#7dd3fc", "#fca5a5", "#86efac",
+];
 
+function hashSeed(str) {
+  let h = 0;
+
+  for (let i = 0; i < str.length; i++) {
+    h = (h << 5) - h + str.charCodeAt(i);
+    h |= 0;
+  }
+
+  return Math.abs(h);
+}
+
+function AnonymousAvatar({ id }) {
+  const seed = hashSeed(id || "anon");
+  const color = AVATAR_COLORS[seed % AVATAR_COLORS.length];
+
+  return (
+    <div
+      className="anonymous-avatar"
+      style={{
+        background: `${color}22`,
+        borderColor: `${color}55`,
+      }}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        width="17"
+        height="17"
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
+      </svg>
+    </div>
+  );
+}
 export default function GuestbookTab({ entries, loadMore, hasMore, loadGuestbook }) {
   const [name,setName]=useState(""); const [pw,setPw]=useState(""); const [msg,setMsg]=useState("");
   const submit=async()=>{if(!name.trim()||!pw.trim()||!msg.trim()) return; await addDoc(collection(db,"guestbook"),{name:name.trim(),pw:pw.trim(),msg:msg.trim(),createdAt:new Date()}); setName("");setPw("");setMsg(""); await loadGuestbook();};
@@ -23,9 +66,7 @@ export default function GuestbookTab({ entries, loadMore, hasMore, loadGuestbook
   <div className="guestbook-list">
     {entries.map((e, i) => (
       <article key={e.id}>
-        <div className="note-index">
-          {String(i + 1).padStart(2, "0")}
-        </div>
+        <AnonymousAvatar id={e.id} />
 
         <div className="note-body">
           <div>
