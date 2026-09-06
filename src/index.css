@@ -226,3 +226,195 @@
     height: 34px;
   }
 }
+
+/* =========================
+   FEATURED ALBUM SLIDER
+========================= */
+
+.featured-section {
+  overflow: hidden;
+}
+
+.featured-slider {
+  width: 100%;
+  overflow: hidden;
+
+  margin-top: 8px;
+}
+
+/* 실제로 움직이는 한 줄 */
+.featured-track {
+  display: flex;
+  align-items: flex-start;
+
+  width: max-content;
+
+  gap: 18px;
+
+  padding: 0 20px 10px;
+
+  animation: featured-scroll 42s linear infinite;
+  will-change: transform;
+}
+
+/* 마우스 올리면 일시 정지 */
+.featured-track:hover {
+  animation-play-state: paused;
+}
+
+
+/* =========================
+   FEATURED CARD
+========================= */
+
+.featured-card {
+  flex: 0 0 auto;
+
+  width: 300px;
+
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  text-align: left;
+  cursor: pointer;
+}
+
+.featured-art {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  position: relative;
+  overflow: hidden;
+
+  background: #14161a;
+}
+
+.featured-art img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition:
+    transform .4s ease,
+    opacity .4s ease;
+}
+
+.featured-card:hover .featured-art img {
+  transform: scale(1.025);
+  opacity: .88;
+}
+
+
+/* =========================
+   FEATURED TEXT
+========================= */
+
+.featured-copy {
+  padding-top: 13px;
+}
+
+.featured-copy h3 {
+  margin: 0 0 5px;
+
+  color: #f5f7f8;
+
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.45;
+
+  letter-spacing: -.02em;
+}
+
+.featured-copy p {
+  margin: 0;
+
+  color: var(--muted);
+
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.4;
+
+  letter-spacing: .1em;
+}
+
+
+/* =========================
+   INFINITE ANIMATION
+========================= */
+
+@keyframes featured-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(
+      calc(-50% - 9px)
+    );
+  }
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 980px) {
+
+  .featured-track {
+    gap: 16px;
+
+    padding-left: 18px;
+    padding-right: 18px;
+
+    animation-duration: 36s;
+  }
+
+  .featured-card {
+    width: 250px;
+  }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 640px) {
+
+  .featured-slider {
+    margin-top: 0;
+  }
+
+  .featured-track {
+    gap: 12px;
+
+    padding-left: 14px;
+    padding-right: 14px;
+
+    animation-duration: 30s;
+  }
+
+  .featured-card {
+    width: 185px;
+  }
+
+  .featured-copy {
+    padding-top: 10px;
+  }
+
+  .featured-copy h3 {
+    font-size: 13px;
+  }
+
+  .featured-copy p {
+    font-size: 8px;
+  }
+
+}
