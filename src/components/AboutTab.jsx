@@ -9,9 +9,11 @@ export default function AboutTab() {
       <span className="eyebrow">밤하늘극장 소개</span>
 
       <h1>
-        하루의 마지막, 모두가 
+        하루의 마지막,
         <br />
-        자기 삶의 <em>주인공</em>이 되는 곳.
+        모두가 자기 삶의
+        <br />
+        <em>주인공</em>이 되는 곳.
       </h1>
 
       <p>
