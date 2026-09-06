@@ -347,8 +347,8 @@ export default function HomeTab({ setTab }) {
                   <i />
 
                   {countdown.released
-                    ? "발매완료"
-                    : "발매예정"}
+                    ? "공개 중"
+                    : "공개 예정"}
 
                 </span>
 
