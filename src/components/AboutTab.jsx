@@ -82,6 +82,7 @@ export default function AboutTab() {
 
     <section className="section section-dark">
   <div className="page-shell">
+
 <div className="identity-panel">
   <div
     className="identity-symbol"
@@ -95,7 +96,7 @@ export default function AboutTab() {
   />
 
       <div>
-        <span>CI · 브랜드 심볼</span>
+        <span>브랜드 아이덴티티 · CI</span>
 
         <h3>밤하늘극장</h3>
 
