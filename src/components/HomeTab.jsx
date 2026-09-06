@@ -236,10 +236,8 @@ export default function HomeTab({
             <h1>
               모든 밤에는
               <br />
-
               <em>남겨야 할</em>
               <br />
-
               노래가 있다.
             </h1>
 
