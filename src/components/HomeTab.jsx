@@ -3,7 +3,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { ALBUMS, ALL_TRACKS, NEWS_ITEMS, RELEASE_SCHEDULE, SUB_DATA } from "../data";
 import { SectionTitle, formatCompact } from "./Common";
 
-const HERO_IMAGE = "https://down.mixtape.so/NAS/img/b/d/d/c/bddc807264d156fa82fd1a98208a4856.png";
+const HERO_IMAGE = "img/homebg.jpg";
 
 export default function HomeTab({ setTab }) {
   const [liveSubs, setLiveSubs] = useState(null);
