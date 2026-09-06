@@ -1,6 +1,5 @@
 import React from "react";
 import { PLATFORMS } from "../data";
-import { ArrowRight } from "lucide-react";
 import { SectionTitle } from "./Common";
 
 export default function AboutTab({ setTab }) {
@@ -23,8 +22,13 @@ export default function AboutTab({ setTab }) {
     <section className="section page-shell">
       <SectionTitle
   kicker="음원 및 소셜 채널"
-  title="밤하늘극장을 다양한 플랫폼에서 만나보세요."
-  body="주요 음원 플랫폼과 공식 소셜 채널을 통해 밤하늘극장의 음악과 새로운 소식을 만나보실 수 있습니다."
+  title={
+    <>
+      밤하늘극장을
+      <br />
+      다양한 플랫폼에서 만나보세요.
+    </>
+  }
 />
 <div className="platform-logo-grid">
   {PLATFORMS.map((platform) => (
