@@ -1,39 +1,119 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { ALBUMS, ALL_TRACKS, NEWS_ITEMS, RELEASE_SCHEDULE, SUB_DATA } from "../data";
+import {
+  ALBUMS,
+  ALL_TRACKS,
+  NEWS_ITEMS,
+  RELEASE_SCHEDULE,
+  SUB_DATA,
+} from "../data";
 import { SectionTitle, formatCompact } from "./Common";
 
-const HERO_IMAGE = "img/homebg.png";
+const HERO_IMAGE = "/img/homebg.png";
+
+// 2026년 9월 6일 낮 12시 (한국시간)
+const RELEASE_DATE = new Date("2026-09-06T12:00:00+09:00");
 
 export default function HomeTab({ setTab }) {
   const [liveSubs, setLiveSubs] = useState(null);
   const [liveViews, setLiveViews] = useState(null);
+
+  const [countdown, setCountdown] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+
   const latest = ALBUMS[ALBUMS.length - 1];
-  const featured = useMemo(() => [...ALBUMS].slice(-6).reverse(), []);
 
+  const featured = useMemo(
+    () => [...ALBUMS].slice(-6).reverse(),
+    []
+  );
+
+  // 유튜브 통계
   useEffect(() => {
-  async function fetchStats() {
-    try {
-      const key = import.meta.env.VITE_YOUTUBE_API_KEY;
-      if (!key) return;
+    async function fetchStats() {
+      try {
+        const key = import.meta.env.VITE_YOUTUBE_API_KEY;
 
-      const res = await fetch(
-        `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${key}`
+        if (!key) return;
+
+        const res = await fetch(
+          `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${key}`
+        );
+
+        const data = await res.json();
+
+        if (data.items?.[0]) {
+          setLiveSubs(
+            Number(data.items[0].statistics.subscriberCount)
+          );
+
+          setLiveViews(
+            Number(data.items[0].statistics.viewCount)
+          );
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    fetchStats();
+  }, []);
+
+  // 발매 카운트다운
+  useEffect(() => {
+    function updateCountdown() {
+      const now = new Date();
+      const diff = RELEASE_DATE.getTime() - now.getTime();
+
+      if (diff <= 0) {
+        setCountdown({
+          days: 0,
+          hours: 0,
+          minutes: 0,
+          seconds: 0,
+        });
+
+        return;
+      }
+
+      const days = Math.floor(
+        diff / (1000 * 60 * 60 * 24)
       );
 
-      const data = await res.json();
+      const hours = Math.floor(
+        (diff / (1000 * 60 * 60)) % 24
+      );
 
-      if (data.items?.[0]) {
-        setLiveSubs(Number(data.items[0].statistics.subscriberCount));
-        setLiveViews(Number(data.items[0].statistics.viewCount));
-      }
-    } catch (e) {
-      console.error(e);
+      const minutes = Math.floor(
+        (diff / (1000 * 60)) % 60
+      );
+
+      const seconds = Math.floor(
+        (diff / 1000) % 60
+      );
+
+      setCountdown({
+        days,
+        hours,
+        minutes,
+        seconds,
+      });
     }
-  }
 
-  fetchStats();
-}, []);
+    updateCountdown();
+
+    const timer = setInterval(
+      updateCountdown,
+      1000
+    );
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <main>
       <section className="hero-corporate">
@@ -76,6 +156,31 @@ export default function HomeTab({ setTab }) {
         <div className="latest-layout">
           <div className="latest-cover-wrap"><img src={latest.cover} alt={latest.title} /><span className="release-stamp">OUT NOW</span></div>
           <div className="latest-info">
+            <div className="release-countdown">
+  <span className="countdown-label">NEXT RELEASE IN</span>
+
+  <div className="countdown-time">
+    <div>
+      <strong>{String(countdown.days).padStart(2, "0")}</strong>
+      <span>DAYS</span>
+    </div>
+
+    <div>
+      <strong>{String(countdown.hours).padStart(2, "0")}</strong>
+      <span>HRS</span>
+    </div>
+
+    <div>
+      <strong>{String(countdown.minutes).padStart(2, "0")}</strong>
+      <span>MIN</span>
+    </div>
+
+    <div>
+      <strong>{String(countdown.seconds).padStart(2, "0")}</strong>
+      <span>SEC</span>
+    </div>
+  </div>
+</div>
             <p className="release-meta">NST · 2026 · {latest.tracks.length} TRACKS</p>
             <h3>{latest.title}</h3>
             <p>{latest.desc}</p>
