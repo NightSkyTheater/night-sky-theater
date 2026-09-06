@@ -774,9 +774,9 @@ export default function HomeTab({
             />
 
             <h2>
-              Let’s make something
+              우리의 밤이,
               <br />
-              worth remembering.
+              누군가의 오래된 기억이 되도록.
             </h2>
 
           </div>
@@ -788,7 +788,7 @@ export default function HomeTab({
               setTab("contact")
             }
           >
-            CONTACT US
+            문의하기
 
             <ArrowRight
               size={16}

@@ -130,7 +130,6 @@ export default function MainSite() {
           </div>
 
           <div>
-            <span>SEOUL · SOUTH KOREA</span>
             <span>© 2026 NIGHT SKY THEATER</span>
           </div>
         </div>
