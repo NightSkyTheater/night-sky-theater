@@ -454,7 +454,7 @@ export const ALBUMS = [
       {
     id: 31,
     title: "밤을 건너는 아이들아",
-    cover: "/covers/A31.png",
+    cover: "/covers/A31.jpg",
     year: "2026",
     color: "#10101a",
     desc: "우울마저 다정하게 느껴질 만큼 지쳐버린 이들에게. ",
