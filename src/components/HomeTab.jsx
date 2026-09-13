@@ -17,7 +17,7 @@ import { SectionTitle, formatCompact } from "./Common";
 const HERO_IMAGE = "/img/homebg.png";
 
 const RELEASE_DATE =
-  new Date("2026-09-06T12:00:00+09:00");
+  new Date("2026-09-24T12:00:00+09:00");
 
 /*
   추천 앨범
@@ -354,8 +354,8 @@ export default function HomeTab({
 
         <SectionTitle
           kicker="LATEST RELEASE"
-          title="완전한 무조건적 사랑의 형태"
-          body="사랑이라는 감정이 도달할 수 있는 가장 깊고 숭고한 경지, ‘조건 없음’에 대하여."
+          title="밤을 건너는 아이들아"
+          body="각자의 무게를 안고 고단한 밤을 견디는 모든 이들에게 건네는 단단하고 다정한 위로"
         />
 
         <div className="latest-layout">
