@@ -12,6 +12,11 @@ const DEMOS = {
     artist: "밤하늘극장",
     file: "/music/260913.wav",
   },
+    "261109": {
+    title: "선택할 수 있는 건 하나도 없는데",
+    artist: "밤하늘극장",
+    file: "/music/261109.wav",
+  },
 };
 
 export default function DemoPage() {
