@@ -1,8 +1,15 @@
 {
-  "rewrites": [
+  "redirects": [
     {
       "source": "/(.*)",
-      "destination": "/"
+      "has": [
+        {
+          "type": "host",
+          "value": "night-sky-theater.vercel.app"
+        }
+      ],
+      "destination": "https://nightskytheater.kr/$1",
+      "permanent": true
     }
   ]
 }
