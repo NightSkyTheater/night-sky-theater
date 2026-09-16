@@ -11,5 +11,11 @@
       "destination": "https://nightskytheater.kr/$1",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/((?!music/).*)",
+      "destination": "/index.html"
+    }
   ]
 }
