@@ -19,11 +19,9 @@ export default function Home({ setTab }) {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const res = await fetch(
-          `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCagbKVKMsqoHsD1_LLk2W2w&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`
-        );
+        const res = await fetch("/api/youtube-stats", { cache: "no-store" });
         const data = await res.json();
-        if (data.items?.[0]) setLiveSubs(Number(data.items[0].statistics.subscriberCount));
+        if (data.success) setLiveSubs(Number(data.subscribers || 0));
       } catch (err) {
         console.error(err);
       }
