@@ -14,7 +14,7 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!music/).*)",
+      "source": "/((?!api/|music/).*)",
       "destination": "/index.html"
     }
   ]
