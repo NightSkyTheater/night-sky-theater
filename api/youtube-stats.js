@@ -1,6 +1,25 @@
 const CHANNEL_ID = "UCagbKVKMsqoHsD1_LLk2W2w";
 
 export default async function handler(req, res) {
+  const allowedOrigins = new Set([
+    "https://nightskytheater.kr",
+    "https://www.nightskytheater.kr",
+    "https://night-sky-theater-hq.vercel.app",
+  ]);
+
+  const origin = req.headers.origin;
+  if (origin && (allowedOrigins.has(origin) || origin.endsWith(".vercel.app"))) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+  }
+
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
+
   try {
     const apiKey =
       process.env.YOUTUBE_API_KEY ||
