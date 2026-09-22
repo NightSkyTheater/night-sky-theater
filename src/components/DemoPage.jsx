@@ -17,6 +17,11 @@ const DEMOS = {
     artist: "밤하늘극장",
     file: "/music/261109.wav",
   },
+      "261123": {
+    title: "지친 나를 충전해줘",
+    artist: "밤하늘극장",
+    file: "/music/261123.wav",
+  },
 };
 
 export default function DemoPage() {
