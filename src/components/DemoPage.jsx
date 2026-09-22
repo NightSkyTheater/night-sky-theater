@@ -22,6 +22,11 @@ const DEMOS = {
     artist: "밤하늘극장",
     file: "/music/261123.wav",
   },
+   "260922": {
+    title: "마음이나 처지가 슬프고 괴로워",
+    artist: "밤하늘극장",
+    file: "/music/260922.wav",
+  },
 };
 
 export default function DemoPage() {
