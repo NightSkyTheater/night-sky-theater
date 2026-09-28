@@ -27,6 +27,11 @@ const DEMOS = {
     artist: "밤하늘극장",
     file: "/music/260922.wav",
   },
+  "260928": {
+    title: "우리들의 푸른빛",
+    artist: "밤하늘극장",
+    file: "/music/260928.wav",
+  },
 };
 
 export default function DemoPage() {
