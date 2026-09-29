@@ -148,8 +148,8 @@ export default async function handler(req, res) {
 
     const publicStats = await getPublicStats(apiKey);
 
-    let subscribers = BASELINE_SUBSCRIBERS;
-    let subscriberSource = "baseline";
+    let subscribers = publicStats?.subscribers || BASELINE_SUBSCRIBERS;
+    let subscriberSource = publicStats?.subscribers ? "public-data" : "baseline";
     let analytics = null;
 
     try {
@@ -162,7 +162,7 @@ export default async function handler(req, res) {
       }
     } catch (analyticsError) {
       console.error("YOUTUBE ANALYTICS ERROR:", analyticsError);
-      subscriberSource = "baseline-fallback";
+      subscriberSource = publicStats?.subscribers ? "public-data-fallback" : "baseline-fallback";
     }
 
     res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=600");
@@ -180,6 +180,8 @@ export default async function handler(req, res) {
       },
       analytics,
       publicSubscriberCount: publicStats?.subscribers ?? null,
+      analyticsLatestDate: analytics?.latestDate ?? null,
+      isExactSubscriberCount: subscriberSource === "analytics",
       fetchedAt: new Date().toISOString(),
     });
   } catch (error) {
