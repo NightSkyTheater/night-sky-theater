@@ -17,7 +17,7 @@ import { SectionTitle, formatCompact } from "./Common";
 const HERO_IMAGE = "/img/homebg.png";
 
 const RELEASE_DATE =
-  new Date("2026-09-24T12:00:00+09:00");
+  new Date("2026-10-08T12:00:00+09:00");
 
 /*
   추천 앨범
@@ -354,8 +354,8 @@ export default function HomeTab({
 
         <SectionTitle
           kicker="LATEST RELEASE"
-          title="밤을 건너는 아이들아"
-          body="각자의 무게를 안고 고단한 밤을 견디는 모든 이들에게 건네는 단단하고 다정한 위로"
+          title="왜 어떤 사랑은 떠나야 했을까요"
+          body="무거운 현실에 서로를 밀어낼 수밖에 없었던 연인들에게 전하는 따뜻한 위로"
         />
 
         <div className="latest-layout">
