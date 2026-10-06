@@ -581,7 +581,8 @@ export const RELEASE_SCHEDULE = [
   { tag:"싱글", tagC:"#a8e6cf", date:"26.08.03", title:"'오늘 내가 죽어도 너 때문은 아니야' 발매" },
   { tag:"정규", tagC:"#ff8b94", date:"26.08.04", title:"'이 파도가 멈추지 않았으면 해' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"26.09.06", title:"'완전한 무조건적 사랑의 형태' 발매" },
-  { tag:"예정", tagC:"#ffcc44", date:"26.09.24", title:"'밤을 건너는 아이들아' 발매" },
+  { tag:"예정", tagC:"#a8e6cf", date:"26.09.24", title:"'밤을 건너는 아이들아' 발매" },
+  { tag:"예정", tagC:"#ffcc44", date:"26.09.24", title:"'왜 어떤 사랑은 떠나야 했을까요' 발매" },
 ];
 
 export const NEWS_ITEMS = [
