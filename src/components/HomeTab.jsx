@@ -17,7 +17,7 @@ import { SectionTitle, formatCompact } from "./Common";
 const HERO_IMAGE = "/img/homebg.png";
 
 const RELEASE_DATE =
-  new Date("2026-10-12T12:00:00+09:00");
+  new Date("2026-10-28T12:00:00+09:00");
 
 /*
   추천 앨범
@@ -354,8 +354,8 @@ export default function HomeTab({
 
         <SectionTitle
           kicker="LATEST RELEASE"
-          title="우리들의 푸른빛"
-          body="차가운 현실 속에서도 영원히 빛나는 청춘의 온기와 위로"
+          title="너에게 나는 왜 사랑이 아니었을까"
+          body="뜻대로 되지 않는 삶과 치열했던 나를 온전히 다독이는 다정한 수용"
         />
 
         <div className="latest-layout">
