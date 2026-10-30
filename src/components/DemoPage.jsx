@@ -32,6 +32,11 @@ const DEMOS = {
     artist: "밤하늘극장",
     file: "/music/260928.wav",
   },
+  "261222": {
+    title: "세상은 한 장의 백지가 되었다",
+    artist: "밤하늘극장",
+    file: "/music/261222.wav",
+  },
 };
 
 export default function DemoPage() {
