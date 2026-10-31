@@ -17,7 +17,7 @@ import { SectionTitle, formatCompact } from "./Common";
 const HERO_IMAGE = "/img/homebg.png";
 
 const RELEASE_DATE =
-  new Date("2026-10-28T12:00:00+09:00");
+  new Date("2026-11-09T12:00:00+09:00");
 
 /*
   추천 앨범
@@ -354,8 +354,8 @@ export default function HomeTab({
 
         <SectionTitle
           kicker="LATEST RELEASE"
-          title="너에게 나는 왜 사랑이 아니었을까"
-          body="뜻대로 되지 않는 삶과 치열했던 나를 온전히 다독이는 다정한 수용"
+          title="선택할 수 있는 건 하나도 없는데"
+          body="부조리한 세상 속, 스스로를 안아주며 무해한 내일을 꿈꾸는 청춘의 단단한 항변"
         />
 
         <div className="latest-layout">
@@ -692,7 +692,7 @@ export default function HomeTab({
 
       {[...RELEASE_SCHEDULE]
         .reverse()
-        .slice(0, 4)
+        .slice(0, 5)
         .map((n) => (
 
 <div
@@ -726,7 +726,7 @@ export default function HomeTab({
 
       {[...NEWS_ITEMS]
         .reverse()
-        .slice(0, 4)
+        .slice(0, 5)
         .map((n) => (
 
           <div

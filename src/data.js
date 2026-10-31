@@ -498,6 +498,17 @@ export const ALBUMS = [
     tracks: [
       { n: 1, title: "너에게 나는 왜 사랑이 아니었을까", mood: "너에게 나는 왜 사랑이 아니었을까\n내 마음이 너무나도 선명해서 투명하게 보였던 걸까" }
     ]
+  },
+    {
+    id: 35,
+    title: "선택할 수 있는 건 하나도 없는데",
+    cover: "https://storage.googleapis.com/srd-production-app-data/20261014082251263_%EC%84%A0%ED%83%9D%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EA%B1%B4-%ED%95%98%EB%82%98%EB%8F%84-%EC%97%86%EB%8A%94%EB%8D%B0_thumb.jpg",
+    year: "2026",
+    color: "#10101a",
+    desc: "부조리한 세상 속, 스스로를 안아주며 무해한 내일을 꿈꾸는 청춘의 단단한 항변",
+    tracks: [
+      { n: 1, title: "선택할 수 있는 건 하나도 없는데", mood: "선택할 수 있는 건 하나도 없는데\n책임져야 하는 건 왜 이리 많은 걸까요" }
+    ]
   }
 ];
 
@@ -605,12 +616,14 @@ export const RELEASE_SCHEDULE = [
   { tag:"싱글", tagC:"#a8e6cf", date:"26.09.24", title:"'밤을 건너는 아이들아' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"26.10.08", title:"'왜 어떤 사랑은 떠나야 했을까요' 발매" },
   { tag:"정규", tagC:"#ff8b94", date:"26.10.12", title:"'우리들의 푸른빛' 발매" },
-  { tag:"예정", tagC:"#ffcc44", date:"26.10.28", title:"'너에게 나는 왜 사랑이 아니었을까' 발매" },
+  { tag:"싱글", tagC:"#a8e6cf", date:"26.10.28", title:"'너에게 나는 왜 사랑이 아니었을까' 발매" },
+  { tag:"예정", tagC:"#ffcc44", date:"26.11.09", title:"'선택할 수 있는 건 하나도 없는데' 발매" },
 ];
 
 export const NEWS_ITEMS = [
   { date:"26.04.03", title:"'겨울의 대삼각형' 제주도교육청 교육자료 수록" },
   { date:"26.06.11", title:"밤하늘극장 공식 팬페이지 오픈" },
   { date:"26.06.28", title:"오마이걸 효정님의 추천곡으로 '죽어가는 모든 것들을 사랑해야지' 라디오 소개" },
-  { date:"26.10.23", title:"유튜브 구독자 3,000명 달성" },
+  { date:"26.10.27", title:"유튜브 구독자 4,000명 달성" },
+  { date:"26.10.30", title:"TJ 미디어 '죽어가는 모든 것들을 사랑해야지' 노래방 등록" },
 ];
