@@ -37,6 +37,11 @@ const DEMOS = {
     artist: "밤하늘극장",
     file: "/music/261222.wav",
   },
+    "270101": {
+    title: "포근한 겨울의 고요한 여백을 걸어",
+    artist: "밤하늘극장",
+    file: "/music/270101.wav",
+  },
 };
 
 export default function DemoPage() {
