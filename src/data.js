@@ -626,11 +626,11 @@ export const PLATFORMS = [
 
 // ── 발매 일정 & 뉴스 ─────────────────────────────
 export const RELEASE_SCHEDULE = [
-  { tag:"싱글", tagC:"#a8e6cf", date:"26.09.24", title:"'밤을 건너는 아이들아' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"26.10.08", title:"'왜 어떤 사랑은 떠나야 했을까요' 발매" },
   { tag:"정규", tagC:"#ff8b94", date:"26.10.12", title:"'우리들의 푸른빛' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"26.10.28", title:"'너에게 나는 왜 사랑이 아니었을까' 발매" },
-  { tag:"예정", tagC:"#ffcc44", date:"26.11.09", title:"'선택할 수 있는 건 하나도 없는데' 발매" },
+  { tag:"싱글", tagC:"#a8e6cf", date:"26.11.09", title:"'선택할 수 있는 건 하나도 없는데' 발매" },
+  { tag:"예정", tagC:"#ffcc44", date:"26.11.16", title:"'미완의 수식들로 얼룩진 청춘' 발매" },
 ];
 
 export const NEWS_ITEMS = [
