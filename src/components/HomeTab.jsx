@@ -17,7 +17,7 @@ import { SectionTitle, formatCompact } from "./Common";
 const HERO_IMAGE = "/img/homebg.png";
 
 const RELEASE_DATE =
-  new Date("2026-11-09T12:00:00+09:00");
+  new Date("2026-11-16T12:00:00+09:00");
 
 /*
   추천 앨범
@@ -354,8 +354,8 @@ export default function HomeTab({
 
         <SectionTitle
           kicker="LATEST RELEASE"
-          title="선택할 수 있는 건 하나도 없는데"
-          body="부조리한 세상 속, 스스로를 안아주며 무해한 내일을 꿈꾸는 청춘의 단단한 항변"
+          title="미완의 수식들로 얼룩진 청춘"
+          body="정답 없는 삶에 방황하는 서툰 청춘들에게 건네는 따뜻한 공감"
         />
 
         <div className="latest-layout">
