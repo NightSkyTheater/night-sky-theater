@@ -522,6 +522,17 @@ export const ALBUMS = [
       { n: 2, title: "미완의 수식들로 얼룩진 청춘", mood: "미완의 수식들로 얼룩진 청춘\n닿지 않을 무언가를 향해 던지던 열망" },
       { n: 3, title: "어쩔 수 없는 만유인력", mood: "떨어질 줄 알았는데\n추락이 아니라 비행이 되는 것" }
     ]
+  },
+            {
+    id: 37,
+    title: "마음이나 처지가 슬프고 괴로워",
+    cover: "https://storage.googleapis.com/srd-production-app-data/20261031072952786_%EB%A7%88%EC%9D%8C%EC%9D%B4%EB%82%98-%EC%B2%98%EC%A7%80%EA%B0%80-%EC%8A%AC%ED%94%84%EA%B3%A0-%EA%B4%B4%EB%A1%9C%EC%9B%8C_thumb.jpg",
+    year: "2026",
+    color: "#10101a",
+    desc: "가장 어둡고 처절한 자리에 서서도 삶을 포기하지 않는 청춘의 꿋꿋함",
+    tracks: [
+      { n: 1, title: "마음이나 처지가 슬프고 괴로워", mood: "딛는 발걸음마다 서럽고 서러워\n어디서부터 어긋나 이토록 지독한 가시밭길인가" }
+    ]
   }
 ];
 
@@ -626,11 +637,11 @@ export const PLATFORMS = [
 
 // ── 발매 일정 & 뉴스 ─────────────────────────────
 export const RELEASE_SCHEDULE = [
-  { tag:"싱글", tagC:"#a8e6cf", date:"26.10.08", title:"'왜 어떤 사랑은 떠나야 했을까요' 발매" },
   { tag:"정규", tagC:"#ff8b94", date:"26.10.12", title:"'우리들의 푸른빛' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"26.10.28", title:"'너에게 나는 왜 사랑이 아니었을까' 발매" },
   { tag:"싱글", tagC:"#a8e6cf", date:"26.11.09", title:"'선택할 수 있는 건 하나도 없는데' 발매" },
-  { tag:"예정", tagC:"#ffcc44", date:"26.11.16", title:"'미완의 수식들로 얼룩진 청춘' 발매" },
+  { tag:"싱글", tagC:"#a8e6cf", date:"26.11.16", title:"'미완의 수식들로 얼룩진 청춘' 발매" },
+  { tag:"예정", tagC:"#ffcc44", date:"26.11.23", title:"'마음이나 처지가 슬프고 괴로워' 발매" },
 ];
 
 export const NEWS_ITEMS = [

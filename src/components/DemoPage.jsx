@@ -42,6 +42,11 @@ const DEMOS = {
     artist: "밤하늘극장",
     file: "/music/270101.wav",
   },
+      "270124": {
+    title: "너의 세계가 무겁게 느껴진다면",
+    artist: "밤하늘극장",
+    file: "/music/270124.wav",
+  },
 };
 
 export default function DemoPage() {
