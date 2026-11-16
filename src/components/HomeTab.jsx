@@ -17,7 +17,7 @@ import { SectionTitle, formatCompact } from "./Common";
 const HERO_IMAGE = "/img/homebg.png";
 
 const RELEASE_DATE =
-  new Date("2026-11-16T12:00:00+09:00");
+  new Date("2026-11-23T12:00:00+09:00");
 
 /*
   추천 앨범
@@ -354,8 +354,8 @@ export default function HomeTab({
 
         <SectionTitle
           kicker="LATEST RELEASE"
-          title="미완의 수식들로 얼룩진 청춘"
-          body="정답 없는 삶에 방황하는 서툰 청춘들에게 건네는 따뜻한 공감"
+          title="마음이나 처지가 슬프고 괴로워"
+          body="가장 어둡고 처절한 자리에 서서도 삶을 포기하지 않는 청춘의 꿋꿋함"
         />
 
         <div className="latest-layout">
@@ -482,16 +482,6 @@ export default function HomeTab({
             <p className="release-meta">
               SINGLE ALBUM ·{" "}
               {latest.tracks.length} TRACKS
-            </p>
-
-
-            <h3>
-              {latest.title}
-            </h3>
-
-
-            <p>
-              {latest.desc}
             </p>
 
 
